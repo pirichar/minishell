@@ -7,6 +7,8 @@ bash manual : https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html
 			
 quick shell tutorial : https://www.youtube.com/watch?v=ZGmg8wEdQOM&t=691s
 
+page about the $$ $? : https://www.unix.com/shell-programming-and-scripting/75297-what-does-echo-mean.html
+
 video about readline : https://www.youtube.com/watch?v=MxRTh8wlmJk
 
 Environement variables : https://www.youtube.com/watch?v=WN5ZV4B2X7g
@@ -39,3 +41,5 @@ g
 h
 i
 j
+
+
