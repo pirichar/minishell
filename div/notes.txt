@@ -11,6 +11,12 @@ page about the $$ $? : https://www.unix.com/shell-programming-and-scripting/7529
 
 video about readline : https://www.youtube.com/watch?v=MxRTh8wlmJk
 
+CTRL-C : https://superuser.com/questions/1653229/when-pressed-ctrlc-only-break-out-of-current-function-and-not-whole-bash-script#:~:text=Analysis,when%20Bash%20interprets%20a%20script. 
+
+fork,vfork,exit,wait,waitpid,wait3,wait4 functions : https://vimeo.com/658505583 
+
+wait waitpid video : https://www.youtube.com/watch?v=h6mD0CPP9AI 
+
 Environement variables : https://www.youtube.com/watch?v=WN5ZV4B2X7g
 		Variables : A varaible defined in the shell is available to that shell and not sub-shells
 		export will show you the exported local variables'
@@ -41,5 +47,3 @@ g
 h
 i
 j
-
-

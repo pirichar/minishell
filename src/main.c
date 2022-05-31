@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/29 14:57:53 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/31 14:04:37 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,35 +14,70 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>
+#include "../include/minishell.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	size_t	i;
+// void	print_env()
+// {
+// 	char	*tmp;
 
-	i = 0;
-	if (n == 0)
-		return (0);
-	while (s1[i] && (unsigned char)s1[i] == (unsigned char)s2[i]
-		&& i < n - 1)
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
 
-int ft_strlen(char *str)
+// }
+
+// int main(int argc, char **argv, char **env)
+// {
+// 	(void)argc;
+// 	(void)argv;
+// 	char *line;
+// 	int		i;
+// 	char **path;
+	
+// 	path = path_to_strarr(env);
+
+// 	i = 0;
+// 	while(1)
+// 	{
+// 		line = readline("MINISHELL: ");
+// 		if (line && *line) // not sure I need this but saw it in the man
+// 			add_history(line);
+// 		while(path[i])
+// 		{
+// 			if (search_path(path[i], line) == true)
+// 				printf("VALID COMMAND WILL HANDLE LATER\n");
+// 			else
+// 				printf("Invalid command\n");
+// 			i++;
+// 		}
+// 		if (ft_strncmp(line, "env",5) == 0)
+// 		{
+// 			i = 0;
+// 			while(env[i])
+// 			{
+// 				printf("%s\n",env[i]);
+// 				i++;
+// 			}
+// 			printf("\n");
+// 			free(line);
+// 		}
+// 		else if(ft_strncmp(line, "exit",5) == 0)
+// 		{
+// 			free(line);
+// 			return (0);
+// 		}
+// 		else
+// 			free(line);
+// 	}
+// 	free(path);
+// }
+
+
+int	nb_of_paths(char **path)
 {
 	int i;
 
 	i = 0;
-	while (str[i])
+	while(path[i])
 		i++;
 	return (i);
-}
-
-void	print_env()
-{
-	char	*tmp;
-
-
 }
 
 int main(int argc, char **argv, char **env)
@@ -50,14 +85,31 @@ int main(int argc, char **argv, char **env)
 	(void)argc;
 	(void)argv;
 	char *line;
-	char	*tmp;
 	int		i;
-
-	i = 0;
+	char **path;
+	
+	path = path_to_strarr(env);
 	while(1)
 	{
-		line = readline("PLR_ZSH: ");
-		
+		i = 0;
+		line = readline("MINISHELL: ");
+		if (line && *line) // not sure I need this but saw it in the man
+			add_history(line);
+		/* parse the line here
+			1- first round check the special characters
+			2- reparse taking in count special character and fill the cmd array
+			3- give that to the command that search the path
+							*/
+		while(path[i])
+		{
+			if (search_path(path[i], line) == true)
+				break ;
+			i++;
+		}
+		if (i == nb_of_paths(path))
+				printf("Invalid command\n");
+		else
+			printf("VALID COMMAND WILL HANDLE LATER\n");
 		if (ft_strncmp(line, "env",5) == 0)
 		{
 			i = 0;
@@ -77,4 +129,5 @@ int main(int argc, char **argv, char **env)
 		else
 			free(line);
 	}
+	free(path);
 }

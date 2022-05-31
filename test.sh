@@ -1,4 +1,4 @@
-gcc ./src/*.c -lreadline
+gcc -Wall -Werror -Wextra ./src/*.c -lreadline
 
 ./a.out
 
