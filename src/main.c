@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 14:04:37 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:26:26 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,8 @@
 // 	(void)argv;
 // 	char *line;
 // 	int		i;
-// 	char **path;
-	
+// 	char **path;	
 // 	path = path_to_strarr(env);
-
 // 	i = 0;
 // 	while(1)
 // 	{
@@ -100,6 +98,12 @@ int main(int argc, char **argv, char **env)
 			2- reparse taking in count special character and fill the cmd array
 			3- give that to the command that search the path
 							*/
+		/* 
+			initiate program for this and work in the child after
+			create an array of pids
+			pass the array of argument as it was char **argv in calling_the_execs
+			Calculate the amount of argument and pass it as argc 
+		*/
 		while(path[i])
 		{
 			if (search_path(path[i], line) == true)
@@ -109,7 +113,11 @@ int main(int argc, char **argv, char **env)
 		if (i == nb_of_paths(path))
 				printf("Invalid command\n");
 		else
+		{
 			printf("VALID COMMAND WILL HANDLE LATER\n");
+			//here I should probably fork and start to do stuff with that command
+		}
+
 		if (ft_strncmp(line, "env",5) == 0)
 		{
 			i = 0;
