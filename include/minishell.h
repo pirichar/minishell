@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 12:47:29 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 13:34:45 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/31 22:44:11 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,17 @@ typedef struct s_ptrs
 typedef struct s_parsing
 {
 	int	nb_quote;
+	bool	quotes;
 	int	nb_dbquote;
+	bool	dbquotes;
 	int	nb_pipe;
 	int	nb_cmd;
 	int sml_then;
 	int	gtr_then;
 	int	dlr_sign;
 	int and_sign;
-	char **cmds;// probably a linked list here ; for now ima malloc like 10 commands when init
+	int *pids;//to be malloced with the right number of commands during the first phase of parsing
+	char **cmds;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 }				t_parsing;
 
 //environement.c

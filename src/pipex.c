@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 14:58:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 15:16:38 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/05/31 22:42:10 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	parse_and_exec_cmd(const char *cmd, char **env)
 		}
 		i++;
 	}
-	printf("PLR : Command not found\n"); // change this for an error function
+	printf("MINISHELL : Command not found\n"); // change this for an error function
 	free (p.path);
 	free (p.cmd_split);
 	free (p.cmd_with_slash);
@@ -178,7 +178,7 @@ int	calling_the_execs(int argc, char **argv, char **env, t_files *f)
 	f->outfile = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (f->outfile == -1)
 	{
-		printf("could not open output file\n"); //change this for an error function
+		printf("MINISHELL : could not open output file\n"); //change this for an error function
 		return (1);
 	}
 	execute_out(argv[argc - 2], (int [2]){fd, f->outfile},
