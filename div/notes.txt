@@ -31,7 +31,6 @@ Environement variables : https://www.youtube.com/watch?v=WN5ZV4B2X7g
 				do hotdog=mayo ; then echo$hotdog you will see mayo; 
 				Open a bash and do echo $hotdog; you wont be able to see the variable
 				To make it an environment variable i should export drink 
-
 		Environement variables: 
 			When exported a variable is avaiable to the shell 
 			it was defined in and to sub-shells

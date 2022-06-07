@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 22:56:00 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/04 09:41:27 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int main(int argc, char **argv, char **env)
 			Calculate the amount of argument and pass it as argc 
 			set fd in ; set fd out; prepare stuff for the execute command function
 		*/
-		while(path[i])
+		while(path[i]) //this could be inserted into something else I used it to see if the command is in the path or not
 		{
 			if (search_path(path[i], line) == true)
 				break ;
