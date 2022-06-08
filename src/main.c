@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/04 09:41:27 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:01:07 by jvigneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,32 +67,41 @@
 // 	free(path);
 // }
 
-
 int	nb_of_paths(char **path)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(path[i])
+	while (path[i])
 		i++;
 	return (i);
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
+	char	*line;
+	int		i;
+	char	**path;
+	int		j = 0;
+	char	*cmd;
+
 	(void)argc;
 	(void)argv;
-	char *line;
-	int		i;
-	char **path;
-	
+	print_logo(env);
 	path = path_to_strarr(env);
-	while(1)
+	while (1)
 	{
 		i = 0;
 		line = readline("MINISHELL: ");
 		if (line && *line) // not sure I need this but saw it in the man
 			add_history(line);
+		if (line == NULL) //POUR LE CTRL D; COMME CA CA FAIT EN SORTE DE FERMER DS CE CAS LA
+			return (0);
+		if (ft_strncmp(line, "exit", 5) == 0)
+		{
+			free(line);
+			return (0);
+		}
 		/* parse the line here
 			1- first round check the special characters - set the quotes to their number ;
 				check for the start at the same time and filter the " " ' ' and spaces at first
@@ -134,14 +143,25 @@ int main(int argc, char **argv, char **env)
 			Calculate the amount of argument and pass it as argc 
 			set fd in ; set fd out; prepare stuff for the execute command function
 		*/
-		while(path[i]) //this could be inserted into something else I used it to see if the command is in the path or not
+		while (line && line[j])
+		{
+			if (line[j] == ' ')
+			{
+				cmd = malloc(j + 1 * sizeof(char));
+				ft_strlcpy(cmd, line, j + 1);
+				printf("cmd = %s\n", cmd);
+				break ;
+			}
+			j++;
+		}
+		while (path[i]) //this could be inserted into something else I used it to see if the command is in the path or not
 		{
 			if (search_path(path[i], line) == true)
 				break ;
 			i++;
 		}
 		if (i == nb_of_paths(path))
-				printf("Invalid command\n");
+				printf("Dunder Shell: %s: command not found\n", line);
 		else
 		{
 			printf("VALID COMMAND WILL HANDLE LATER\n");
@@ -151,7 +171,7 @@ int main(int argc, char **argv, char **env)
 		if (ft_strncmp(line, "env",5) == 0)
 		{
 			i = 0;
-			while(env[i])
+			while (env[i])
 			{
 				printf("%s\n",env[i]);
 				i++;
@@ -159,13 +179,35 @@ int main(int argc, char **argv, char **env)
 			printf("\n");
 			free(line);
 		}
-		else if(ft_strncmp(line, "exit",5) == 0)
-		{
-			free(line);
-			return (0);
-		}
 		else
 			free(line);
 	}
 	free(path);
+}
+
+void	print_logo(char **env)
+{
+	char	*lol[15];
+	int		pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		lol[0] = "/usr/bin/clear";
+		lol[1] = NULL;
+		execve("/usr/bin/clear", lol, env);
+	}
+	wait(NULL);
+	printf("\n __________________________________________________________________\n");
+	printf("|    ____                  __             __  ____ ___________     |\n");
+	printf("|   / __ \\__  ______  ____/ /__  _____   /  |/  (_) __/ __/ (_)___ |\n");
+	printf("|  / / / / / / / __ \\/ __  / _ \\/ ___/  / /|_/ / / /_/ /_/ / / __ \\|\n");
+	printf("| / /_/ / /_/ / / / / /_/ /  __/ /     / /  / / / __/ __/ / / / / /|\n");
+	printf("|/_____/\\____/_/ /_/\\__,_/\\___/_/   __/_/  /_/_/_/ /_/ /_/_/_/ /_/ |\n");
+	printf("|        / /_  __  __   _________ _/ /_  ________                  |\n");
+	printf("|       / __ \\/ / / /  / ___/ __ `/ __ \\/ ___/ _ \\                 |\n");
+	printf("|      / /_/ / /_/ /  (__  ) /_/ / /_/ / /  /  __/                 |\n");
+	printf("|     /_.___/\\__, /  /____/\\__,_/_.___/_/   \\___/                  |\n");
+	printf("|          /____/                                                  |\n");
+	printf("|__________________________________________________________________|\n\n\n");
 }
