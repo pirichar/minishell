@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 13:24:27 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 13:39:37 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:14:01 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static int	strlen_path(char **env)
 	The output represent all the possible
 	 path to try with execve with the command
 */
-char	**path_to_strarr(char **env)
+char	**var_to_strarr(char **env, char *var)
 {
 	int		i;
 	int		len;
@@ -66,7 +66,7 @@ char	**path_to_strarr(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
 		{
 			ft_strlcpy(path, env[i], len);
 			p_arr = ft_split(path + 5, ':');

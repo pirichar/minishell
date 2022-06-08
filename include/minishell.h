@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 12:47:29 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 22:44:11 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:30:48 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <limits.h>
 # include <stdio.h>
 # include <sys/wait.h>
+#include <sys/types.h>
+#include <dirent.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdbool.h>
@@ -59,7 +61,7 @@ typedef struct s_parsing
 
 //environement.c
 bool			search_path(const char *p_arr, const char *cmd);
-char			**path_to_strarr(char **env);
+char			**var_to_strarr(char **env, char *var);
 //ft_split.c
 char			**ft_split(const char *s, char c);
 //str_functions.c
