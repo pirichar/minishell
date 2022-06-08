@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 15:01:07 by jvigneau         ###   ########.fr       */
+/*   Updated: 2022/06/08 18:24:08 by jvigneau         ###   ########          */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		i = 0;
-		line = readline("MINISHELL: ");
+		line = readline("4269420@DunderShell$> ");
 		if (line && *line) // not sure I need this but saw it in the man
 			add_history(line);
 		if (line == NULL) //POUR LE CTRL D; COMME CA CA FAIT EN SORTE DE FERMER DS CE CAS LA
@@ -161,7 +161,7 @@ int	main(int argc, char **argv, char **env)
 			i++;
 		}
 		if (i == nb_of_paths(path))
-				printf("Dunder Shell: %s: command not found\n", line);
+				printf("Dunder Shell: command not found: %s\n", line);
 		else
 		{
 			printf("VALID COMMAND WILL HANDLE LATER\n");

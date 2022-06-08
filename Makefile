@@ -3,12 +3,13 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
+#    By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/08 15:53:40 by jvigneau         ###   ########.fr        #
+#    Updated: 2022/06/08 18:16:16 by jvigneau         ###   ########        #
 #                                                                              #
 # **************************************************************************** #
+ #
 define JR
 
 	BIG LEAK!!!! A PICTURE OF ME WORKING
@@ -56,13 +57,13 @@ define TEA
 endef
 export TEA
 
-SRCS	=	
+SRCS	=	src/environement.c src/main.c
 
 HEADERS	=	minishell.h
 
 vpath %.h include/
 
-OB		= @mkdir -p objs && mv ./srcs/*.o ./objs/ 
+OB		= @mkdir -p objs && mv ./src/*.o ./objs/ 
 
 OBJS	=	${SRCS:.c=.o}
 
@@ -70,7 +71,7 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-Wall -Wextra -Werror -o DunderShell
+CFLAGS	=	-Wall -Wextra -Werror -lreadline -o DunderShell
 
 LIBS	=	./include/Libft/libft/libft.a
 
