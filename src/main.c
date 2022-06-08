@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 16:42:37 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:08:13 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,14 @@ int main(int argc, char **argv, char **env)
 		i = 0;
 		line = readline("MINISHELL: ");
 		if (line && *line)
-		{ // not sure I need this but saw it in the man
+		{ 
 			add_history(line);
+			if (line == NULL)
+			{
+				free (s_line);
+				free(line);
+				return (0);
+			}
 			s_line = ft_split(line, ' ');
 			look_for_builtins(s_line, new_env, &b_in);
 			if(ft_strncmp(s_line[0], "exit",5) == 0)
@@ -114,9 +120,7 @@ int main(int argc, char **argv, char **env)
 			{
 				i = 0;
 				pid_t p;
-				//check if the command works line[0]
-				while(path[i]) //this could be inserted into something else I used it to see if the command is in the path or not
-				{
+				while(path[i])
 					if (search_path(path[i], s_line[0]) == true)
 						break ;
 					i++;
