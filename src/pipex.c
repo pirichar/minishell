@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 14:58:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/07 16:33:38 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 13:01:55 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ void	execute_out(const char *cmd, int fds[2], int *p, char **env)
 	*p = pid;
 }
 
-void	execute_solo(const char *cmd, int fds[2], int *p, char **env)
+void	execute_solo(const char *cmd, int *p, char **env)
 {
 	int	pid;
 
@@ -154,7 +154,6 @@ void	execute_solo(const char *cmd, int fds[2], int *p, char **env)
 	{
 		parse_and_exec_cmd(cmd, env);
 	}
-	close(fds[0]);
 	*p = pid;
 }
 /* 

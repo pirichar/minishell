@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 12:47:29 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 09:11:03 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:06:22 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,9 @@ typedef struct s_parsing
 //environement.c
 bool			search_path(const char *p_arr, const char *cmd);
 char			**var_to_strarr(char **env, char *var);
+char 			**copy_strarr(char **env);
+// char			*var_to_str(char **env, char *var);
+
 //ft_split.c
 char			**ft_split(const char *s, char c);
 //str_functions.c
@@ -72,11 +75,13 @@ size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 //pipex.c
 int				calling_the_execs(int argc, char **argv,
 					char **env, t_files *f);
-void			execute_solo(const char *cmd, int fds[2], int *p, char **env);
+void			execute_solo(const char *cmd, pid_t *p, char **env);
 void			execute_out(const char *cmd, int fds[2], int *p, char **env);
 int				execute(const char *cmd, int fd_in, int *p, char **env);
 void			parse_and_exec_cmd(const char *cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
+//ft_strdup.c
+char	*ft_strdup(const char *s1);
 
 
 #endif

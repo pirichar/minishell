@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 11:24:45 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:18:11 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,12 @@ int main(int argc, char **argv, char **env)
 	int		i;
 	char **path;
 	char **s_line;
-	
+	char **new_env;
+
+	new_env = copy_strarr(env);
 	while(1)
 	{
+		path = var_to_strarr(new_env,"PATH=");
 		i = 0;
 		line = readline("MINISHELL: ");
 		if (line && *line)
@@ -114,36 +117,55 @@ int main(int argc, char **argv, char **env)
 				if (with_nl)
 					printf("\n");
 			}
+			
 			else if(ft_strncmp(s_line[0], "cd",3) == 0)
 			{
-				//update PWD HERE ?
-				//UPDATE LAST PWD HERE?
+				// char *tmp;
+				// char *actual_pwd;
+				// char *pwd;
+				// char *lpwd;
+				// char *buff = NULL;
+
+				// //UPDATE LAST PWD HERE?
+				// tmp = *new_env;
+				// lpwd = var_to_str(new_env, "OLDPWD=");
+				// free(lpwd);
+				// actual_pwd = getcwd(buff, 1024);
+				// tmp = ft_strjoin("OLDPWD=",actual_pwd);
+				// free(actual_pwd);
 				chdir(s_line[1]);
+				//update PWD HERE ?
+				// pwd = var_to_str(new_env, "PWD=");
+
 			}
-			else if(ft_strncmp(s_line[0], "ls",3) == 0)
+			
+			else if(ft_strncmp(s_line[0], "export",8) == 0)
 			{
-				DIR *dir;
-				struct dirent *sd;
-				dir = opendir("."); 
-				if (dir == NULL)
-				{
-					printf("Error! Unable to open direcyory.\n");
-					exit (1);
-				}
-				while((sd=readdir(dir)) != NULL)
-				{
-					printf(">> %s\n", sd->d_name);
-				}
-				closedir(dir);
+				//if no command just show all the Standard variables
+			}
+			else if(ft_strncmp(s_line[0], "unset",6) == 0)
+			{
+				//if no command just show all the Standard variables
+			}
+			else if(ft_strncmp(s_line[0], "pwd",4) == 0)
+			{
+				char *to_print;
+				char *buff;
+				
+				buff = NULL;
+				to_print = getcwd(buff, 1024);
+				printf("%s\n",to_print);
+				free(to_print);
+				free(buff);
 			}
 			else if (ft_strncmp(s_line[0], "env",5) == 0)
 			{
 				//update PWD
 				//faire une copie du ENV et l'updater
 				i = 0;
-				while(env[i])
+				while(new_env[i])
 				{
-					printf("%s\n",env[i]);
+					printf("%s\n",new_env[i]);
 					i++;
 				}
 				printf("\n");
@@ -154,33 +176,32 @@ int main(int argc, char **argv, char **env)
 				free(line);
 				return (0);
 			}
+			//basic execute function
 			else if(1)
 			{
 				i = 0;
-				int *p;
-				path = var_to_strarr(env,"PATH=");
+				pid_t p;
 				//check if the command works line[0]
 				while(path[i]) //this could be inserted into something else I used it to see if the command is in the path or not
 				{
-					if (search_path(path[i], line) == true)
+					if (search_path(path[i], s_line[0]) == true)
 						break ;
 					i++;
 				}
 				if (i != nb_of_paths(path))
 				{
-					printf("VALID COMMAND WILL HANDLE LATER\n");
-					// execute_solo()
-					//wait for the pid
+					execute_solo(line, &p, env);
+					waitpid(p, NULL, 0);
 				}
 			}
 			else
 			{
 				printf("Please provide a built-in command to test or a valid command in the path\n");
-				free(line);
+				// free(line);
 			}
-		}
-		free(path);
-		free(line);
 		free(s_line);
+		}
+		free(line);
+		free(path);
 	}
 }
