@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 12:47:29 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 15:06:22 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 16:33:44 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ typedef struct s_parsing
 bool			search_path(const char *p_arr, const char *cmd);
 char			**var_to_strarr(char **env, char *var);
 char 			**copy_strarr(char **env);
-// char			*var_to_str(char **env, char *var);
+char			*var_to_str(char **env, char *var);
 
 //ft_split.c
 char			**ft_split(const char *s, char c);
@@ -82,6 +82,9 @@ void			parse_and_exec_cmd(const char *cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //ft_strdup.c
 char	*ft_strdup(const char *s1);
+
+//builtin
+void	look_for_builtins(char **s_line, char **new_env, bool *b_in);
 
 
 #endif

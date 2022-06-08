@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 13:24:27 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 15:13:16 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:26:00 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,25 +87,16 @@ char	**var_to_strarr(char **env, char *var)
 	return (p_arr);
 }
 
-// char	*var_to_str(char **env, char *var)
-// {
-// 	int		i;
-// 	// int		len;
-// 	// char	*rtn;
-
-
-// 	i = 0;
-// 	while (env)
-// 	{
-// 		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
-// 		{
-// 			// ft_strlcpy(path, env[i], len);
-// 			break;
-// 		}
-// 			env++;
-// 	}
-// 	return (env);
-// }
+char	*var_to_str(char **env, char *var)
+{
+	while (env)
+	{
+		if (ft_strncmp(*env, var, ft_strlen(var)) == 0)
+			break;
+		env++;
+	}
+	return *(env);
+}
 
 /*
 	This function takes as input a line of the path and the argv[1] passed by main
