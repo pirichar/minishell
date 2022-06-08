@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 19:08:13 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:41:12 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ int main(int argc, char **argv, char **env)
 			{
 				i = 0;
 				pid_t p;
+				
 				while(path[i])
+				{
 					if (search_path(path[i], s_line[0]) == true)
 						break ;
 					i++;
