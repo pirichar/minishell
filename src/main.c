@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 19:47:28 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:51:55 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,26 +80,19 @@ int	nb_of_paths(char **path)
 
 int	main(int argc, char **argv, char **env)
 {
-	char	*line;
-	int		i;
-	char	**path;
-	int		j = 0;
-	char	*cmd;
-
+	
 	(void)argc;
 	(void)argv;
-	char *line;
 	int		i;
+	char	*line;
 	char **path;
 	char **s_line;
 	char **new_env;
 	bool	b_in;
 
 
-	new_env = copy_strarr(env);
-	while(1)
 	print_logo(env);
-	path = path_to_strarr(env);
+	new_env = copy_strarr(env);
 	while (1)
 	{
 		b_in = false;
