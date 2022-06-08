@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 19:41:12 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:47:28 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,24 @@
 // 	free(path);
 // }
 
-
 int	nb_of_paths(char **path)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(path[i])
+	while (path[i])
 		i++;
 	return (i);
 }
 
-int main(int argc, char **argv, char **env)
+int	main(int argc, char **argv, char **env)
 {
+	char	*line;
+	int		i;
+	char	**path;
+	int		j = 0;
+	char	*cmd;
+
 	(void)argc;
 	(void)argv;
 	char *line;
@@ -93,6 +98,9 @@ int main(int argc, char **argv, char **env)
 
 	new_env = copy_strarr(env);
 	while(1)
+	print_logo(env);
+	path = path_to_strarr(env);
+	while (1)
 	{
 		b_in = false;
 		path = var_to_strarr(new_env,"PATH=");
@@ -137,9 +145,38 @@ int main(int argc, char **argv, char **env)
 			{
 				printf("Please provide a built-in command to test or a valid command in the path\n");
 			}
-		free(s_line);
+			printf("\n");
+			free(line);
 		}
-		free(line);
-		free(path);
+		else
+			free(line);
 	}
+	free(path);
+}
+
+void	print_logo(char **env)
+{
+	char	*lol[15];
+	int		pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		lol[0] = "/usr/bin/clear";
+		lol[1] = NULL;
+		execve("/usr/bin/clear", lol, env);
+	}
+	wait(NULL);
+	printf("\n __________________________________________________________________\n");
+	printf("|    ____                  __             __  ____ ___________     |\n");
+	printf("|   / __ \\__  ______  ____/ /__  _____   /  |/  (_) __/ __/ (_)___ |\n");
+	printf("|  / / / / / / / __ \\/ __  / _ \\/ ___/  / /|_/ / / /_/ /_/ / / __ \\|\n");
+	printf("| / /_/ / /_/ / / / / /_/ /  __/ /     / /  / / / __/ __/ / / / / /|\n");
+	printf("|/_____/\\____/_/ /_/\\__,_/\\___/_/   __/_/  /_/_/_/ /_/ /_/_/_/ /_/ |\n");
+	printf("|        / /_  __  __   _________ _/ /_  ________                  |\n");
+	printf("|       / __ \\/ / / /  / ___/ __ `/ __ \\/ ___/ _ \\                 |\n");
+	printf("|      / /_/ / /_/ /  (__  ) /_/ / /_/ / /  /  __/                 |\n");
+	printf("|     /_.___/\\__, /  /____/\\__,_/_.___/_/   \\___/                  |\n");
+	printf("|          /____/                                                  |\n");
+	printf("|__________________________________________________________________|\n\n\n");
 }
