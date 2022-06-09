@@ -71,9 +71,9 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-Wall -Wextra -Werror  -o DunderShell -lreadline
+CFLAGS	=	-Wall -Wextra -Werror  -o DunderShell 
 
-LIBS	=	./include/Libft/libft/libft.a
+LIBS	=	./include/Libft/libft/libft.a -lreadline
 
 NAME	=	DunderShell
 
@@ -137,7 +137,7 @@ fclean	:	clean
 			@if [ -f "./DunderShell" ]; then \
 				rm -rf ./DunderShell; \
 			fi
-			$(FTMAKE) $``@
+			$(FTMAKE) $@
 			@sleep 1
 			@echo "__________________________________"
 			@echo "\n         Cleaning done!\n"

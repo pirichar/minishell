@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 16:14:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/09 08:38:00 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:42:00 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ void	mini_echo(char **s_line)
 	bool with_nl = true;
 	while(s_line[i])
 	{
+		//filter un nombre inifni de -n
+		//fitrer un nombre infini de n dans le flag -n
+		//-n had to be at the start
 		if (ft_strncmp(s_line[i], "-n", 3) == 0)
 		{
 			with_nl = false;
@@ -36,22 +39,10 @@ void	mini_echo(char **s_line)
 
 void	mini_cd(char **s_line)
 {
-	// char *tmp;
-	// char *actual_pwd;
-	// // char *pwd;
-	// char *lpwd;
-	// char *buff = NULL;
-
-	// /*update last pwd with the actual pwd*/
-	// tmp = *new_env;
-	// lpwd = var_to_str(new_env, "OLDPWD=");
-	// actual_pwd = getcwd(buff, 1024);
-	// lpwd = ft_strjoin("OLDPWD=", actual_pwd);
-	// free(actual_pwd);
-	/*change the actual folder*/
+	/*change the OLDPWD= folder*/
 	chdir(s_line[1]);
-	//update PWD HERE ?
-	// pwd = var_to_str(new_env, "PWD=");
+	/*change the PWD*/
+
 }
 
 void	mini_pwd()
