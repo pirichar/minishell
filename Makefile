@@ -59,7 +59,7 @@ export TEA
 
 SRCS	=	src/environement.c src/main.c src/builtin.c  src/ft_split.c src/ft_strdup.c src/pipex.c
 
-HEADERS	=	minishell.h
+HEADERS	=	minishell.h colors.h
 
 vpath %.h include/
 
@@ -71,7 +71,7 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-Wall -Wextra -Werror  -o DunderShell
+CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -lreadline
 
 LIBS	=	./include/Libft/libft/libft.a
 

@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 19:51:55 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/09 08:17:15 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,6 @@ int	main(int argc, char **argv, char **env)
 			{
 				printf("Please provide a built-in command to test or a valid command in the path\n");
 			}
-			printf("\n");
 			free(line);
 		}
 		else
