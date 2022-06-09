@@ -3,13 +3,12 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+         #
+#    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/08 18:16:16 by jvigneau         ###   ########        #
+#    Updated: 2022/06/09 11:34:50 by jvigneau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
- #
 define JR
 
 	BIG LEAK!!!! A PICTURE OF ME WORKING
