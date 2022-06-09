@@ -3,15 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
+#    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
 #    Updated: 2022/06/09 15:38:36 by jvigneau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-# **************************************************************************** #
-define JR
 
+define JR
 	BIG LEAK!!!! A PICTURE OF ME WORKING
 
                         .="=.
@@ -59,7 +58,7 @@ export TEA
 
 SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c
 
-HEADERS	=	minishell.h
+HEADERS	=	minishell.h colors.h
 
 vpath %.h include/
 
