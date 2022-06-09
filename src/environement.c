@@ -6,21 +6,31 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 13:24:27 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 13:39:37 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 15:26:00 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// static void	strarr_free(char **arr)
-// {
-// 	int	i;
+char **copy_strarr(char **env)
+{
+	int i;
+	char **rtn;
+	
+	i = 0;
+	while(env[i])
+		i++;
+	rtn = malloc(sizeof(char *) * i + 1);
+	rtn[i + 1] = 0;
+	i = 0;
+	while(env[i])
+	{
+		rtn[i] = ft_strdup(env[i]);
+		i++;
+	}
+	return (rtn);
+}
 
-// 	i = 0;
-// 	while (arr[i])
-// 		free(arr[i++]);
-// 	free(arr);
-// }
 
 static int	strlen_path(char **env)
 {
@@ -53,7 +63,7 @@ static int	strlen_path(char **env)
 	The output represent all the possible
 	 path to try with execve with the command
 */
-char	**path_to_strarr(char **env)
+char	**var_to_strarr(char **env, char *var)
 {
 	int		i;
 	int		len;
@@ -66,7 +76,7 @@ char	**path_to_strarr(char **env)
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
 		{
 			ft_strlcpy(path, env[i], len);
 			p_arr = ft_split(path + 5, ':');
@@ -75,6 +85,17 @@ char	**path_to_strarr(char **env)
 	}
 	free (path);
 	return (p_arr);
+}
+
+char	*var_to_str(char **env, char *var)
+{
+	while (env)
+	{
+		if (ft_strncmp(*env, var, ft_strlen(var)) == 0)
+			break;
+		env++;
+	}
+	return *(env);
 }
 
 /*

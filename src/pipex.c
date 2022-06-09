@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 14:58:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 22:42:10 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/08 13:01:55 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	parse_and_exec_cmd(const char *cmd, char **env)
 	int			i;
 	t_exec_ptrs	p;
 
-	p.path = path_to_strarr(env);
+	p.path = var_to_strarr(env,"PATH=");
 	p.cmd_with_slash = ft_strjoin("/", cmd);
 	p.cmd_split = ft_split(cmd, ' ');
 	i = 0;
@@ -145,6 +145,17 @@ void	execute_out(const char *cmd, int fds[2], int *p, char **env)
 	*p = pid;
 }
 
+void	execute_solo(const char *cmd, int *p, char **env)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		parse_and_exec_cmd(cmd, env);
+	}
+	*p = pid;
+}
 /* 
 	Calling the exec goes through all the commands and run execute on that command
 	It will give execute different parameters depending on 

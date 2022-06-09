@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 12:47:29 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 15:34:51 by jvigneau         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:53:13 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -17,6 +18,8 @@
 # include <limits.h>
 # include <stdio.h>
 # include <sys/wait.h>
+#include <sys/types.h>
+#include <dirent.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdbool.h>
@@ -63,7 +66,10 @@ typedef struct s_parsing
 void			print_logo(char **env);
 //environement.c
 bool			search_path(const char *p_arr, const char *cmd);
-char			**path_to_strarr(char **env);
+char			**var_to_strarr(char **env, char *var);
+char 			**copy_strarr(char **env);
+char			*var_to_str(char **env, char *var);
+
 //ft_split.c
 char			**ft_split(const char *s, char c);
 // str_functions.c
@@ -74,10 +80,16 @@ char			**ft_split(const char *s, char c);
 //pipex.c
 int				calling_the_execs(int argc, char **argv,
 					char **env, t_files *f);
+void			execute_solo(const char *cmd, pid_t *p, char **env);
 void			execute_out(const char *cmd, int fds[2], int *p, char **env);
 int				execute(const char *cmd, int fd_in, int *p, char **env);
 void			parse_and_exec_cmd(const char *cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
+//ft_strdup.c
+char	*ft_strdup(const char *s1);
+
+//builtin
+void	look_for_builtins(char **s_line, char **new_env, bool *b_in);
 
 
 #endif

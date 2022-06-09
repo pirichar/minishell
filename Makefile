@@ -6,8 +6,9 @@
 #    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/09 11:34:50 by jvigneau         ###   ########.fr        #
+#    Updated: 2022/06/09 12:06:26 by jvigneau         ###   ########.fr        #
 #                                                                              #
+# **************************************************************************** #
 # **************************************************************************** #
 define JR
 
@@ -56,7 +57,7 @@ define TEA
 endef
 export TEA
 
-SRCS	=	src/environement.c src/main.c
+SRCS	=	src/environement.c src/main.c src/builtin.c  src/ft_split.c src/ft_strdup.c src/pipex.c
 
 HEADERS	=	minishell.h
 
@@ -70,13 +71,13 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-Wall -Wextra -Werror -lreadline -o DunderShell
+CFLAGS	=	-Wall -Wextra -Werror -o DunderShell
 
-LIBS	=	./include/Libft/libft/libft.a
+LIBS	=	include/Libft/libft/libft.a -lreadline
 
 NAME	=	DunderShell
 
-FTMAKE	=	@cd ./include/Libft/libft && make -s 
+FTMAKE	=	@cd include/Libft/libft && make -s 
 
 RUN		=	./DunderShell
 
@@ -136,7 +137,7 @@ fclean	:	clean
 			@if [ -f "./DunderShell" ]; then \
 				rm -rf ./DunderShell; \
 			fi
-			$(FTMAKE) $``@
+			$(FTMAKE) $@
 			@sleep 1
 			@echo "__________________________________"
 			@echo "\n         Cleaning done!\n"
@@ -147,9 +148,6 @@ re		:	fclean all
 
 run :		fclean all 
 			$(RUN)
-			
-bonus :		all
-			@cd ./bonus && make -s
 
 jr		: 
 			clear

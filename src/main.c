@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+        */
+/*   By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 18:24:08 by jvigneau         ###   ########          */
+/*   Updated: 2022/06/09 11:55:39 by jvigneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include "../include/minishell.h"
+
 
 // void	print_env()
 // {
@@ -79,102 +80,65 @@ int	nb_of_paths(char **path)
 
 int	main(int argc, char **argv, char **env)
 {
-	char	*line;
-	int		i;
-	char	**path;
-	int		j = 0;
-	char	*cmd;
-
+	
 	(void)argc;
 	(void)argv;
+	int		i;
+	char	*line;
+	char **path;
+	char **s_line;
+	char **new_env;
+	bool	b_in;
+
+
 	print_logo(env);
-	path = path_to_strarr(env);
+	new_env = copy_strarr(env);
 	while (1)
 	{
+		b_in = false;
+		path = var_to_strarr(new_env,"PATH=");
 		i = 0;
-		line = readline("4269420@DunderShell$> ");
-		if (line && *line) // not sure I need this but saw it in the man
+		line = readline("MINISHELL: ");
+		if (line == NULL)
+			return (0);
+		if (line && *line)
+		{ 
 			add_history(line);
-		if (line == NULL) //POUR LE CTRL D; COMME CA CA FAIT EN SORTE DE FERMER DS CE CAS LA
-			return (0);
-		if (ft_strncmp(line, "exit", 5) == 0)
-		{
-			free(line);
-			return (0);
-		}
-		/* parse the line here
-			1- first round check the special characters - set the quotes to their number ;
-				check for the start at the same time and filter the " " ' ' and spaces at first
-				check the number of pipe 
-				check the ammount of strings to malloc
-				at the end if quotes % 2 != 0 invalid command
-				
-			2- reparse taking in count special character and fill the cmd array spliting with spaces
-				-- FOR THE CMDS ; I WILL NEED TO IMPLEMENT A LIST OR A STRUCT WITH THE STRING ITSELF AND ITS POSITION + A POINTER TO THE NEXT ELEMENT --
-				--ASSUME THAT IF YOU ARE IN QUOTES YOULL BE IN AN OTHER MODE OF PARSING--
-				--PARSE EVERYTHING THEN RUN ALL IN PARRALLEL LIKE YOU DID IN PIPEX--
-				***** << allo " ; IN THIS SCENARIO THE " QUOTE WOULD PROMPT THE QUOTE PROMPT BEFORE THE HERE DOC SO THE PROMPT GOES OVER ALL ****
-				If you encounter a < dup2 the input with the file; open as well; if you dont find the file return and empty pipe and prompt an error
-				if you encounter a << at the begining of the line with  a valid herdoc word after you prompt an heredoc and pass the output to the other command if there is any
-				if you encounter a > you dup2 the ouput and open the file ** THINK ABOUT THIS ONE COMPARE TO YOUR PIPEX
-				if you encounter a >> you dup2 the ouput and open the file with append
-				if you encounter a " " any character goes into the array no mather what except for valid path with $; each time you hit a " nb_dbquote-- ; dbquotes = true;enter dbquotes mode
-				if you encounter a ' ' any character goes into the array untill you hit another one each time you hit a ' nb_quote-- ; quotes = true;enter quote mode
-				if you encounter a $	if the word next to the $ is a valid env var the env var pointed by the word replace the word into the array
-				if you encounter a space you should try to access the word and see if its a valid command
-					if its not valid prompt a message error and pass an empty pipe to next command 
-						if last command just prompt empty message and return prompt
-					if its valid add everything to the string formed by the accessed command so you can use them as its arguments ; nb of wd in this node ++;
-					each time you cross a space nb of word in this node ++
-					go untill you meet the \0 or a |  character or a < or a > or a & 
-				if you encounter a | 	you must absolutely stop the actual array with \0  and move to the next command; pipe--
-					you could also check after a space how many space there is before to add the next argument the the array
-					while it is space and the next character is a space or the same kind of quote you might be in i++;
-					if char +1 = \0 stop the parsing of the line
-				if you encounter a \0  stop the parsing of the line
-				else
-					you add the char into the array 
-			3- give that to the command that search the path OR exec the cmds
-							*/
-		/* 
-			initiate program for this and work in the child after
-			create an array of pids depending on the count of commands
-			pass the array of argument as it was char **argv in calling_the_execs
-			Calculate the amount of argument and pass it as argc 
-			set fd in ; set fd out; prepare stuff for the execute command function
-		*/
-		while (line && line[j])
-		{
-			if (line[j] == ' ')
+			if (line == NULL)
 			{
-				cmd = malloc(j + 1 * sizeof(char));
-				ft_strlcpy(cmd, line, j + 1);
-				printf("cmd = %s\n", cmd);
-				break ;
+				free (s_line);
+				free(line);
+				return (0);
 			}
-			j++;
-		}
-		while (path[i]) //this could be inserted into something else I used it to see if the command is in the path or not
-		{
-			if (search_path(path[i], line) == true)
-				break ;
-			i++;
-		}
-		if (i == nb_of_paths(path))
-				printf("Dunder Shell: command not found: %s\n", line);
-		else
-		{
-			printf("VALID COMMAND WILL HANDLE LATER\n");
-			//here I should probably fork and start to do stuff with that command
-		}
-
-		if (ft_strncmp(line, "env",5) == 0)
-		{
-			i = 0;
-			while (env[i])
+			s_line = ft_split(line, ' ');
+			look_for_builtins(s_line, new_env, &b_in);
+			if(ft_strncmp(s_line[0], "exit",5) == 0)
 			{
-				printf("%s\n",env[i]);
-				i++;
+				free (s_line);
+				free(line);
+				return (0);
+			}
+			//basic execute function
+			if(b_in == false)
+			{
+				i = 0;
+				pid_t p;
+				
+				while(path[i])
+				{
+					if (search_path(path[i], s_line[0]) == true)
+						break ;
+					i++;
+				}
+				if (i != nb_of_paths(path))
+				{
+					execute_solo(line, &p, env);
+					waitpid(p, NULL, 0);
+				}
+			}
+			else if (b_in == false)
+			{
+				printf("Please provide a built-in command to test or a valid command in the path\n");
 			}
 			printf("\n");
 			free(line);
