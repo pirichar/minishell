@@ -1,72 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/09 11:55:39 by jvigneau         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
 #include "../include/minishell.h"
-
-
-// void	print_env()
-// {
-// 	char	*tmp;
-
-
-// }
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	(void)argc;
-// 	(void)argv;
-// 	char *line;
-// 	int		i;
-// 	char **path;	
-// 	path = path_to_strarr(env);
-// 	i = 0;
-// 	while(1)
-// 	{
-// 		line = readline("MINISHELL: ");
-// 		if (line && *line) // not sure I need this but saw it in the man
-// 			add_history(line);
-// 		while(path[i])
-// 		{
-// 			if (search_path(path[i], line) == true)
-// 				printf("VALID COMMAND WILL HANDLE LATER\n");
-// 			else
-// 				printf("Invalid command\n");
-// 			i++;
-// 		}
-// 		if (ft_strncmp(line, "env",5) == 0)
-// 		{
-// 			i = 0;
-// 			while(env[i])
-// 			{
-// 				printf("%s\n",env[i]);
-// 				i++;
-// 			}
-// 			printf("\n");
-// 			free(line);
-// 		}
-// 		else if(ft_strncmp(line, "exit",5) == 0)
-// 		{
-// 			free(line);
-// 			return (0);
-// 		}
-// 		else
-// 			free(line);
-// 	}
-// 	free(path);
-// }
 
 int	nb_of_paths(char **path)
 {
@@ -80,51 +13,52 @@ int	nb_of_paths(char **path)
 
 int	main(int argc, char **argv, char **env)
 {
-	
-	(void)argc;
-	(void)argv;
 	int		i;
 	char	*line;
-	char **path;
-	char **s_line;
-	char **new_env;
+	char	**path;
+	char	**s_line;
+	char	**new_env;
 	bool	b_in;
 
-
+	(void)argv;
+	(void)argc;
 	print_logo(env);
 	new_env = copy_strarr(env);
 	while (1)
 	{
 		b_in = false;
-		path = var_to_strarr(new_env,"PATH=");
+		path = var_to_strarr(new_env, "PATH=");
 		i = 0;
-		line = readline("MINISHELL: ");
+		line = readline("User@IP.DUNDERSHELL>$ ");
 		if (line == NULL)
+		{
+			free(line);
+			free(path);
+			free(new_env);
 			return (0);
+		}
 		if (line && *line)
-		{ 
+		{
 			add_history(line);
-			if (line == NULL)
-			{
-				free (s_line);
-				free(line);
-				return (0);
-			}
+			start_parse(line);
+
+
+
+
 			s_line = ft_split(line, ' ');
 			look_for_builtins(s_line, new_env, &b_in);
-			if(ft_strncmp(s_line[0], "exit",5) == 0)
+			if (ft_strncmp(s_line[0], "exit",5) == 0)
 			{
 				free (s_line);
 				free(line);
 				return (0);
 			}
 			//basic execute function
-			if(b_in == false)
+			if (b_in == false)
 			{
 				i = 0;
 				pid_t p;
-				
-				while(path[i])
+				while (path[i])
 				{
 					if (search_path(path[i], s_line[0]) == true)
 						break ;
@@ -140,7 +74,6 @@ int	main(int argc, char **argv, char **env)
 			{
 				printf("Please provide a built-in command to test or a valid command in the path\n");
 			}
-			printf("\n");
 			free(line);
 		}
 		else
@@ -159,7 +92,7 @@ void	print_logo(char **env)
 	{
 		lol[0] = "/usr/bin/clear";
 		lol[1] = NULL;
-		execve("/usr/bin/clear", lol, env);
+		execve(lol[0], lol, env);
 	}
 	wait(NULL);
 	printf("\n __________________________________________________________________\n");

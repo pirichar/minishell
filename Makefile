@@ -6,7 +6,7 @@
 #    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/09 12:06:26 by jvigneau         ###   ########.fr        #
+#    Updated: 2022/06/09 15:38:36 by jvigneau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 # **************************************************************************** #
@@ -57,7 +57,7 @@ define TEA
 endef
 export TEA
 
-SRCS	=	src/environement.c src/main.c src/builtin.c  src/ft_split.c src/ft_strdup.c src/pipex.c
+SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c
 
 HEADERS	=	minishell.h
 

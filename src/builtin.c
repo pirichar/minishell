@@ -1,26 +1,15 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/08 16:14:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 16:39:29 by pirichar         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/minishell.h"
 
 //s'assurer que dans la version officielle echo "-n" 
 // fonctionne aussi mais pas echo " -n"
 void	mini_echo(char **s_line)
 {
-	int i;
+	int		i;
+	bool	with_nl;
 
 	i = 1;
-	bool with_nl = true;
-	while(s_line[i])
+	with_nl = true;
+	while (s_line[i])
 	{
 		if (ft_strncmp(s_line[i], "-n", 3) == 0)
 		{
@@ -28,7 +17,7 @@ void	mini_echo(char **s_line)
 			i++;
 		}
 		if (s_line[i] != 0)
-		printf("%s ", s_line[i++]);
+			printf("%s", s_line[i++]);
 	}
 	if (with_nl)
 		printf("\n");
