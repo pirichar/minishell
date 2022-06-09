@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/09 08:17:15 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:18:41 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ int	main(int argc, char **argv, char **env)
 		path = var_to_strarr(new_env,"PATH=");
 		i = 0;
 		line = readline("MINISHELL: ");
+		if (line == NULL)
+			return (0);
 		if (line && *line)
 		{ 
 			add_history(line);
