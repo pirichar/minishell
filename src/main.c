@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 19:51:55 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/09 11:55:39 by jvigneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,8 @@ int	main(int argc, char **argv, char **env)
 		path = var_to_strarr(new_env,"PATH=");
 		i = 0;
 		line = readline("MINISHELL: ");
+		if (line == NULL)
+			return (0);
 		if (line && *line)
 		{ 
 			add_history(line);
