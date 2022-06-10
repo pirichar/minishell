@@ -47,6 +47,16 @@ typedef struct s_ptrs
 	char	**cmd_split;
 }				t_exec_ptrs;
 
+typedef struct s_cmds
+{
+	char			*cmd;
+	int				flags;
+	struct s_cmds	*next;
+	struct s_cmds	*prev;
+	struct s_cmds	*start;
+
+}			t_cmds;
+
 typedef struct s_parsing
 {
 	int		nb_quote;
@@ -62,8 +72,9 @@ typedef struct s_parsing
 	int		dlr_sign;
 	int 	and_sign;
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
-	char 	**cmds;
-	int		nb_tokens;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
+	char 	**cmds;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
+	int		nb_tokens;
+	t_cmds	*commands;
 }				t_parsing;
 
 
@@ -89,5 +100,8 @@ int				start_parse(char *line);
 int				nb_tokens(t_parsing *parse_list, char *line);
 void			init_parse(t_parsing *parse_list);
 char			*tokenization(char *line, int i, t_parsing *parse_list);
+int				cnt_tokens(char **cmds);
+int				put_on_the_props(t_parsing *parse_list);
+int				check_flags(t_parsing *parse_list);
 
 #endif
