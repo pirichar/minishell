@@ -6,11 +6,37 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 16:14:13 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/12 14:32:48 by pirichar         ###   ########.fr       */
+/*   Updated: 2022/06/12 15:06:35 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+/*
+	Function to use in unset
+*/
+// static void	delete_variable(char **env, char *var, char *variable)
+// {
+// 	int i;
+// 	int j;
+// 	char **tmp;
+	
+// 	tmp = env;
+// 	i = strarr_len(tmp);//strlen of old tmp
+// 	env = malloc(sizeof(char *) * i ); //malloc array 1 smaller then the last one (with no + 1)
+// 	env[i] = 0;
+// 	i = 0;
+// 	j = 0;
+// 	while(tmp[i])//pass over all the tmp character and filter the one you don't want
+// 	{
+// 		if (ft_strncmp(tmp[i], var, ft_strlen(var)) == 0)
+// 			i++;
+// 		env[j] = ft_strdup(tmp[i]);
+// 		i++;
+// 		j++;
+// 	}
+// 	env[i] = ft_strjoin(var, variable);
+// 	free_strrarr(tmp);
+// }
 
 int	strarr_len(char **str_arr)
 {
@@ -20,6 +46,19 @@ int	strarr_len(char **str_arr)
 	while(str_arr[i])
 		i++;
 	return (i);
+}
+
+void	free_strrarr(char **to_free)
+{
+	int i;
+
+	i = 0;
+	while(to_free[i])
+	{
+		free(to_free[i]);
+		i++;
+	}
+	free(to_free);
 }
 
 static void	add_new_variable(char **env,char *var, char *variable)
@@ -38,8 +77,9 @@ static void	add_new_variable(char **env,char *var, char *variable)
 		i++;
 	}
 	env[i] = ft_strjoin(var, variable);
-	//free tmp probably here
+	free_strrarr(tmp);
 }
+
 
 void	set_variable(char **env, char *var, char *new_var)
 {
@@ -58,7 +98,8 @@ void	set_variable(char **env, char *var, char *new_var)
 		}
 		i++;
 	}
-	add_new_variable(env, var, new_var);
+	if (env[i] == NULL)
+		add_new_variable(env, var, new_var);
 	//look for variable first
 	//if you find it replace it
 	//if you dont find it create it 
@@ -97,7 +138,7 @@ void	mini_echo(char **s_line)
 		//filter un nombre inifni de -n
 		//fitrer un nombre infini de n dans le flag -n
 		//-n had to be at the start
-		if (ft_strncmp(s_line[i], "-n", 3) == 0)
+		if (ft_strncmp(s_line[1], "-n", 3) == 0)
 		{
 			with_nl = false;
 			i++;
@@ -151,7 +192,14 @@ void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
 	else if(ft_strncmp(s_line[0], "export",8) == 0)
 	{
 		*b_in = true;
-		//if no command just show all the Standard variables
+		//if export alone
+			//print out the list of env but alphabetically 
+			//with something infront
+		//else
+			//ft_split with = 
+			//keep the = for the new_split[0]
+			//add the content after the = to the new_split[1];
+			//set_variable(env, new_split[0], new_split[1]);
 	}
 	else if(ft_strncmp(s_line[0], "unset",6) == 0)
 	{
