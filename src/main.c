@@ -40,7 +40,7 @@ int	main(int argc, char **argv, char **env)
 		if (line && *line)
 		{
 			add_history(line);
-			start_parse(line);
+			start_parse(line, env);
 
 
 

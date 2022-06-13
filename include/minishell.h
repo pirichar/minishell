@@ -50,7 +50,9 @@ typedef struct s_ptrs
 typedef struct s_cmds
 {
 	char			*cmd;
-	int				flags;
+	int				flags;  // 0 = exe, 1 = redirection, 2 = flags, 3 = &&, 4 = pipe, 5 = $var, 6 = param
+	bool			quotes;
+	bool			close_quotes;
 	struct s_cmds	*next;
 	struct s_cmds	*prev;
 	struct s_cmds	*start;
@@ -96,12 +98,14 @@ char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void	look_for_builtins(char **s_line, char **new_env, bool *b_in);
 //parsing
-int				start_parse(char *line);
+int				start_parse(char *line, char *env[]);
 int				nb_tokens(t_parsing *parse_list, char *line);
 void			init_parse(t_parsing *parse_list);
 char			*tokenization(char *line, int i, t_parsing *parse_list);
 int				cnt_tokens(char **cmds);
-int				put_on_the_props(t_parsing *parse_list);
-int				check_flags(t_parsing *parse_list);
+int				put_on_the_props(t_parsing *parse_list, char *env[]);
+int				check_tokens(char *cmd, t_parsing *parse_list, char *env[]);
+int				check_exe(char *cmd, char *env[]);
+void			free_them(t_parsing *parse_list);
 
 #endif
