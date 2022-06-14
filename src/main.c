@@ -20,6 +20,7 @@ int	main(int argc, char **argv, char **env)
 	char	**new_env;
 	bool	b_in;
 	char	*user;
+	char	*blue_user;
 	char	*prompt;
 
 	(void)argv;
@@ -30,8 +31,10 @@ int	main(int argc, char **argv, char **env)
 		i++;
 	user = calloc(ft_strlen(env[i]), sizeof(char));
 	ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
-	user = ft_strjoin(BBLU, user);
-	prompt = ft_strjoin(user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
+	blue_user = ft_strjoin(BBLU, user);
+	free(user);
+	prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
+	free(blue_user);
 	new_env = copy_strarr(env);
 	while (1)
 	{
@@ -89,6 +92,7 @@ int	main(int argc, char **argv, char **env)
 			free(line);
 	}
 	free(path);
+	free(prompt);
 }
 
 void	print_logo(char **env)

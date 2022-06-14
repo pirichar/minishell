@@ -10,36 +10,36 @@ int	start_parse(char *line, char *env[])
 	parse_list = malloc(sizeof(t_parsing));
 	if (line)
 	{
-		parse_list->cmds = malloc(13 * sizeof(char *));
-		parse_list->cmds[0] = calloc(8, sizeof(char));
-		parse_list->cmds[0] = "Makefile";
-		parse_list->cmds[1] = calloc(2, sizeof(char));
-		parse_list->cmds[1] = "<<";
-		parse_list->cmds[2] = calloc(6, sizeof(char));
-		parse_list->cmds[2] = "\"echo\"";
-		parse_list->cmds[3] = calloc(2, sizeof(char));
-		parse_list->cmds[3] = "-n";
-		parse_list->cmds[4] = calloc(8, sizeof(char));
-		parse_list->cmds[4] = "allo toi";
-		parse_list->cmds[5] = calloc(2, sizeof(char));
-		parse_list->cmds[5] = "ca";
-		parse_list->cmds[6] = calloc(4, sizeof(char));
-		parse_list->cmds[6] = "$PWD";
-		parse_list->cmds[7] = calloc(47, sizeof(char));
-		parse_list->cmds[7] = "\"lui                             est le best\""; // il faut quand tu split, il y est un flag pour les quotes, question que je sache si il y a des quotes ou non ds le token, si oui, faut il les enlever oui ou non
-		parse_list->cmds[8] = calloc(2, sizeof(char));
-		parse_list->cmds[8] = "&&";
-		parse_list->cmds[9] = calloc(2, sizeof(char));
-		parse_list->cmds[9] = "||";
-		parse_list->cmds[10] = calloc(2, sizeof(char));
-		parse_list->cmds[10] = ">>";
-		parse_list->cmds[11] = calloc(7, sizeof(char));
-		parse_list->cmds[11] = "outfile";
-		parse_list->cmds[12] = NULL;
+		parse_list->tkns_array = malloc(13 * sizeof(char *));
+		parse_list->tkns_array[0] = calloc(8, sizeof(char));
+		parse_list->tkns_array[0] = "Makefile";
+		parse_list->tkns_array[1] = calloc(2, sizeof(char));
+		parse_list->tkns_array[1] = "<<";
+		parse_list->tkns_array[2] = calloc(6, sizeof(char));
+		parse_list->tkns_array[2] = "\'echo\'";
+		parse_list->tkns_array[3] = calloc(2, sizeof(char));
+		parse_list->tkns_array[3] = "\"'-n'\"";
+		parse_list->tkns_array[4] = calloc(10, sizeof(char));
+		parse_list->tkns_array[4] = "'allo $PWD toi'";
+		parse_list->tkns_array[5] = calloc(8, sizeof(char));
+		parse_list->tkns_array[5] = "/bin/cat";
+		parse_list->tkns_array[6] = calloc(4, sizeof(char));
+		parse_list->tkns_array[6] = "$ENV";
+		parse_list->tkns_array[7] = calloc(47, sizeof(char));
+		parse_list->tkns_array[7] = "\"lui          $PWD               est le best\""; // il faut quand tu split, il y est un flag pour les quotes, question que je sache si il y a des quotes ou non ds le token, si oui, faut il les enlever oui ou non
+		parse_list->tkns_array[8] = calloc(2, sizeof(char));
+		parse_list->tkns_array[8] = "&&";
+		parse_list->tkns_array[9] = calloc(2, sizeof(char));
+		parse_list->tkns_array[9] = "||";
+		parse_list->tkns_array[10] = calloc(2, sizeof(char));
+		parse_list->tkns_array[10] = ">>";
+		parse_list->tkns_array[11] = calloc(7, sizeof(char));
+		parse_list->tkns_array[11] = "outfile";
+		parse_list->tkns_array[12] = NULL;
 	}
-	// while (parse_list->cmds[i])
+	// while (parse_list->tkns_array[i])
 	// {
-	// 	printf("token %d = %s\n", i, parse_list->cmds[i]);
+	// 	printf("token %d = %s\n", i, parse_list->tkns_array[i]);
 	// 	i++;
 	// }
 	put_on_the_props(parse_list, env);
@@ -54,30 +54,34 @@ int	put_on_the_props(t_parsing *parse_list, char *env[])
 
 	j = 0;
 	i = 0;
-	tks_cnt = cnt_tokens(parse_list->cmds);
-	parse_list->commands = malloc(sizeof(t_parsing));
-	parse_list->commands->start = parse_list->commands;
+	tks_cnt = cnt_tokens(parse_list->tkns_array);
+	parse_list->tkns_list = malloc(sizeof(t_parsing));
+	parse_list->tkns_list->start = parse_list->tkns_list;
 	while (tks_cnt > i)
 	{
-		parse_list->commands->cmd = calloc(ft_strlen(parse_list->cmds[i]), sizeof(char));
-		while (parse_list->cmds[i][j])
+		parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i]), sizeof(char));
+		while (parse_list->tkns_array[i][j])
 		{
-			parse_list->commands->cmd[j] = parse_list->cmds[i][j];
-			if (parse_list->commands->cmd[j] == '"')
-				parse_list->commands->quotes = true;
+			parse_list->tkns_list->tkn[j] = parse_list->tkns_array[i][j];
+			if (parse_list->tkns_list->tkn[0] == '"' )
+				parse_list->tkns_list->db_quotes = true;
 			else
-				parse_list->commands->quotes = false;
+				parse_list->tkns_list->db_quotes = false;
+			if (parse_list->tkns_list->tkn[0] == '\'')
+				parse_list->tkns_list->sing_quotes = true;
+			else
+				parse_list->tkns_list->sing_quotes = false;
 			j++;
 		}
-		check_tokens(parse_list->commands->cmd, parse_list, env);
+		check_tokens(parse_list->tkns_list->tkn, parse_list, env);
 		j = 0;
 		i++;
-		parse_list->commands->next = malloc(sizeof(t_parsing));
-		(parse_list->commands->next)->start = parse_list->commands->start;
-		parse_list->commands = parse_list->commands->next;
+		parse_list->tkns_list->next = malloc(sizeof(t_parsing));
+		(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
+		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
-	parse_list->commands->next = NULL;
-	parse_list->commands = parse_list->commands->start;
+	parse_list->tkns_list->next = NULL;
+	parse_list->tkns_list = parse_list->tkns_list->start;
 	return (0);
 }
 
@@ -88,36 +92,94 @@ int	check_tokens(char *cmd, t_parsing *parse_list, char *env[])
 	i = 0;
 	while (ft_strncmp(*env, "PATH=", 5))
 		env++;
-	if (parse_list->commands->quotes == true)
+	if (parse_list->tkns_list->db_quotes == true)
 	{
-		parse_list->commands->cmd = ft_strtrim(parse_list->commands->cmd, "\"");
+		parse_list->tkns_list->tkn = ft_strtrim(parse_list->tkns_list->tkn, "\"");
 		cmd = ft_strtrim(cmd, "\"");
 	}
+	if (parse_list->tkns_list->sing_quotes == true)
+	{
+		parse_list->tkns_list->tkn = ft_strtrim(parse_list->tkns_list->tkn, "'");
+		cmd = ft_strtrim(cmd, "'");
+	}
 	if (check_exe(cmd, env) == 0)
-		parse_list->commands->flags = 0;
+		parse_list->tkns_list->flags = 0;
 	else if (!ft_strncmp(cmd, "<<\0", 3) || (!ft_strncmp(cmd, ">>\0", 3)))
-		parse_list->commands->flags = 1;
+		parse_list->tkns_list->flags = 1;
 	else if (!ft_strncmp(cmd, "-", 1))
-		parse_list->commands->flags = 2;
+		parse_list->tkns_list->flags = 2;
 	else if (!ft_strncmp(cmd, "&&\0", 3))
-		parse_list->commands->flags = 3;
+		parse_list->tkns_list->flags = 3;
 	else if (!ft_strncmp(cmd, "||\0", 3))
-		parse_list->commands->flags = 4;
+		parse_list->tkns_list->flags = 4;
 	else if (!ft_strncmp(cmd, "$", 1))
-		parse_list->commands->flags = 5;
+		parse_list->tkns_list->flags = 5;
 	else
-		parse_list->commands->flags = 6;
-	// if (parse_list->commands->quotes == true)
-	// 	printf("with quotes = True %d  ", parse_list->commands->quotes);
-	// printf("token : %s = %d\n", parse_list->commands->cmd, parse_list->commands->flags);
-	still_parsing(parse_list);
+		parse_list->tkns_list->flags = 6;
+	if (parse_list->tkns_list->db_quotes == true || parse_list->tkns_list->sing_quotes == true)
+		printf("with quotes = True ");
+	printf("token : %s = %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->flags);
+	check_var(parse_list, cmd, env);
 	return (0);
 }
 
-int	still_parsing(t_parsing *parse_list)
+int	check_var(t_parsing *parse_list, char *cmd, char *env[])
 {
-	(void)parse_list;
+	int		i;
+	int		j;
+	char	*var;
+
+	i = 0;
+	j = 0;
+	var = malloc(5);
+	if (parse_list->tkns_list->db_quotes == true)
+	{
+		while (cmd[i])
+		{
+			if (cmd[i] == '$')
+			{
+				while ((cmd[i]) && (cmd[i] != 32 || cmd[i] != '\0'))
+				{
+					var[j] = cmd[i];
+					i++;
+					j++;
+					if (cmd[i] == ' ')
+						break ;
+				}
+				if (j == 1)
+					free(var);
+				else
+				{
+					var = get_var(parse_list, var, env);
+					printf("var = %s\n", var);
+				}
+			}
+			i++;
+		}
+	}
 	return (0);
+}
+
+char	*get_var(t_parsing *parse_list, char *var, char *env[])
+{
+	int		len;
+	int		i;
+	char	*var_name;
+
+	(void)parse_list;
+	i = 0;
+	len = ft_strlen(var);
+	printf("len = %d\n", len);
+	while (env[i])
+	{
+		if (!ft_strncmp(env[i], var + 1, len - 1))
+		{
+			var_name = calloc(ft_strlen(env[i] - 1), sizeof(char));
+			ft_strlcpy(var_name, env[i] + len, ft_strlen(env[i]) - len + 1);
+		}
+		i++;
+	}
+	return (var_name);
 }
 
 int	check_exe(char *cmd, char *env[])
@@ -130,6 +192,9 @@ int	check_exe(char *cmd, char *env[])
 
 	i = 0;
 	si_o_no = -1;
+	si_o_no = access(cmd, X_OK);
+	if (si_o_no != -1)
+		return (si_o_no);
 	path_split = ft_split(*env + 5, ':');
 	cmd_temp = ft_strjoin("/", cmd);
 	while (si_o_no == -1 && path_split[i])
@@ -164,12 +229,12 @@ int	cnt_tokens(char **cmds)
 
 void	free_them(t_parsing *parse_list)
 {
-	while (parse_list->commands->next != NULL)
+	while (parse_list->tkns_list->next != NULL)
 	{
-		free(parse_list->commands);
-		parse_list->commands = parse_list->commands->next;
+		free(parse_list->tkns_list);
+		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
-	free(parse_list->commands);
+	free(parse_list->tkns_list);
 }
 // 	i = 0;
 // 	nb_tokens(&parse_list, line);
@@ -203,7 +268,7 @@ void	free_them(t_parsing *parse_list)
 // 	parse_list->sing_quotes = 0;
 // 	parse_list->doub_quotes = 0;
 // 	parse_list->nb_cmd = -1;
-// 	parse_list->cmds = malloc(parse_list->nb_tokens * sizeof(char *));
+// 	parse_list->tkns_array = malloc(parse_list->nb_tokens * sizeof(char *));
 // }
 
 // char	*tokenization(char *line, int i, t_parsing *parse_list)
@@ -214,15 +279,15 @@ void	free_them(t_parsing *parse_list)
 // 	j = 0;
 // 	k = 0;
 // 	parse_list->nb_cmd++;
-// 	parse_list->cmds[parse_list->nb_cmd] = malloc(i * sizeof(char));
+// 	parse_list->tkns_array[parse_list->nb_cmd] = malloc(i * sizeof(char));
 // 	while (i > j)
 // 	{
-// 		parse_list->cmds[parse_list->nb_cmd][k] = *line;
+// 		parse_list->tkns_array[parse_list->nb_cmd][k] = *line;
 // 		line++;
 // 		i--;
 // 		k++;
 // 	}
-// 	printf("l = %s\n", parse_list->cmds[parse_list->nb_cmd]);
+// 	printf("l = %s\n", parse_list->tkns_array[parse_list->nb_cmd]);
 // 	return (line);
 // }
 
