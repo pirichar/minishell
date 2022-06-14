@@ -77,6 +77,7 @@ typedef struct s_parsing
 	char 	**cmds;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	int		nb_tokens;
 	t_cmds	*commands;
+	char	*user;
 }				t_parsing;
 
 
@@ -107,5 +108,6 @@ int				put_on_the_props(t_parsing *parse_list, char *env[]);
 int				check_tokens(char *cmd, t_parsing *parse_list, char *env[]);
 int				check_exe(char *cmd, char *env[]);
 void			free_them(t_parsing *parse_list);
+int				still_parsing(t_parsing *parse_list);
 
 #endif

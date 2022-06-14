@@ -107,12 +107,18 @@ int	check_tokens(char *cmd, t_parsing *parse_list, char *env[])
 		parse_list->commands->flags = 5;
 	else
 		parse_list->commands->flags = 6;
-	if (parse_list->commands->quotes == true)
-		printf("with quotes = True %d  ", parse_list->commands->quotes);
-	printf("token : %s = %d\n", parse_list->commands->cmd, parse_list->commands->flags);
+	// if (parse_list->commands->quotes == true)
+	// 	printf("with quotes = True %d  ", parse_list->commands->quotes);
+	// printf("token : %s = %d\n", parse_list->commands->cmd, parse_list->commands->flags);
+	still_parsing(parse_list);
 	return (0);
 }
 
+int	still_parsing(t_parsing *parse_list)
+{
+	(void)parse_list;
+	return (0);
+}
 
 int	check_exe(char *cmd, char *env[])
 {
