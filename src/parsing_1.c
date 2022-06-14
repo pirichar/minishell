@@ -16,7 +16,7 @@ int	start_parse(char *line, char *env[])
 		parse_list->cmds[1] = calloc(2, sizeof(char));
 		parse_list->cmds[1] = "<<";
 		parse_list->cmds[2] = calloc(6, sizeof(char));
-		parse_list->cmds[2] = "\"echo\"";
+		parse_list->cmds[2] = "\"'echo'\"";
 		parse_list->cmds[3] = calloc(2, sizeof(char));
 		parse_list->cmds[3] = "-n";
 		parse_list->cmds[4] = calloc(8, sizeof(char));
@@ -51,7 +51,7 @@ int	put_on_the_props(t_parsing *parse_list, char *env[])
 	int	tks_cnt;
 	int	i;
 	int	j;
-
+	
 	j = 0;
 	i = 0;
 	tks_cnt = cnt_tokens(parse_list->cmds);
