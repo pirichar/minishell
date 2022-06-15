@@ -70,7 +70,7 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-Wall -Wextra -Werror -o DunderShell
+CFLAGS	=	-g -Wall -Wextra -Werror -o DunderShell
 
 LIBS	=	include/Libft/libft/libft.a -lreadline
 

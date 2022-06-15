@@ -10,29 +10,29 @@ int	start_parse(char *line, char *env[])
 	if (line)
 	{
 		parse_list->tkns_array = malloc(13 * sizeof(char *));
-		parse_list->tkns_array[0] = calloc(8, sizeof(char));
+		parse_list->tkns_array[0] = calloc(9, sizeof(char));
 		parse_list->tkns_array[0] = "Makefile";
-		parse_list->tkns_array[1] = calloc(2, sizeof(char));
+		parse_list->tkns_array[1] = calloc(3, sizeof(char));
 		parse_list->tkns_array[1] = "<<";
-		parse_list->tkns_array[2] = calloc(6, sizeof(char));
+		parse_list->tkns_array[2] = calloc(7, sizeof(char));
 		parse_list->tkns_array[2] = "\'echo\'";
-		parse_list->tkns_array[3] = calloc(2, sizeof(char));
+		parse_list->tkns_array[3] = calloc(3, sizeof(char));
 		parse_list->tkns_array[3] = "\"'-n'\"";
-		parse_list->tkns_array[4] = calloc(10, sizeof(char));
+		parse_list->tkns_array[4] = calloc(11, sizeof(char));
 		parse_list->tkns_array[4] = "'allo $PWD toi'";
-		parse_list->tkns_array[5] = calloc(8, sizeof(char));
+		parse_list->tkns_array[5] = calloc(9, sizeof(char));
 		parse_list->tkns_array[5] = "/bin/cat";
-		parse_list->tkns_array[6] = calloc(4, sizeof(char));
-		parse_list->tkns_array[6] = "$ENV";
-		parse_list->tkns_array[7] = calloc(48, sizeof(char));
+		parse_list->tkns_array[6] = calloc(5, sizeof(char));
+		parse_list->tkns_array[6] = "$PWD";
+		parse_list->tkns_array[7] = calloc(49, sizeof(char));
 		parse_list->tkns_array[7] = "\"lui          $LANG               est le best\""; // il faut quand tu split, il y est un flag pour les quotes, question que je sache si il y a des quotes ou non ds le token, si oui, faut il les enlever oui ou non
-		parse_list->tkns_array[8] = calloc(2, sizeof(char));
+		parse_list->tkns_array[8] = calloc(3, sizeof(char));
 		parse_list->tkns_array[8] = "&&";
-		parse_list->tkns_array[9] = calloc(2, sizeof(char));
+		parse_list->tkns_array[9] = calloc(3, sizeof(char));
 		parse_list->tkns_array[9] = "||";
-		parse_list->tkns_array[10] = calloc(2, sizeof(char));
+		parse_list->tkns_array[10] = calloc(3, sizeof(char));
 		parse_list->tkns_array[10] = ">>";
-		parse_list->tkns_array[11] = calloc(7, sizeof(char));
+		parse_list->tkns_array[11] = calloc(8, sizeof(char));
 		parse_list->tkns_array[11] = "outfile";
 		parse_list->tkns_array[12] = NULL;
 	}
@@ -58,7 +58,7 @@ int	put_on_the_props(t_parsing *parse_list, char *env[])
 	parse_list->tkns_list->start = parse_list->tkns_list;
 	while (tks_cnt > i)
 	{
-		parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i]), sizeof(char));
+		parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i]) + 1, sizeof(char));
 		while (parse_list->tkns_array[i][j])
 		{
 			parse_list->tkns_list->tkn[j] = parse_list->tkns_array[i][j];
@@ -119,7 +119,7 @@ int	check_tokens(char *cmd, t_parsing *parse_list, char *env[])
 		parse_list->tkns_list->flags = 6;
 	if (parse_list->tkns_list->db_quotes == true || parse_list->tkns_list->sing_quotes == true)
 		printf("with quotes = True ");
-	printf("token : %s = %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->flags);
+	printf("token : %s = %d cmmmmmmd %s\n", parse_list->tkns_list->tkn, parse_list->tkns_list->flags, cmd);
 	check_var(parse_list, cmd, env);
 	return (0);
 }
@@ -132,7 +132,14 @@ int	check_var(t_parsing *parse_list, char *cmd, char *env[])
 
 	i = 0;
 	j = 0;
-	var = malloc(ft_strlen(cmd) * sizeof(char));
+	var = calloc(ft_strlen(cmd) , sizeof(char));
+	if (parse_list->tkns_list->flags == 5)
+	{
+		var = get_var(parse_list, cmd, env);
+		printf("var = %s\n", var);
+		free(var);
+		return (0);
+	}
 	if (parse_list->tkns_list->db_quotes == true)
 	{
 		while (cmd[i])
@@ -151,7 +158,9 @@ int	check_var(t_parsing *parse_list, char *cmd, char *env[])
 					}
 				}
 				if (j == 1)
+				{
 					free(var);
+				}
 				else
 				{
 					var = get_var(parse_list, var, env);
@@ -175,12 +184,12 @@ char	*get_var(t_parsing *parse_list, char *var, char *env[])
 	i = 0;
 	len = ft_strlen(var);
 	printf("len = %d\n", len);
-	printf("var + 1:%s\n", var + 1);
+	printf("var + 1:%s\n", var);
 	while (env[i])
 	{
 		if (!ft_strncmp(env[i], var + 1, len - 1))
 		{
-			var_name = calloc(ft_strlen(env[i] - 1), sizeof(char));
+			var_name = calloc(ft_strlen(env[i]), sizeof(char));
 			ft_strlcpy(var_name, env[i] + len, ft_strlen(env[i]) - len + 1);
 		}
 		i++;
