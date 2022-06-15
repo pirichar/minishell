@@ -25,8 +25,8 @@ int	start_parse(char *line, char *env[])
 		parse_list->tkns_array[5] = "/bin/cat";
 		parse_list->tkns_array[6] = calloc(4, sizeof(char));
 		parse_list->tkns_array[6] = "$ENV";
-		parse_list->tkns_array[7] = calloc(47, sizeof(char));
-		parse_list->tkns_array[7] = "\"lui          $PWD               est le best\""; // il faut quand tu split, il y est un flag pour les quotes, question que je sache si il y a des quotes ou non ds le token, si oui, faut il les enlever oui ou non
+		parse_list->tkns_array[7] = calloc(48, sizeof(char));
+		parse_list->tkns_array[7] = "\"lui          $LANG               est le best\""; // il faut quand tu split, il y est un flag pour les quotes, question que je sache si il y a des quotes ou non ds le token, si oui, faut il les enlever oui ou non
 		parse_list->tkns_array[8] = calloc(2, sizeof(char));
 		parse_list->tkns_array[8] = "&&";
 		parse_list->tkns_array[9] = calloc(2, sizeof(char));
@@ -172,7 +172,7 @@ char	*get_var(t_parsing *parse_list, char *var, char *env[])
 	printf("len = %d\n", len);
 	while (env[i])
 	{
-		if (!ft_strncmp(env[i], var + 1, len - 1))
+		if (!ft_strncmp(env[i], var, len))
 		{
 			var_name = calloc(ft_strlen(env[i] - 1), sizeof(char));
 			ft_strlcpy(var_name, env[i] + len, ft_strlen(env[i]) - len + 1);
