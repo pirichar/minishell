@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   environement.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/31 13:24:27 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 15:26:00 by pirichar         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/minishell.h"
 
 char **copy_strarr(char **env)
@@ -31,6 +19,16 @@ char **copy_strarr(char **env)
 	return (rtn);
 }
 
+
+// int	strarr_len(char **str_arr)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while(str_arr[i])
+// 		i++;
+// 	return (i);
+// }
 
 static int	strlen_path(char **env)
 {
@@ -87,16 +85,70 @@ char	**var_to_strarr(char **env, char *var)
 	return (p_arr);
 }
 
+/*
+	Basically the same as getenv() but you pass
+	the environment table you want as the first argument
+	then pass the variable you look for
+	The functions return a pointer to the variable 
+	or NULL if nothing is found
+*/
 char	*var_to_str(char **env, char *var)
 {
-	while (env)
+	int i;
+
+	i = 0;
+	while (env[i])
 	{
-		if (ft_strncmp(*env, var, ft_strlen(var)) == 0)
+		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
 			break;
-		env++;
+		i++;
 	}
-	return *(env);
+	return (env[i]);
 }
+
+// static void	add_new_variable(char **env, char *variable)
+// {
+// 	int i;
+// 	char **rtn;
+// 	char **tmp;
+	
+// 	tmp = env;
+// 	i = strarr_len(env);
+// 	env = malloc(sizeof(char *) * i + 2);
+// 	env[i + 2] = 0;
+// 	i = 0;
+// 	while(tmp[i])
+// 	{
+// 		env[i] = ft_strdup(tmp[i]);
+// 		i++;
+// 	}
+// 	env[i] = ft_strdup(variable);
+// 	//free tmp probably here
+// }
+
+// void	set_variable(char **env, char *var, char *new_var)
+// {
+// 	int i;
+// 	char *tmp;
+
+// 	i = 0;
+// 	while(env[i])
+// 	{
+// 		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
+// 		{
+// 			tmp = env[i];
+// 			env[i] = new_var;
+// 			free(tmp);
+// 			break;
+// 		}
+// 		i++;
+// 	}
+// 	add_new_variable(env, new_var);
+// 	//look for variable first
+// 	//if you find it replace it
+// 	//if you dont find it create it 
+// 		//create a new array 
+// }
 
 /*
 	This function takes as input a line of the path and the argv[1] passed by main

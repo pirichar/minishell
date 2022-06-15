@@ -1,16 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/23 12:47:29 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/08 19:53:13 by pirichar         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
@@ -47,23 +34,26 @@ typedef struct s_ptrs
 	char	**cmd_split;
 }				t_exec_ptrs;
 
+typedef struct s_tkns
+{
+	char			*tkn;
+	int				flags;  // 0 = exe, 1 = redirection, 2 = flags, 3 = &&, 4 = pipe, 5 = $var, 6 = param
+	bool			db_quotes;
+	bool			sing_quotes;
+	struct s_tkns	*next;
+	struct s_tkns	*prev;
+	struct s_tkns	*start;
+
+}			t_tkns;
+
 typedef struct s_parsing
 {
-	int		nb_quote;
-	bool	quotes;
-	int		nb_dbquote;
-	bool	dbquotes;
-	int		nb_pipe;
-	int		nb_cmd;
-	int		sing_quotes;
-	int		doub_quotes;
-	int 	sml_then;
-	int		gtr_then;
-	int		dlr_sign;
-	int 	and_sign;
+	bool	db_quotes;
+	bool	sing_quotes;
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
-	char 	**cmds;
-	int		nb_tokens;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
+	char 	**tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
+	t_tkns	*tkns_list;
+	char	*user;
 }				t_parsing;
 
 
@@ -85,9 +75,16 @@ char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void	look_for_builtins(char **s_line, char **new_env, bool *b_in);
 //parsing
-int				start_parse(char *line);
+int				start_parse(char *line, char *env[]);
 int				nb_tokens(t_parsing *parse_list, char *line);
 void			init_parse(t_parsing *parse_list);
 char			*tokenization(char *line, int i, t_parsing *parse_list);
+int				cnt_tokens(char **cmds);
+int				put_on_the_props(t_parsing *parse_list, char *env[]);
+int				check_tokens(char *cmd, t_parsing *parse_list, char *env[]);
+int				check_exe(char *cmd, char *env[]);
+void			free_them(t_parsing *parse_list);
+int				check_var(t_parsing *parse_list, char *cmd, char *env[]);
+char			*get_var(t_parsing *parse_list, char *var, char *env[]);
 
 #endif
