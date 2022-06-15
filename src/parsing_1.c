@@ -87,10 +87,12 @@ int	put_on_the_props(t_parsing *parse_list, char *env[])
 int	check_tokens(char *cmd, t_parsing *parse_list, char *env[])
 {
 	int	i;
+	char	**temp;
 
 	i = 0;
-	while (ft_strncmp(*env, "PATH=", 5))
-		env++;
+	temp = env;
+	while (ft_strncmp(*temp, "PATH=", 5))
+		temp++;
 	if (parse_list->tkns_list->db_quotes == true)
 	{
 		parse_list->tkns_list->tkn = ft_strtrim(parse_list->tkns_list->tkn, "\"");
@@ -101,7 +103,7 @@ int	check_tokens(char *cmd, t_parsing *parse_list, char *env[])
 		parse_list->tkns_list->tkn = ft_strtrim(parse_list->tkns_list->tkn, "'");
 		cmd = ft_strtrim(cmd, "'");
 	}
-	if (check_exe(cmd, env) == 0)
+	if (check_exe(cmd, temp) == 0)
 		parse_list->tkns_list->flags = 0;
 	else if (!ft_strncmp(cmd, "<<\0", 3) || (!ft_strncmp(cmd, ">>\0", 3)))
 		parse_list->tkns_list->flags = 1;
@@ -130,7 +132,7 @@ int	check_var(t_parsing *parse_list, char *cmd, char *env[])
 
 	i = 0;
 	j = 0;
-	var = malloc(5);
+	var = malloc(ft_strlen(cmd) * sizeof(char));
 	if (parse_list->tkns_list->db_quotes == true)
 	{
 		while (cmd[i])
@@ -143,14 +145,18 @@ int	check_var(t_parsing *parse_list, char *cmd, char *env[])
 					i++;
 					j++;
 					if (cmd[i] == ' ')
+					{
+						var[j] = '\0';
 						break ;
+					}
 				}
 				if (j == 1)
 					free(var);
 				else
 				{
 					var = get_var(parse_list, var, env);
-					printf("var = %s\n", var);
+					printf("var %s\n", var);
+					break ;
 				}
 			}
 			i++;
@@ -169,9 +175,10 @@ char	*get_var(t_parsing *parse_list, char *var, char *env[])
 	i = 0;
 	len = ft_strlen(var);
 	printf("len = %d\n", len);
+	printf("var + 1:%s\n", var + 1);
 	while (env[i])
 	{
-		if (!ft_strncmp(env[i], var, len))
+		if (!ft_strncmp(env[i], var + 1, len - 1))
 		{
 			var_name = calloc(ft_strlen(env[i] - 1), sizeof(char));
 			ft_strlcpy(var_name, env[i] + len, ft_strlen(env[i]) - len + 1);
