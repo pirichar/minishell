@@ -1,4 +1,3 @@
-
 #include "../include/minishell.h"
 
 int	nb_of_paths(char **path)
