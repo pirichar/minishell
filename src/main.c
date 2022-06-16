@@ -43,6 +43,7 @@ int	main(int argc, char **argv, char **env)
 		free(user);
 		prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
 		free(blue_user);
+		printf("AT THE END OF THE PROMPT SO THIS DID NOT BREAK IT\n");
 	}
 	else
 	{
@@ -78,8 +79,9 @@ int	main(int argc, char **argv, char **env)
 				i = 0;
 				pid_t p;
 				path = var_to_strarr(new_env, "PATH=");
-				printf("This is path %s\n", path[i]);
-				if (path != NULL)
+				if (path == NULL)
+					printf("TERM environment variable not set\n");
+				else
 				{
 					while (path[i])
 					{

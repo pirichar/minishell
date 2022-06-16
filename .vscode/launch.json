@@ -10,7 +10,8 @@
 			"name": "Debug",
 			"program": "${workspaceFolder}/Dundershell",
 			"args": [],
-			"cwd": "${workspaceFolder}"
+			"cwd": "${workspaceFolder}",
+			"env": {}
 		}
 	]
 }
