@@ -30,11 +30,13 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	print_logo(env);
 	i = 0;
+	//set the env
 	new_env = copy_strarr(env);
+	//set the prompt
+	while (new_env[i] && ft_strncmp(new_env[i], "USER=", 5))
+		i++;
 	if (new_env[i])
 	{
-		while (new_env[i] && ft_strncmp(new_env[i], "USER=", 5))
-			i++;
 		user = calloc(ft_strlen(env[i]), sizeof(char));
 		ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
 		blue_user = ft_strjoin(BBLU, user);
@@ -46,16 +48,15 @@ int	main(int argc, char **argv, char **env)
 	{
 		prompt = strdup("DunderShell = ");
 	}
+	//start the loop
 	while (1)
 	{
 		b_in = false;
-		path = var_to_strarr(new_env, "PATH=");
 		i = 0;
 		line = readline(prompt);
 		if (line == NULL)
 		{
 			free(line);
-			free(path);
 			free(new_env);
 			return (0);
 		}
@@ -64,7 +65,7 @@ int	main(int argc, char **argv, char **env)
 			add_history(line);
 			// start_parse(line, env);
 			s_line = ft_split(line, ' ');
-			look_for_builtins(s_line, new_env, &b_in);
+			look_for_builtins(s_line, &new_env, &b_in);
 			if (ft_strncmp(s_line[0], "exit",5) == 0)
 			{
 				free (s_line);
@@ -76,16 +77,21 @@ int	main(int argc, char **argv, char **env)
 			{
 				i = 0;
 				pid_t p;
-				while (path[i])
+				path = var_to_strarr(new_env, "PATH=");
+				printf("This is path %s\n", path[i]);
+				if (path != NULL)
 				{
-					if (search_path(path[i], s_line[0]) == true)
-						break ;
-					i++;
-				}
-				if (i != nb_of_charstrstr(path))
-				{
-					execute_solo(line, &p, env);
-					waitpid(p, NULL, 0);
+					while (path[i])
+					{
+						if (search_path(path[i], s_line[0]) == true)
+							break ;
+						i++;
+					}
+					if (i != nb_of_charstrstr(path))
+					{
+						execute_solo(line, &p, new_env);
+						waitpid(p, NULL, 0);
+					}
 				}
 			}
 			else if (b_in == false)

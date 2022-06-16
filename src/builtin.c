@@ -10,7 +10,7 @@
 	
 // 	tmp = env;
 // 	i = strarr_len(tmp);//strlen of old tmp
-// 	env = malloc(sizeof(char *) * i ); //malloc array 1 smaller then the last one (with no + 1)
+// 	env = malloc(sizeof(char *) * i); //malloc array 1 smaller then the last one (with no + 1)
 // 	env[i] = 0;
 // 	i = 0;
 // 	j = 0;
@@ -53,26 +53,16 @@ void	add_new_variable(char ***env,char *var, char *variable)
 {
 	int i;
 	char **tmp;
-	 //env pointe vers mon env 
-	tmp = *env; // tmp pointe vers env
+	tmp = *env; 
 	i = strarr_len(*env);
-	printf("this is i %d\n", i);
-	(*env) = ft_calloc(i+ 2, sizeof(char *));
+	(*env) = ft_calloc(i + 2, sizeof(char *));
 	i = 0;
 	while(tmp[i])
 	{
 		(*env)[i] = ft_strdup(tmp[i]);
 		i++;
 	}
-	// printf("This is i [%d] before to add the value of the new variable [%s]\n", i, (*env)[i]);
 	(*env)[i] = ft_strjoin(var, variable);
-	// printf("this is env[%d] after we did the str_join = [%s]",i, (*env)[i]);
-	// i = 0;
-	// while((*env)[i])
-	// {
-	// 	printf("%s\n",(*env)[i]);
-	// 	i++;
-	// }
 	free_strrarr(tmp);
 }
 
@@ -83,7 +73,7 @@ void	set_variable(char ***env, char *var, char *new_var)
 	char *tmp;
 
 	i = 0;
-	while((*env)[i])
+	while((*env) && (*env)[i])
 	{
 		if (ft_strncmp((*env)[i], var, ft_strlen(var)) == 0)
 		{
@@ -168,7 +158,7 @@ void	mini_env(char **new_env)
 	}
 }
 
-void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
+void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 {
 
 	if(ft_strncmp(s_line[0], "echo",5) == 0)
@@ -179,7 +169,7 @@ void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
 	else if(ft_strncmp(s_line[0], "cd",3) == 0)
 	{
 		*b_in = true;
-		mini_cd(s_line, new_env);
+		mini_cd(s_line, (*new_env));
 	}
 	else if(ft_strncmp(s_line[0], "export",8) == 0)
 	{
@@ -189,14 +179,12 @@ void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
 
 		i = 0;
 		//if export alone
-			//print out the list of env but alphabetically 
-			//with something infront
 		if (s_line[1] == NULL)
 		{
 			//copy new_env into a new memory space and put it in alphabetical order
-			while(new_env[i])
+			while((*new_env)[i])
 			{
-				printf("declare -x %s\n", new_env[i]);
+				printf("declare -x %s\n", (*new_env)[i]);
 				i++;
 			}
 		}
@@ -204,14 +192,18 @@ void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
 		{
 			to_add = ft_split(s_line[1], '=');
 			to_add[0] = ft_strjoin(to_add[0], "=");
-			set_variable(&new_env, s_line[0], s_line[1]);
+			printf("this is to_add[0] = [%s] this is to_add[1] = [%s]\n",to_add[0], to_add[1]);
+			set_variable(new_env, to_add[0], to_add[1]);
+			int i = 0;
+			while((*new_env)[i])
+			{
+				printf("new_env[i] = [%s]\n", (*new_env)[i]);
+				i++;
+			}
+			free (to_add);
 		}
-		//else
-			//ft_split with = 
-			//keep the = for the new_split[0]
-			//add the content after the = to the new_split[1];
-			//set_variable(env, new_split[0], new_split[1]);
 	}
+
 	else if(ft_strncmp(s_line[0], "unset",6) == 0)
 	{
 		*b_in = true;
@@ -225,6 +217,6 @@ void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
 	else if (ft_strncmp(s_line[0], "env",5) == 0)
 	{
 		*b_in = true;
-		mini_env(new_env);
+		mini_env((*new_env));
 	}
 }
