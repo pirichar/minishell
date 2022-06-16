@@ -31,9 +31,9 @@ int	main(int argc, char **argv, char **env)
 	print_logo(env);
 	i = 0;
 	new_env = copy_strarr(env);
-	if (env[i])
+	if (new_env[i])
 	{
-		while (ft_strncmp(env[i], "USER=", 5))
+		while (new_env[i] && ft_strncmp(new_env[i], "USER=", 5))
 			i++;
 		user = calloc(ft_strlen(env[i]), sizeof(char));
 		ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));

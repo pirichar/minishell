@@ -9,7 +9,7 @@
 	_=
 
 */
-void	set_3_variables(char **env)
+void	set_3_variables(char ***env)
 {
 	char *actual_pwd;
 	char *buff;
@@ -21,10 +21,8 @@ void	set_3_variables(char **env)
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(env, "PWD=", actual_pwd);
 	binary = ft_strjoin(actual_pwd, "./DunderShell");
-	printf("then going to set_variable-Binary\n");
 	set_variable(env, "_=", binary);
-	printf("After going to set_variable-Binary\n");
-	shlvl = var_to_str(env, "SHLVL");
+	shlvl = var_to_str((*env), "SHLVL");
 	nb = shlvl[ft_strlen(shlvl) - 1] - '0';
 	nb++;
 	shlvl = ft_itoa(nb);
@@ -43,7 +41,7 @@ char **copy_strarr(char **env)
 	i = 0;
 	while(env[i])
 		i++;
-	rtn = malloc(sizeof(char *) * i + 1);
+	rtn = malloc(sizeof(char *) * (i + 1));
 	rtn[i + 1] = 0;
 	i = 0;
 	while(env[i])
@@ -51,7 +49,7 @@ char **copy_strarr(char **env)
 		rtn[i] = ft_strdup(env[i]);
 		i++;
 	}
-	set_3_variables(rtn);
+	set_3_variables(&rtn);
 	return (rtn);
 }
 

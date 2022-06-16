@@ -49,55 +49,53 @@ void	free_strrarr(char **to_free)
 	free(to_free);
 }
 
-void	add_new_variable(char **env,char *var, char *variable)
+void	add_new_variable(char ***env,char *var, char *variable)
 {
 	int i;
 	char **tmp;
 	 //env pointe vers mon env 
-	tmp = env; // tmp pointe vers env
-	i = strarr_len(env);
+	tmp = *env; // tmp pointe vers env
+	i = strarr_len(*env);
 	printf("this is i %d\n", i);
-	env = malloc(sizeof(char *) * i + 2); // nouveau bloque de memoire vers ou env pointe
-	env[i + 2] = 0;
+	(*env) = ft_calloc(i+ 2, sizeof(char *));
 	i = 0;
 	while(tmp[i])
 	{
-		env[i] = ft_strdup(tmp[i]);
+		(*env)[i] = ft_strdup(tmp[i]);
 		i++;
 	}
-	env[i] = ft_strjoin(var, variable);
-	printf("env[i] is %s \n", env[i]);
+	// printf("This is i [%d] before to add the value of the new variable [%s]\n", i, (*env)[i]);
+	(*env)[i] = ft_strjoin(var, variable);
+	// printf("this is env[%d] after we did the str_join = [%s]",i, (*env)[i]);
+	// i = 0;
+	// while((*env)[i])
+	// {
+	// 	printf("%s\n",(*env)[i]);
+	// 	i++;
+	// }
 	free_strrarr(tmp);
 }
 
 
-void	set_variable(char **env, char *var, char *new_var)
+void	set_variable(char ***env, char *var, char *new_var)
 {
 	int i;
 	char *tmp;
 
 	i = 0;
-	while(env[i])
+	while((*env)[i])
 	{
-		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
+		if (ft_strncmp((*env)[i], var, ft_strlen(var)) == 0)
 		{
-			tmp = env[i];
-			env[i] = ft_strjoin(var, new_var);
+			tmp = (*env)[i];
+			(*env)[i] = ft_strjoin(var, new_var);
 			free(tmp);
 			break;
 		}
 		i++;
 	}
-	if (env[i] == NULL)
-	{
-		// printf("Going to add a new variable\n");
-		add_new_variable(env, var, new_var);
-		// printf("Done adding new variable\n");
-	}
-	//look for variable first
-	//if you find it replace it
-	//if you dont find it create it 
-		//create a new array 
+	if ((*env)[i] == NULL)
+			add_new_variable(env, var, new_var);
 }
 
 void	mini_cd(char **s_line, char **new_env)
@@ -108,14 +106,14 @@ void	mini_cd(char **s_line, char **new_env)
 	
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "OLDPWD=", actual_pwd);
+	set_variable(&new_env, "OLDPWD=", actual_pwd);
 	free(actual_pwd);
 	free(buff);
 	chdir(s_line[1]);
 	/*change the PWD*/
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "PWD=", actual_pwd);
+	set_variable(&new_env, "PWD=", actual_pwd);
 	free(actual_pwd);
 	free(buff);
 }
@@ -168,7 +166,6 @@ void	mini_env(char **new_env)
 		printf("%s\n",new_env[i]);
 		i++;
 	}
-	printf("\n");
 }
 
 void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
@@ -187,9 +184,28 @@ void	look_for_builtins(char **s_line, char **new_env, bool *b_in)
 	else if(ft_strncmp(s_line[0], "export",8) == 0)
 	{
 		*b_in = true;
+		char **to_add;
+		int i;
+
+		i = 0;
 		//if export alone
 			//print out the list of env but alphabetically 
 			//with something infront
+		if (s_line[1] == NULL)
+		{
+			//copy new_env into a new memory space and put it in alphabetical order
+			while(new_env[i])
+			{
+				printf("declare -x %s\n", new_env[i]);
+				i++;
+			}
+		}
+		else
+		{
+			to_add = ft_split(s_line[1], '=');
+			to_add[0] = ft_strjoin(to_add[0], "=");
+			set_variable(&new_env, s_line[0], s_line[1]);
+		}
 		//else
 			//ft_split with = 
 			//keep the = for the new_split[0]
