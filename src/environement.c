@@ -1,5 +1,40 @@
 #include "../include/minishell.h"
 
+
+/*
+	This function takes care of setting the 3 variables when we open the shell
+	Those variables are
+	PWD
+	SHLVL
+	_=
+
+*/
+void	set_3_variables(char **env)
+{
+	char *actual_pwd;
+	char *buff;
+	char *binary;
+	char *shlvl;
+	int nb;
+	
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	set_variable(env, "PWD=", actual_pwd);
+	binary = ft_strjoin(actual_pwd, "./DunderShell");
+	printf("then going to set_variable-Binary\n");
+	set_variable(env, "_=", binary);
+	printf("After going to set_variable-Binary\n");
+	shlvl = var_to_str(env, "SHLVL");
+	nb = shlvl[ft_strlen(shlvl) - 1] - '0';
+	nb++;
+	shlvl = ft_itoa(nb);
+	set_variable(env, "SHLVL=", shlvl);
+	free(actual_pwd);
+	free(buff);
+	free(binary);
+	free(shlvl);
+}
+
 char **copy_strarr(char **env)
 {
 	int i;
@@ -16,6 +51,7 @@ char **copy_strarr(char **env)
 		rtn[i] = ft_strdup(env[i]);
 		i++;
 	}
+	set_3_variables(rtn);
 	return (rtn);
 }
 

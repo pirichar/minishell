@@ -74,6 +74,7 @@ void			parse_and_exec_cmd(const char *cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void	look_for_builtins(char **s_line, char **new_env, bool *b_in);
+void	set_variable(char **env, char *var, char *new_var);
 //parsing
 int				start_parse(char *line, char *env[]);
 int				nb_tokens(t_parsing *parse_list, char *line);

@@ -49,14 +49,15 @@ void	free_strrarr(char **to_free)
 	free(to_free);
 }
 
-static void	add_new_variable(char **env,char *var, char *variable)
+void	add_new_variable(char **env,char *var, char *variable)
 {
 	int i;
 	char **tmp;
-	
-	tmp = env;
+	 //env pointe vers mon env 
+	tmp = env; // tmp pointe vers env
 	i = strarr_len(env);
-	env = malloc(sizeof(char *) * i + 2);
+	printf("this is i %d\n", i);
+	env = malloc(sizeof(char *) * i + 2); // nouveau bloque de memoire vers ou env pointe
 	env[i + 2] = 0;
 	i = 0;
 	while(tmp[i])
@@ -65,6 +66,7 @@ static void	add_new_variable(char **env,char *var, char *variable)
 		i++;
 	}
 	env[i] = ft_strjoin(var, variable);
+	printf("env[i] is %s \n", env[i]);
 	free_strrarr(tmp);
 }
 
@@ -87,7 +89,11 @@ void	set_variable(char **env, char *var, char *new_var)
 		i++;
 	}
 	if (env[i] == NULL)
+	{
+		// printf("Going to add a new variable\n");
 		add_new_variable(env, var, new_var);
+		// printf("Done adding new variable\n");
+	}
 	//look for variable first
 	//if you find it replace it
 	//if you dont find it create it 

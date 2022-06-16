@@ -30,15 +30,22 @@ int	main(int argc, char **argv, char **env)
 	(void)argc;
 	print_logo(env);
 	i = 0;
-	while (ft_strncmp(env[i], "USER=", 5))
-		i++;
-	user = calloc(ft_strlen(env[i]), sizeof(char));
-	ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
-	blue_user = ft_strjoin(BBLU, user);
-	free(user);
-	prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
-	free(blue_user);
 	new_env = copy_strarr(env);
+	if (env[i])
+	{
+		while (ft_strncmp(env[i], "USER=", 5))
+			i++;
+		user = calloc(ft_strlen(env[i]), sizeof(char));
+		ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
+		blue_user = ft_strjoin(BBLU, user);
+		free(user);
+		prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
+		free(blue_user);
+	}
+	else
+	{
+		prompt = strdup("DunderShell = ");
+	}
 	while (1)
 	{
 		b_in = false;
@@ -55,11 +62,7 @@ int	main(int argc, char **argv, char **env)
 		if (line && *line)
 		{
 			add_history(line);
-			start_parse(line, env);
-
-
-
-
+			// start_parse(line, env);
 			s_line = ft_split(line, ' ');
 			look_for_builtins(s_line, new_env, &b_in);
 			if (ft_strncmp(s_line[0], "exit",5) == 0)
