@@ -43,7 +43,6 @@ int	main(int argc, char **argv, char **env)
 		free(user);
 		prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
 		free(blue_user);
-		printf("AT THE END OF THE PROMPT SO THIS DID NOT BREAK IT\n");
 	}
 	else
 	{

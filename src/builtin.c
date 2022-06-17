@@ -1,30 +1,4 @@
 #include "../include/minishell.h"
-/*
-	Function to use in unset
-*/
-// static void	delete_variable(char **env, char *var, char *variable)
-// {
-// 	int i;
-// 	int j;
-// 	char **tmp;
-	
-// 	tmp = env;
-// 	i = strarr_len(tmp);//strlen of old tmp
-// 	env = malloc(sizeof(char *) * i); //malloc array 1 smaller then the last one (with no + 1)
-// 	env[i] = 0;
-// 	i = 0;
-// 	j = 0;
-// 	while(tmp[i])//pass over all the tmp character and filter the one you don't want
-// 	{
-// 		if (ft_strncmp(tmp[i], var, ft_strlen(var)) == 0)
-// 			i++;
-// 		env[j] = ft_strdup(tmp[i]);
-// 		i++;
-// 		j++;
-// 	}
-// 	env[i] = ft_strjoin(var, variable);
-// 	free_strrarr(tmp);
-// }
 
 int	strarr_len(char **str_arr)
 {
@@ -48,6 +22,37 @@ void	free_strrarr(char **to_free)
 	}
 	free(to_free);
 }
+
+/*
+	Function to use in unset
+*/
+static void	delete_variable(char ***env, char *var)
+{
+	int i;
+	int j;
+	char **tmp;
+	
+	tmp = *env;
+	i = strarr_len(tmp);
+	(*env) = malloc(sizeof(char *) * i);
+	(*env)[i] = 0;
+	i = 0;
+	j = 0;
+	while(tmp[i])
+	{
+		if (ft_strncmp(tmp[i], var, ft_strlen(var)) != 0)
+		{
+			(*env)[j] = ft_strdup(tmp[i]);
+			i++;
+			j++;
+		}
+		else
+			i++;
+	}
+	free_strrarr(tmp);
+}
+
+
 
 void	add_new_variable(char ***env,char *var, char *variable)
 {
@@ -149,18 +154,55 @@ void	mini_pwd()
 void	mini_env(char **new_env)
 {
 	int i;
+	char **tmp;
 
 	i = 0;
 	while(new_env[i])
 	{
-		printf("%s\n",new_env[i]);
+		tmp = ft_split(new_env[i], '=');
+		if (tmp[1] != NULL)
+			printf("%s\n",new_env[i]);
+		free_strrarr(tmp);
 		i++;
 	}
+}
+char **	sort_strarr(char **to_sort)
+{
+	int i;
+	int j;
+	char **rtn;
+	char *tmp;
+	
+	i = 0;
+	while(to_sort && to_sort[i])
+		i++;
+	rtn = malloc(sizeof(char *) * (i + 1));
+	rtn[i + 1] = 0;
+	i = 0;
+	while(to_sort[i])
+	{
+		rtn[i] = ft_strdup(to_sort[i]);
+		i++;
+	}
+	i = 0;
+	j = 0;
+	while(rtn[i+1])
+	{
+		if (ft_strncmp(rtn[i], rtn[i+1], ft_strlen(rtn[i])) > 1)
+		{
+			tmp = rtn[i];
+			rtn[i] = rtn[i+1];
+			rtn[i+1] = tmp;
+			i = 0;
+		}
+		else
+			i++;
+	}
+	return (rtn);
 }
 
 void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 {
-
 	if(ft_strncmp(s_line[0], "echo",5) == 0)
 	{
 		*b_in = true;
@@ -171,7 +213,7 @@ void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 		*b_in = true;
 		mini_cd(s_line, (*new_env));
 	}
-	else if(ft_strncmp(s_line[0], "export",8) == 0)
+	else if(ft_strncmp(s_line[0], "export",ft_strlen("export")) == 0)
 	{
 		*b_in = true;
 		char **to_add;
@@ -182,32 +224,59 @@ void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 		if (s_line[1] == NULL)
 		{
 			//copy new_env into a new memory space and put it in alphabetical order
-			while((*new_env)[i])
+			to_add = sort_strarr(*new_env);
+			while(to_add[i])
 			{
-				printf("declare -x %s\n", (*new_env)[i]);
+				printf("declare -x %s\n", to_add[i]);
 				i++;
 			}
+			free(to_add);
 		}
 		else
 		{
-			to_add = ft_split(s_line[1], '=');
-			to_add[0] = ft_strjoin(to_add[0], "=");
-			printf("this is to_add[0] = [%s] this is to_add[1] = [%s]\n",to_add[0], to_add[1]);
-			set_variable(new_env, to_add[0], to_add[1]);
-			int i = 0;
-			while((*new_env)[i])
+			i = 1;
+			while(s_line[i])
 			{
-				printf("new_env[i] = [%s]\n", (*new_env)[i]);
+				to_add = ft_split(s_line[i], '=');
+				if (to_add[1] != NULL)
+				{
+					to_add[0] = ft_strjoin(to_add[0], "=");
+					set_variable(new_env, to_add[0], to_add[1]);
+				}
+				else
+				{
+					to_add[0] = ft_strjoin(to_add[0], "=");
+					set_variable(new_env, to_add[0], "");	
+				}
+				free (to_add);
 				i++;
 			}
-			free (to_add);
 		}
 	}
-
 	else if(ft_strncmp(s_line[0], "unset",6) == 0)
 	{
+		char **var_to_unset;
 		*b_in = true;
-		//if no command just show all the Standard variables
+		int i;
+
+		if (s_line[1] == NULL)
+			printf("unset : not enough arguments\n");
+		else
+		{
+			i = 1;
+			while(s_line[i])
+			{
+				var_to_unset = var_to_strarr((*new_env), s_line[i]);
+				if(var_to_unset == NULL)
+					i++;
+				else
+				{
+					delete_variable(new_env, s_line[i]);
+					i++;
+				}
+			}
+		}
+
 	}
 	else if(ft_strncmp(s_line[0], "pwd",4) == 0)
 	{
