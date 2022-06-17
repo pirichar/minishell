@@ -23,28 +23,43 @@ int	main(int argc, char **argv, char **env)
 	char	**new_env;
 	bool	b_in;
 	char	*user;
+	char	*pwd;
 	char	*blue_user;
+	char	*with_at;
 	char	*prompt;
 
 	(void)argv;
 	(void)argc;
+	if (!env)
+		return (0);
 	print_logo(env);
-	i = 0;
-	while (ft_strncmp(env[i], "USER=", 5))
-		i++;
-	user = calloc(ft_strlen(env[i]), sizeof(char));
-	ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
-	blue_user = ft_strjoin(BBLU, user);
-	free(user);
-	prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
-	free(blue_user);
 	new_env = copy_strarr(env);
 	while (1)
 	{
+		i = 0;
+		while (ft_strncmp(new_env[i], "USER=", 5))
+			i++;
+		user = calloc(ft_strlen(new_env[i]), sizeof(char));
+		ft_strlcpy(user, new_env[i] + 5, ft_strlen(new_env[i]));
+		blue_user = ft_strjoin(BBLU, user);
+		free(user);
+		i = 0;
+		while (ft_strncmp(new_env[i], "PWD=", 4))
+			i++;
+		user = calloc(ft_strlen(new_env[i]), sizeof(char));
+		ft_strlcpy(user, new_env[i] + 4, ft_strlen(new_env[i]));
+		with_at = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
+		pwd = ft_strjoin(user, " $> \e[0m");
+		prompt = ft_strjoin(with_at, pwd);
+		free(blue_user);
+		free(with_at);
+		free(pwd);
+		free(user);
 		b_in = false;
 		path = var_to_strarr(new_env, "PATH=");
 		i = 0;
 		line = readline(prompt);
+		free(prompt);
 		if (line == NULL)
 		{
 			free(line);
@@ -93,7 +108,6 @@ int	main(int argc, char **argv, char **env)
 		free(line);
 	}
 	free(path);
-	free(prompt);
 }
 
 void	print_logo(char **env)
