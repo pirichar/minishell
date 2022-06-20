@@ -1,0 +1,7 @@
+Faire :
+
+env 
+cd ..
+env
+
+on dirait que mon cd fuck le chien

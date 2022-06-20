@@ -33,9 +33,8 @@ static void	delete_variable(char ***env, char *var)
 	char **tmp;
 	
 	tmp = *env;
-	i = strarr_len(tmp);
-	(*env) = malloc(sizeof(char *) * i);
-	(*env)[i] = 0;
+	i = strarr_len(*env);
+	(*env) = ft_calloc(i, sizeof(char *));
 	i = 0;
 	j = 0;
 	while(tmp[i])
@@ -78,7 +77,7 @@ void	set_variable(char ***env, char *var, char *new_var)
 	char *tmp;
 
 	i = 0;
-	while((*env) && (*env)[i])
+	while((*env)[i])
 	{
 		if (ft_strncmp((*env)[i], var, ft_strlen(var)) == 0)
 		{
@@ -93,22 +92,21 @@ void	set_variable(char ***env, char *var, char *new_var)
 			add_new_variable(env, var, new_var);
 }
 
-void	mini_cd(char **s_line, char **new_env)
+void	mini_cd(char **s_line, char ***new_env)
 {
-	/*change the OLDPWD= folder*/
+	// (void)new_env;
 	char *actual_pwd;
 	char *buff;
 	
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
-	set_variable(&new_env, "OLDPWD=", actual_pwd);
+	set_variable(new_env, "OLDPWD=", actual_pwd);//clairement un problème avec cette fonction
 	free(actual_pwd);
 	free(buff);
 	chdir(s_line[1]);
-	/*change the PWD*/
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
-	set_variable(&new_env, "PWD=", actual_pwd);
+	set_variable(new_env, "PWD=", actual_pwd);
 	free(actual_pwd);
 	free(buff);
 }
@@ -176,8 +174,7 @@ char **	sort_strarr(char **to_sort)
 	i = 0;
 	while(to_sort && to_sort[i])
 		i++;
-	rtn = malloc(sizeof(char *) * (i + 1));
-	rtn[i + 1] = 0;
+	rtn = ft_calloc(i+1, sizeof(char *));
 	i = 0;
 	while(to_sort[i])
 	{
@@ -211,12 +208,12 @@ void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 	else if(ft_strncmp(s_line[0], "cd",3) == 0)
 	{
 		*b_in = true;
-		mini_cd(s_line, (*new_env));
+		mini_cd(s_line, (new_env));
 	}
-	else if(ft_strncmp(s_line[0], "export",ft_strlen("export")) == 0)
+	else if(ft_strncmp(s_line[0], "export",8) == 0)
 	{
 		*b_in = true;
-		char **to_add;
+		char **to_add = NULL;
 		int i;
 
 		i = 0;
@@ -266,7 +263,7 @@ void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 			i = 1;
 			while(s_line[i])
 			{
-				var_to_unset = var_to_strarr((*new_env), s_line[i]);
+				var_to_unset = var_to_strarr((*new_env), s_line[i]); //probablement un probleme ici
 				if(var_to_unset == NULL)
 					i++;
 				else

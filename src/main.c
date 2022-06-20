@@ -99,8 +99,9 @@ int	main(int argc, char **argv, char **env)
 			{
 				printf("Please provide a built-in command to test or a valid command in the path\n");
 			}
-		}
+		free(s_line);
 		free(line);
+		}
 	}
 	free(path);
 	free(prompt);
