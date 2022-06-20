@@ -37,6 +37,7 @@ typedef struct s_ptrs
 typedef struct s_tkns
 {
 	char			*tkn;
+	int				argv_pos;
 	int				flags;  // 0 = exe, 1 = redirection, 2 = flags, 3 = &&, 4 = pipe, 5 = $var, 6 = param
 	bool			db_quotes;
 	bool			sing_quotes;
@@ -85,6 +86,7 @@ int				check_tokens(char *cmd, t_parsing *parse_list, char *env[]);
 int				check_exe(char *cmd, char *env[]);
 void			free_them(t_parsing *parse_list);
 int				check_var(t_parsing *parse_list, char *cmd, char *env[]);
+char			**split(const char *s);
 char			*get_var(t_parsing *parse_list, char *var, char *env[]);
 
 #endif

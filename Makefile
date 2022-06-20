@@ -56,7 +56,8 @@ define TEA
 endef
 export TEA
 
-SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c
+SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c \
+			src/minisplit.c
 
 HEADERS	=	minishell.h colors.h
 
@@ -70,7 +71,7 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-g -Wall -Wextra -Werror -o DunderShell
+CFLAGS	=	-Wall -Wextra -Werror -o DunderShell
 
 LIBS	=	include/Libft/libft/libft.a -lreadline
 

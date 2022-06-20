@@ -30,8 +30,6 @@ int	main(int argc, char **argv, char **env)
 
 	(void)argv;
 	(void)argc;
-	if (!env)
-		return (0);
 	print_logo(env);
 	new_env = copy_strarr(env);
 	while (1)
@@ -87,7 +85,7 @@ int	main(int argc, char **argv, char **env)
 			if (b_in == false)
 			{
 				i = 0;
-				pid_t p;
+				pid_t	p;
 				while (path[i])
 				{
 					if (search_path(path[i], s_line[0]) == true)
