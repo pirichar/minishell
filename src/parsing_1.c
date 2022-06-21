@@ -10,7 +10,7 @@ int	start_parse(char *line, char *env[])
 	parse_list->tkns_array = split(line);
 	while (parse_list->tkns_array && parse_list->tkns_array[i])
 	{
-		printf("token %d = %s\n", i, parse_list->tkns_array[i]);
+		// printf("token %d = %s\n", i, parse_list->tkns_array[i]);
 		i++;
 	}
 	if (parse_list->tkns_array)
@@ -27,13 +27,20 @@ int	put_on_the_props(t_parsing *parse_list, char *env[])
 	j = 0;
 	i = 0;
 	tks_cnt = cnt_tokens(parse_list->tkns_array);
+	printf("tkns = %d\n", tks_cnt);
+	if (tks_cnt == 0)
+	{
+		printf("sdada\n");
+		
+	}
 	parse_list->tkns_list = malloc(sizeof(t_parsing));
 	parse_list->tkns_list->prev = NULL;
 	parse_list->tkns_list->start = parse_list->tkns_list;
 	while (tks_cnt > i)
 	{
 		parse_list->tkns_list->argv_pos = i;
-		parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i]) + 1, sizeof(char));
+		parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i])
+				+ 1, sizeof(char));
 		while (parse_list->tkns_array[i][j])
 		{
 			parse_list->tkns_list->tkn[j] = parse_list->tkns_array[i][j];
@@ -55,6 +62,7 @@ int	put_on_the_props(t_parsing *parse_list, char *env[])
 		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
 	parse_list->tkns_list->next = NULL;
+	parse_list->tkns_list->tkn = NULL;
 	parse_list->tkns_list = parse_list->tkns_list->start;
 	check_tokens(parse_list->tkns_list->tkn, parse_list, env);
 	return (0);
@@ -66,26 +74,84 @@ int	check_tokens(char *cmd, t_parsing *parse_list, char *env[])
 
 	i = 0;
 	(void)env;
+	cmd = NULL;
 	parse_list->tkns_list = parse_list->tkns_list->start;
 	while (parse_list->tkns_list->next != NULL)
 	{
-		printf("cmd = %s argv pos = %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos);
-		if (parse_list->tkns_list->argv_pos == 0 && (parse_list->tkns_list->next != NULL))
+		// get_rid_of_those_mofo_spaces(parse_list);
+		if (!parse_list->tkns_list->tkn)
+			return (0);
+		if (parse_list->tkns_list->argv_pos == 0
+			&& (!ft_strncmp(parse_list->tkns_list->tkn, "<\0", 2)))
+			put_redirect_props(parse_list);
+		else if (parse_list->tkns_list->argv_pos == 0
+			&& ((!ft_strncmp(parse_list->tkns_list->tkn, "&", 1))
+				|| (!ft_strncmp(parse_list->tkns_list->tkn, "|", 1))))
+			printf("DunderShell: syntax error near unexpected token `%.2s'\n", parse_list->tkns_list->tkn);
+		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "\\", 1)))
+			printf("do the wait for input or do the error ig, idk i dont even work here\n");
+		else if (parse_list->tkns_list->argv_pos == 0)
 		{
-			if (parse_list->tkns_list->next->tkn != NULL && (!ft_strncmp(parse_list->tkns_list->next->tkn, "<<", 2)))
-				printf("redirection vers %s\n", parse_list->tkns_list->tkn);
-			else if (!ft_strncmp(cmd, "<<", 2))
-				printf("do_the_heredocs()\n");
-			else
-				printf("its_an_exe()\n");
+			parse_list->tkns_list->flags = 0;
+			printf("do_the_exe_baby(parse_list) tkn %s, argv pos %d, flags %d\n",
+				parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos,
+				parse_list->tkns_list->flags);
 		}
-		else if (parse_list->tkns_list->argv_pos == 1 && (!ft_strncmp(parse_list->tkns_list->tkn, "<<", 2)))
-			printf("there it is\n");
+		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "&&\0", 3)))
+			put_ampers_props(parse_list);
+		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "||\0", 3)))
+			printf("do the pipes(parse_list)\n");
+		// printf("cmd %s pos %d flags %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos, parse_list->tkns_list->flags);
 		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
 	return (0);
 }
 
+int	get_rid_of_those_mofo_spaces(t_parsing *parse_list)
+{
+	if (parse_list->tkns_list->sing_quotes == false || parse_list->tkns_list->db_quotes == false)
+		ft_strtrim(parse_list->tkns_list->tkn, " ");
+	return (0);
+}
+
+int	put_ampers_props(t_parsing *parse_list)
+{
+	parse_list->tkns_list->flags = 3;
+	printf("tkn %s argv pos %d flags %d\n", parse_list->tkns_list->tkn,
+		parse_list->tkns_list->argv_pos, parse_list->tkns_list->flags);
+	if (parse_list->tkns_list->next != NULL)
+	{
+		parse_list->tkns_list->next->flags = 0;
+		printf("tkn %s argv pos %d flags %d\n", parse_list->tkns_list->next->tkn,
+			parse_list->tkns_list->next->argv_pos,
+			parse_list->tkns_list->next->flags);
+	}
+	return (0);
+}
+
+int	put_redirect_props(t_parsing *parse_list)
+{
+	if (parse_list->tkns_list->next->tkn != NULL)
+	{
+		parse_list->tkns_list->flags = 1;
+		// printf("cmd %s pos %d flags %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos, parse_list->tkns_list->flags);
+		parse_list->tkns_list->next->flags = 7;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+	}
+	else
+	{
+		parse_list->tkns_list->flags = 69;
+		printf("DunderShell: syntax error near unexpected token `newline' \n");
+		return (1);
+	}
+	if (parse_list->tkns_list->next->tkn != NULL)
+	{
+		// printf("cmd %s pos %d flags %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos, parse_list->tkns_list->flags);
+		parse_list->tkns_list->next->flags = 0;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+	}
+	return (0);
+}
 // int	check_tokens(char *cmd, t_parsing *parse_list, char *env[])
 // {
 // 	int		i;

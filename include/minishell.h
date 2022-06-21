@@ -38,7 +38,7 @@ typedef struct s_tkns
 {
 	char			*tkn;
 	int				argv_pos;
-	int				flags;  // 0 = exe, 1 = redirection, 2 = flags, 3 = &&, 4 = pipe, 5 = $var, 6 = param
+	int				flags;  // 0 = exe, 1 = redirection, 2 = flags, 3 = &&, 4 = pipe, 5 = $var, 6 = param, 7 = infile for redirect 69 = error
 	bool			db_quotes;
 	bool			sing_quotes;
 	struct s_tkns	*next;
@@ -88,5 +88,8 @@ void			free_them(t_parsing *parse_list);
 int				check_var(t_parsing *parse_list, char *cmd, char *env[]);
 char			**split(const char *s);
 char			*get_var(t_parsing *parse_list, char *var, char *env[]);
+int				put_redirect_props(t_parsing *parse_list);
+int				put_ampers_props(t_parsing *parse_list);
+int				get_rid_of_those_mofo_spaces(t_parsing *parse_list);
 
 #endif

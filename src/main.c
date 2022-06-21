@@ -69,7 +69,8 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(line);
 			start_parse(line, env);
-
+			if (line == NULL)
+				printf("dsaasdasasdasd\n");
 
 
 
