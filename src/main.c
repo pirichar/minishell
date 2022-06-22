@@ -68,13 +68,14 @@ int	main(int argc, char **argv, char **env)
 		if (line && *line)
 		{
 			add_history(line);
-			start_parse(line, env);
-			if (line == NULL)
-				printf("dsaasdasasdasd\n");
+			start_parse(line);
+
 
 
 
 			s_line = ft_split(line, ' ');
+			if (s_line[0] == NULL)
+				continue ;
 			look_for_builtins(s_line, new_env, &b_in);
 			if (ft_strncmp(s_line[0], "exit",5) == 0)
 			{

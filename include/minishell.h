@@ -76,20 +76,15 @@ char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void	look_for_builtins(char **s_line, char **new_env, bool *b_in);
 //parsing
-int				start_parse(char *line, char *env[]);
-int				nb_tokens(t_parsing *parse_list, char *line);
-void			init_parse(t_parsing *parse_list);
-char			*tokenization(char *line, int i, t_parsing *parse_list);
+int				start_parse(char *line);
 int				cnt_tokens(char **cmds);
-int				put_on_the_props(t_parsing *parse_list, char *env[]);
-int				check_tokens(char *cmd, t_parsing *parse_list, char *env[]);
-int				check_exe(char *cmd, char *env[]);
-void			free_them(t_parsing *parse_list);
-int				check_var(t_parsing *parse_list, char *cmd, char *env[]);
-char			**split(const char *s);
-char			*get_var(t_parsing *parse_list, char *var, char *env[]);
+int				put_on_the_props(t_parsing *parse_list);
+int				assign_the_list(t_parsing *parse_list);
+int				argv0(t_parsing *parse_list);
+int				check_tokens(t_parsing *parse_list);
 int				put_redirect_props(t_parsing *parse_list);
 int				put_ampers_props(t_parsing *parse_list);
-int				get_rid_of_those_mofo_spaces(t_parsing *parse_list);
+int				good_riddance_quotes(t_parsing *parse_list, int i);
+char			**split(const char *s);
 
 #endif

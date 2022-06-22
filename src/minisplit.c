@@ -69,6 +69,7 @@ char	**split(const char *s)
 	char	c;
 	char	**str_arr;
 
+
 	count = counttokens(s);
 	if (count == -1)
 	{
