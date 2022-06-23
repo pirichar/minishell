@@ -94,7 +94,6 @@ void	set_variable(char ***env, char *var, char *new_var)
 
 void	mini_cd(char **s_line, char ***new_env)
 {
-	// (void)new_env;
 	char *actual_pwd;
 	char *buff;
 	
@@ -112,30 +111,55 @@ void	mini_cd(char **s_line, char ***new_env)
 }
 //s'assurer que dans la version officielle echo "-n" 
 // fonctionne aussi mais pas echo " -n"
+
+bool	check_n(char *str)
+{
+	int i;
+
+	i = 1;
+
+	while(str[i])
+	{
+		if (str[i] != 'n')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 void	mini_echo(char **s_line)
 {
 	int		i;
+	int 	j;
 	bool	with_nl;
+	bool	check_nl;
 
 	i = 1;
+	j = 1;
 	with_nl = true;
+	check_nl = true;
 	while (s_line[i])
 	{
-		//filter un nombre inifni de -n
-		//fitrer un nombre infini de n dans le flag -n
-		//-n had to be at the start
-		if (ft_strncmp(s_line[1], "-n", 3) == 0)
+		while (ft_strncmp(s_line[i], "-n", 2) == 0 && check_nl)
 		{
-			with_nl = false;
-			i++;
+			if (check_n(s_line[i]))
+			{
+				with_nl = false;
+				i++;
+			}
+			if (s_line[i] == NULL)
+				return;
 		}
-		if (s_line[i] != 0)
-			printf("%s", s_line[i++]);
+		check_nl = false;
+		if (s_line[i + 1])
+			printf("%s ", s_line[i]);
+		else
+			printf("%s", s_line[i]);
+		i++;
 	}
 	if (with_nl)
 		printf("\n");
 }
-
 
 void	mini_pwd()
 {
