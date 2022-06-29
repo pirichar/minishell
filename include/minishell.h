@@ -74,7 +74,8 @@ int				execute(const char *cmd, int fd_in, int *p, char **env);
 void			parse_and_exec_cmd(const char *cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
-void	look_for_builtins(char **s_line, char **new_env, bool *b_in);
+void			look_for_builtins(char **s_line, char ***new_env, bool *b_in);
+void			set_variable(char ***env, char *var, char *new_var);
 //parsing
 int				start_parse(char *line);
 int				cnt_tokens(char **cmds);
@@ -86,5 +87,6 @@ int				put_redirect_props(t_parsing *parse_list);
 int				put_ampers_props(t_parsing *parse_list);
 int				good_riddance_quotes(t_parsing *parse_list, int i);
 char			**split(const char *s);
+int				ft_strlen_delim(char *str);
 
 #endif

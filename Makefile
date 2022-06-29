@@ -6,7 +6,7 @@
 #    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/15 12:36:03 by pirichar         ###   ########.fr        #
+#    Updated: 2022/06/16 10:59:00 by pirichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,7 +71,7 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-Wall -Wextra -Werror -o DunderShell
+CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -g
 
 LIBS	=	include/Libft/libft/libft.a -lreadline
 

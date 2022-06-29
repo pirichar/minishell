@@ -2,11 +2,9 @@
 
 int	start_parse(char *line)
 {
-	int			i;
 	t_parsing	*parse_list;
 
-	i = 0;
-	parse_list = malloc(sizeof(t_parsing));
+	parse_list = calloc(1, sizeof(t_parsing));
 	parse_list->tkns_array = split(line);
 	if (parse_list->tkns_array == NULL)
 		return (0);
@@ -17,7 +15,7 @@ int	start_parse(char *line)
 
 int	put_on_the_props(t_parsing *parse_list)
 {
-	parse_list->tkns_list = malloc(sizeof(t_parsing));
+	parse_list->tkns_list = calloc(1, sizeof(t_tkns));
 	parse_list->tkns_list->prev = NULL;
 	parse_list->tkns_list->start = parse_list->tkns_list;
 	assign_the_list(parse_list);
@@ -30,90 +28,135 @@ int	put_on_the_props(t_parsing *parse_list)
 
 int	assign_the_list(t_parsing *parse_list)
 {
-	int	tks_cnt;
-	int	i;
-	int	j;
-	int	k;
+	int		tks_cnt;
+	int		index_array;
+	int		index_str_array;
+	int		i_str_list;
+	int i = 0;
+	char	temp;
 
-	i = 0;
-	j = 0;
-	k = 0;
+	index_array = 0;
+	index_str_array = 0;
+	i_str_list = 0;
 	tks_cnt = cnt_tokens(parse_list->tkns_array);
-	while (tks_cnt > i)
+	while (tks_cnt > index_array)
 	{
-		parse_list->tkns_list->argv_pos = i;
-		parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i])
-				+ 1, sizeof(char));
-		while (parse_list->tkns_array[i][j])
+		parse_list->tkns_list->argv_pos = index_array;
+		parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
+		while (parse_list->tkns_array[index_array][index_str_array])
 		{
-			if (parse_list->tkns_array[i][j] == '&')
+			if (parse_list->tkns_array[index_array][index_str_array] == '&' && parse_list->tkns_array[index_array][index_str_array + 1] == '&')
 			{
-				if (k != 0)
-					{
-						printf("token = %s\n", parse_list->tkns_list->tkn);
-						parse_list->tkns_list->next = malloc(sizeof(t_parsing));
-						parse_list->tkns_list->next->prev = parse_list->tkns_list;
-							(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
-						parse_list->tkns_list = parse_list->tkns_list->next;
-						parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i])
-							+ 1, sizeof(char));
-						k = 0;
-					}
-				if (parse_list->tkns_array[i][j + 1] == '&')
+				if (i_str_list == 0)
 				{
-					
+					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
+					i_str_list++;
+					index_str_array++;
+					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
+					i_str_list++;
+					parse_list->tkns_list->tkn[i_str_list] = '\0';
+					parse_list->tkns_array[index_array]++;
+					parse_list->tkns_array[index_array]++;
+					if (parse_list->tkns_array[index_array][index_str_array] != '\0')
 					{
-						parse_list->tkns_list->tkn[k] = parse_list->tkns_array[i][j];
-						j++;
-						k++;
-						parse_list->tkns_list->tkn[k] = parse_list->tkns_array[i][j];
-						k++;
-						j++;
-						parse_list->tkns_list->tkn[k] = '\0';
-						printf("token = %s\n", parse_list->tkns_list->tkn);
-						parse_list->tkns_list->next = malloc(sizeof(t_parsing));
+						parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
 						parse_list->tkns_list->next->prev = parse_list->tkns_list;
 						(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
 						parse_list->tkns_list = parse_list->tkns_list->next;
-						parse_list->tkns_list->tkn = calloc(ft_strlen(parse_list->tkns_array[i])
-						+ 1, sizeof(char));
-						k = 0;
+						parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
+						i_str_list = 0;
+						index_str_array = 0;
 					}
+					continue ;
+				}
+				else if (i_str_list != 0)
+				{
+					parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
+					parse_list->tkns_list->next->prev = parse_list->tkns_list;
+					(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
+					parse_list->tkns_list = parse_list->tkns_list->next;
+					parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
+					i_str_list = 0;
+					temp = parse_list->tkns_array[index_array][index_str_array];
+					while (*parse_list->tkns_array[index_array] != temp)
+						parse_list->tkns_array[index_array]++;
+					i_str_list = 0;
+					index_str_array = 0;
+					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
+					i_str_list++;
+					index_str_array++;
+					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
+					i_str_list++;
+					parse_list->tkns_list->tkn[i_str_list] = '\0';
+					parse_list->tkns_array[index_array]++;
+					parse_list->tkns_array[index_array]++;
+					if (parse_list->tkns_array[index_array][index_str_array] != '\0')
+					{
+						parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
+						parse_list->tkns_list->next->prev = parse_list->tkns_list;
+						(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
+						parse_list->tkns_list = parse_list->tkns_list->next;
+						parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
+						i_str_list = 0;
+						index_str_array = 0;
+					}
+					continue ;
 				}
 			}
-			if (parse_list->tkns_array[i][j] == '\0')
+			if (parse_list->tkns_array[index_array][index_str_array] == '\0')
 				break ;
-			else
 			{
-				parse_list->tkns_list->tkn[k] = parse_list->tkns_array[i][j];
-				j++;
-				k++;
+				parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
+				index_str_array++;
+				i_str_list++;
 			}
 		}
-		parse_list->tkns_list->tkn[k] = '\0';
+		parse_list->tkns_list->tkn[i_str_list] = '\0';
 		if (parse_list->tkns_list->tkn == NULL)
 			parse_list->tkns_list = parse_list->tkns_list->prev;
-		printf("token = %s\n", parse_list->tkns_list->tkn);
-		j = 0;
-		k = 0;
-		j = 0;
-		i++;
-		parse_list->tkns_list->next = malloc(sizeof(t_parsing));
+		index_str_array = 0;
+		i_str_list = 0;
+		index_str_array = 0;
+		index_array++;
+		parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
 		parse_list->tkns_list->next->prev = parse_list->tkns_list;
 		(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
 		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
+	parse_list->tkns_list = parse_list->tkns_list->start;
+	i = 0;
+	while (parse_list->tkns_list->tkn)
+	{
+		if (parse_list->tkns_list->tkn == NULL)
+			break;
+		parse_list->tkns_list->argv_pos = i;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+		i++;
+	}
 	return (0);
 }
 
-int	check_tokens(t_parsing *parse_list)
+int	ft_strlen_delim(char *str)
 {
 	int	i;
 
 	i = 0;
+	while (str[i] != '&' || str[i] != '|' || str[i] != '<')
+	{
+		if (str[i] == '\0')
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+
+int	check_tokens(t_parsing *parse_list)
+{
 	parse_list->tkns_list = parse_list->tkns_list->start;
 	while (parse_list->tkns_list->next != NULL)
 	{
+		printf("tkns = %s, arg pos = %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos);
 		if ((!ft_strncmp(parse_list->tkns_list->tkn, "\\", 1)))
 			printf("do the wait for input or do the error ig, idk i dont even work here\n");
 		else if (parse_list->tkns_list->argv_pos == 0)
@@ -190,7 +233,7 @@ int	cnt_tokens(char **cmds)
 // int	check_var(t_parsing *parse_list, char *cmd, char *env[])
 // {
 // 	int		i;
-// 	int		j;
+// 	int		index_str_array;
 // 	char	*var;
 
 // 	i = 0;
