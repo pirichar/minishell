@@ -44,7 +44,6 @@ char	*fillstr(const char *s, char c, int *i)
 	j = 0;
 	while (s[len] && s[len] != c)
 		len++;
-	// printf("%c", c);
 	str = calloc(sizeof(char), (++len) + 1);
 	if (c == 34 || c == 39)
 		str[j++] = c;

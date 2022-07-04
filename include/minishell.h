@@ -55,6 +55,9 @@ typedef struct s_parsing
 	char 	**tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
 	char	*user;
+	int		i_str_list;
+	int		index_array;
+	int		index_str_array;
 }				t_parsing;
 
 
@@ -88,5 +91,11 @@ int				put_ampers_props(t_parsing *parse_list);
 int				good_riddance_quotes(t_parsing *parse_list, int i);
 char			**split(const char *s);
 int				ft_strlen_delim(char *str);
+void			i_str_list_0(t_parsing *parse_list);
+void			i_str_list_no_0(t_parsing *parse_list);
+void			still_no_0(t_parsing *parse_list);
+void			check_index_array(t_parsing *parse_list);
+int				check_delims(t_parsing *parse_list);
+void			put_arg_pos(t_parsing *parse_list);
 
 #endif

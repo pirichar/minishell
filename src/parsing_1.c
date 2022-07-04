@@ -1,10 +1,216 @@
 #include "../include/minishell.h"
 
+
+int	assign_the_list(t_parsing *parse_list)
+{
+	int	tks_cnt;
+
+	tks_cnt = cnt_tokens(parse_list->tkns_array);
+	while (tks_cnt > parse_list->index_array)
+	{
+		parse_list->tkns_list->argv_pos = parse_list->index_array;
+		parse_list->tkns_list->tkn = calloc(ft_strlen_delim(
+			(parse_list->tkns_array[parse_list->index_array]))
+			+ 1, sizeof(char));
+		check_index_array(parse_list);
+		parse_list->tkns_list->tkn[parse_list->i_str_list] = '\0';
+		if (parse_list->tkns_list->tkn == NULL)
+			parse_list->tkns_list = parse_list->tkns_list->prev;
+		parse_list->index_str_array = 0;
+		parse_list->i_str_list = 0;
+		parse_list->index_str_array = 0;
+		parse_list->index_array++;
+		parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
+		parse_list->tkns_list->next->prev = parse_list->tkns_list;
+		(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+	}
+	parse_list->tkns_list = parse_list->tkns_list->start;
+	put_arg_pos(parse_list);
+	return (0);
+}
+
+void	put_arg_pos(t_parsing *parse_list)
+{
+	int	i;
+
+	i = 0;
+	while (parse_list->tkns_list->tkn)
+	{
+		if (parse_list->tkns_list->tkn == NULL)
+			break;
+		parse_list->tkns_list->argv_pos = i;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+		i++;
+	}
+	return ;
+}
+
+void	check_index_array(t_parsing *parse_list)
+{
+	while (parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array])
+	{
+		if (check_delims(parse_list) == 0)
+		{
+			if (parse_list->i_str_list == 0)
+				i_str_list_0(parse_list);
+			else
+				i_str_list_no_0(parse_list);
+		}
+		if (parse_list->tkns_array[parse_list->index_array]
+				[parse_list->index_str_array] == '\0')
+			break ;
+		parse_list->tkns_list->tkn[parse_list->i_str_list]
+			= parse_list->tkns_array[parse_list->index_array]
+			[parse_list->index_str_array];
+		parse_list->index_str_array++;
+		parse_list->i_str_list++;
+	}
+	return ;
+}
+
+	int	check_delims(t_parsing *parse_list)
+	{
+	if ((parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array] == '&'
+		&& parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array + 1] == '&')
+		|| (parse_list->tkns_array[parse_list->index_array]
+			[parse_list->index_str_array] == '|'
+			&& parse_list->tkns_array[parse_list->index_array]
+			[parse_list->index_str_array + 1] == '|')
+		|| (parse_list->tkns_array[parse_list->index_array]
+			[parse_list->index_str_array] == '<'
+			&& parse_list->tkns_array[parse_list->index_array]
+			[parse_list->index_str_array + 1] == '<'))
+		return (0);
+	return (1);
+}
+
+void	i_str_list_0(t_parsing *parse_list)
+{
+	parse_list->tkns_list->tkn[parse_list->i_str_list]
+		= parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array];
+	parse_list->i_str_list++;
+	parse_list->tkns_list->tkn[parse_list->i_str_list]
+		= parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array];
+	parse_list->i_str_list++;
+	parse_list->tkns_list->tkn[parse_list->i_str_list] = '\0';
+	parse_list->tkns_array[parse_list->index_array]++;
+	parse_list->tkns_array[parse_list->index_array]++;
+	if (parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array] != '\0')
+	{
+		parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
+		parse_list->tkns_list->next->prev = parse_list->tkns_list;
+		(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+		parse_list->tkns_list->tkn = calloc(ft_strlen_delim(
+			(parse_list->tkns_array[parse_list->index_array]))
+			+ 1, sizeof(char));
+		parse_list->i_str_list = 0;
+		parse_list->index_str_array = 0;
+	}
+	return ;
+}
+
+void	i_str_list_no_0(t_parsing *parse_list)
+{
+	char	temp;
+
+	parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
+	parse_list->tkns_list->next->prev = parse_list->tkns_list;
+	(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
+	parse_list->tkns_list = parse_list->tkns_list->next;
+	parse_list->tkns_list->tkn = calloc(ft_strlen_delim(
+		(parse_list->tkns_array[parse_list->index_array])) + 1, sizeof(char));
+	parse_list->i_str_list = 0;
+	temp = parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array];
+	while (*parse_list->tkns_array[parse_list->index_array] != temp)
+		parse_list->tkns_array[parse_list->index_array]++;
+	parse_list->i_str_list = 0;
+	parse_list->index_str_array = 0;
+	parse_list->tkns_list->tkn[parse_list->i_str_list]
+		= parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array];
+	parse_list->i_str_list++;
+	still_no_0(parse_list);
+	return ;
+}
+
+void	still_no_0(t_parsing *parse_list)
+{
+	parse_list->tkns_list->tkn[parse_list->i_str_list]
+		= parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array];
+	parse_list->i_str_list++;
+	parse_list->tkns_list->tkn[parse_list->i_str_list] = '\0';
+	parse_list->tkns_array[parse_list->index_array]++;
+	parse_list->tkns_array[parse_list->index_array]++;
+	if (parse_list->tkns_array[parse_list->index_array]
+		[parse_list->index_str_array] != '\0')
+	{
+		parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
+		parse_list->tkns_list->next->prev = parse_list->tkns_list;
+		(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+		parse_list->tkns_list->tkn = calloc(ft_strlen_delim(
+			(parse_list->tkns_array[parse_list->index_array]))
+			+ 1, sizeof(char));
+		parse_list->i_str_list = 0;
+		parse_list->index_str_array = 0;
+	}
+	return ;
+}
+
+int	ft_strlen_delim(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != '&' || str[i] != '|' || str[i] != '<')
+	{
+		if (str[i] == '\0')
+			break ;
+		i++;
+	}
+	return (i);
+}
+
+int	check_tokens(t_parsing *parse_list)
+{
+	parse_list->tkns_list = parse_list->tkns_list->start;
+	while (parse_list->tkns_list->next != NULL)
+	{
+		printf("tkns = %s, arg pos = %d\n", parse_list->tkns_list->tkn,
+			parse_list->tkns_list->argv_pos);
+		if ((!ft_strncmp(parse_list->tkns_list->tkn, "\\", 1)))
+			printf("do the wait for input or do the error ig,"
+			 "idk i dont even work here\n");
+		else if (parse_list->tkns_list->argv_pos == 0)
+			argv0(parse_list);
+		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "&&\0", 3)))
+			// put_ampers_props(parse_list);
+			printf("hahaha\n");
+		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "||\0", 3)))
+			printf("do the pipes(parse_list)\n");
+		parse_list->tkns_list = parse_list->tkns_list->next;
+	}
+	return (0);
+}
+
 int	start_parse(char *line)
 {
 	t_parsing	*parse_list;
 
 	parse_list = calloc(1, sizeof(t_parsing));
+	parse_list->index_array = 0;
+	parse_list->index_str_array = 0;
+	parse_list->i_str_list = 0;
 	parse_list->tkns_array = split(line);
 	if (parse_list->tkns_array == NULL)
 		return (0);
@@ -23,151 +229,6 @@ int	put_on_the_props(t_parsing *parse_list)
 	parse_list->tkns_list->tkn = NULL;
 	parse_list->tkns_list = parse_list->tkns_list->start;
 	check_tokens(parse_list);
-	return (0);
-}
-
-int	assign_the_list(t_parsing *parse_list)
-{
-	int		tks_cnt;
-	int		index_array;
-	int		index_str_array;
-	int		i_str_list;
-	int i = 0;
-	char	temp;
-
-	index_array = 0;
-	index_str_array = 0;
-	i_str_list = 0;
-	tks_cnt = cnt_tokens(parse_list->tkns_array);
-	while (tks_cnt > index_array)
-	{
-		parse_list->tkns_list->argv_pos = index_array;
-		parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
-		while (parse_list->tkns_array[index_array][index_str_array])
-		{
-			if (parse_list->tkns_array[index_array][index_str_array] == '&' && parse_list->tkns_array[index_array][index_str_array + 1] == '&')
-			{
-				if (i_str_list == 0)
-				{
-					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
-					i_str_list++;
-					index_str_array++;
-					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
-					i_str_list++;
-					parse_list->tkns_list->tkn[i_str_list] = '\0';
-					parse_list->tkns_array[index_array]++;
-					parse_list->tkns_array[index_array]++;
-					if (parse_list->tkns_array[index_array][index_str_array] != '\0')
-					{
-						parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
-						parse_list->tkns_list->next->prev = parse_list->tkns_list;
-						(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
-						parse_list->tkns_list = parse_list->tkns_list->next;
-						parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
-						i_str_list = 0;
-						index_str_array = 0;
-					}
-					continue ;
-				}
-				else if (i_str_list != 0)
-				{
-					parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
-					parse_list->tkns_list->next->prev = parse_list->tkns_list;
-					(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
-					parse_list->tkns_list = parse_list->tkns_list->next;
-					parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
-					i_str_list = 0;
-					temp = parse_list->tkns_array[index_array][index_str_array];
-					while (*parse_list->tkns_array[index_array] != temp)
-						parse_list->tkns_array[index_array]++;
-					i_str_list = 0;
-					index_str_array = 0;
-					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
-					i_str_list++;
-					index_str_array++;
-					parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
-					i_str_list++;
-					parse_list->tkns_list->tkn[i_str_list] = '\0';
-					parse_list->tkns_array[index_array]++;
-					parse_list->tkns_array[index_array]++;
-					if (parse_list->tkns_array[index_array][index_str_array] != '\0')
-					{
-						parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
-						parse_list->tkns_list->next->prev = parse_list->tkns_list;
-						(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
-						parse_list->tkns_list = parse_list->tkns_list->next;
-						parse_list->tkns_list->tkn = calloc(ft_strlen_delim((parse_list->tkns_array[index_array])) + 1, sizeof(char));
-						i_str_list = 0;
-						index_str_array = 0;
-					}
-					continue ;
-				}
-			}
-			if (parse_list->tkns_array[index_array][index_str_array] == '\0')
-				break ;
-			{
-				parse_list->tkns_list->tkn[i_str_list] = parse_list->tkns_array[index_array][index_str_array];
-				index_str_array++;
-				i_str_list++;
-			}
-		}
-		parse_list->tkns_list->tkn[i_str_list] = '\0';
-		if (parse_list->tkns_list->tkn == NULL)
-			parse_list->tkns_list = parse_list->tkns_list->prev;
-		index_str_array = 0;
-		i_str_list = 0;
-		index_str_array = 0;
-		index_array++;
-		parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
-		parse_list->tkns_list->next->prev = parse_list->tkns_list;
-		(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
-		parse_list->tkns_list = parse_list->tkns_list->next;
-	}
-	parse_list->tkns_list = parse_list->tkns_list->start;
-	i = 0;
-	while (parse_list->tkns_list->tkn)
-	{
-		if (parse_list->tkns_list->tkn == NULL)
-			break;
-		parse_list->tkns_list->argv_pos = i;
-		parse_list->tkns_list = parse_list->tkns_list->next;
-		i++;
-	}
-	return (0);
-}
-
-int	ft_strlen_delim(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != '&' || str[i] != '|' || str[i] != '<')
-	{
-		if (str[i] == '\0')
-			break ;
-		i++;
-	}
-	return (i);
-}
-
-
-int	check_tokens(t_parsing *parse_list)
-{
-	parse_list->tkns_list = parse_list->tkns_list->start;
-	while (parse_list->tkns_list->next != NULL)
-	{
-		printf("tkns = %s, arg pos = %d\n", parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos);
-		if ((!ft_strncmp(parse_list->tkns_list->tkn, "\\", 1)))
-			printf("do the wait for input or do the error ig, idk i dont even work here\n");
-		else if (parse_list->tkns_list->argv_pos == 0)
-			argv0(parse_list);
-		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "&&\0", 3)))
-			// put_ampers_props(parse_list);
-			printf("hahaha\n");
-		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "||\0", 3)))
-			printf("do the pipes(parse_list)\n");
-		parse_list->tkns_list = parse_list->tkns_list->next;
-	}
 	return (0);
 }
 
@@ -228,120 +289,3 @@ int	cnt_tokens(char **cmds)
 		i++;
 	return (i);
 }
-
-
-// int	check_var(t_parsing *parse_list, char *cmd, char *env[])
-// {
-// 	int		i;
-// 	int		index_str_array;
-// 	char	*var;
-
-// 	i = 0;
-// 	j = 0;
-// 	var = calloc(ft_strlen(cmd) , sizeof(char));
-// 	if (parse_list->tkns_list->flags == 5)
-// 	{
-// 		var = get_var(parse_list, cmd, env);
-// 		printf("var %s\n", var);
-// 		free(var);
-// 		return (0);
-// 	}
-// 	if (parse_list->tkns_list->db_quotes == true)
-// 	{
-// 		while (cmd[i])
-// 		{
-// 			if (cmd[i] == '$')
-// 			{
-// 				while ((cmd[i]) && (cmd[i] != 32 || cmd[i] != '\0'))
-// 				{
-// 					var[j] = cmd[i];
-// 					i++;
-// 					j++;
-// 					if (cmd[i] == ' ')
-// 					{
-// 						var[j] = '\0';
-// 						break ;
-// 					}
-// 				}
-// 				if (j == 1)
-// 				{
-// 					free(var);
-// 				}
-// 				else
-// 				{
-// 					var = get_var(parse_list, var, env);
-// 					printf("var %s\n", var);
-// 					break ;
-// 				}
-// 			}
-// 			i++;
-// 		}
-// 	}
-// 	return (0);
-// }
-
-// char	*get_var(t_parsing *parse_list, char *var, char *env[])
-// {
-// 	int		len;
-// 	int		i;
-// 	char	*var_name;
-
-// 	(void)parse_list;
-// 	i = 0;
-// 	len = ft_strlen(var);
-// 	while (env[i])
-// 	{
-// 		if (!ft_strncmp(env[i], var + 1, len - 1))
-// 		{
-// 			var_name = calloc(ft_strlen(env[i]), sizeof(char));
-// 			ft_strlcpy(var_name, env[i] + len, ft_strlen(env[i]) - len + 1);
-// 		}
-// 		i++;
-// 	}
-// 	return (var_name);
-// }
-
-// int	check_exe(char *cmd, char *env[])
-// {
-// 	char	**path_split;
-// 	int		i;
-// 	int		si_o_no;
-// 	char	*cmd_temp;
-// 	char	*temp_path;
-
-// 	i = 0;
-// 	si_o_no = -1;
-// 	si_o_no = access(cmd, X_OK);
-// 	if (si_o_no != -1)
-// 		return (si_o_no);
-// 	path_split = ft_split(*env + 5, ':');
-// 	cmd_temp = ft_strjoin("/", cmd);
-// 	while (si_o_no == -1 && path_split[i])
-// 	{
-// 		temp_path = ft_strjoin(path_split[i], cmd_temp);
-// 		si_o_no = access(temp_path, X_OK);
-// 		if (si_o_no == -1)
-// 		{
-// 			free(temp_path);
-// 			free(path_split[i]);
-// 		}
-// 		i++;
-// 	}
-// 	if (si_o_no != -1)
-// 	{
-// 		free(path_split[i]);
-// 		free(temp_path);
-// 	}
-// 	free(cmd_temp);
-// 	return (si_o_no);
-// }
-
-// void	free_them(t_parsing *parse_list)
-// {
-// 	while (parse_list->tkns_list->next != NULL)
-// 	{
-// 		free(parse_list->tkns_list);
-// 		parse_list->tkns_list = parse_list->tkns_list->next;
-// 	}
-// 	free(parse_list->tkns_list);
-// }
