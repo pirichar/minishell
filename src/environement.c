@@ -1,6 +1,5 @@
 #include "../include/minishell.h"
 
-
 /*
 	This function takes care of setting the 3 variables when we open the shell
 	Those variables are
@@ -11,12 +10,12 @@
 */
 void	set_3_variables(char ***env)
 {
-	char *actual_pwd;
-	char *buff;
-	char *binary;
-	char *shlvl;
-	int nb;
-	
+	char	*actual_pwd;
+	char	*buff;
+	char	*binary;
+	char	*shlvl;
+	int		nb;
+
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(env, "PWD=", actual_pwd);
@@ -36,18 +35,18 @@ void	set_3_variables(char ***env)
 	free(shlvl);
 }
 
-char **copy_strarr(char **env)
+char	**copy_strarr(char **env)
 {
-	int i;
-	char **rtn;
-	
+	int		i;
+	char	**rtn;
+
 	i = 0;
-	while(env && env[i])
+	while (env && env[i])
 		i++;
 	rtn = malloc(sizeof(char *) * (i + 1));
 	rtn[i + 1] = 0;
 	i = 0;
-	while(env[i])
+	while (env[i])
 	{
 		rtn[i] = ft_strdup(env[i]);
 		i++;
@@ -56,13 +55,12 @@ char **copy_strarr(char **env)
 	return (rtn);
 }
 
-
 // int	strarr_len(char **str_arr)
 // {
-// 	int i;
+// 	int	i;
 
 // 	i = 0;
-// 	while(str_arr[i])
+// 	while (str_arr[i])
 // 		i++;
 // 	return (i);
 // }
@@ -131,13 +129,13 @@ char	**var_to_strarr(char **env, char *var)
 */
 char	*var_to_str(char **env, char *var)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env && env[i])
 	{
 		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
-			break;
+			break ;
 		i++;
 	}
 	return (env[i]);
@@ -148,7 +146,7 @@ char	*var_to_str(char **env, char *var)
 // 	int i;
 // 	char **rtn;
 // 	char **tmp;
-	
+
 // 	tmp = env;
 // 	i = strarr_len(env);
 // 	env = malloc(sizeof(char *) * i + 2);

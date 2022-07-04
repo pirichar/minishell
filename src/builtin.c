@@ -2,20 +2,20 @@
 
 int	strarr_len(char **str_arr)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(str_arr[i])
+	while (str_arr[i])
 		i++;
 	return (i);
 }
 
 void	free_strrarr(char **to_free)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(to_free[i])
+	while (to_free[i])
 	{
 		free(to_free[i]);
 		i++;
@@ -28,16 +28,16 @@ void	free_strrarr(char **to_free)
 */
 static void	delete_variable(char ***env, char *var)
 {
-	int i;
-	int j;
-	char **tmp;
-	
+	int		i;
+	int		j;
+	char	**tmp;
+
 	tmp = *env;
 	i = strarr_len(*env);
 	(*env) = ft_calloc(i, sizeof(char *));
 	i = 0;
 	j = 0;
-	while(tmp[i])
+	while (tmp[i])
 	{
 		if (ft_strncmp(tmp[i], var, ft_strlen(var)) != 0)
 		{
@@ -51,17 +51,16 @@ static void	delete_variable(char ***env, char *var)
 	free_strrarr(tmp);
 }
 
-
-
-void	add_new_variable(char ***env,char *var, char *variable)
+void	add_new_variable(char ***env, char *var, char *variable)
 {
-	int i;
-	char **tmp;
-	tmp = *env; 
+	int		i;
+	char	**tmp;
+
+	tmp = *env;
 	i = strarr_len(*env);
 	(*env) = ft_calloc(i + 2, sizeof(char *));
 	i = 0;
-	while(tmp[i])
+	while (tmp[i])
 	{
 		(*env)[i] = ft_strdup(tmp[i]);
 		i++;
@@ -70,36 +69,35 @@ void	add_new_variable(char ***env,char *var, char *variable)
 	free_strrarr(tmp);
 }
 
-
 void	set_variable(char ***env, char *var, char *new_var)
 {
-	int i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
-	while((*env)[i])
+	while ((*env)[i])
 	{
 		if (ft_strncmp((*env)[i], var, ft_strlen(var)) == 0)
 		{
 			tmp = (*env)[i];
 			(*env)[i] = ft_strjoin(var, new_var);
 			free(tmp);
-			break;
+			break ;
 		}
 		i++;
 	}
 	if ((*env)[i] == NULL)
-			add_new_variable(env, var, new_var);
+		add_new_variable(env, var, new_var);
 }
 
 void	mini_cd(char **s_line, char ***new_env)
 {
-	char *actual_pwd;
-	char *buff;
-	
+	char	*actual_pwd;
+	char	*buff;
+
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "OLDPWD=", actual_pwd);//clairement un problème avec cette fonction
+	set_variable(new_env, "OLDPWD=", actual_pwd);
 	free(actual_pwd);
 	free(buff);
 	chdir(s_line[1]);
@@ -112,13 +110,12 @@ void	mini_cd(char **s_line, char ***new_env)
 //s'assurer que dans la version officielle echo "-n" 
 // fonctionne aussi mais pas echo " -n"
 
-bool	check_n(char *str)
+bool	check_only_n(char *str)
 {
-	int i;
+	int	i;
 
 	i = 1;
-
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] != 'n')
 			return (false);
@@ -127,10 +124,24 @@ bool	check_n(char *str)
 	return (true);
 }
 
-void	mini_echo(char **s_line)
+void	parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i)
+{
+	while (ft_strncmp(s_line[*(i)], "-n", 2) == 0 && (*check_nl))
+	{
+		if (s_line[*(i)] == NULL)
+			return ;
+		if (check_only_n(s_line[*(i)]))
+			(*with_nl) = false;
+		else
+			break ;
+		(*i)++;
+	}
+}
+
+void	mini_echo(char **s_line, bool *b_in)
 {
 	int		i;
-	int 	j;
+	int		j;
 	bool	with_nl;
 	bool	check_nl;
 
@@ -138,18 +149,10 @@ void	mini_echo(char **s_line)
 	j = 1;
 	with_nl = true;
 	check_nl = true;
+	*b_in = true;
 	while (s_line[i])
 	{
-		while (ft_strncmp(s_line[i], "-n", 2) == 0 && check_nl)
-		{
-			if (check_n(s_line[i]))
-			{
-				with_nl = false;
-				i++;
-			}
-			if (s_line[i] == NULL)
-				return;
-		}
+		parse_echo(s_line, &check_nl, &with_nl, &i);
 		check_nl = false;
 		if (s_line[i + 1])
 			printf("%s ", s_line[i]);
@@ -161,59 +164,49 @@ void	mini_echo(char **s_line)
 		printf("\n");
 }
 
-void	mini_pwd()
+void	mini_pwd(void)
 {
-	char *to_print;
-	char *buff;
-	
+	char	*to_print;
+	char	*buff;
+
 	buff = NULL;
 	to_print = getcwd(buff, 1024);
-	printf("%s\n",to_print);
+	printf("%s\n", to_print);
 	free(to_print);
 	free(buff);
 }
 
 void	mini_env(char **new_env)
 {
-	int i;
-	char **tmp;
+	int		i;
+	char	**tmp;
 
 	i = 0;
-	while(new_env[i])
+	while (new_env[i])
 	{
 		tmp = ft_split(new_env[i], '=');
 		if (tmp[1] != NULL)
-			printf("%s\n",new_env[i]);
+			printf("%s\n", new_env[i]);
 		free_strrarr(tmp);
 		i++;
 	}
 }
-char **	sort_strarr(char **to_sort)
+
+char	**bubble_sort_strarr(char **rtn)
 {
-	int i;
-	int j;
-	char **rtn;
-	char *tmp;
-	
-	i = 0;
-	while(to_sort && to_sort[i])
-		i++;
-	rtn = ft_calloc(i+1, sizeof(char *));
-	i = 0;
-	while(to_sort[i])
-	{
-		rtn[i] = ft_strdup(to_sort[i]);
-		i++;
-	}
+	int		i;
+	int		j;
+	char	*tmp;
+
 	i = 0;
 	j = 0;
-	while(rtn[i+1])
+	while (rtn[i + 1])
 	{
-		if (ft_strncmp(rtn[i], rtn[i+1], ft_strlen(rtn[i])) > 1)
+		if (ft_strncmp(rtn[i], rtn[i + 1], ft_strlen(rtn[i])) > 1)
 		{
 			tmp = rtn[i];
-			rtn[i] = rtn[i+1];
-			rtn[i+1] = tmp;
+			rtn[i] = rtn[i + 1];
+			rtn[i + 1] = tmp;
 			i = 0;
 		}
 		else
@@ -222,89 +215,122 @@ char **	sort_strarr(char **to_sort)
 	return (rtn);
 }
 
+char	**sort_strarr(char **to_sort)
+{
+	int		i;
+	char	**rtn;
+
+	i = 0;
+	while (to_sort && to_sort[i])
+		i++;
+	rtn = ft_calloc(i + 1, sizeof(char *));
+	i = 0;
+	while (to_sort[i])
+	{
+		rtn[i] = ft_strdup(to_sort[i]);
+		i++;
+	}
+	return (bubble_sort_strarr(rtn));
+}
+
+void	print_export(char ***new_env)
+{
+	char	**to_print;
+	int		i;
+
+	i = 0;
+	to_print = sort_strarr(*new_env);
+	while (to_print[i])
+	{
+		printf("declare -x %s\n", to_print[i]);
+		i++;
+	}
+	free(to_print);
+}
+
+void	actually_set_variables(char **s_line, char ***new_env)
+{
+	int		i;
+	char	**to_add;
+
+	i = 1;
+	while (s_line[i])
+	{
+		to_add = ft_split(s_line[i], '=');
+		if (to_add[0] == NULL)
+			printf("DunderSHell: export: `=': not a valid identifierr\n");
+		else if (to_add[1] != NULL)
+		{
+			to_add[0] = ft_strjoin(to_add[0], "=");
+			set_variable(new_env, to_add[0], to_add[1]);
+		}
+		else if (to_add[1] == NULL)
+		{
+			to_add[0] = ft_strjoin(to_add[0], "=");
+			set_variable(new_env, to_add[0], "");
+		}
+		free (to_add);
+		i++;
+	}
+}
+
+void	mini_export(char **s_line, char ***new_env)
+{
+	if (s_line[1] == NULL)
+		print_export(new_env);
+	else
+		actually_set_variables(s_line, new_env);
+}
+
+/*peut etre un probleme a la ligne var_to_unset =
+ var_to_strarr((*new_env), s_line[i]); (ancienne note)*/
+void	mini_unset(char **s_line, char ***new_env, bool *built_in)
+{
+	char	**var_to_unset;
+	int		i;
+
+	*built_in = true;
+	if (s_line[1] == NULL)
+		printf("unset : not enough arguments\n");
+	else
+	{
+		i = 1;
+		while (s_line[i])
+		{
+			var_to_unset = var_to_strarr((*new_env), s_line[i]);
+			if (var_to_unset == NULL)
+				i++;
+			else
+			{
+				delete_variable(new_env, s_line[i]);
+				i++;
+			}
+		}
+	}
+}
+
 void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 {
-	if(ft_strncmp(s_line[0], "echo",5) == 0)
-	{
-		*b_in = true;
-		mini_echo(s_line);
-	}
-	else if(ft_strncmp(s_line[0], "cd",3) == 0)
+	if (ft_strncmp(s_line[0], "echo", 5) == 0)
+		mini_echo(s_line, b_in);
+	else if (ft_strncmp(s_line[0], "cd", 3) == 0)
 	{
 		*b_in = true;
 		mini_cd(s_line, (new_env));
 	}
-	else if(ft_strncmp(s_line[0], "export",8) == 0)
+	else if (ft_strncmp(s_line[0], "export", 8) == 0)
 	{
 		*b_in = true;
-		char **to_add = NULL;
-		int i;
-
-		i = 0;
-		//if export alone
-		if (s_line[1] == NULL)
-		{
-			//copy new_env into a new memory space and put it in alphabetical order
-			to_add = sort_strarr(*new_env);
-			while(to_add[i])
-			{
-				printf("declare -x %s\n", to_add[i]);
-				i++;
-			}
-			free(to_add);
-		}
-		else
-		{
-			i = 1;
-			while(s_line[i])
-			{
-				to_add = ft_split(s_line[i], '=');
-				if (to_add[1] != NULL)
-				{
-					to_add[0] = ft_strjoin(to_add[0], "=");
-					set_variable(new_env, to_add[0], to_add[1]);
-				}
-				else
-				{
-					to_add[0] = ft_strjoin(to_add[0], "=");
-					set_variable(new_env, to_add[0], "");	
-				}
-				free (to_add);
-				i++;
-			}
-		}
+		mini_export(s_line, (new_env));
 	}
-	else if(ft_strncmp(s_line[0], "unset",6) == 0)
-	{
-		char **var_to_unset;
-		*b_in = true;
-		int i;
-
-		if (s_line[1] == NULL)
-			printf("unset : not enough arguments\n");
-		else
-		{
-			i = 1;
-			while(s_line[i])
-			{
-				var_to_unset = var_to_strarr((*new_env), s_line[i]); //probablement un probleme ici
-				if(var_to_unset == NULL)
-					i++;
-				else
-				{
-					delete_variable(new_env, s_line[i]);
-					i++;
-				}
-			}
-		}
-
-	}
-	else if(ft_strncmp(s_line[0], "pwd",4) == 0)
+	else if (ft_strncmp(s_line[0], "unset", 6) == 0)
+		mini_unset(s_line, new_env, b_in);
+	else if (ft_strncmp(s_line[0], "pwd", 4) == 0)
 	{
 		*b_in = true;
 		mini_pwd();
 	}
-	else if (ft_strncmp(s_line[0], "env",5) == 0)
+	else if (ft_strncmp(s_line[0], "env", 5) == 0)
 	{
 		*b_in = true;
 		mini_env((*new_env));
