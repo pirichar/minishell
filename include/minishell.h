@@ -38,9 +38,10 @@ typedef struct s_tkns
 {
 	char			*tkn;
 	int				argv_pos;
-	int				flags;  // 0 = exe, 1 = redirection, 2 = flags, 3 = &&, 4 = pipe, 5 = $var, 6 = param, 7 = infile for redirect 69 = error
+	int				flags;  // 0 = exe, 1 = redirection, 2 = param, 3 = &&, 4 = ||, 5 = pipe, 6 = $var, 7 = infile for redirect, 8 = heredocs, 9 = delimiter for heredocs, 10 = redirect out, 11 = file for redirect out, 12 = redirect out and append, 69 = error
 	bool			db_quotes;
 	bool			sing_quotes;
+	bool			dollar_sign;
 	struct s_tkns	*next;
 	struct s_tkns	*prev;
 	struct s_tkns	*start;
@@ -88,14 +89,15 @@ int				argv0(t_parsing *parse_list);
 int				check_tokens(t_parsing *parse_list);
 int				put_redirect_props(t_parsing *parse_list);
 int				put_ampers_props(t_parsing *parse_list);
-int				good_riddance_quotes(t_parsing *parse_list, int i);
+int				put_pipe_props(t_parsing *parse_list);
 char			**split(const char *s);
 int				ft_strlen_delim(char *str);
-void			i_str_list_0(t_parsing *parse_list);
-void			i_str_list_no_0(t_parsing *parse_list);
-void			still_no_0(t_parsing *parse_list);
+void			i_str_list_0(t_parsing *parse_list, int nb);
+void			i_str_list_no_0(t_parsing *parse_list, int nb);
+void			still_no_0(t_parsing *parse_list, int nb);
 void			check_index_array(t_parsing *parse_list);
 int				check_delims(t_parsing *parse_list);
 void			put_arg_pos(t_parsing *parse_list);
+int				var_len(t_parsing *parse_list);
 
 #endif
