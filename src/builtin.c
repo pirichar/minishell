@@ -90,11 +90,12 @@ void	set_variable(char ***env, char *var, char *new_var)
 		add_new_variable(env, var, new_var);
 }
 
-void	mini_cd(char **s_line, char ***new_env)
+void	mini_cd(char **s_line, char ***new_env, bool *b_in)
 {
 	char	*actual_pwd;
 	char	*buff;
 
+	*b_in = true;
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(new_env, "OLDPWD=", actual_pwd);
@@ -164,11 +165,12 @@ void	mini_echo(char **s_line, bool *b_in)
 		printf("\n");
 }
 
-void	mini_pwd(void)
+void	mini_pwd(bool *b_in)
 {
 	char	*to_print;
 	char	*buff;
 
+	*b_in = true;
 	buff = NULL;
 	to_print = getcwd(buff, 1024);
 	printf("%s\n", to_print);
@@ -176,11 +178,22 @@ void	mini_pwd(void)
 	free(buff);
 }
 
-void	mini_env(char **new_env)
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	size_t	i;
+
+	i = 0;
+	while (s1[i] != '\0' && s1[i] == s2[i])
+		i++;
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+void	mini_env(char **new_env, bool *b_in)
 {
 	int		i;
 	char	**tmp;
 
+	*b_in = true;
 	i = 0;
 	while (new_env[i])
 	{
@@ -202,7 +215,7 @@ char	**bubble_sort_strarr(char **rtn)
 	j = 0;
 	while (rtn[i + 1])
 	{
-		if (ft_strncmp(rtn[i], rtn[i + 1], ft_strlen(rtn[i])) > 1)
+		if (ft_strcmp(rtn[i], rtn[i + 1]) > 0)
 		{
 			tmp = rtn[i];
 			rtn[i] = rtn[i + 1];
@@ -274,8 +287,9 @@ void	actually_set_variables(char **s_line, char ***new_env)
 	}
 }
 
-void	mini_export(char **s_line, char ***new_env)
+void	mini_export(char **s_line, char ***new_env, bool *b_in)
 {
+	*b_in = true;
 	if (s_line[1] == NULL)
 		print_export(new_env);
 	else
@@ -309,30 +323,24 @@ void	mini_unset(char **s_line, char ***new_env, bool *built_in)
 	}
 }
 
+void	mini_dollar(char ***new_env, bool *b_in)
+{
+
+}
 void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
 {
 	if (ft_strncmp(s_line[0], "echo", 5) == 0)
 		mini_echo(s_line, b_in);
 	else if (ft_strncmp(s_line[0], "cd", 3) == 0)
-	{
-		*b_in = true;
-		mini_cd(s_line, (new_env));
-	}
+		mini_cd(s_line, (new_env), b_in);
 	else if (ft_strncmp(s_line[0], "export", 8) == 0)
-	{
-		*b_in = true;
-		mini_export(s_line, (new_env));
-	}
+		mini_export(s_line, (new_env), b_in);
 	else if (ft_strncmp(s_line[0], "unset", 6) == 0)
 		mini_unset(s_line, new_env, b_in);
 	else if (ft_strncmp(s_line[0], "pwd", 4) == 0)
-	{
-		*b_in = true;
-		mini_pwd();
-	}
+		mini_pwd(b_in);
 	else if (ft_strncmp(s_line[0], "env", 5) == 0)
-	{
-		*b_in = true;
-		mini_env((*new_env));
-	}
+		mini_env((*new_env), b_in);
+	else if (ft_strncmp(s_line[0], "$", 1) == 0)
+		mini_dollar((new_env), b_in);
 }
