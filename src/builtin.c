@@ -90,6 +90,22 @@ void	set_variable(char ***env, char *var, char *new_var)
 		add_new_variable(env, var, new_var);
 }
 
+char *	return_variable(char ***env, char *var)
+{
+	int		i;
+
+	i = 0;
+	while ((*env)[i])
+	{
+		if (ft_strncmp((*env)[i], var, ft_strlen(var)) == 0)
+		{
+			return (*env[i]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 void	mini_cd(char **s_line, char ***new_env, bool *b_in)
 {
 	char	*actual_pwd;
@@ -258,7 +274,7 @@ void	print_export(char ***new_env)
 		printf("declare -x %s\n", to_print[i]);
 		i++;
 	}
-	free(to_print);
+	free_strrarr(to_print);
 }
 
 void	actually_set_variables(char **s_line, char ***new_env)
@@ -282,7 +298,7 @@ void	actually_set_variables(char **s_line, char ***new_env)
 			to_add[0] = ft_strjoin(to_add[0], "=");
 			set_variable(new_env, to_add[0], "");
 		}
-		free (to_add);
+		free_strrarr(to_add);
 		i++;
 	}
 }
@@ -319,31 +335,16 @@ void	mini_unset(char **s_line, char ***new_env, bool *built_in)
 				delete_variable(new_env, s_line[i]);
 				i++;
 			}
+			free_strrarr(var_to_unset);
 		}
 	}
 }
 
-void	mini_dollar(char ***new_env, bool *b_in)
+/* lol */
+void	exit_was_too_long(char **s_line)
 {
-	(void)new_env;
-	(void)b_in;
-
-}
-
-void	mini_exit(char *line, char **s_line, bool *b_in)
-{
-	(void)line;
-	int tmp;
 	int i;
 
-	i = 1;
-	*b_in = true;
-	while(s_line[i++]);
-	if (i > 3)
-	{
-		printf("Dundershell: exit: too many arguments\n");
-		return;
-	}
 	if (s_line[1] == NULL)
 	{
 		printf("exit\n");
@@ -359,9 +360,37 @@ void	mini_exit(char *line, char **s_line, bool *b_in)
 		}
 		i++;
 	}
+}
+
+/*
+	étrangement quand je free line et s_line j'ai un leak mais 
+	le leak part quand je ne les free pas ; je devrais vérifier pourquoi bientôt
+*/
+void	mini_exit(char *line, char **s_line, bool *b_in)
+{
+	(void)line;
+	int tmp;
+	int i;
+
+	i = 1;
+	*b_in = true;
+	while(s_line[i++]);
+	if (i > 3)
+	{
+		printf("Dundershell: exit: too many arguments\n");
+		return;
+	}
+	exit_was_too_long(s_line);
 	tmp = ft_atoi(s_line[1]);
 	printf("exit\n");
 	exit (tmp);
+}
+
+void	mini_dollar(char **s_line, char ***new_env, bool *b_in)
+{
+	*b_in = true;
+	if (return_variable(new_env, s_line[1]) != NULL)
+		printf("%s\n",return_variable(new_env, s_line[1]));
 }
 
 void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in)
@@ -381,5 +410,5 @@ void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in)
 	else if (ft_strncmp(*s_line[0], "exit",5) == 0)
 		mini_exit(*line, *s_line, b_in);
 	else if (ft_strncmp(*s_line[0], "$", 1) == 0)
-		mini_dollar((new_env), b_in);
+		mini_dollar(*s_line, new_env, b_in);
 }
