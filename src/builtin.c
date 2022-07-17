@@ -127,10 +127,8 @@ bool	check_only_n(char *str)
 
 void	parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i)
 {
-	while (ft_strncmp(s_line[*(i)], "-n", 2) == 0 && (*check_nl))
+	while (s_line[*(i)] && ft_strncmp(s_line[*(i)], "-n", 2) == 0 && (*check_nl))
 	{
-		if (s_line[*(i)] == NULL)
-			return ;
 		if (check_only_n(s_line[*(i)]))
 			(*with_nl) = false;
 		else
@@ -154,6 +152,8 @@ void	mini_echo(char **s_line, bool *b_in)
 	while (s_line[i])
 	{
 		parse_echo(s_line, &check_nl, &with_nl, &i);
+		if (s_line[i] == NULL)
+			return;
 		check_nl = false;
 		if (s_line[i + 1])
 			printf("%s ", s_line[i]);
@@ -325,22 +325,61 @@ void	mini_unset(char **s_line, char ***new_env, bool *built_in)
 
 void	mini_dollar(char ***new_env, bool *b_in)
 {
+	(void)new_env;
+	(void)b_in;
 
 }
-void	look_for_builtins(char **s_line, char ***new_env, bool *b_in)
+
+void	mini_exit(char *line, char **s_line, bool *b_in)
 {
-	if (ft_strncmp(s_line[0], "echo", 5) == 0)
-		mini_echo(s_line, b_in);
-	else if (ft_strncmp(s_line[0], "cd", 3) == 0)
-		mini_cd(s_line, (new_env), b_in);
-	else if (ft_strncmp(s_line[0], "export", 8) == 0)
-		mini_export(s_line, (new_env), b_in);
-	else if (ft_strncmp(s_line[0], "unset", 6) == 0)
-		mini_unset(s_line, new_env, b_in);
-	else if (ft_strncmp(s_line[0], "pwd", 4) == 0)
+	(void)line;
+	int tmp;
+	int i;
+
+	i = 1;
+	*b_in = true;
+	while(s_line[i++]);
+	if (i > 3)
+	{
+		printf("Dundershell: exit: too many arguments\n");
+		return;
+	}
+	if (s_line[1] == NULL)
+	{
+		printf("exit\n");
+		exit (0);
+	}
+	i = 0;
+	while(s_line[1][i])
+	{
+		if (s_line[1][i] < '0' || s_line[1][i] > '9')
+		{
+			printf("Dundershell: exit: %s: numeric argument required\n", s_line[1]);
+			exit (255);
+		}
+		i++;
+	}
+	tmp = ft_atoi(s_line[1]);
+	printf("exit\n");
+	exit (tmp);
+}
+
+void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in)
+{
+	if (ft_strncmp(*s_line[0], "echo", 5) == 0)
+		mini_echo(*s_line, b_in);
+	else if (ft_strncmp(*s_line[0], "cd", 3) == 0)
+		mini_cd(*s_line, (new_env), b_in);
+	else if (ft_strncmp(*s_line[0], "export", 8) == 0)
+		mini_export(*s_line, (new_env), b_in);
+	else if (ft_strncmp(*s_line[0], "unset", 6) == 0)
+		mini_unset(*s_line, new_env, b_in);
+	else if (ft_strncmp(*s_line[0], "pwd", 4) == 0)
 		mini_pwd(b_in);
-	else if (ft_strncmp(s_line[0], "env", 5) == 0)
+	else if (ft_strncmp(*s_line[0], "env", 5) == 0)
 		mini_env((*new_env), b_in);
-	else if (ft_strncmp(s_line[0], "$", 1) == 0)
+	else if (ft_strncmp(*s_line[0], "exit",5) == 0)
+		mini_exit(*line, *s_line, b_in);
+	else if (ft_strncmp(*s_line[0], "$", 1) == 0)
 		mini_dollar((new_env), b_in);
 }

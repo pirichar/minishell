@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -22,6 +23,7 @@ int	main(int argc, char **argv, char **env)
 	char	**s_line;
 	char	**new_env;
 	bool	b_in;
+	bool	cmd;
 	char	*user;
 	char	*blue_user;
 	char	*prompt;
@@ -52,6 +54,7 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		b_in = false;
+		cmd = false;
 		i = 0;
 		line = readline(prompt);
 		if (line == NULL)
@@ -67,13 +70,7 @@ int	main(int argc, char **argv, char **env)
 			s_line = ft_split(line, ' ');
 			if(s_line[0] == NULL)
 				continue;
-			look_for_builtins(s_line, &new_env, &b_in);
-			if (ft_strncmp(s_line[0], "exit",5) == 0)
-			{
-				free (s_line);
-				free(line);
-				return (0);
-			}
+			look_for_builtins(&line, &s_line, &new_env, &b_in);
 			//basic execute function
 			if (b_in == false)
 			{
@@ -90,17 +87,16 @@ int	main(int argc, char **argv, char **env)
 							break ;
 						i++;
 					}
-					if (i != nb_of_charstrstr(path))
+					if (i != nb_of_charstrstr(path) || access(s_line[0], X_OK) == 0)
 					{
+						cmd = true;
 						execute_solo(line, &p, new_env);
 						waitpid(p, NULL, 0);
 					}
 				}
 			}
-			else if (b_in == false)
-			{
+			if (b_in == false && cmd == false)
 				printf("Please provide a built-in command to test or a valid command in the path\n");
-			}
 		free(s_line);
 		free(line);
 		}

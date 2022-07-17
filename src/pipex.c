@@ -140,7 +140,15 @@ void	execute_solo(const char *cmd, int *p, char **env)
 	pid = fork();
 	if (pid == 0)
 	{
-		parse_and_exec_cmd(cmd, env);
+		if (access (cmd, X_OK) == 0)
+		{
+			char **cmdo = ft_split(cmd, ' ');
+			printf("EXECUTING LOCALY\n");
+			execve(cmdo[0], cmdo, env);
+			exit(1);
+		}
+		else
+			parse_and_exec_cmd(cmd, env);
 	}
 	*p = pid;
 }
