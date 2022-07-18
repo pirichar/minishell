@@ -90,22 +90,6 @@ void	set_variable(char ***env, char *var, char *new_var)
 		add_new_variable(env, var, new_var);
 }
 
-char *	return_variable(char ***env, char *var)
-{
-	int		i;
-
-	i = 0;
-	while ((*env)[i])
-	{
-		if (ft_strncmp((*env)[i], var, ft_strlen(var)) == 0)
-		{
-			return (*env[i]);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
 void	mini_cd(char **s_line, char ***new_env, bool *b_in)
 {
 	char	*actual_pwd;
@@ -343,7 +327,7 @@ void	mini_unset(char **s_line, char ***new_env, bool *built_in)
 /* lol */
 void	exit_was_too_long(char **s_line)
 {
-	int i;
+	int	i;
 
 	if (s_line[1] == NULL)
 	{
@@ -386,11 +370,27 @@ void	mini_exit(char *line, char **s_line, bool *b_in)
 	exit (tmp);
 }
 
+char*	return_variable(char **env, char *var)
+{
+	int		i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
+		{
+			return (env[i]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 void	mini_dollar(char **s_line, char ***new_env, bool *b_in)
 {
 	*b_in = true;
-	if (return_variable(new_env, s_line[1]) != NULL)
-		printf("%s\n",return_variable(new_env, s_line[1]));
+	if (return_variable(*new_env, s_line[1]) != NULL)
+		printf("%s\n",return_variable(*new_env, s_line[1]));
 }
 
 void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in)

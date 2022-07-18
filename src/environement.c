@@ -6,7 +6,6 @@
 	PWD
 	SHLVL
 	_=
-
 */
 void	set_3_variables(char ***env)
 {
@@ -25,8 +24,10 @@ void	set_3_variables(char ***env)
 	if (shlvl == NULL)
 		nb = 1;
 	else
+	{
 		nb = shlvl[ft_strlen(shlvl) - 1] - '0';
-	nb++;
+		nb++;
+	}
 	shlvl = ft_itoa(nb);
 	set_variable(env, "SHLVL=", shlvl);
 	free(actual_pwd);
@@ -35,6 +36,11 @@ void	set_3_variables(char ***env)
 	free(shlvl);
 }
 
+/*
+	This function copies the env variables passed by the main
+	It then sets 3 variables that are the SHLVL, the actual pwd 
+	and the binary using the function set 3 variabless
+*/
 char	**copy_strarr(char **env)
 {
 	int		i;
@@ -44,13 +50,18 @@ char	**copy_strarr(char **env)
 	while (env && env[i])
 		i++;
 	rtn = malloc(sizeof(char *) * (i + 1));
-	rtn[i + 1] = 0;
-	i = 0;
-	while (env[i])
+	if (i != 0)
 	{
-		rtn[i] = ft_strdup(env[i]);
-		i++;
+		rtn[i + 1] = 0;
+		i = 0;
+		while (env[i])
+		{
+			rtn[i] = ft_strdup(env[i]);
+			i++;
+		}
 	}
+	else 
+		rtn[i] = 0;
 	set_3_variables(&rtn);
 	return (rtn);
 }
