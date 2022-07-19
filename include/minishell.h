@@ -61,7 +61,7 @@ typedef struct s_parsing
 void			print_logo(char **env);
 //environement.c
 bool			search_path(const char *p_arr, const char *cmd);
-char			**var_to_strarr(char **env, char *var);
+char			**path_to_starrr(char **env, char *var);
 char 			**copy_strarr(char **env);
 char			*var_to_str(char **env, char *var);
 //pipex.c

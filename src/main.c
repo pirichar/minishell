@@ -76,7 +76,7 @@ int	main(int argc, char **argv, char **env)
 			{
 				i = 0;
 				pid_t p;
-				path = var_to_strarr(new_env, "PATH=");
+				path = path_to_starrr(new_env, "PATH=");
 				if (path == NULL)
 					printf("TERM environment variable not set\n");
 				else

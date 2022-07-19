@@ -107,7 +107,7 @@ static int	strlen_path(char **env)
 	The output represent all the possible
 	 path to try with execve with the command
 */
-char	**var_to_strarr(char **env, char *var)
+char	**path_to_starrr(char **env, char *var)
 {
 	int		i;
 	int		len;

@@ -23,34 +23,6 @@ void	free_strrarr(char **to_free)
 	free(to_free);
 }
 
-/*
-	Function to use in unset
-*/
-static void	delete_variable(char ***env, char *var)
-{
-	int		i;
-	int		j;
-	char	**tmp;
-
-	tmp = *env;
-	i = strarr_len(*env);
-	(*env) = ft_calloc(i, sizeof(char *));
-	i = 0;
-	j = 0;
-	while (tmp[i])
-	{
-		if (ft_strncmp(tmp[i], var, ft_strlen(var)) != 0)
-		{
-			(*env)[j] = ft_strdup(tmp[i]);
-			i++;
-			j++;
-		}
-		else
-			i++;
-	}
-	free_strrarr(tmp);
-}
-
 void	add_new_variable(char ***env, char *var, char *variable)
 {
 	int		i;
@@ -90,10 +62,31 @@ void	set_variable(char ***env, char *var, char *new_var)
 		add_new_variable(env, var, new_var);
 }
 
+/*returns a copy of a variable or null if not found*/
+
+char*	return_variable(char **env, char *var)
+{
+	int		i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
+		{
+			return (env[i]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
 void	mini_cd(char **s_line, char ***new_env, bool *b_in)
 {
 	char	*actual_pwd;
 	char	*buff;
+	char	**home;
+	int		i;
+	
 
 	*b_in = true;
 	buff = NULL;
@@ -101,12 +94,33 @@ void	mini_cd(char **s_line, char ***new_env, bool *b_in)
 	set_variable(new_env, "OLDPWD=", actual_pwd);
 	free(actual_pwd);
 	free(buff);
-	chdir(s_line[1]);
-	buff = NULL;
-	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "PWD=", actual_pwd);
-	free(actual_pwd);
-	free(buff);
+	if (s_line[1] == NULL)
+	{
+		home = ft_split(return_variable(*new_env, "HOME"), '=');
+		if (home == NULL)
+			printf("minishell: cd: HOME not set\n");
+		else
+			chdir(home[1]);
+		free_strrarr(home);
+		buff = NULL;
+		actual_pwd = getcwd(buff, 1024);
+		set_variable(new_env, "PWD=", actual_pwd);
+		free(actual_pwd);
+		free(buff);
+		return;
+	}
+	i = 1;
+	while(s_line[i])
+	{
+		if(s_line[i])
+			chdir(s_line[i]);
+		buff = NULL;
+		actual_pwd = getcwd(buff, 1024);
+		set_variable(new_env, "PWD=", actual_pwd);
+		free(actual_pwd);
+		free(buff);
+		i++;
+	}
 }
 //s'assurer que dans la version officielle echo "-n" 
 // fonctionne aussi mais pas echo " -n"
@@ -296,11 +310,40 @@ void	mini_export(char **s_line, char ***new_env, bool *b_in)
 		actually_set_variables(s_line, new_env);
 }
 
+/*
+	Function to use in unset
+*/
+static void	delete_variable(char ***env, char *var)
+{
+	int		i;
+	int		j;
+	char	**tmp;
+
+	tmp = *env;
+	i = strarr_len(*env);
+	(*env) = ft_calloc(i, sizeof(char *));
+	i = 0;
+	j = 0;
+	while (tmp[i])
+	{
+		if (ft_strncmp(tmp[i], var, ft_strlen(var)) != 0)
+		{
+			(*env)[j] = ft_strdup(tmp[i]);
+			i++;
+			j++;
+		}
+		else
+			i++;
+	}
+	if (i != strarr_len(*env))
+		free_strrarr(tmp);
+}
+
 /*peut etre un probleme a la ligne var_to_unset =
- var_to_strarr((*new_env), s_line[i]); (ancienne note)*/
+ path_to_starrr((*new_env), s_line[i]); (ancienne note)*/
 void	mini_unset(char **s_line, char ***new_env, bool *built_in)
 {
-	char	**var_to_unset;
+	char	*var_to_unset;
 	int		i;
 
 	*built_in = true;
@@ -311,7 +354,13 @@ void	mini_unset(char **s_line, char ***new_env, bool *built_in)
 		i = 1;
 		while (s_line[i])
 		{
-			var_to_unset = var_to_strarr((*new_env), s_line[i]);
+			if(s_line[i] && s_line[i][0] == '=' && s_line[i][1] == '\0')
+			{
+				printf("Minishell: unset: \"=\": not a valid identifier\n");
+				i++;
+				continue;
+			}
+			var_to_unset = return_variable((*new_env), s_line[i]);
 			if (var_to_unset == NULL)
 				i++;
 			else
@@ -319,7 +368,6 @@ void	mini_unset(char **s_line, char ***new_env, bool *built_in)
 				delete_variable(new_env, s_line[i]);
 				i++;
 			}
-			free_strrarr(var_to_unset);
 		}
 	}
 }
@@ -339,6 +387,7 @@ void	exit_was_too_long(char **s_line)
 	{
 		if (s_line[1][i] < '0' || s_line[1][i] > '9')
 		{
+			printf("exit\n");
 			printf("Dundershell: exit: %s: numeric argument required\n", s_line[1]);
 			exit (255);
 		}
@@ -370,27 +419,19 @@ void	mini_exit(char *line, char **s_line, bool *b_in)
 	exit (tmp);
 }
 
-char*	return_variable(char **env, char *var)
-{
-	int		i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
-		{
-			return (env[i]);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
 void	mini_dollar(char **s_line, char ***new_env, bool *b_in)
 {
+	char	*to_print;
+	char	**splitted;
+
 	*b_in = true;
-	if (return_variable(*new_env, s_line[1]) != NULL)
-		printf("%s\n",return_variable(*new_env, s_line[1]));
+	to_print = return_variable(*new_env, s_line[1]);
+	if (to_print)
+	{
+		splitted = ft_split(to_print, '=');
+		printf("%s\n",splitted[1]);
+		free_strrarr(splitted);
+	}
 }
 
 void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in)
