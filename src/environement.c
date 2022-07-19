@@ -1,22 +1,20 @@
 #include "../include/minishell.h"
 
-
 /*
 	This function takes care of setting the 3 variables when we open the shell
 	Those variables are
 	PWD
 	SHLVL
 	_=
-
 */
 void	set_3_variables(char ***env)
 {
-	char *actual_pwd;
-	char *buff;
-	char *binary;
-	char *shlvl;
-	int nb;
-	
+	char	*actual_pwd;
+	char	*buff;
+	char	*binary;
+	char	*shlvl;
+	int		nb;
+
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(env, "PWD=", actual_pwd);
@@ -26,8 +24,10 @@ void	set_3_variables(char ***env)
 	if (shlvl == NULL)
 		nb = 1;
 	else
+	{
 		nb = shlvl[ft_strlen(shlvl) - 1] - '0';
-	nb++;
+		nb++;
+	}
 	shlvl = ft_itoa(nb);
 	set_variable(env, "SHLVL=", shlvl);
 	free(actual_pwd);
@@ -36,33 +36,43 @@ void	set_3_variables(char ***env)
 	free(shlvl);
 }
 
-char **copy_strarr(char **env)
+/*
+	This function copies the env variables passed by the main
+	It then sets 3 variables that are the SHLVL, the actual pwd 
+	and the binary using the function set 3 variabless
+*/
+char	**copy_strarr(char **env)
 {
-	int i;
-	char **rtn;
-	
+	int		i;
+	char	**rtn;
+
 	i = 0;
-	while(env && env[i])
+	while (env && env[i])
 		i++;
 	rtn = calloc(sizeof(char *), (i + 1) + 1);
 	rtn[i + 1] = 0;
 	i = 0;
 	while(env[i])
 	{
-		rtn[i] = ft_strdup(env[i]);
-		i++;
+		rtn[i + 1] = 0;
+		i = 0;
+		while (env[i])
+		{
+			rtn[i] = ft_strdup(env[i]);
+			i++;
+		}
 	}
+	rtn[i] = 0;
 	set_3_variables(&rtn);
 	return (rtn);
 }
 
-
 // int	strarr_len(char **str_arr)
 // {
-// 	int i;
+// 	int	i;
 
 // 	i = 0;
-// 	while(str_arr[i])
+// 	while (str_arr[i])
 // 		i++;
 // 	return (i);
 // }
@@ -98,7 +108,7 @@ static int	strlen_path(char **env)
 	The output represent all the possible
 	 path to try with execve with the command
 */
-char	**var_to_strarr(char **env, char *var)
+char	**path_to_starrr(char **env, char *var)
 {
 	int		i;
 	int		len;
@@ -131,13 +141,13 @@ char	**var_to_strarr(char **env, char *var)
 */
 char	*var_to_str(char **env, char *var)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (env && env[i])
 	{
 		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
-			break;
+			break ;
 		i++;
 	}
 	return (env[i]);
@@ -148,7 +158,7 @@ char	*var_to_str(char **env, char *var)
 // 	int i;
 // 	char **rtn;
 // 	char **tmp;
-	
+
 // 	tmp = env;
 // 	i = strarr_len(env);
 // 	env = malloc(sizeof(char *) * i + 2);

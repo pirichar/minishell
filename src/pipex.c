@@ -34,7 +34,7 @@ void	parse_and_exec_cmd(const char *cmd, char **env)
 	int			i;
 	t_exec_ptrs	p;
 
-	p.path = var_to_strarr(env, "PATH=");
+	p.path = path_to_starrr(env, "PATH=");
 	p.cmd_with_slash = ft_strjoin("/", cmd);
 	p.cmd_split = ft_split(cmd, ' ');
 	i = 0;
@@ -140,7 +140,15 @@ void	execute_solo(const char *cmd, int *p, char **env)
 	pid = fork();
 	if (pid == 0)
 	{
-		parse_and_exec_cmd(cmd, env);
+		if (access (cmd, X_OK) == 0)
+		{
+			char **cmdo = ft_split(cmd, ' ');
+			printf("EXECUTING LOCALY\n");
+			execve(cmdo[0], cmdo, env);
+			exit(1);
+		}
+		else
+			parse_and_exec_cmd(cmd, env);
 	}
 	*p = pid;
 }

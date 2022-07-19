@@ -66,7 +66,7 @@ typedef struct s_parsing
 void			print_logo(char **env);
 //environement.c
 bool			search_path(const char *p_arr, const char *cmd);
-char			**var_to_strarr(char **env, char *var);
+char			**path_to_starrr(char **env, char *var);
 char 			**copy_strarr(char **env);
 char			*var_to_str(char **env, char *var);
 //pipex.c
@@ -78,7 +78,7 @@ int				execute(const char *cmd, int fd_in, int *p, char **env);
 void			parse_and_exec_cmd(const char *cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
-void			look_for_builtins(char **s_line, char ***new_env, bool *b_in);
+void			look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in);
 void			set_variable(char ***env, char *var, char *new_var);
 //parsing
 int				start_parse(char *line);
