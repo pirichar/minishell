@@ -60,7 +60,7 @@ int	main(int argc, char **argv, char **env)
 		if (line == NULL)
 		{
 			free(line);
-			free(new_env);
+			free_strrarr(new_env);
 			return (0);
 		}
 		if (line && *line)
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **env)
 			}
 			if (b_in == false && cmd == false)
 				printf("Please provide a built-in command to test or a valid command in the path\n");
-		free(s_line);
+		free_strrarr(s_line);
 		free(line);
 		}
 	}
