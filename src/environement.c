@@ -49,10 +49,8 @@ char	**copy_strarr(char **env)
 	i = 0;
 	while (env && env[i])
 		i++;
-	rtn = calloc(sizeof(char *), (i + 1) + 1);
-	rtn[i + 1] = 0;
-	i = 0;
-	while(env[i])
+	rtn = malloc(sizeof(char *) * (i + 1));
+	if (i != 0)
 	{
 		rtn[i + 1] = 0;
 		i = 0;
@@ -62,7 +60,8 @@ char	**copy_strarr(char **env)
 			i++;
 		}
 	}
-	rtn[i] = 0;
+	else 
+		rtn[i] = 0;
 	set_3_variables(&rtn);
 	return (rtn);
 }
