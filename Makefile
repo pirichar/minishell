@@ -6,7 +6,7 @@
 #    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/15 12:36:03 by pirichar         ###   ########.fr        #
+#    Updated: 2022/06/16 10:59:00 by pirichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,8 @@ define TEA
 endef
 export TEA
 
-SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c
+SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c \
+			src/minisplit.c
 
 HEADERS	=	minishell.h colors.h
 
@@ -70,7 +71,7 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-g -Wall -Wextra -Werror -o DunderShell
+CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -g
 
 LIBS	=	include/Libft/libft/libft.a -lreadline
 

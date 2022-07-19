@@ -1,14 +1,50 @@
 #include "../include/minishell.h"
 
+
+/*
+	This function takes care of setting the 3 variables when we open the shell
+	Those variables are
+	PWD
+	SHLVL
+	_=
+
+*/
+void	set_3_variables(char ***env)
+{
+	char *actual_pwd;
+	char *buff;
+	char *binary;
+	char *shlvl;
+	int nb;
+	
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	set_variable(env, "PWD=", actual_pwd);
+	binary = ft_strjoin(actual_pwd, "./DunderShell");
+	set_variable(env, "_=", binary);
+	shlvl = var_to_str((*env), "SHLVL");
+	if (shlvl == NULL)
+		nb = 1;
+	else
+		nb = shlvl[ft_strlen(shlvl) - 1] - '0';
+	nb++;
+	shlvl = ft_itoa(nb);
+	set_variable(env, "SHLVL=", shlvl);
+	free(actual_pwd);
+	free(buff);
+	free(binary);
+	free(shlvl);
+}
+
 char **copy_strarr(char **env)
 {
 	int i;
 	char **rtn;
 	
 	i = 0;
-	while(env[i])
+	while(env && env[i])
 		i++;
-	rtn = malloc(sizeof(char *) * i + 1);
+	rtn = calloc(sizeof(char *), (i + 1) + 1);
 	rtn[i + 1] = 0;
 	i = 0;
 	while(env[i])
@@ -16,6 +52,7 @@ char **copy_strarr(char **env)
 		rtn[i] = ft_strdup(env[i]);
 		i++;
 	}
+	set_3_variables(&rtn);
 	return (rtn);
 }
 
@@ -70,7 +107,7 @@ char	**var_to_strarr(char **env, char *var)
 
 	p_arr = NULL;
 	len = strlen_path(env);
-	path = malloc(sizeof(char) * len);
+	path = calloc(sizeof(char), len);
 	i = 0;
 	while (env[i])
 	{
@@ -97,7 +134,7 @@ char	*var_to_str(char **env, char *var)
 	int i;
 
 	i = 0;
-	while (env[i])
+	while (env && env[i])
 	{
 		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
 			break;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+        */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/17 12:11:03 by jvigneau          #+#    #+#             */
-/*   Updated: 2021/09/29 14:53:51 by jvigneau         ###   ########.fr       */
+/*   Updated: 2022/06/16 20:02:13 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
