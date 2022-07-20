@@ -1,4 +1,4 @@
-#ifndef MINISHELL_H
+	#ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <fcntl.h>
@@ -80,6 +80,10 @@ char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void			look_for_builtins(char **s_line, char ***new_env, bool *b_in);
 void			set_variable(char ***env, char *var, char *new_var);
+//prompt
+char	*pwd_not_there(char *blue_user);
+char	*pwd_prompt(char *new_env[], char *blue_user);
+char	*set_prompt(char *new_env[]);
 //parsing
 int				start_parse(char *line);
 int				cnt_tokens(char **cmds);

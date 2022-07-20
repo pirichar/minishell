@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
+#    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/16 10:59:00 by pirichar         ###   ########.fr        #
+#    Updated: 2022/07/20 16:16:49 by jvigneau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ endef
 export TEA
 
 SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c \
-			src/minisplit.c
+			src/minisplit.c src/prompt.c
 
 HEADERS	=	minishell.h colors.h
 

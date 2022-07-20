@@ -14,52 +14,6 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
-char	*set_prompt(char *new_env[])
-{
-	char	*user;
-	char	*pwd;
-	char	*blue_user;
-	char	*prompt;
-	char	*with_at;
-	int		i;
-
-	i = 0;
-	while (ft_strncmp(new_env[i], "USER=", 5))
-	{
-		i++;
-		if (new_env[i] == NULL)
-		{
-			prompt = calloc(16, sizeof(char));
-			ft_strlcpy(prompt, "DunderShell $> ", 16);
-			return (prompt);
-		}
-	}
-	user = calloc(ft_strlen(new_env[i]), sizeof(char));
-	ft_strlcpy(user, new_env[i] + 5, ft_strlen(new_env[i]));
-	blue_user = ft_strjoin(BBLU, user);
-	i = 0;
-	while (ft_strncmp(new_env[i], "PWD=", 4))
-	{
-		i++;
-		if (new_env[i] == NULL)
-		{
-			prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
-			prompt = ft_strjoin(prompt, "/DunderShell $> \e[0m");
-			return (prompt);
-		}
-	}
-	user = calloc(ft_strlen(new_env[i]), sizeof(char));
-	ft_strlcpy(user, new_env[i] + 4, ft_strlen(new_env[i]));
-	with_at = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
-	pwd = ft_strjoin(user, " $> \e[0m");
-	prompt = ft_strjoin(with_at, pwd);
-	free(blue_user);
-	free(with_at);
-	free(pwd);
-	free(user);
-	return (prompt);
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	int		i;
@@ -71,27 +25,15 @@ int	main(int argc, char **argv, char **env)
 	bool	b_in;
 	pid_t	p;
 
+	if (argc > 1)
+	{
+		printf("Why U put params?!?!\n");
+		return (1);
+	}
 	(void)argv;
-	(void)argc;
 	print_logo(env);
 	//set the env
 	new_env = copy_strarr(env);
-	//set the prompt
-	//while (new_env[i] && ft_strncmp(new_env[i], "USER=", 5))
-	// 	i++;
-	// if (new_env[i])
-	// {
-	// 	user = calloc(ft_strlen(env[i]), sizeof(char));
-	// 	ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
-	// 	blue_user = ft_strjoin(BBLU, user);
-	// 	free(user);
-	// 	prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
-	// 	free(blue_user);
-	// }
-	// else
-	// {
-	// 	prompt = strdup("DunderShell = ");
-	// }
 	//start the loop
 	while (1)
 	{
@@ -99,7 +41,6 @@ int	main(int argc, char **argv, char **env)
 		b_in = false;
 		i = 0;
 		line = readline(prompt);
-		printf("asdhkjashdjkasjh\n");
 		free(prompt);
 		if (line == NULL)
 		{
