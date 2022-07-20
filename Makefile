@@ -6,7 +6,7 @@
 #    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/06/16 10:59:00 by pirichar         ###   ########.fr        #
+#    Updated: 2022/07/20 10:58:37 by pirichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,15 +70,15 @@ CC		=	@gcc
 
 RM		=	@rm -rf
 
-CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -g
+INC 	= include
 
-LIBS	=	include/Libft/libft/libft.a -lreadline
+CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -g  -I${INC}
+
+LIBS	=	include/Libft/libft/libft.a -lreadline 
 
 NAME	=	DunderShell
 
 FTMAKE	=	@cd include/Libft/libft && make -s 
-
-RUN		=	./DunderShell
 
 CLS		= 	clear
 
@@ -99,7 +99,7 @@ $(NAME)	:	$(SRCS) $(OBJS) $(HEADERS)
 				echo "\n      Libft compiled \n" && \
 				echo "__________________________________"; \
 			fi
-			$(CC) $(SRCS) $(LIBS) $(CFLAGS)
+			$(CC) $(SRCS) $(LIBS) -Llib -lreadline -lhistory -lcurses $(CFLAGS)
 			@if [ -p "./objs" ]; then \
 				rm -rf ./objs; \
 			fi

@@ -69,7 +69,11 @@ int	main(int argc, char **argv, char **env)
 			// start_parse(line, env);
 			s_line = ft_split(line, ' ');
 			if(s_line[0] == NULL)
+			{
+				free(line);
+				free_strrarr(s_line);
 				continue;
+			}
 			look_for_builtins(&line, &s_line, &new_env, &b_in);
 			//basic execute function
 			if (b_in == false)

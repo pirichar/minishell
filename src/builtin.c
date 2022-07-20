@@ -1,5 +1,6 @@
 #include "../include/minishell.h"
 
+
 int	strarr_len(char **str_arr)
 {
 	int	i;
@@ -564,6 +565,7 @@ void	exit_was_too_long(char **s_line)
 	if (s_line[1] == NULL)
 	{
 		printf("exit\n");
+		rl_clear_history();
 		exit (0);
 	}
 	i = 0;
@@ -573,6 +575,7 @@ void	exit_was_too_long(char **s_line)
 		{
 			printf("exit\n");
 			printf("Dundershell: exit: %s: numeric argument required\n", s_line[1]);
+			rl_clear_history();
 			exit (255);
 		}
 		i++;
@@ -600,6 +603,7 @@ void	mini_exit(char *line, char **s_line, bool *b_in)
 	exit_was_too_long(s_line);
 	tmp = ft_atoi(s_line[1]);
 	printf("exit\n");
+	rl_clear_history();
 	exit (tmp);
 }
 
