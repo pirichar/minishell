@@ -155,14 +155,14 @@ char	**split(const char *s)
 	return (str_arr);
 }
 
-int	main(void)
-{
-	int	i;
+// int	main(void)
+// {
+// 	int	i;
 
-	i = -1;
-	char str[] = "'allo' toi";
-	char **token = split(str);
-	while (token != NULL && token[++i] != NULL)
-		printf("%s\n", token[i]);
+// 	i = -1;
+// 	char str[] = "'allo' toi";
+// 	char **token = split(str);
+// 	while (token != NULL && token[++i] != NULL)
+// 		printf("%s\n", token[i]);
 	
-}
+// }

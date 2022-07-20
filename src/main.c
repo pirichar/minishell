@@ -14,6 +14,52 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
+char	*set_prompt(char *new_env[])
+{
+	char	*user;
+	char	*pwd;
+	char	*blue_user;
+	char	*prompt;
+	char	*with_at;
+	int		i;
+
+	i = 0;
+	while (ft_strncmp(new_env[i], "USER=", 5))
+	{
+		i++;
+		if (new_env[i] == NULL)
+		{
+			prompt = calloc(16, sizeof(char));
+			ft_strlcpy(prompt, "DunderShell $> ", 16);
+			return (prompt);
+		}
+	}
+	user = calloc(ft_strlen(new_env[i]), sizeof(char));
+	ft_strlcpy(user, new_env[i] + 5, ft_strlen(new_env[i]));
+	blue_user = ft_strjoin(BBLU, user);
+	i = 0;
+	while (ft_strncmp(new_env[i], "PWD=", 4))
+	{
+		i++;
+		if (new_env[i] == NULL)
+		{
+			prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
+			prompt = ft_strjoin(prompt, "/DunderShell $> \e[0m");
+			return (prompt);
+		}
+	}
+	user = calloc(ft_strlen(new_env[i]), sizeof(char));
+	ft_strlcpy(user, new_env[i] + 4, ft_strlen(new_env[i]));
+	with_at = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
+	pwd = ft_strjoin(user, " $> \e[0m");
+	prompt = ft_strjoin(with_at, pwd);
+	free(blue_user);
+	free(with_at);
+	free(pwd);
+	free(user);
+	return (prompt);
+}
+
 int	main(int argc, char **argv, char **env)
 {
 	int		i;
@@ -21,60 +67,39 @@ int	main(int argc, char **argv, char **env)
 	char	**path;
 	char	**s_line;
 	char	**new_env;
-	bool	b_in;
-	char	*user;
-	char	*pwd;
-	char	*blue_user;
-	char	*with_at;
 	char	*prompt;
+	bool	b_in;
+	pid_t	p;
 
 	(void)argv;
 	(void)argc;
 	print_logo(env);
-	i = 0;
 	//set the env
 	new_env = copy_strarr(env);
 	//set the prompt
-	while (new_env[i] && ft_strncmp(new_env[i], "USER=", 5))
-		i++;
-	if (new_env[i])
-	{
-		user = calloc(ft_strlen(env[i]), sizeof(char));
-		ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
-		blue_user = ft_strjoin(BBLU, user);
-		free(user);
-		prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
-		free(blue_user);
-	}
-	else
-	{
-		prompt = strdup("DunderShell = ");
-	}
+	//while (new_env[i] && ft_strncmp(new_env[i], "USER=", 5))
+	// 	i++;
+	// if (new_env[i])
+	// {
+	// 	user = calloc(ft_strlen(env[i]), sizeof(char));
+	// 	ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
+	// 	blue_user = ft_strjoin(BBLU, user);
+	// 	free(user);
+	// 	prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
+	// 	free(blue_user);
+	// }
+	// else
+	// {
+	// 	prompt = strdup("DunderShell = ");
+	// }
 	//start the loop
 	while (1)
 	{
-		i = 0;
-		while (ft_strncmp(new_env[i], "USER=", 5))
-			i++;
-		user = calloc(ft_strlen(new_env[i]), sizeof(char));
-		ft_strlcpy(user, new_env[i] + 5, ft_strlen(new_env[i]));
-		blue_user = ft_strjoin(BBLU, user);
-		free(user);
-		i = 0;
-		while (ft_strncmp(new_env[i], "PWD=", 4))
-			i++;
-		user = calloc(ft_strlen(new_env[i]), sizeof(char));
-		ft_strlcpy(user, new_env[i] + 4, ft_strlen(new_env[i]));
-		with_at = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
-		pwd = ft_strjoin(user, " $> \e[0m");
-		prompt = ft_strjoin(with_at, pwd);
-		free(blue_user);
-		free(with_at);
-		free(pwd);
-		free(user);
+		prompt = set_prompt(new_env);
 		b_in = false;
 		i = 0;
 		line = readline(prompt);
+		printf("asdhkjashdjkasjh\n");
 		free(prompt);
 		if (line == NULL)
 		{
@@ -87,8 +112,8 @@ int	main(int argc, char **argv, char **env)
 			add_history(line);
 			start_parse(line);
 			s_line = ft_split(line, ' ');
-			if(s_line[0] == NULL)
-				continue;
+			if (s_line[0] == NULL)
+				continue ;
 			look_for_builtins(s_line, &new_env, &b_in);
 			if (ft_strncmp(s_line[0], "exit",5) == 0)
 			{
@@ -100,7 +125,6 @@ int	main(int argc, char **argv, char **env)
 			if (b_in == false)
 			{
 				i = 0;
-				pid_t p;
 				path = var_to_strarr(new_env, "PATH=");
 				if (path == NULL)
 					printf("TERM environment variable not set\n");
@@ -123,8 +147,8 @@ int	main(int argc, char **argv, char **env)
 			{
 				printf("Please provide a built-in command to test or a valid command in the path\n");
 			}
-		free(s_line);
-		free(line);
+			free(s_line);
+			free(line);
 		}
 	}
 	free(path);
