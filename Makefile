@@ -6,7 +6,7 @@
 #    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/07/20 16:16:49 by jvigneau         ###   ########.fr        #
+#    Updated: 2022/07/20 17:14:39 by jvigneau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,7 @@ endef
 export TEA
 
 SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c \
-			src/minisplit.c src/prompt.c
+			src/minisplit.c src/prompt.c src/parsing_2.c src/parsing_3.c src/parsing_utils.c \
 
 HEADERS	=	minishell.h colors.h
 
