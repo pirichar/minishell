@@ -101,7 +101,7 @@ int	main(int argc, char **argv, char **env)
 		free(line);
 		}
 	}
-	free(path);
+	free_strrarr(path);
 	free(prompt);
 }
 
