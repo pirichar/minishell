@@ -6,7 +6,7 @@
 #    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/07/20 11:50:16 by pirichar         ###   ########.fr        #
+#    Updated: 2022/07/21 11:04:10 by pirichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,11 @@ define TEA
 endef
 export TEA
 
-SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c
+SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c\
+			src/parsing_1.c src/exit.c src/export.c src/env.c src/unset.c\
+			src/pwd.c src/echo.c src/tmp_star_functions.c src/cd.c\
+			src/str_arr_fcn.c
+			
 
 HEADERS	=	minishell.h colors.h
 
