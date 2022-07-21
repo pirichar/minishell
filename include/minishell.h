@@ -88,7 +88,7 @@ char			*set_prompt(char *new_env[]);
 int				start_parse(char *line);
 int				cnt_tokens(char **cmds);
 int				init_first_token_nodes(t_parsing *parse_list);
-int				init_other_token_nodes(t_parsing *parse_list);
+int				init_all_token_nodes(t_parsing *parse_list);
 int				argv0(t_parsing *parse_list);
 int				check_tokens(t_parsing *parse_list);
 int				put_redirect_props(t_parsing *parse_list);
@@ -96,12 +96,17 @@ int				put_ampers_props(t_parsing *parse_list);
 int				put_pipe_props(t_parsing *parse_list);
 char			**split(const char *s);
 int				ft_strlen_delim(char *str);
-void			i_str_list_0(t_parsing *parse_list, int nb);
-void			i_str_list_no_0(t_parsing *parse_list, int nb);
+void			delim_on_first_node(t_parsing *parse_list, int nb);
+void			delim_on_other_node(t_parsing *parse_list, int nb);
 void			still_no_0(t_parsing *parse_list, int nb);
 void			split_by_delims(t_parsing *parse_list);
 int				check_delims(t_parsing *parse_list);
 void			put_arg_pos(t_parsing *parse_list);
 int				var_len(t_parsing *parse_list);
+void			init_circular_list(t_parsing *parse_list);
+int				is_it_ampersand(t_parsing *parse_list);
+int				is_it_pipes(t_parsing *parse_list);
+int				is_it_heredoc_or_in_redirec(t_parsing *parse_list);
+int				is_it_redirec_out_or_append(t_parsing *parse_list);
 
 #endif

@@ -5,15 +5,28 @@ int	check_tokens(t_parsing *parse_list)
 	parse_list->tkns_list = parse_list->tkns_list->start;
 	while (parse_list->tkns_list->next != NULL)
 	{
-		if ((!ft_strncmp(parse_list->tkns_list->tkn, "\\", 1)))
-			printf("do the wait for input or do the error ig,"
-				"idk i dont even work here\n");
-		else if (ft_strchr(parse_list->tkns_list->tkn, '$'))
+		if (ft_strchr(parse_list->tkns_list->tkn, '$'))
 			parse_list->tkns_list->dollar_sign = true;
 		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "&&\0", 3)))
+		{
+			if (parse_list->tkns_list->next->tkn == NULL
+				|| parse_list->tkns_list->prev == NULL)
+			{
+				argv0(parse_list);
+				return (0);
+			}	
 			put_ampers_props(parse_list);
+		}
 		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "|", 1)))
+		{
+			if (parse_list->tkns_list->next->tkn == NULL
+				|| parse_list->tkns_list->prev == NULL)
+			{
+				argv0(parse_list);
+				return (0);
+			}
 			put_pipe_props(parse_list);
+		}
 		else if ((!ft_strncmp(parse_list->tkns_list->tkn, "<", 1))
 			|| (!ft_strncmp(parse_list->tkns_list->tkn, ">", 1)))
 			put_redirect_props(parse_list);
@@ -98,9 +111,7 @@ int	argv0(t_parsing *parse_list)
 	else
 	{
 		parse_list->tkns_list->flags = 0;
-		printf("do_the_exe_baby(parse_list) tkn %s, argv pos %d, flags %d\n",
-			parse_list->tkns_list->tkn, parse_list->tkns_list->argv_pos,
-			parse_list->tkns_list->flags);
+		printf("do_the_exe\n");
 	}
 	return (0);
 }
