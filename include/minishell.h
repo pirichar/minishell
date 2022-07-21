@@ -111,6 +111,8 @@ void			free_strrarr(char **to_free);
 int				strarr_len(char **str_arr);
 char 			**copy_strarr(char **env);
 void			set_3_variables(char ***env);
+//ft_strjoin_free.c
+char	*ft_strjoin_free(char *s1, const char *s2);
 
 //parsing
 int				start_parse(char *line, char *env[]);

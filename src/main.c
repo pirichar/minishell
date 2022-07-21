@@ -47,9 +47,8 @@ int	main(int argc, char **argv, char **env)
 		free(blue_user);
 	}
 	else
-	{
-		prompt = strdup("DunderShell = ");
-	}
+		prompt = ft_strdup("DunderShell = ");
+
 	//start the loop
 	while (1)
 	{
@@ -102,8 +101,8 @@ int	main(int argc, char **argv, char **env)
 			if (b_in == false && cmd == false)
 				printf("Please provide a built-in command to test or a valid command in the path\n");
 		free_strrarr(s_line);
-		free(line);
 		}
+		free(line);
 	}
 	free_strrarr(path);
 	free(prompt);

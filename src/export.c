@@ -69,12 +69,12 @@ void	actually_set_variables(char **s_line, char ***new_env)
 			printf("DunderSHell: export: `=': not a valid identifierr\n");
 		else if (to_add[1] != NULL)
 		{
-			to_add[0] = ft_strjoin(to_add[0], "=");
+			to_add[0] = ft_strjoin_free(to_add[0], "=");
 			set_variable(new_env, to_add[0], to_add[1]);
 		}
 		else if (to_add[1] == NULL)
 		{
-			to_add[0] = ft_strjoin(to_add[0], "=");
+			to_add[0] = ft_strjoin_free(to_add[0], "=");
 			set_variable(new_env, to_add[0], "");
 		}
 		free_strrarr(to_add);
