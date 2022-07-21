@@ -23,6 +23,9 @@ void	put_arg_pos(t_parsing *parse_list)
 		parse_list->tkns_list = parse_list->tkns_list->next;
 		i++;
 	}
+	parse_list->tkns_list->next = NULL;
+	parse_list->tkns_list->tkn = NULL;
+	parse_list->tkns_list = parse_list->tkns_list->start;
 	return ;
 }
 

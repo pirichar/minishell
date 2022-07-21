@@ -23,6 +23,7 @@ int	check_tokens(t_parsing *parse_list)
 			parse_list->tkns_list->flags = 2;
 		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
+	parse_list->tkns_list = parse_list->tkns_list->start;
 	return (0);
 }
 

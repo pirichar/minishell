@@ -81,14 +81,14 @@ char			**split_cmd(const char *path, const char *cmd);
 void			look_for_builtins(char **s_line, char ***new_env, bool *b_in);
 void			set_variable(char ***env, char *var, char *new_var);
 //prompt
-char	*pwd_not_there(char *blue_user);
-char	*pwd_prompt(char *new_env[], char *blue_user);
-char	*set_prompt(char *new_env[]);
+char			*pwd_not_there(char *blue_user);
+char			*pwd_prompt(char *new_env[], char *blue_user);
+char			*set_prompt(char *new_env[]);
 //parsing
 int				start_parse(char *line);
 int				cnt_tokens(char **cmds);
-int				put_on_the_props(t_parsing *parse_list);
-int				assign_the_list(t_parsing *parse_list);
+int				init_first_token_nodes(t_parsing *parse_list);
+int				init_other_token_nodes(t_parsing *parse_list);
 int				argv0(t_parsing *parse_list);
 int				check_tokens(t_parsing *parse_list);
 int				put_redirect_props(t_parsing *parse_list);
@@ -99,7 +99,7 @@ int				ft_strlen_delim(char *str);
 void			i_str_list_0(t_parsing *parse_list, int nb);
 void			i_str_list_no_0(t_parsing *parse_list, int nb);
 void			still_no_0(t_parsing *parse_list, int nb);
-void			check_index_array(t_parsing *parse_list);
+void			split_by_delims(t_parsing *parse_list);
 int				check_delims(t_parsing *parse_list);
 void			put_arg_pos(t_parsing *parse_list);
 int				var_len(t_parsing *parse_list);
