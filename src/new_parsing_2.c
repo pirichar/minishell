@@ -19,20 +19,22 @@ int	init_all_token_nodes(t_parsing *parse_list)
 void	split_by_delims(t_parsing *parse_list)
 {
 	int	len_delim;
+	int	i;
 
+	i = 0;
 	while (parse_list->tkns_array[parse_list->index_array]
 		[parse_list->index_str_array])
 	{
 		len_delim = check_delims(parse_list);
-		if (len_delim)
-		{
-			if (parse_list->i_str_list == 0)
-				//creer une node si il ny a pas de node precedentes
-				delim_on_first_node(parse_list, len_delim);
-			else
-				//cree une si il y a des nodes precedentes
-				delim_on_other_node(parse_list, len_delim);
-		}
+		// if (len_delim)
+		// {
+		// 	if (parse_list->i_str_list == 0)
+		// 		//creer une node si il ny a pas de node precedentes
+		// 		delim_on_first_node(parse_list, len_delim);
+		// 	else
+		// 		//cree une si il y a des nodes precedentes
+		// 		delim_on_other_node(parse_list, len_delim);
+		// }
 		if (parse_list->tkns_array[parse_list->index_array]
 			[parse_list->index_str_array] == '\0')
 			break ;
@@ -67,7 +69,21 @@ int	is_it_ampersand(t_parsing *parse_list)
 		&& parse_list->tkns_array[parse_list->index_array]
 		[parse_list->index_str_array + 1] == '&')
 	{
+		if (parse_list->index_str_array == 0)
+		{
+			printf("DunderShell: syntax error near unexpected token `%.2s'\n",
+				parse_list->tkns_array[parse_list->index_array]);
+			return (0);
+		}
+		if (parse_list->tkns_array[parse_list->index_array][parse_list->index_str_array + 2] == '\0')
+		{
+			printf("DunderShell: syntax error near unexpected token `&&'\n");
+			return (0);
+		}
 		printf("do the &&\n");
+		parse_list->tkns_array[parse_list->index_array]++;
+		parse_list->tkns_array[parse_list->index_array]++;
+		prep_next_node(parse_list);
 		return (2);
 	}
 	return (0);
@@ -82,9 +98,14 @@ int	is_it_pipes(t_parsing *parse_list)
 			[parse_list->index_str_array + 1] == '|')
 		{
 			printf("do the double pipe\n");
+			parse_list->tkns_array[parse_list->index_array]++;
+			parse_list->tkns_array[parse_list->index_array]++;
+			prep_next_node(parse_list);
 			return (2);
 		}
 		printf("do the simple pipe\n");
+		parse_list->tkns_array[parse_list->index_array]++;
+		prep_next_node(parse_list);
 		return (1);
 	}
 	return (0);

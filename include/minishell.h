@@ -108,5 +108,8 @@ int				is_it_ampersand(t_parsing *parse_list);
 int				is_it_pipes(t_parsing *parse_list);
 int				is_it_heredoc_or_in_redirec(t_parsing *parse_list);
 int				is_it_redirec_out_or_append(t_parsing *parse_list);
+void			print_node_debug(t_parsing *parse_list);
+t_parsing		*init_master_list(void);
+void			prep_next_node(t_parsing *parse_list);
 
 #endif
