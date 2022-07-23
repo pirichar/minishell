@@ -3,15 +3,11 @@
 void	prep_next_node(t_parsing *parse_list)
 {
 	parse_list->tkns_list->next = calloc(1, sizeof(t_tkns));
+	parse_list->tkns_list->next->start = parse_list->tkns_list->start;
 	parse_list->tkns_list->next->prev = parse_list->tkns_list;
-	(parse_list->tkns_list->next)->start = parse_list->tkns_list->start;
 	parse_list->tkns_list = parse_list->tkns_list->next;
-	parse_list->tkns_list->dollar_sign = false;
-	parse_list->tkns_list->flags = 400;
-	parse_list->tkns_list->tkn = calloc(ft_strlen_delim(
-				(parse_list->tkns_array[parse_list->index_array]))
-			+ 1, sizeof(char));
-		parse_list->i_str_list = 0;
+	parse_list->tkns_list->tkn = calloc(ft_strlen_without_delim(parse_list->tkns_array[parse_list->index_array]), sizeof(char));
+	parse_list->index_str_array = 0;
 }
 
 void	how_many_letters_in_delim(t_parsing *parse_list, int nb)

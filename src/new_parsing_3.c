@@ -39,7 +39,7 @@ int	is_it_redirec_out_or_append(t_parsing *parse_list)
 				printf("lala %s\n", parse_list->tkns_array[parse_list->index_array]);
 				return (2);
 			}
-			printf("do the appends in the out\n");	
+			printf("do the appends in the out\n");
 			printf("lala %s\n", parse_list->tkns_array[parse_list->index_array]);
 			parse_list->index_str_array++;
 			parse_list->index_str_array++;

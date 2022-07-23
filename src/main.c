@@ -48,7 +48,7 @@ int	main(int argc, char **argv, char **env)
 			free(new_env);
 			return (0);
 		}
-		if (line && *line)
+		if (*line)
 		{
 			add_history(line);
 			start_parse(line);

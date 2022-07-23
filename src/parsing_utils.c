@@ -62,7 +62,69 @@ void	print_node_debug(t_parsing *parse_list)
 			parse_list->tkns_list->tkn,
 			parse_list->tkns_list->argv_pos, parse_list->tkns_list->flags,
 			parse_list->tkns_list->dollar_sign);
+		if (parse_list->tkns_list->next == NULL)
+			break ;
 		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
 	return ;
+}
+
+int	print_syntax_err_simple(t_parsing *parse_list, char c)
+{
+	if (parse_list->index_str_array == 0)
+	{
+		printf("DunderShell: syntax error near unexpected token `%.1s'\n",
+			parse_list->tkns_array[parse_list->index_array]);
+		return (1);
+	}
+	else if (parse_list->tkns_array[parse_list->index_array][parse_list->index_str_array + 2] == '\0')
+	{
+		while (*parse_list->tkns_array[parse_list->index_array] != c)
+			parse_list->tkns_array[parse_list->index_array]++;
+		printf("DunderShell: syntax error near unexpected token `%.1s'\n",
+			parse_list->tkns_array[parse_list->index_array]);
+		return (1);
+	}
+	return (0);
+}
+
+int	print_syntax_err_double(t_parsing *parse_list, char c)
+{
+	printf("line la %s\n", parse_list->tkns_array[parse_list->index_array]);
+	if (parse_list->tkns_list->tkn == NULL)
+	{
+		printf("DunderShell: syntax error near unexpected token `%.2s'\n",
+			parse_list->tkns_array[parse_list->index_array]);
+		return (1);
+	}
+	else if (parse_list->tkns_array[parse_list->index_array][parse_list->index_str_array + 2]  == '\0')
+	{
+		while (*parse_list->tkns_array[parse_list->index_array] != c)
+		{
+			parse_list->tkns_array[parse_list->index_array]++;
+		}
+		printf("DunderShell: syntax error near unexpected token `%.2s'\n",
+			parse_list->tkns_array[parse_list->index_array]);
+		return (1);
+	}
+	return (0);
+}
+
+int	print_syntax_err_full(t_parsing *parse_list, char c)
+{
+	if (parse_list->index_str_array == 0)
+	{
+		printf("DunderShell: syntax error near unexpected token `%s'\n",
+			parse_list->tkns_array[parse_list->index_array]);
+		return (1);
+	}
+	if (parse_list->tkns_array[parse_list->index_array][parse_list->index_str_array + 2] == '\0')
+	{
+		while (*parse_list->tkns_array[parse_list->index_array] != c)
+			parse_list->tkns_array[parse_list->index_array]++;
+		printf("DunderShell: syntax error near unexpected token `%s'\n",
+			parse_list->tkns_array[parse_list->index_array]);
+		return (1);
+	}
+	return (0);
 }

@@ -111,5 +111,9 @@ int				is_it_redirec_out_or_append(t_parsing *parse_list);
 void			print_node_debug(t_parsing *parse_list);
 t_parsing		*init_master_list(void);
 void			prep_next_node(t_parsing *parse_list);
+int				print_syntax_err_simple(t_parsing *parse_list, char c);
+int				print_syntax_err_double(t_parsing *parse_list, char c);
+int				print_syntax_err_full(t_parsing *parse_list, char c);
+int				ft_strlen_without_delim(char *array);
 
 #endif
