@@ -14,35 +14,45 @@ int	ft_strlen_without_delim(char *array)
 	return (i);
 }
 
-int	do_the_redirin_or_heredoc(t_parsing *parse_list)
+int	next_or_not(t_parsing *parse_list, char *flag)
+{
+	if (*parse_list->tkns_array[parse_list->index_array] != '\0' || parse_list->tkns_array[parse_list->index_array + 1]) 
+	{
+		prep_next_node(parse_list);
+		parse_list->tkns_list = parse_list->tkns_list->prev;
+		parse_list->tkns_list = parse_list->tkns_list->next;
+		return (0);
+	}
+	printf("Dundershell: syntax error near unexpected token `%s'\n", flag);
+	return (1);
+}
+int	check_for_triple(t_parsing *parse_list)
 {
 	if (*parse_list->tkns_array[parse_list->index_array] == '<')
 	{
-		parse_list->tkns_array[parse_list->index_array]++;
-		if (*parse_list->tkns_array[parse_list->index_array] == '<')
-		{
-			parse_list->tkns_array[parse_list->index_array]++;
-			printf("do the heredoc(UTILISER SOIT LA FIN DE LA STR SI LE * NET PAS \\0 SINON LAUTRE index_array)\n");
-			if (*parse_list->tkns_array[parse_list->index_array] != '\0' || parse_list->tkns_array[parse_list->index_array + 1]) 
-			{
-				prep_next_node(parse_list);
-				parse_list->tkns_list = parse_list->tkns_list->prev;
-			}
-		}
-		else
-		{
-			printf("do the redirect(UTILISER SOIT LA FIN DE LA STR SI LE * NET PAS \\0 SINON LAUTRE index_array)\n");
-			if (*parse_list->tkns_array[parse_list->index_array] != '\0' || !parse_list->tkns_array[parse_list->index_array + 1])
-			{
-				prep_next_node(parse_list);
-				parse_list->tkns_list = parse_list->tkns_list->prev;
-			}
-		}
-		if (!parse_list->tkns_list->next)//FAAIRE EN SORTE QUE  SI LE TK EST SEUL RETOUR ERR
-			printf("Dundershell: syntax error near unexpected token `newline'\n");
-		else
-			parse_list->tkns_list = parse_list->tkns_list->next;
+		printf("Dundershell: syntax error near unexpected token `newline'\n");
+		parse_list->tkns_array[parse_list->index_array]--;
+		return (1);
 	}
+	return (0);
+}
+
+int	do_the_redir_in_or_heredoc(t_parsing *parse_list)
+{
+	parse_list->tkns_array[parse_list->index_array]++;
+	if (*parse_list->tkns_array[parse_list->index_array] == '<')
+	{
+		parse_list->tkns_array[parse_list->index_array]++;
+		if (next_or_not(parse_list, "newline") == 1)
+			return (1);
+		if (check_for_triple(parse_list) == 1)
+			return (1);
+		printf("do the heredoc(UTILISER SOIT LA FIN DE LA STR SI LE * NET PAS \\0 SINON LAUTRE index_array)\n");
+		return (0);
+	}
+	if (next_or_not(parse_list, "newline") == 1)
+		return (1);
+	printf("do the redirect in(UTILISER SOIT LA FIN DE LA STR SI LE * NET PAS \\0 SINON LAUTRE index_array)\n");
 	return (0);
 }
 
@@ -54,7 +64,7 @@ void	parse_delim(t_parsing *parse_list)
 	{
 		if (*parse_list->tkns_array[parse_list->index_array] == '<')
 		{
-			if (do_the_redirin_or_heredoc(parse_list) == 1)
+			if (do_the_redir_in_or_heredoc(parse_list) == 1)
 				return ;
 		}
 		parse_list->tkns_list->tkn[parse_list->index_str_array] = *parse_list->tkns_array[parse_list->index_array];
