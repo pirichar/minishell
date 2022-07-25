@@ -67,7 +67,6 @@ void			print_logo(char **env);
 //environement.c
 bool			search_path(const char *p_arr, const char *cmd);
 char			**path_to_starrr(char **env, char *var);
-char 			**copy_strarr(char **env);
 char			*var_to_str(char **env, char *var);
 //pipex.c
 int				calling_the_execs(int argc, char **argv,
@@ -80,6 +79,46 @@ char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void			look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in);
 void			set_variable(char ***env, char *var, char *new_var);
+
+//exit.c
+void			exit_was_too_long(char **s_line);
+void			mini_exit(char *line, char **s_line, bool *b_in);
+//export.c
+char			**bubble_sort_strarr(char **rtn);
+char			**sort_strarr(char **to_sort);
+void			print_export(char ***new_env);
+void			actually_set_variables(char **s_line, char ***new_env);
+void			mini_export(char **s_line, char ***new_env, bool *b_in);
+//env.c
+void			mini_env(char **new_env, bool *b_in);
+int				ft_strcmp(const char *s1, const char *s2);
+void			print_out_dir(char **to_print);
+//unset.c
+char*			return_variable(char **env, char *var);
+void			mini_unset(char **s_line, char ***new_env, bool *built_in);
+//pwd.c
+void			mini_pwd(bool *b_in);
+//echo.c
+void			mini_echo(char **s_line, bool *b_in);
+bool			check_only_n(char *str);
+void			parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i);
+//tmp_star_function.c
+int				get_nb_items_in_folder(void);
+int				get_nb_items_chars_in_folder(void);
+char			*mom_i_am_a_star(char *to_replace);
+char			**mom_i_am_a_star_d(void);
+void			mom_i_am_a_star_p(void);
+//cd.c
+void			go_to_home(char ***new_env);
+void			mini_cd(char **s_line, char ***new_env, bool *b_in);
+//str_arr_fcn.c
+void			free_strrarr(char **to_free);
+int				strarr_len(char **str_arr);
+char 			**copy_strarr(char **env);
+void			set_3_variables(char ***env);
+//ft_strjoin_free.c
+char	*ft_strjoin_free(char *s1, const char *s2);
+
 //parsing
 int				start_parse(char *line);
 int				cnt_tokens(char **cmds);

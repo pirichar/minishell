@@ -49,9 +49,8 @@ int	main(int argc, char **argv, char **env)
 		free(blue_user);
 	}
 	else
-	{
-		prompt = strdup("DunderShell = ");
-	}
+		prompt = ft_strdup("DunderShell = ");
+
 	//start the loop
 	while (1)
 	{
@@ -82,7 +81,7 @@ int	main(int argc, char **argv, char **env)
 		if (line == NULL)
 		{
 			free(line);
-			free(new_env);
+			free_strrarr(new_env);
 			return (0);
 		}
 		if (line && *line)
@@ -91,7 +90,11 @@ int	main(int argc, char **argv, char **env)
 			start_parse(line);
 			s_line = ft_split(line, ' ');
 			if(s_line[0] == NULL)
+			{
+				free(line);
+				free_strrarr(s_line);
 				continue;
+			}
 			look_for_builtins(&line, &s_line, &new_env, &b_in);
 			//basic execute function
 			if (b_in == false)
@@ -119,11 +122,12 @@ int	main(int argc, char **argv, char **env)
 			}
 			if (b_in == false && cmd == false)
 				printf("Please provide a built-in command to test or a valid command in the path\n");
-		free(s_line);
-		free(line);
+		free_strrarr(s_line);
 		}
+		free(line);
 	}
-	free(path);
+	free_strrarr(path);
+	free(prompt);
 }
 
 void	print_logo(char **env)
