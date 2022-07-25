@@ -114,18 +114,18 @@ void	print_tkns_array_debug(t_parsing *parse_list)
 	}
 }
 
-int	start_parse(char *line)
+t_parsing	*start_parse(char *line)
 {
 	t_parsing	*parse_list;
 
 	parse_list = init_master_list();
 	parse_list->tkns_array = ft_split(line, ' ');
 	if (parse_list->tkns_array == NULL)
-		return (1);
+		return (NULL);
 	init_first_token_nodes(parse_list);
 	if (check_heredocs(parse_list) != 0)
-		return (2);
+		return (NULL);
 	get_cmd(parse_list);
-	print_tkns_array_debug(parse_list);
-	return (0);
+	// print_tkns_array_debug(parse_list);
+	return (parse_list);
 }

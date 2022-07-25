@@ -23,6 +23,7 @@ int	main(int argc, char **argv, char **env)
 	char	**new_env;
 	char	*prompt;
 	bool	b_in;
+	// t_parsing 	*parse;
 	pid_t	p;
 
 	if (argc > 1)
@@ -51,8 +52,17 @@ int	main(int argc, char **argv, char **env)
 		if (*line)
 		{
 			add_history(line);
+
+			// // utiliser ma liste splitter pour lexec
+			// parse = start_parse(line);
+
+			// s_line = parse->tkns_list->vector_cmd;
+			// printf("line 1%s\n", s_line[0]);
+			// printf("line 2%s\n", s_line[1]);
+
 			start_parse(line);
 			s_line = ft_split(line, ' ');
+
 			if (s_line[0] == NULL)
 				continue ;
 			look_for_builtins(s_line, &new_env, &b_in);

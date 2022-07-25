@@ -79,7 +79,7 @@ char			*pwd_not_there(char *blue_user);
 char			*pwd_prompt(char *new_env[], char *blue_user);
 char			*set_prompt(char *new_env[]);
 //parsing
-int				start_parse(char *line);
+t_parsing		*start_parse(char *line);
 int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
 void			print_node_debug(t_parsing *parse_list);
