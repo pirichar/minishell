@@ -78,7 +78,7 @@ char	*split_words(char **str)
 		(*str)++;
 	}
 	s[i] = '\0';
-	if (**str && **str == 34 || **str == 39)
+	if ((**str && **str == 34) || **str == 39)
 		return(ft_strjoin(s, split_quotes(str)));
 	// if (**str == 0 || **str == ' ' || **str == '|' || **str == '<' || **str == '>')
 	return (s);
@@ -109,11 +109,11 @@ char	**split_tokens(char *str)
 	char	*tmp;
 	char	**ret;
 
+	printf("here");
 	ret = NULL;
 	while (*str != '\0')
 	{
 		tmp = NULL;
-		// printf("here");
 		if (*str && (*str == 39 || *str == 34))
 		{
 			tmp = split_quotes(&str);
@@ -133,8 +133,5 @@ char	**split_tokens(char *str)
 
 // int main(void)
 // {
-// 	char str[] = "<<";
-// 	char **tkns;
-
-// 	tkns = split_tokens(str);
+// 	split_tokens("\"test\"");
 // }
