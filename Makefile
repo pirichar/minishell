@@ -6,7 +6,7 @@
 #    By: jvigneau <jvigneau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/07/23 14:47:52 by jvigneau         ###   ########.fr        #
+#    Updated: 2022/07/25 15:00:15 by jvigneau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,9 +56,8 @@ define TEA
 endef
 export TEA
 
-SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c \
-			src/minisplit.c src/prompt.c src/parsing_2.c src/parsing_3.c src/parsing_utils.c \
-			src/new_parsing_2.c src/new_parsing_3.c src/new_parsing_4.c src/bigparsingfile1.c
+SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c \
+			src/minisplit.c src/prompt.c  src/parsing_1.c src/parsing_2.c src/parsing_utils.c
 
 HEADERS	=	minishell.h colors.h
 

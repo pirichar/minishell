@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// ecrire une fct qui retourne une copie de s1, sans les chars specifies
+// lsecrire une fct qui retourne une copie de s1, sans les chars specifies
 // dans set au debut et a la fin
 
 #include "libft.h"
