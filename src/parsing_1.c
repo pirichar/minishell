@@ -55,7 +55,6 @@ int	get_cmd(t_parsing *parse_list)
 		ind_vector++;
 	}
 	parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
-	parse_list->tkns_list = parse_list->tkns_list->start;
 	return (0);
 }
 
