@@ -57,8 +57,8 @@ int	main(int argc, char **argv, char **env)
 			// parse = start_parse(line);
 
 			// s_line = parse->tkns_list->vector_cmd;
-			// printf("line 1%s\n", s_line[0]);
-			// printf("line 2%s\n", s_line[1]);
+			// printf("line 0 %s\n", s_line[0]);
+			// printf("line 1 %s\n", s_line[1]);
 
 			start_parse(line);
 			s_line = ft_split(line, ' ');

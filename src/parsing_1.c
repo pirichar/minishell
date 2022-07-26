@@ -3,6 +3,16 @@
 int	check_delim_name(t_parsing *parse_list, int i, int j)
 {
 	j += 2;
+	if (!parse_list->tkns_array[i + 1])
+	{
+		if (parse_list->tkns_array[i][j])
+		{
+			printf("Dundershell: syntax error near unexpected token `%c'\n", parse_list->tkns_array[i][j]);
+			return (1);
+		}
+		printf("Dundershell: syntax error near unexpected token `newline'\n");
+		return (1);
+	}
 	if (parse_list->tkns_array[i] && (parse_list->tkns_array[i][j] || parse_list->tkns_array[i + 1] != NULL))
 	{
 		if (parse_list->tkns_array[i][j] == '<'
@@ -23,12 +33,12 @@ int	check_delim_name(t_parsing *parse_list, int i, int j)
 			printf("Dundershell: syntax error near unexpected token `|'\n");
 			return (1);
 		}
+		if (parse_list->tkns_array[i][j] != '\0')
+		{
+			printf("Dundershell: syntax error near unexpected token `newline'\n");
+			return (1);
+		}
 		return (0);
-	}
-	if (parse_list->tkns_array[i + 1] == NULL)
-	{
-		printf("Dundershell: syntax error near unexpected token `newline'\n");
-		return (1);
 	}
 	return (0);
 }
@@ -73,7 +83,6 @@ int	get_cmd(t_parsing *parse_list)
 	ind_vector = 0;
 	while (parse_list->tkns_array[count] != NULL)
 		count++;
-	parse_list->tkns_list = calloc(sizeof(t_tkns), 1);
 	parse_list->tkns_list->vector_cmd = calloc(sizeof(char *), count);
 	while (count > ind_array)
 	{
@@ -107,10 +116,13 @@ void	print_tkns_array_debug(t_parsing *parse_list)
 	int	i;
 
 	i = 0;
-	while (parse_list->tkns_list && parse_list->tkns_list->vector_cmd[i])
+	while (parse_list && parse_list->tkns_list->vector_cmd && parse_list->tkns_list->vector_cmd[i])
 	{
+		
 		printf("array %d : %s\n", i, parse_list->tkns_list->vector_cmd[i]);
 		i++;
+		if (!parse_list->tkns_list->vector_cmd[i + 1])
+			return ;
 	}
 }
 
@@ -126,6 +138,6 @@ t_parsing	*start_parse(char *line)
 	if (check_heredocs(parse_list) != 0)
 		return (NULL);
 	get_cmd(parse_list);
-	print_tkns_array_debug(parse_list);
+	// print_tkns_array_debug(parse_list);
 	return (parse_list);
 }
