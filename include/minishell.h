@@ -53,6 +53,7 @@ typedef struct s_parsing
 	t_tkns	*tkns_list;
 	char	*user;
 	int		index;
+	int		nb_of_pipes;
 }				t_parsing;
 
 
@@ -121,9 +122,14 @@ char			*set_prompt(char *new_env[]);
 t_parsing		*start_parse(char *line);
 int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
-void			print_node_debug(t_parsing *parse_list);
-t_parsing		*init_master_list(void);
-void			prep_next_node(t_parsing *parse_list);
-int				ft_strlen_without_delim(char *array);
+int				check_delim_name(t_parsing *parse_list, int i, int j);
+int				check_heredocs(t_parsing *parse_list);
+int				count_cmd(t_parsing *parse_list);
+int				get_cmd(t_parsing *parse_list);
+void			print_tkns_array_debug(t_parsing *parse_list);
+t_parsing		*start_parse(char *line);
+int				check_redir_in(t_parsing *parse_list);
+int				check_infile_name(t_parsing *parse_list, int i, int j);
+int				check_redir_out(t_parsing *parse_list);
 
 #endif

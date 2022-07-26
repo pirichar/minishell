@@ -1,75 +1,5 @@
 #include "../include/minishell.h"
 
-int	check_delim_name(t_parsing *parse_list, int i, int j)
-{
-	j += 2;
-	if (!parse_list->tkns_array[i + 1])
-	{
-		if (parse_list->tkns_array[i][j])
-		{
-			printf("Dundershell: syntax error near unexpected token `%c'\n", parse_list->tkns_array[i][j]);
-			return (1);
-		}
-		printf("Dundershell: syntax error near unexpected token `newline'\n");
-		return (1);
-	}
-	if (parse_list->tkns_array[i] && (parse_list->tkns_array[i][j] || parse_list->tkns_array[i + 1] != NULL))
-	{
-		if (parse_list->tkns_array[i][j] == '<'
-				|| parse_list->tkns_array[i + 1][0] == '<')
-		{
-			printf("Dundershell: syntax error near unexpected token `newline'\n");
-			return (1);
-		}
-		if (parse_list->tkns_array[i][j] == '>'
-				|| parse_list->tkns_array[i + 1][0] == '>')
-		{
-			printf("Dundershell: syntax error near unexpected token `>'\n");
-			return (1);
-		}
-		if (parse_list->tkns_array[i][j] == '|'
-				|| parse_list->tkns_array[i + 1][0] == '|')
-		{
-			printf("Dundershell: syntax error near unexpected token `|'\n");
-			return (1);
-		}
-		if (parse_list->tkns_array[i][j] != '\0')
-		{
-			printf("Dundershell: syntax error near unexpected token `newline'\n");
-			return (1);
-		}
-		return (0);
-	}
-	return (0);
-}
-
-int	check_heredocs(t_parsing *parse_list)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (parse_list->tkns_array[i])
-	{
-		while (parse_list->tkns_array[i][j])
-		{
-			if (parse_list->tkns_array[i][j] == '<'
-				&& parse_list->tkns_array[i][j + 1] == '<')
-			{
-				if (check_delim_name(parse_list, i, j) == 1)
-					return (1);
-				printf("do_heredoc(parse_list)\n");
-				break ;
-			}
-			j++;
-		}
-		j = 0;
-		i++;
-	}
-	return (0);
-}
-
 int	get_cmd(t_parsing *parse_list)
 {
 	int	count;
@@ -81,12 +11,12 @@ int	get_cmd(t_parsing *parse_list)
 	ind_array = 0;
 	ind_str = 0;
 	ind_vector = 0;
-	while (parse_list->tkns_array[count] != NULL)
-		count++;
-	parse_list->tkns_list->vector_cmd = calloc(sizeof(char *), count);
-	while (count > ind_array)
+	count = count_cmd(parse_list);
+	printf("count %d\n", count);
+	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), count + 1);
+	while (parse_list->tkns_array[ind_array])
 	{
-		parse_list->tkns_list->vector_cmd[ind_vector] = calloc(sizeof(char), ft_strlen(parse_list->tkns_array[ind_array]) + 1);
+		parse_list->tkns_list->vector_cmd[ind_vector] = calloc(ft_strlen(parse_list->tkns_array[ind_array]) + 1, sizeof(char));
 		while (parse_list->tkns_array[ind_array][ind_str])
 		{
 			if (ft_strchr("<>", parse_list->tkns_array[ind_array][ind_str]))
@@ -94,50 +24,66 @@ int	get_cmd(t_parsing *parse_list)
 				ind_array += 2;
 				if (parse_list->tkns_array[ind_array - 1] == NULL || parse_list->tkns_array[ind_array] == NULL)
 				{
-					free(parse_list->tkns_list->vector_cmd[ind_vector]);
+					parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
 					return (0);
 				}
+				free(parse_list->tkns_list->vector_cmd[ind_vector]);
+				parse_list->tkns_list->vector_cmd[ind_vector] = calloc(ft_strlen(parse_list->tkns_array[ind_array]) + 1, sizeof(char));
+				continue ;
 			}
-			else
+			if (ft_strchr("|", parse_list->tkns_array[ind_array][ind_str]))
 			{
-				parse_list->tkns_list->vector_cmd[ind_vector][ind_str] = parse_list->tkns_array[ind_array][ind_str];
-				ind_str++;
+				parse_list->tkns_list->next = calloc(sizeof(t_tkns), 1);
+				parse_list->tkns_list->next->prev = parse_list->tkns_list;
+				parse_list->tkns_list->next->start = parse_list->tkns_list->start;
+				parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
+				parse_list->tkns_list = parse_list->tkns_list->next;
+				parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), count + 1);
+				ind_vector = 0;
+				parse_list->tkns_list->argv_pos = parse_list->tkns_list->prev->argv_pos + 1;
+				parse_list->tkns_list->vector_cmd[ind_vector] = calloc(ft_strlen(parse_list->tkns_array[ind_array]) + 1, sizeof(char));
+				parse_list->nb_of_pipes++;
+				ind_array++;
+				ind_str = 0;
+				continue ;
 			}
+			parse_list->tkns_list->vector_cmd[ind_vector][ind_str] = parse_list->tkns_array[ind_array][ind_str];
+			ind_str++;
 		}
 		ind_str = 0;
 		ind_array++;
 		ind_vector++;
 	}
+	parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
+	parse_list->tkns_list = parse_list->tkns_list->start;
 	return (0);
 }
 
-void	print_tkns_array_debug(t_parsing *parse_list)
+void	init_master_list(t_parsing *parse_list)
 {
-	int	i;
-
-	i = 0;
-	while (parse_list && parse_list->tkns_list->vector_cmd && parse_list->tkns_list->vector_cmd[i])
-	{
-		
-		printf("array %d : %s\n", i, parse_list->tkns_list->vector_cmd[i]);
-		i++;
-		if (!parse_list->tkns_list->vector_cmd[i + 1])
-			return ;
-	}
+	parse_list->nb_of_pipes = 0;
 }
 
 t_parsing	*start_parse(char *line)
 {
 	t_parsing	*parse_list;
 
-	parse_list = init_master_list();
+	parse_list = calloc(1, sizeof(t_parsing));
+	init_master_list(parse_list);
+	init_first_token_nodes(parse_list);
 	parse_list->tkns_array = ft_split(line, ' ');
 	if (parse_list->tkns_array == NULL)
 		return (NULL);
 	init_first_token_nodes(parse_list);
 	if (check_heredocs(parse_list) != 0)
 		return (NULL);
+	if (check_redir_in(parse_list) != 0)
+		return (NULL);
+	if (check_redir_out(parse_list) != 0)
+		return (NULL);
+	// if (check_pipe(parse_list) != 0)
+	// 	return (NULL);
 	get_cmd(parse_list);
-	// print_tkns_array_debug(parse_list);
+	print_tkns_array_debug(parse_list);
 	return (parse_list);
 }

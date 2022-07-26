@@ -1,10 +1,7 @@
-refais le parsing, en enlevant toute les inutilites, gardant juste ce qui va aller ds excve et executant les shit si nec
-
-je cree pus les nodes pour les delimiteur(servaient a rien; pcq je vais juste tenvore les exe avec leurs flags et param)
-
 faut absolument gere le split
 
-tout ca va enlever la necessite davoir toputes les flags pour les nodes; pcq ca sers pus a rien; jtrimme les metachar et les renvoies pas 
+le <<, le <, le > et le >> sont donnes for real
 
+reste le |
 
-le << est pas mal fait pas le < tout a fait. la seule affaire cest que si cest <<sa ca cree une node vide avant celle avec sa, mais en vrai ca va srranger avec do the << pcq ds ce cas la node vide se creeras pas
+tester cat << opi >> out | < out >> delim cat << delim > out
