@@ -44,6 +44,11 @@ int	count_cmd(t_parsing *parse_list)
 			index_arr += 2;
 			continue ;
 		}
+		if (ft_strchr("|", parse_list->tkns_array[index_arr][0]))
+		{
+			index_arr++;
+			continue ;
+		}
 		count++;
 		index_arr++;
 	}

@@ -11,7 +11,7 @@ int	get_cmd(t_parsing *parse_list)
 	ind_array = 0;
 	ind_str = 0;
 	ind_vector = 0;
-	count = count_cmd(parse_list);
+	count = count_cmd(parse_list); // faire un espece de count tkn si nb of pipes > 0 qui px mallocer toute les nodes davancent juskau prochain |
 	printf("count %d\n", count);
 	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), count + 1);
 	while (parse_list->tkns_array[ind_array])
@@ -38,7 +38,7 @@ int	get_cmd(t_parsing *parse_list)
 				parse_list->tkns_list->next->start = parse_list->tkns_list->start;
 				parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
 				parse_list->tkns_list = parse_list->tkns_list->next;
-				parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), count + 1);
+				parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), count + 1); // clairement pas le bon count
 				ind_vector = 0;
 				parse_list->tkns_list->argv_pos = parse_list->tkns_list->prev->argv_pos + 1;
 				parse_list->tkns_list->vector_cmd[ind_vector] = calloc(ft_strlen(parse_list->tkns_array[ind_array]) + 1, sizeof(char));
