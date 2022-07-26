@@ -3,7 +3,7 @@
 int	check_delim_name(t_parsing *parse_list, int i, int j)
 {
 	j += 2;
-	if (parse_list->tkns_array[i][j] || parse_list->tkns_array[i + 1] != NULL)
+	if (parse_list->tkns_array[i] && (parse_list->tkns_array[i][j] || parse_list->tkns_array[i + 1] != NULL))
 	{
 		if (parse_list->tkns_array[i][j] == '<'
 				|| parse_list->tkns_array[i + 1][0] == '<')
@@ -107,7 +107,7 @@ void	print_tkns_array_debug(t_parsing *parse_list)
 	int	i;
 
 	i = 0;
-	while (parse_list->tkns_list->vector_cmd[i])
+	while (parse_list->tkns_list && parse_list->tkns_list->vector_cmd[i])
 	{
 		printf("array %d : %s\n", i, parse_list->tkns_list->vector_cmd[i]);
 		i++;
@@ -126,6 +126,6 @@ t_parsing	*start_parse(char *line)
 	if (check_heredocs(parse_list) != 0)
 		return (NULL);
 	get_cmd(parse_list);
-	// print_tkns_array_debug(parse_list);
+	print_tkns_array_debug(parse_list);
 	return (parse_list);
 }
