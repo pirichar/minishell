@@ -1,106 +1,153 @@
 #include "../include/minishell.h"
 
-int	counttokens(const char *s)
+int	is_delim(char c)
 {
-	int		count;
-	int		i;
-	char	c;
+	if (c == '>' || c == '<' || c == '|')
+		return (1);
+	return (0);
+}
 
-	count = 0;
+int	cnt_alloc(char *str, char c)
+{
+	int	i;
+	int	count;
+
 	i = 0;
-	if (!s[i])
-		return (0);
-	while (s[i])
-	{
-		if (s[i] && (s[i] == 34 || s[i] == 39))
-		{
-			c = s[i];
-			if (i == 0 || s[i - 1] == ' ' || s[i - 1] == c)
-				count++;
-			i++;
-			while (s[i] && s[i] != c)
-				i++;
-			if (!s[i])
-				return (-1);
-			i++;
-		}
-		while (s[i] && s[i] == ' ')
-			i++;
-		if (s[i] && (i == 0 || s[i - 1] == ' ') && s[i] != 34 && s[i] != 39)
-			count++;
-		while (s[i] && s[i] != ' ' && s[i] != 34 && s[i] != 39)
-			i++;
-	}
+	count = 0;
+	if (c != 34 && c != 39)
+		c = ' ';
+	if (c == 34)
+		i++;
+	while (str[i] && str[i++] != c && (c != ' ' || !is_delim(str[i]))) // and delim if c == ' '
+		count++;
+	if (c == 39)
+		count += 2;
 	return (count);
 }
 
-char	*fillstr(const char *s, char c, int *i)
+char	*split_quotes(char **str)
 {
-	char	*str;
-	int		len;
-	int		j;
-
-	len = 0;
-	j = 0;
-	while (s[len] && s[len] != c)
-		len++;
-	str = calloc(sizeof(char), (++len) + 1);
-	if (c == 34 || c == 39)
-		str[j++] = c;
-	while (s[*i] && s[*i] != c)
-	{
-		str[j] = s[*i];
-		j++;
-		(*i)++;
-	}
-	if (c == 34 || c == 39)
-		str[j] = c;
-	str[++j] = '\0';
-	(*i)++;
-	return (str);
-}
-
-char	**split(const char *s)
-{
+	char	*s;
 	int		count;
 	int		i;
-	int		x;
-	char	c;
-	char	**str_arr;
 
-
-	count = counttokens(s);
-	if (count == -1)
-	{
-		write(2, "error: missing a quote\n", 24);
-		return (NULL);
-	}
-	str_arr = malloc(sizeof(char *) * (count + 1));
+	count = cnt_alloc(*str, **str);
+	s = malloc(sizeof(char) * (count + 1));
+	if (**str == '"')
+		(*str)++;
 	i = 0;
-	x = 0;
 	while (count--)
 	{
-		c = ' ';
-		while (s[i] && s[i] == ' ')
-			i++;
-		if (s[i] && (s[i] == 34 || s[i] == 39))
-			c = s[i++];
-		str_arr[x] = fillstr(s, c, &i);
-		// printf("%d\n", i);
-		x++;
+		s[i] = **str;
+		i++;
+		(*str)++;
 	}
-	str_arr[x] = NULL;
-	return (str_arr);
+	if (**str == '"')
+		(*str)++;
+	s[i] = '\0';
+	printf("%s\n", s);
+	return (s);
 }
 
-// int	main(void)
-// {
-// 	int	i;
+char	*split_delims(char **str, char c)
+{
+	char	*s;
+	int		count;
+	int		i;
 
-// 	i = -1;
-// 	char str[] = "' hel\"lo'";
-// 	char **token = split(str);
-// 	while (token[++i] != NULL && token != NULL)
-// 		printf("%s\n", token[i]);
-	
+	count = 0;
+	i = 0;
+	while ((*str)[count] && (*str)[count] == c)
+		count++;
+	printf("%d\n", count);
+	s = malloc(sizeof(char) * (count + 1));
+	while (count--)
+	{
+		s[i] = **str;
+		i++;
+		(*str)++;
+	}
+	s[i] = '\0';
+	printf("%s\n", s);
+	return (s);
+}
+
+char	*split_words(char **str)
+{
+	char	*s;
+	int		count;
+	int		i;
+
+	count = cnt_alloc(*str, **str);
+	i = 0;
+	s = malloc(sizeof(char) * (count + 1));
+	while (count--)
+	{
+		s[i] = **str;
+		i++;
+		(*str)++;
+	}
+	s[i] = '\0';
+	if (**str && (**str == 34 || **str == 39))
+		s = ft_strjoin(s, split_quotes(str));
+	// if (**str == 0 || **str == ' ' || **str == '|' || **str == '<' || **str == '>')
+	printf("%s\n", s);
+	return (s);
+}
+
+char **joinsplit(char **old, char **new)
+{
+	int		i;
+	char	**tkns;
+
+	if (!(*new) || !new)
+		return (old);
+	i = 0;
+	while (old[i] != NULL)
+		i++;
+	tkns = malloc(sizeof(char *) * (i + 2));
+	i = -1;
+	while (old[++i])
+		tkns[i] = old[i];
+	tkns[i] = *new;
+	tkns[i + 1] = NULL;
+	// free (old);
+	return (tkns);
+}
+
+char	**split_tokens(char *str)
+{
+	char	*tmp;
+	char	**ret;
+	int		loop;
+
+	printf("here\n");
+	ret = NULL;
+	loop = 0;
+	while (*str != '\0')
+	{
+		tmp = NULL;
+		if (*str && (*str == 39 || *str == 34))
+		{
+			tmp = split_quotes(&str);
+			while (*str && (*str != ' ' && !is_delim(*str)))
+				tmp = ft_strjoin(tmp, split_quotes(&str));
+			//check particularities of ft_strjoin to adapt to tkns
+		}
+		else if (*str && is_delim(*str))
+			tmp = split_delims(&str, *str);
+		else if (*str)
+			tmp = split_words(&str);
+		// ret = joinsplit(ret, &tmp);
+		printf("loop: %d\n", ++loop);
+	}
+	return (ret);
+}
+
+// int main(void)
+// {
+// 	// char str[] = "";
+// 	// char **tkns
+
+// 	split_tokens("\"hello\"'wtf'<<world");
 // }

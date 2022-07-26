@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/09/24 11:00:19 by jvigneau          #+#    #+#              #
-#    Updated: 2022/07/25 17:11:48 by pirichar         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 define JR
 	BIG LEAK!!!! A PICTURE OF ME WORKING
 
@@ -59,8 +47,8 @@ export TEA
 SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c \
 			src/minisplit.c src/exit.c src/export.c src/env.c src/unset.c\
 			src/pwd.c src/echo.c src/tmp_star_functions.c src/cd.c\
-			src/str_arr_fcn.c src/ft_strjoin_free.c
-			
+			src/str_arr_fcn.c src/ft_strjoin_free.c  src/prompt.c  src/parsing_2.c \
+			src/parsing_utils.c
 
 HEADERS	=	minishell.h colors.h
 
@@ -103,7 +91,7 @@ $(NAME)	:	$(SRCS) $(OBJS) $(HEADERS)
 				echo "\n      Libft compiled \n" && \
 				echo "__________________________________"; \
 			fi
-			$(CC) $(SRCS) $(LIBS) -Lm1lib -lreadline -lhistory -lcurses $(CFLAGS)
+			$(CC) $(SRCS) $(LIBS) -Llib -lreadline -lhistory -lcurses $(CFLAGS)
 			@if [ -p "./objs" ]; then \
 				rm -rf ./objs; \
 			fi

@@ -1,8 +1,3 @@
-#include <stdbool.h>
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
 #include "../include/minishell.h"
 
 int	nb_of_charstrstr(char **path)
@@ -24,55 +19,23 @@ int	main(int argc, char **argv, char **env)
 	char	**new_env;
 	bool	b_in;
 	bool	cmd;
-	char	*user;
-	char	*pwd;
-	char	*blue_user;
-	char	*with_at;
 	char	*prompt;
+	// t_parsing 	*parse;
+	pid_t	p;
 
+	if (argc > 1)
+	{
+		printf("Why U put params?!?!\n");
+		return (1);
+	}
 	(void)argv;
-	(void)argc;
 	print_logo(env);
-	i = 0;
 	//set the env
 	new_env = copy_strarr(env);
-	//set the prompt
-	while (new_env[i] && ft_strncmp(new_env[i], "USER=", 5))
-		i++;
-	if (new_env[i])
-	{
-		user = calloc(ft_strlen(env[i]), sizeof(char));
-		ft_strlcpy(user, env[i] + 5, ft_strlen(env[i]));
-		blue_user = ft_strjoin(BBLU, user);
-		free(user);
-		prompt = ft_strjoin(blue_user, "\e[1;31m@\e[1;32mDunderShell>$ \e[0m");
-		free(blue_user);
-	}
-	else
-		prompt = ft_strdup("DunderShell = ");
-
 	//start the loop
 	while (1)
 	{
-		i = 0;
-		while (ft_strncmp(new_env[i], "USER=", 5))
-			i++;
-		user = calloc(ft_strlen(new_env[i]), sizeof(char));
-		ft_strlcpy(user, new_env[i] + 5, ft_strlen(new_env[i]));
-		blue_user = ft_strjoin(BBLU, user);
-		free(user);
-		i = 0;
-		while (ft_strncmp(new_env[i], "PWD=", 4))
-			i++;
-		user = calloc(ft_strlen(new_env[i]), sizeof(char));
-		ft_strlcpy(user, new_env[i] + 4, ft_strlen(new_env[i]));
-		with_at = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
-		pwd = ft_strjoin(user, " $> \e[0m");
-		prompt = ft_strjoin(with_at, pwd);
-		free(blue_user);
-		free(with_at);
-		free(pwd);
-		free(user);
+		prompt = set_prompt(new_env);
 		b_in = false;
 		cmd = false;
 		i = 0;
@@ -84,23 +47,27 @@ int	main(int argc, char **argv, char **env)
 			free_strrarr(new_env);
 			return (0);
 		}
-		if (line && *line)
+		if (*line)
 		{
 			add_history(line);
+			// // utiliser ma liste splitter pour lexec
+			// parse = start_parse(line);
+			// s_line = parse->tkns_list->vector_cmd;
+			// printf("line 0 %s\n", s_line[0]);
+			// printf("line 1 %s\n", s_line[1]);
 			start_parse(line);
 			s_line = ft_split(line, ' ');
-			if(s_line[0] == NULL)
+			if (s_line[0] == NULL)
 			{
 				free(line);
 				free_strrarr(s_line);
-				continue;
+				continue ;
 			}
 			look_for_builtins(&line, &s_line, &new_env, &b_in);
 			//basic execute function
 			if (b_in == false)
 			{
 				i = 0;
-				pid_t p;
 				path = path_to_starrr(new_env, "PATH=");
 				if (path == NULL)
 					printf("TERM environment variable not set\n");
@@ -122,7 +89,7 @@ int	main(int argc, char **argv, char **env)
 			}
 			if (b_in == false && cmd == false)
 				printf("Please provide a built-in command to test or a valid command in the path\n");
-		free_strrarr(s_line);
+			free_strrarr(s_line);
 		}
 		free(line);
 	}

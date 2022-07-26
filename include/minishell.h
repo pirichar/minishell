@@ -1,4 +1,4 @@
-#ifndef MINISHELL_H
+	#ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include <fcntl.h>
@@ -10,7 +10,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdbool.h>
-# include "colors.h"
+# include "./colors.h"
 # include "./Libft/libft/libft.h"
 # include <errno.h>
 # include <readline/readline.h>
@@ -36,10 +36,8 @@ typedef struct s_ptrs
 
 typedef struct s_tkns
 {
-	char			*tkn;
+	char			**vector_cmd;
 	int				argv_pos;
-	int				flags;  // 0 = exe, 1 = redirection, 2 = param, 3 = &&, 4 = ||, 5 = pipe, 6 = $var, 7 = infile for redirect, 8 = heredocs, 9 = delimiter for heredocs, 10 = redirect out, 11 = file for redirect out, 12 = redirect out and append, 69 = error
-	bool			db_quotes;
 	bool			sing_quotes;
 	bool			dollar_sign;
 	struct s_tkns	*next;
@@ -50,15 +48,11 @@ typedef struct s_tkns
 
 typedef struct s_parsing
 {
-	bool	db_quotes;
-	bool	sing_quotes;
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
 	char 	**tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
 	char	*user;
-	int		i_str_list;
-	int		index_array;
-	int		index_str_array;
+	int		index;
 }				t_parsing;
 
 
@@ -119,24 +113,17 @@ void			set_3_variables(char ***env);
 //ft_strjoin_free.c
 char	*ft_strjoin_free(char *s1, const char *s2);
 
+//prompt
+char			*pwd_not_there(char *blue_user);
+char			*pwd_prompt(char *new_env[], char *blue_user);
+char			*set_prompt(char *new_env[]);
 //parsing
-int				start_parse(char *line);
-int				cnt_tokens(char **cmds);
-int				put_on_the_props(t_parsing *parse_list);
-int				assign_the_list(t_parsing *parse_list);
-int				argv0(t_parsing *parse_list);
-int				check_tokens(t_parsing *parse_list);
-int				put_redirect_props(t_parsing *parse_list);
-int				put_ampers_props(t_parsing *parse_list);
-int				put_pipe_props(t_parsing *parse_list);
+t_parsing		*start_parse(char *line);
+int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
-int				ft_strlen_delim(char *str);
-void			i_str_list_0(t_parsing *parse_list, int nb);
-void			i_str_list_no_0(t_parsing *parse_list, int nb);
-void			still_no_0(t_parsing *parse_list, int nb);
-void			check_index_array(t_parsing *parse_list);
-int				check_delims(t_parsing *parse_list);
-void			put_arg_pos(t_parsing *parse_list);
-int				var_len(t_parsing *parse_list);
+void			print_node_debug(t_parsing *parse_list);
+t_parsing		*init_master_list(void);
+void			prep_next_node(t_parsing *parse_list);
+int				ft_strlen_without_delim(char *array);
 
 #endif
