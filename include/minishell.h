@@ -54,6 +54,9 @@ typedef struct s_parsing
 	char	*user;
 	int		index;
 	int		nb_of_pipes;
+	int		i_arr;
+	int		i_vect;
+	int		i_str;
 }				t_parsing;
 
 
@@ -122,14 +125,17 @@ char			*set_prompt(char *new_env[]);
 t_parsing		*start_parse(char *line);
 int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
-int				check_delim_name(t_parsing *parse_list, int i, int j);
-int				check_heredocs(t_parsing *parse_list);
-int				count_cmd(t_parsing *parse_list);
+t_parsing		*start_parse(char *line);
+int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
+int				check_pipe_name(t_parsing *parse_list, int i, int j);
+int				count_cmd(char **tkns_array, int ind_array);
 int				get_cmd(t_parsing *parse_list);
 void			print_tkns_array_debug(t_parsing *parse_list);
-t_parsing		*start_parse(char *line);
-int				check_redir_in(t_parsing *parse_list);
-int				check_infile_name(t_parsing *parse_list, int i, int j);
-int				check_redir_out(t_parsing *parse_list);
+int				check_metachar(t_parsing *parse_list);
+void			prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array);
+void			alloc_vector(t_parsing *parse_list, int ind_vector, int ind_array, bool to_free);
+int				is_it_redir(t_parsing *parse_list);
+int				is_it_pipe(t_parsing *parse_list);
+void			do_copy_cmd(t_parsing *parse_list);
 
 #endif

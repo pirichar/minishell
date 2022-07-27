@@ -11,11 +11,11 @@ int	check_pipes(t_parsing *parse_list)
 	{
 		while (parse_list->tkns_array[i][j])
 		{
-			if (parse_list->tkns_array[i][j] == '<' &&
-				parse_list->tkns_array[i][j + 1] != '<'
+			if (parse_list->tkns_array[i][j] == '|'
+				&& parse_list->tkns_array[i][j + 1] == '\0'
 				&& j == 0)
 			{
-				if (check_pipe_name(parse_list, i, j) == 1)
+				if (check_pipe_name(parse_list, i, j) != 0)
 					return (1);
 				printf("do the pipe\n");
 				break ;
@@ -26,5 +26,4 @@ int	check_pipes(t_parsing *parse_list)
 		i++;
 	}
 	return (0);
-}
 }

@@ -49,7 +49,7 @@ SRCS	=	src/environement.c src/main.c src/builtin.c src/pipex.c src/parsing_1.c \
 			src/pwd.c src/echo.c src/tmp_star_functions.c src/cd.c\
 			src/str_arr_fcn.c src/ft_strjoin_free.c  src/prompt.c  src/parsing_2.c \
 			src/parsing_utils.c src/parsing_heredocs.c src/parsing_redir_in.c \
-			src/parsing_redir_out.c
+			src/parsing_redir_out.c src/parsing_pipes.c
 
 HEADERS	=	minishell.h colors.h
 

@@ -20,9 +20,11 @@ void	print_tkns_array_debug(t_parsing *parse_list)
 	{
 		if (parse_list->tkns_list == NULL)
 			return ;
-		while (parse_list->tkns_list->vector_cmd && parse_list->tkns_list->vector_cmd[i])
+		while (parse_list->tkns_list->vector_cmd
+			&& parse_list->tkns_list->vector_cmd[i])
 		{
-			printf("list %d array %d : %s\n", parse_list->tkns_list->argv_pos, i ,parse_list->tkns_list->vector_cmd[i]);
+			printf("list %d array %d : %s\n", parse_list->tkns_list->argv_pos,
+				i, parse_list->tkns_list->vector_cmd[i]);
 			i++;
 		}
 		parse_list->tkns_list = parse_list->tkns_list->next;
@@ -30,27 +32,59 @@ void	print_tkns_array_debug(t_parsing *parse_list)
 	}
 }
 
-int	count_cmd(t_parsing *parse_list)
+int	count_cmd(char **tkns_array, int ind_array)
 {
 	int	count;
-	int	index_arr;
 
 	count = 0;
-	index_arr = 0;
-	while (parse_list->tkns_array[index_arr] != NULL)
+	while (tkns_array[ind_array])
 	{
-		if (ft_strchr("<>", parse_list->tkns_array[index_arr][0]))
+		if (ft_strchr("<>", tkns_array[ind_array][0]))
 		{
-			index_arr += 2;
+			ind_array += 2;
 			continue ;
 		}
-		if (ft_strchr("|", parse_list->tkns_array[index_arr][0]))
-		{
-			index_arr++;
-			continue ;
-		}
+		if (ft_strchr("|", tkns_array[ind_array][0]))
+			return (count);
 		count++;
-		index_arr++;
+		ind_array++;
 	}
 	return (count);
+}
+
+int	check_file_and_delim_name(t_parsing *parse_list, int i, int j)
+{
+	if (parse_list->tkns_array[i + 1])
+	{
+		if (ft_strchr("<|>", parse_list->tkns_array[i + 1][0]))
+		{
+			printf("Dundershell: syntax error near unexpected token `%c'\n",
+				parse_list->tkns_array[i + 1][0]);
+			return (1);
+		}
+	}
+	if (!parse_list->tkns_array[i + 1]
+		|| parse_list->tkns_array[i][j + 1] != '\0')
+	{
+		printf("Dundershell: syntax error near unexpected token `newline'\n");
+		return (1);
+	}
+	return (0);
+}
+
+int	check_pipe_name(t_parsing *parse_list, int i, int j)
+{
+	if (parse_list->tkns_array[i + 1]
+		&& parse_list->tkns_array[i + 1][0] == '|')
+	{
+		printf("Dundershell: syntax error near unexpected token `|'\n");
+		return (1);
+	}
+	if (!parse_list->tkns_array[i + 1]
+		|| parse_list->tkns_array[i][j + 1] != '\0')
+	{
+		printf("Dundershell: syntax error near unexpected token `newline'\n");
+		return (1);
+	}
+	return (0);
 }

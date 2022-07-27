@@ -1,7 +1,8 @@
 faut absolument gere le split
 
-le <<, le <, le > et le >> sont donnes for real
+le <<, le <, le > ,le | et le >> sont donnes for real
 
-reste le |
 
 tester cat << opi >> out | < out >> delim cat << delim > out
+
+done and goods

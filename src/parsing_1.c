@@ -2,65 +2,35 @@
 
 int	get_cmd(t_parsing *parse_list)
 {
-	int	count;
-	int	ind_array;
-	int	ind_str;
-	int	ind_vector;
-
-	count = 0;
-	ind_array = 0;
-	ind_str = 0;
-	ind_vector = 0;
-	count = count_cmd(parse_list); // faire un espece de count tkn si nb of pipes > 0 qui px mallocer toute les nodes davancent juskau prochain |
-	printf("count %d\n", count);
-	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), count + 1);
-	while (parse_list->tkns_array[ind_array])
+	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **),
+			count_cmd(parse_list->tkns_array, parse_list->i_arr) + 1);
+	while (parse_list->tkns_array[parse_list->i_arr])
 	{
-		parse_list->tkns_list->vector_cmd[ind_vector] = calloc(ft_strlen(parse_list->tkns_array[ind_array]) + 1, sizeof(char));
-		while (parse_list->tkns_array[ind_array][ind_str])
+		alloc_vector(parse_list, parse_list->i_vect, parse_list->i_arr, false);
+		while (parse_list->tkns_array[parse_list->i_arr][parse_list->i_str])
 		{
-			if (ft_strchr("<>", parse_list->tkns_array[ind_array][ind_str]))
-			{
-				ind_array += 2;
-				if (parse_list->tkns_array[ind_array - 1] == NULL || parse_list->tkns_array[ind_array] == NULL)
-				{
-					parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
-					return (0);
-				}
-				free(parse_list->tkns_list->vector_cmd[ind_vector]);
-				parse_list->tkns_list->vector_cmd[ind_vector] = calloc(ft_strlen(parse_list->tkns_array[ind_array]) + 1, sizeof(char));
+			if (is_it_redir(parse_list) == 1)
+				return (0);
+			else if (is_it_redir(parse_list) == 0)
 				continue ;
-			}
-			if (ft_strchr("|", parse_list->tkns_array[ind_array][ind_str]))
-			{
-				parse_list->tkns_list->next = calloc(sizeof(t_tkns), 1);
-				parse_list->tkns_list->next->prev = parse_list->tkns_list;
-				parse_list->tkns_list->next->start = parse_list->tkns_list->start;
-				parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
-				parse_list->tkns_list = parse_list->tkns_list->next;
-				parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), count + 1); // clairement pas le bon count
-				ind_vector = 0;
-				parse_list->tkns_list->argv_pos = parse_list->tkns_list->prev->argv_pos + 1;
-				parse_list->tkns_list->vector_cmd[ind_vector] = calloc(ft_strlen(parse_list->tkns_array[ind_array]) + 1, sizeof(char));
-				parse_list->nb_of_pipes++;
-				ind_array++;
-				ind_str = 0;
+			if (is_it_pipe(parse_list) == 0)
 				continue ;
-			}
-			parse_list->tkns_list->vector_cmd[ind_vector][ind_str] = parse_list->tkns_array[ind_array][ind_str];
-			ind_str++;
+			else
+				do_copy_cmd(parse_list);
 		}
-		ind_str = 0;
-		ind_array++;
-		ind_vector++;
+		parse_list->i_str = 0;
+		parse_list->i_arr++;
+		parse_list->i_vect++;
 	}
-	parse_list->tkns_list->vector_cmd[ind_vector] = NULL;
 	return (0);
 }
 
 void	init_master_list(t_parsing *parse_list)
 {
 	parse_list->nb_of_pipes = 0;
+	parse_list->i_arr = 0;
+	parse_list->i_str = 0;
+	parse_list->i_vect = 0;
 }
 
 t_parsing	*start_parse(char *line)
@@ -74,15 +44,16 @@ t_parsing	*start_parse(char *line)
 	if (parse_list->tkns_array == NULL)
 		return (NULL);
 	init_first_token_nodes(parse_list);
-	if (check_heredocs(parse_list) != 0)
+	if (check_metachar(parse_list) != 0)
 		return (NULL);
-	if (check_redir_in(parse_list) != 0)
-		return (NULL);
-	if (check_redir_out(parse_list) != 0)
-		return (NULL);
-	// if (check_pipe(parse_list) != 0)
-	// 	return (NULL);
 	get_cmd(parse_list);
 	print_tkns_array_debug(parse_list);
 	return (parse_list);
+}
+
+void	do_copy_cmd(t_parsing *parse_list)
+{
+	parse_list->tkns_list->vector_cmd[parse_list->i_vect][parse_list->i_str]
+		= parse_list->tkns_array[parse_list->i_arr][parse_list->i_str];
+	parse_list->i_str++;
 }
