@@ -125,7 +125,6 @@ char			*set_prompt(char *new_env[]);
 t_parsing		*start_parse(char *line);
 int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
-t_parsing		*start_parse(char *line);
 int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
 int				check_pipe_name(t_parsing *parse_list, int i, int j);
 int				count_cmd(char **tkns_array, int ind_array);
