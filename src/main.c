@@ -52,6 +52,11 @@ int	main(int argc, char **argv, char **env)
 			add_history(line);
 			// // utiliser ma liste splitter pour lexec
 			parse = start_parse(line);
+			if (parse == NULL)
+			{
+				free(line);
+				continue;
+			}
 			// if (!parse->tkns_list)
 			// 	printf("IT DOES NOT EXIST\n");
 			// else
@@ -59,7 +64,7 @@ int	main(int argc, char **argv, char **env)
 			// printf("line 0 %s\n", s_line[0]);
 			// printf("line 1 %s\n", s_line[1]);
 			// start_parse(line);
-			s_line = ft_split(line, ' ');
+			// s_line = ft_split(line, ' ');
 			if (s_line[0] == NULL)
 			{
 				free(line);
