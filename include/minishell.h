@@ -64,6 +64,9 @@ typedef struct s_parsing
 	int		i_str;
 	int		infile;
 	int		outfile;
+	bool	b_in;
+	bool	cmd;
+	int		status;
 }				t_parsing;
 
 
@@ -83,29 +86,29 @@ void	execute_solo(char **cmd, int *p, char **env, t_parsing *parse);
 void			parse_and_exec_cmd(char **cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
-void			look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in,  t_parsing *parse);
+void			look_for_builtins(char **line, char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
 
 //exit.c
 void			exit_was_too_long(char **s_line);
-void			mini_exit(char *line, char **s_line, bool *b_in);
+void			mini_exit(char *line, char **s_line, t_parsing *parse);
 //export.c
 char			**bubble_sort_strarr(char **rtn);
 char			**sort_strarr(char **to_sort);
 void			print_export(char ***new_env);
 void			actually_set_variables(char **s_line, char ***new_env);
-void			mini_export(char **s_line, char ***new_env, bool *b_in);
+void			mini_export(char **s_line, char ***new_env, t_parsing *parse);
 //env.c
-void			mini_env(char **new_env, bool *b_in);
+void			mini_env(char **new_env,  t_parsing *parse);
 int				ft_strcmp(const char *s1, const char *s2);
 void			print_out_dir(char **to_print);
 //unset.c
 char*			return_variable(char **env, char *var);
-void			mini_unset(char **s_line, char ***new_env, bool *built_in);
+void			mini_unset(char **s_line, char ***new_env,  t_parsing *parse);
 //pwd.c
-void			mini_pwd(bool *b_in);
+void			mini_pwd(t_parsing *parse);
 //echo.c
-void			mini_echo(char **s_line, bool *b_in, t_parsing *parse);
+void			mini_echo(char **s_line, t_parsing *parse);
 bool			check_only_n(char *str);
 void			parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i);
 //tmp_star_function.c
@@ -116,7 +119,7 @@ char			**mom_i_am_a_star_d(void);
 void			mom_i_am_a_star_p(void);
 //cd.c
 void			go_to_home(char ***new_env);
-void			mini_cd(char **s_line, char ***new_env, bool *b_in);
+void			mini_cd(char **s_line, char ***new_env,  t_parsing *parse);
 //str_arr_fcn.c
 void			free_strrarr(char **to_free);
 int				strarr_len(char **str_arr);
@@ -130,7 +133,7 @@ char			*pwd_not_there(char *blue_user);
 char			*pwd_prompt(char *new_env[], char *blue_user);
 char			*set_prompt(char *new_env[]);
 //parsing
-t_parsing		*start_parse(char *line);
+t_parsing		*start_parse(char *line, int status);
 int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
 int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);

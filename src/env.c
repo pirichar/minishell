@@ -3,12 +3,12 @@
 /*
 	Basically just go through all the new_env and print everything
 */
-void	mini_env(char **new_env, bool *b_in)
+void	mini_env(char **new_env, t_parsing *parse)
 {
 	int		i;
 	char	**tmp;
 
-	*b_in = true;
+	parse->b_in = true;
 	i = 0;
 	while (new_env[i])
 	{

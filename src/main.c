@@ -17,15 +17,15 @@ int	main(int argc, char **argv, char **env)
 	char	**path;
 	char	**s_line;
 	char	**new_env;
-	bool	b_in;
-	bool	cmd;
 	char	*prompt;
+	int		status;
 	t_parsing 	*parse;
 	pid_t	p;
 
+	status = 0;
 	if (argc > 1)
 	{
-		printf("Why U put params?!?!\n");
+		fprintf(stderr, "Why U put params?!?!\n");
 		return (1);
 	}
 	(void)argv;
@@ -36,8 +36,6 @@ int	main(int argc, char **argv, char **env)
 	while (1)
 	{
 		prompt = set_prompt(new_env);
-		b_in = false;
-		cmd = false;
 		i = 0;
 		line = readline(prompt);
 		free(prompt);
@@ -50,7 +48,7 @@ int	main(int argc, char **argv, char **env)
 		if (*line)
 		{
 			add_history(line);
-			parse = start_parse(line);
+			parse = start_parse(line, status);
 			if (parse == NULL)
 			{
 				free(line);
@@ -63,9 +61,9 @@ int	main(int argc, char **argv, char **env)
 				free_strrarr(s_line);
 				continue ;
 			}
-			look_for_builtins(&line, &s_line, &new_env, &b_in, parse);
+			look_for_builtins(&line, &s_line, &new_env, parse);
 			//basic execute function
-			if (b_in == false)
+			if (parse->b_in == false)
 			{
 
 				i = 0;
@@ -82,13 +80,13 @@ int	main(int argc, char **argv, char **env)
 					}
 					if (i != nb_of_charstrstr(path) || access(s_line[0], X_OK) == 0)
 					{
-						cmd = true;
+						parse->cmd = true;
 						execute_solo(s_line, &p, new_env, parse);
-						waitpid(p, NULL, 0);
+						waitpid(p, &status, 0);
 					}
 				}
 			}
-			if (b_in == false && cmd == false)
+			if (parse->b_in == false && parse->cmd == false)
 				printf("Please provide a built-in command to test or a valid command in the path\n");
 			free_strrarr(s_line);
 		}

@@ -40,12 +40,22 @@ void	set_variable(char ***env, char *var, char *new_var)
 		add_new_variable(env, var, new_var);
 }
 
-void	mini_dollar(char **s_line, char ***new_env, bool *b_in)
+void	mini_dollar(char **s_line, char ***new_env,  t_parsing *parse)
 {
 	char	*to_print;
 	char	**splitted;
 
-	*b_in = true;
+	parse->b_in = true;
+	if (s_line[1] == NULL)
+		return;
+	if (s_line[1][0] == '?' && s_line[1][1] == '\0')
+	{
+		if (parse->status != 0)
+			printf("1\n");
+		else	
+			printf("%d\n", parse->status); 
+		return;
+	}
 	to_print = return_variable(*new_env, s_line[1]);
 	if (to_print)
 	{
@@ -55,23 +65,23 @@ void	mini_dollar(char **s_line, char ***new_env, bool *b_in)
 	}
 }
 
-void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in, t_parsing *parse)
+void	look_for_builtins(char **line, char ***s_line, char ***new_env, t_parsing *parse)
 {
 	//mettre le bool b_in dans la struct parse
 	if (ft_strncmp(*s_line[0], "echo", 5) == 0)
-		mini_echo(*s_line, b_in, parse);
+		mini_echo(*s_line, parse);
 	else if (ft_strncmp(*s_line[0], "cd", 3) == 0)
-		mini_cd(*s_line, (new_env), b_in);
+		mini_cd(*s_line, (new_env), parse);
 	else if (ft_strncmp(*s_line[0], "export", 8) == 0)
-		mini_export(*s_line, (new_env), b_in);
+		mini_export(*s_line, (new_env), parse);
 	else if (ft_strncmp(*s_line[0], "unset", 6) == 0)
-		mini_unset(*s_line, new_env, b_in);
+		mini_unset(*s_line, new_env, parse);
 	else if (ft_strncmp(*s_line[0], "pwd", 4) == 0)
-		mini_pwd(b_in);
+		mini_pwd(parse);
 	else if (ft_strncmp(*s_line[0], "env", 5) == 0)
-		mini_env((*new_env), b_in);
+		mini_env((*new_env), parse);
 	else if (ft_strncmp(*s_line[0], "exit",5) == 0)
-		mini_exit(*line, *s_line, b_in);
-	else if (ft_strncmp(*s_line[0], "$", 1) == 0)
-		mini_dollar(*s_line, new_env, b_in);
+		mini_exit(*line, *s_line, parse);
+	else if (ft_strncmp(*s_line[0], "$", ft_strlen(*s_line[0])) == 0)
+		mini_dollar(*s_line, new_env, parse);
 }

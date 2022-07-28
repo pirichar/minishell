@@ -26,12 +26,12 @@ void	go_to_home(char ***new_env)
 	like cd .. folder .. folder would get you back to folder
 	But now its only one argument or getting you back to home
 */
-void	mini_cd(char **s_line, char ***new_env, bool *b_in)
+void	mini_cd(char **s_line, char ***new_env, t_parsing *parse)
 {
 	char	*actual_pwd;
 	char	*buff;
 
-	*b_in = true;
+	parse->b_in = true;
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(new_env, "OLDPWD=", actual_pwd);

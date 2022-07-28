@@ -30,14 +30,14 @@ void	exit_was_too_long(char **s_line)
 	étrangement quand je free line et s_line j'ai un leak mais 
 	le leak part quand je ne les free pas ; je devrais vérifier pourquoi bientôt
 */
-void	mini_exit(char *line, char **s_line, bool *b_in)
+void	mini_exit(char *line, char **s_line, t_parsing *parse)
 {
 	(void)line;
 	int tmp;
 	int i;
 
 	i = 1;
-	*b_in = true;
+	parse->b_in = true;
 	while(s_line[i++]);
 	if (i > 3)
 	{

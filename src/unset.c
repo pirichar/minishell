@@ -48,12 +48,12 @@ static void	delete_variable(char ***env, char *var)
 
 /*peut etre un probleme a la ligne var_to_unset =
  path_to_starrr((*new_env), s_line[i]); (ancienne note)*/
-void	mini_unset(char **s_line, char ***new_env, bool *built_in)
+void	mini_unset(char **s_line, char ***new_env, t_parsing *parse)
 {
 	char	*var_to_unset;
 	int		i;
 
-	*built_in = true;
+	parse->b_in = true;
 	if (s_line[1] == NULL)
 		printf("unset : not enough arguments\n");
 	else

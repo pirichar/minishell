@@ -1,11 +1,11 @@
 #include "../include/minishell.h"
 
-void	mini_pwd(bool *b_in)
+void	mini_pwd(t_parsing *parse)
 {
 	char	*to_print;
 	char	*buff;
 
-	*b_in = true;
+	parse->b_in = true;
 	buff = NULL;
 	to_print = getcwd(buff, 1024);
 	printf("%s\n", to_print);

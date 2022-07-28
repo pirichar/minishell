@@ -25,22 +25,26 @@ int	get_cmd(t_parsing *parse_list)
 	return (0);
 }
 
-void	init_master_list(t_parsing *parse_list)
+void	init_master_list(t_parsing *parse_list, int status)
 {
 	parse_list->nb_of_pipes = 0;
 	parse_list->i_arr = 0;
 	parse_list->i_str = 0;
 	parse_list->i_vect = 0;
+	parse_list->infile = 0;
+	parse_list->outfile = 1;
+	parse_list->b_in = false;
+	parse_list->cmd = false;
+	parse_list->status = status;
 }
 
-t_parsing	*start_parse(char *line)
+t_parsing	*start_parse(char *line, int status)
 {
 	t_parsing	*parse_list;
 
 	parse_list = calloc(1, sizeof(t_parsing));
-	parse_list->infile = 0;
-	parse_list->outfile = 1;
-	init_master_list(parse_list);
+
+	init_master_list(parse_list, status);
 	init_first_token_nodes(parse_list);
 	parse_list->tkns_array = ft_split(line, ' ');
 	if (parse_list->tkns_array == NULL)

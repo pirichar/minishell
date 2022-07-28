@@ -8,7 +8,7 @@
 	this way it does not look for flags
 	to parse but print them out instead
 */
-void	mini_echo(char **s_line, bool *b_in, t_parsing *parse)
+void	mini_echo(char **s_line, t_parsing *parse)
 {
 	int		i;
 	int		j;
@@ -19,7 +19,7 @@ void	mini_echo(char **s_line, bool *b_in, t_parsing *parse)
 	j = 1;
 	with_nl = true;
 	check_nl = true;
-	*b_in = true;
+	parse->b_in = true;
 	while (s_line[i])
 	{
 		parse_echo(s_line, &check_nl, &with_nl, &i);
