@@ -55,10 +55,10 @@ int	main(int argc, char **argv, char **env)
 			// if (!parse->tkns_list)
 			// 	printf("IT DOES NOT EXIST\n");
 			// else
-				s_line = parse->tkns_list->vector_cmd;
+			s_line = parse->tkns_list->vector_cmd;
 			// printf("line 0 %s\n", s_line[0]);
 			// printf("line 1 %s\n", s_line[1]);
-			start_parse(line);
+			// start_parse(line);
 			s_line = ft_split(line, ' ');
 			if (s_line[0] == NULL)
 			{

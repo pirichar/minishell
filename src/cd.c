@@ -10,8 +10,10 @@ void	go_to_home(char ***new_env)
 	if (home == NULL)
 		printf("minishell: cd: HOME not set\n");
 	else
+	{
 		chdir(home[1]);
-	free_strrarr(home);
+		free_strrarr(home);
+	}
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(new_env, "PWD=", actual_pwd);
