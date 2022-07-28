@@ -8,7 +8,7 @@
 	this way it does not look for flags
 	to parse but print them out instead
 */
-void	mini_echo(char **s_line, bool *b_in)
+void	mini_echo(char **s_line, bool *b_in, t_parsing *parse)
 {
 	int		i;
 	int		j;
@@ -33,13 +33,13 @@ void	mini_echo(char **s_line, bool *b_in)
 			continue;
 		}
 		if (s_line[i + 1])
-			printf("%s ", s_line[i]);
+			dprintf(parse->outfile,"%s ", s_line[i]);
 		else
-			printf("%s", s_line[i]);
+			dprintf(parse->outfile,"%s", s_line[i]);
 		i++;
 	}
 	if (with_nl)
-		printf("\n");
+		dprintf(parse->outfile,"\n");
 }
 
 //s'assurer que dans la version officielle echo "-n" 

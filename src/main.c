@@ -63,7 +63,7 @@ int	main(int argc, char **argv, char **env)
 				free_strrarr(s_line);
 				continue ;
 			}
-			look_for_builtins(&line, &s_line, &new_env, &b_in);
+			look_for_builtins(&line, &s_line, &new_env, &b_in, parse);
 			//basic execute function
 			if (b_in == false)
 			{

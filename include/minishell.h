@@ -83,7 +83,7 @@ void	execute_solo(char **cmd, int *p, char **env, t_parsing *parse);
 void			parse_and_exec_cmd(char **cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
-void			look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in);
+void			look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in,  t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
 
 //exit.c
@@ -105,7 +105,7 @@ void			mini_unset(char **s_line, char ***new_env, bool *built_in);
 //pwd.c
 void			mini_pwd(bool *b_in);
 //echo.c
-void			mini_echo(char **s_line, bool *b_in);
+void			mini_echo(char **s_line, bool *b_in, t_parsing *parse);
 bool			check_only_n(char *str);
 void			parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i);
 //tmp_star_function.c

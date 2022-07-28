@@ -163,7 +163,6 @@ void	execute_solo(char **cmd, int *p, char **env, t_parsing *parse)
 	int	pipes[2];
 
 	pipe(pipes);
-	printf("From execute_solo : parse->infile = %d\n", parse->infile);
 	if (parse->infile != -1)
 	{
 		pid = fork();

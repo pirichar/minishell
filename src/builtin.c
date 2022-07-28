@@ -55,10 +55,11 @@ void	mini_dollar(char **s_line, char ***new_env, bool *b_in)
 	}
 }
 
-void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in)
+void	look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in, t_parsing *parse)
 {
+	//mettre le bool b_in dans la struct parse
 	if (ft_strncmp(*s_line[0], "echo", 5) == 0)
-		mini_echo(*s_line, b_in);
+		mini_echo(*s_line, b_in, parse);
 	else if (ft_strncmp(*s_line[0], "cd", 3) == 0)
 		mini_cd(*s_line, (new_env), b_in);
 	else if (ft_strncmp(*s_line[0], "export", 8) == 0)
