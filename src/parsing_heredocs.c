@@ -19,6 +19,7 @@ int	check_metachar(t_parsing *parse_list)
 					{
 						if (check_file_and_delim_name(parse_list, i, j + 1) == 1)
 							return (1);
+						
 						printf("do the heredoc\n");
 						j++;
 						break ;
@@ -32,7 +33,11 @@ int	check_metachar(t_parsing *parse_list)
 					}
 					if (check_file_and_delim_name(parse_list, i, j) == 1)
 						return (1);
-					printf("do the redir in(parse_list->tkns_array[i+1][0])\n");
+					parse_list->infile = open(parse_list->tkns_array[i+1], O_RDONLY);
+					if (parse_list->infile == -1)
+						printf("Could not open input file\n");
+					else
+						printf("did the redir in this is parse_list->infile %d\n", parse_list->infile);
 					//redir avec parse_list->tkns_array[i+1][0];
 					//c'est le fichier à ouvrir
 				}
@@ -50,7 +55,13 @@ int	check_metachar(t_parsing *parse_list)
 					{
 						if (check_file_and_delim_name(parse_list, i, j + 1) == 1)
 							return (1);
-						printf("do the redir out\n");
+						parse_list->outfile = open(parse_list->tkns_array[i+1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+						if (parse_list->outfile == -1)
+						{
+							fprintf(stderr, "MINISHELL: Could not open output file\n");
+							return (1);
+						}
+						printf("did the redir out\n");
 						break ;
 					}
 				}

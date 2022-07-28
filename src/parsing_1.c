@@ -38,6 +38,8 @@ t_parsing	*start_parse(char *line)
 	t_parsing	*parse_list;
 
 	parse_list = calloc(1, sizeof(t_parsing));
+	parse_list->infile = 0;
+	parse_list->outfile = 1;
 	init_master_list(parse_list);
 	init_first_token_nodes(parse_list);
 	parse_list->tkns_array = ft_split(line, ' ');

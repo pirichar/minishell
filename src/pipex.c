@@ -157,23 +157,40 @@ void	parse_and_exec_cmd(char **cmd, char **env)
 // 	*p = pid;
 // }
 
-void	execute_solo(char **cmd, int *p, char **env)
+void	execute_solo(char **cmd, int *p, char **env, t_parsing *parse)
 {
 	int	pid;
+	int	pipes[2];
 
-	pid = fork();
-	if (pid == 0)
+	pipe(pipes);
+	printf("From execute_solo : parse->infile = %d\n", parse->infile);
+	if (parse->infile != -1)
 	{
-		if (access (cmd[0], X_OK) == 0)
+		pid = fork();
+		if (pid == 0)
 		{
-			// char **cmdo = ft_split(cmd, ' ');
-			execve(cmd[0], cmd, env);
-			exit(1);
+			if (parse->infile != 0)
+			{
+				dup2(parse->infile, 0);
+				close(parse->infile);
+			}
+			if (parse->outfile != 1)
+			{
+				dup2(parse->outfile,1);
+				close(parse->outfile);
+			}
+			if (access (cmd[0], X_OK) == 0)
+			{
+				// char **cmdo = ft_split(cmd, ' ');
+				execve(cmd[0], cmd, env);
+				exit(1);
+			}
+			else
+				parse_and_exec_cmd(cmd, env);
 		}
-		else
-			parse_and_exec_cmd(cmd, env);
 	}
-	*p = pid;
+	if (parse->infile != -1)
+		*p = pid;
 }
 // void	execute_solo(const char *cmd, int *p, char **env)
 // {

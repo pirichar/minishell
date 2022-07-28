@@ -67,6 +67,8 @@ int	main(int argc, char **argv, char **env)
 			//basic execute function
 			if (b_in == false)
 			{
+				// parse->infile = 0;
+				// parse->outfile = 1;
 				i = 0;
 				path = path_to_starrr(new_env, "PATH=");
 				if (path == NULL)
@@ -82,7 +84,7 @@ int	main(int argc, char **argv, char **env)
 					if (i != nb_of_charstrstr(path) || access(s_line[0], X_OK) == 0)
 					{
 						cmd = true;
-						execute_solo(s_line, &p, new_env);
+						execute_solo(s_line, &p, new_env, parse);
 						waitpid(p, NULL, 0);
 					}
 				}
