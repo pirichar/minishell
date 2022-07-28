@@ -100,3 +100,17 @@ bool	search_path(const char *p_arr, const char *cmd)
 	free(with_slash);
 	return (false);
 }
+
+bool	search_path_exec(const char *p_arr, const char *cmd)
+{
+	char	*line;
+
+	line = ft_strjoin(p_arr, cmd);
+	if (access(line, X_OK) == 0)
+	{
+		free(line);
+		return (true);
+	}
+	free(line);
+	return (false);
+}

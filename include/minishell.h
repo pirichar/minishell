@@ -71,13 +71,14 @@ void			print_logo(char **env);
 bool			search_path(const char *p_arr, const char *cmd);
 char			**path_to_starrr(char **env, char *var);
 char			*var_to_str(char **env, char *var);
+bool			search_path_exec(const char *p_arr, const char *cmd);
 //pipex.c
-int				calling_the_execs(int argc, char **argv,
-					char **env, t_files *f);
-void			execute_solo(const char *cmd, pid_t *p, char **env);
-void			execute_out(const char *cmd, int fds[2], int *p, char **env);
-int				execute(const char *cmd, int fd_in, int *p, char **env);
-void			parse_and_exec_cmd(const char *cmd, char **env);
+// int				calling_the_execs(int argc, char **argv,
+					// char **env, t_files *f);
+void			execute_solo(char **cmd, pid_t *p, char **env);
+// void			execute_out(const char *cmd, int fds[2], int *p, char **env);
+// int				execute(const char *cmd, int fd_in, int *p, char **env);
+void			parse_and_exec_cmd(char **cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void			look_for_builtins(char **line, char ***s_line, char ***new_env, bool *b_in);

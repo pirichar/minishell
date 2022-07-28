@@ -29,31 +29,55 @@ char	**split_cmd(const char *path, const char *cmd)
 		command is not found and free everything	
 */
 
-void	parse_and_exec_cmd(const char *cmd, char **env)
+void	parse_and_exec_cmd(char **cmd, char **env)
 {
 	int			i;
 	t_exec_ptrs	p;
 
 	p.path = path_to_starrr(env, "PATH=");
-	p.cmd_with_slash = ft_strjoin("/", cmd);
-	p.cmd_split = ft_split(cmd, ' ');
+	cmd[0] = ft_strjoin("/", cmd[0]);//verifier le leak ici il faudrait surement passer par adresse le s_line pour le modifier
 	i = 0;
 	while (p.path[i])
 	{
-		if (search_path(p.path[i], p.cmd_split[0]) == true)
+		if (search_path_exec(p.path[i], cmd[0]) == true)
 		{
-			p.final_cmd = split_cmd(p.path[i], p.cmd_with_slash);
-			execve(p.final_cmd[0], p.final_cmd, env);
+			cmd[0] = ft_strjoin(p.path[i], cmd[0]); //leak ici for sur il faudrait que je free le s2
+			execve(cmd[0], cmd, env);
 			exit(1);
 		}
 		i++;
 	}
 	printf("MINISHELL : Command not found\n"); // change this for an error function
-	free (p.path);
-	free (p.cmd_split);
-	free (p.cmd_with_slash);
+	free_strrarr(p.path);
+	// free (p.cmd_split);
+	// free (p.cmd_with_slash);
 	exit(1);
 }
+// void	parse_and_exec_cmd(const char *cmd, char **env)
+// {
+// 	int			i;
+// 	t_exec_ptrs	p;
+
+// 	p.path = path_to_starrr(env, "PATH=");
+// 	p.cmd_with_slash = ft_strjoin("/", cmd);
+// 	p.cmd_split = ft_split(cmd, ' ');
+// 	i = 0;
+// 	while (p.path[i])
+// 	{
+// 		if (search_path(p.path[i], p.cmd_split[0]) == true)
+// 		{
+// 			p.final_cmd = split_cmd(p.path[i], p.cmd_with_slash);
+// 			execve(p.final_cmd[0], p.final_cmd, env);
+// 			exit(1);
+// 		}
+// 		i++;
+// 	}
+// 	printf("MINISHELL : Command not found\n"); // change this for an error function
+// 	free (p.path);
+// 	free (p.cmd_split);
+// 	free (p.cmd_with_slash);
+// 	exit(1);
+// }
 
 /*
 	Execute take as input the CMD to execute
@@ -86,64 +110,64 @@ void	parse_and_exec_cmd(const char *cmd, char **env)
 
 */
 
-int	execute(const char *cmd, int fd_in, int *p, char **env)
-{
-	int	pipes[2];
-	int	pid;
+// int	execute(const char *cmd, int fd_in, int *p, char **env)
+// {
+// 	int	pipes[2];
+// 	int	pid;
 
-	pipe(pipes);
-	if (fd_in != -1)
-	{
-		pid = fork();
-		if (pid == 0)
-		{
-			dup2(fd_in, 0);
-			close(fd_in);
-			dup2(pipes[1], 1);
-			close(pipes[1]);
-			parse_and_exec_cmd(cmd, env);
-			exit(1);
-		}
-	}
-	close(fd_in);
-	close(pipes[1]);
-	if (fd_in != -1)
-		*p = pid;
-	return (pipes[0]);
-}
+// 	pipe(pipes);
+// 	if (fd_in != -1)
+// 	{
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{
+// 			dup2(fd_in, 0);
+// 			close(fd_in);
+// 			dup2(pipes[1], 1);
+// 			close(pipes[1]);
+// 			parse_and_exec_cmd(cmd, env);
+// 			exit(1);
+// 		}
+// 	}
+// 	close(fd_in);
+// 	close(pipes[1]);
+// 	if (fd_in != -1)
+// 		*p = pid;
+// 	return (pipes[0]);
+// }
 
 /*
 	Execute out function was created to respect the limit of inputs
 	I was using only execute at first and had to switch it around
 */
-void	execute_out(const char *cmd, int fds[2], int *p, char **env)
+// void	execute_out(const char *cmd, int fds[2], int *p, char **env)
+// {
+// 	int	pid;
+
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		dup2(fds[0], 0);
+// 		close(fds[0]);
+// 		dup2(fds[1], 1);
+// 		close(fds[1]);
+// 		parse_and_exec_cmd(cmd, env);
+// 	}
+// 	close(fds[0]);
+// 	*p = pid;
+// }
+
+void	execute_solo(char **cmd, int *p, char **env)
 {
 	int	pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(fds[0], 0);
-		close(fds[0]);
-		dup2(fds[1], 1);
-		close(fds[1]);
-		parse_and_exec_cmd(cmd, env);
-	}
-	close(fds[0]);
-	*p = pid;
-}
-
-void	execute_solo(const char *cmd, int *p, char **env)
-{
-	int	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		if (access (cmd, X_OK) == 0)
+		if (access (cmd[0], X_OK) == 0)
 		{
-			char **cmdo = ft_split(cmd, ' ');
-			execve(cmdo[0], cmdo, env);
+			// char **cmdo = ft_split(cmd, ' ');
+			execve(cmd[0], cmd, env);
 			exit(1);
 		}
 		else
@@ -151,6 +175,26 @@ void	execute_solo(const char *cmd, int *p, char **env)
 	}
 	*p = pid;
 }
+// void	execute_solo(const char *cmd, int *p, char **env)
+// {
+// 	int	pid;
+
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		if (access (cmd, X_OK) == 0)
+// 		{
+// 			char **cmdo = ft_split(cmd, ' ');
+// 			execve(cmdo[0], cmdo, env);
+// 			exit(1);
+// 		}
+// 		else
+// 			parse_and_exec_cmd(cmd, env);
+// 	}
+// 	*p = pid;
+// }
+
+
 /* 
 	Calling the exec goes through all the commands and run execute on that command
 	It will give execute different parameters depending on 
@@ -169,25 +213,25 @@ void	execute_solo(const char *cmd, int *p, char **env)
 	LAST PROCESS = pids[process_count-1 (5) - 1 (4)]
 */
 
-int	calling_the_execs(int argc, char **argv, char **env, t_files *f)
-{
-	int	fd;
-	int	j;
+// int	calling_the_execs(int argc, char **argv, char **env, t_files *f)
+// {
+// 	int	fd;
+// 	int	j;
 
-	fd = execute(argv[2], f->infile, &f->pids[0], env);
-	j = 3;
-	while (j < argc - 2)
-	{
-		fd = execute(argv[j], fd, &f->pids[j - 2], env);
-		j++;
-	}
-	f->outfile = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	if (f->outfile == -1)
-	{
-		printf("MINISHELL : could not open output file\n"); //change this for an error function
-		return (1);
-	}
-	execute_out(argv[argc - 2], (int [2]){fd, f->outfile},
-		&f->pids[f->process_count - 1], env);
-	return (0);
-}
+// 	fd = execute(argv[2], f->infile, &f->pids[0], env);
+// 	j = 3;
+// 	while (j < argc - 2)
+// 	{
+// 		fd = execute(argv[j], fd, &f->pids[j - 2], env);
+// 		j++;
+// 	}
+// 	f->outfile = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
+// 	if (f->outfile == -1)
+// 	{
+// 		printf("MINISHELL : could not open output file\n"); //change this for an error function
+// 		return (1);
+// 	}
+// 	execute_out(argv[argc - 2], (int [2]){fd, f->outfile},
+// 		&f->pids[f->process_count - 1], env);
+// 	return (0);
+// }

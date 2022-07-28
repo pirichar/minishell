@@ -50,21 +50,13 @@ int	main(int argc, char **argv, char **env)
 		if (*line)
 		{
 			add_history(line);
-			// // utiliser ma liste splitter pour lexec
 			parse = start_parse(line);
 			if (parse == NULL)
 			{
 				free(line);
 				continue;
 			}
-			// if (!parse->tkns_list)
-			// 	printf("IT DOES NOT EXIST\n");
-			// else
 			s_line = parse->tkns_list->vector_cmd;
-			// printf("line 0 %s\n", s_line[0]);
-			// printf("line 1 %s\n", s_line[1]);
-			// start_parse(line);
-			// s_line = ft_split(line, ' ');
 			if (s_line[0] == NULL)
 			{
 				free(line);
@@ -90,7 +82,7 @@ int	main(int argc, char **argv, char **env)
 					if (i != nb_of_charstrstr(path) || access(s_line[0], X_OK) == 0)
 					{
 						cmd = true;
-						execute_solo(line, &p, new_env);
+						execute_solo(s_line, &p, new_env);
 						waitpid(p, NULL, 0);
 					}
 				}
