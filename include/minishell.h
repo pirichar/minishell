@@ -34,6 +34,11 @@ typedef struct s_ptrs
 	char	**cmd_split;
 }				t_exec_ptrs;
 
+//token list
+//si ya pas de pipe ya juste une token avec un vecteur de commande
+//le vecteur de commande c'est ce qui est feed a execve
+//arggv pos = 0 premiere exectute; 1= après un pipe etc.
+//il va falloir rajouter des bool redir in; redir out; heredoc
 typedef struct s_tkns
 {
 	char			**vector_cmd;
@@ -129,7 +134,7 @@ int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
 int				check_pipe_name(t_parsing *parse_list, int i, int j);
 int				count_cmd(char **tkns_array, int ind_array);
 int				get_cmd(t_parsing *parse_list);
-void			print_tkns_array_debug(t_parsing *parse_list);
+void			print_tkns_array_debug(t_parsing parse_list);
 int				check_metachar(t_parsing *parse_list);
 void			prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array);
 void			alloc_vector(t_parsing *parse_list, int ind_vector, int ind_array, bool to_free);

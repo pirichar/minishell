@@ -92,7 +92,7 @@ $(NAME)	:	$(SRCS) $(OBJS) $(HEADERS)
 				echo "\n      Libft compiled \n" && \
 				echo "__________________________________"; \
 			fi
-			$(CC) $(SRCS) $(LIBS) -Llib -lreadline -lhistory -lcurses $(CFLAGS)
+			$(CC) $(SRCS) $(LIBS) -Lm1lib -lreadline -lhistory -lcurses $(CFLAGS)
 			@if [ -p "./objs" ]; then \
 				rm -rf ./objs; \
 			fi

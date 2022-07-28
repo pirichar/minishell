@@ -20,7 +20,7 @@ int	main(int argc, char **argv, char **env)
 	bool	b_in;
 	bool	cmd;
 	char	*prompt;
-	// t_parsing 	*parse;
+	t_parsing 	*parse;
 	pid_t	p;
 
 	if (argc > 1)
@@ -51,8 +51,11 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(line);
 			// // utiliser ma liste splitter pour lexec
-			// parse = start_parse(line);
-			// s_line = parse->tkns_list->vector_cmd;
+			parse = start_parse(line);
+			// if (!parse->tkns_list)
+			// 	printf("IT DOES NOT EXIST\n");
+			// else
+				s_line = parse->tkns_list->vector_cmd;
 			// printf("line 0 %s\n", s_line[0]);
 			// printf("line 1 %s\n", s_line[1]);
 			start_parse(line);

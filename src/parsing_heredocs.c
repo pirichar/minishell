@@ -32,7 +32,9 @@ int	check_metachar(t_parsing *parse_list)
 					}
 					if (check_file_and_delim_name(parse_list, i, j) == 1)
 						return (1);
-					printf("do the redir in\n");
+					printf("do the redir in(parse_list->tkns_array[i+1][0])\n");
+					//redir avec parse_list->tkns_array[i+1][0];
+					//c'est le fichier à ouvrir
 				}
 				if (parse_list->tkns_array[i][0] == '>')
 				{

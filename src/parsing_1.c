@@ -43,11 +43,10 @@ t_parsing	*start_parse(char *line)
 	parse_list->tkns_array = ft_split(line, ' ');
 	if (parse_list->tkns_array == NULL)
 		return (NULL);
-	init_first_token_nodes(parse_list);
 	if (check_metachar(parse_list) != 0)
 		return (NULL);
 	get_cmd(parse_list);
-	print_tkns_array_debug(parse_list);
+	print_tkns_array_debug(*parse_list);
 	return (parse_list);
 }
 

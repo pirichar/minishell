@@ -10,24 +10,24 @@ int	init_first_token_nodes(t_parsing *parse_list)
 	return (0);
 }
 
-void	print_tkns_array_debug(t_parsing *parse_list)
+void	print_tkns_array_debug(t_parsing parse_list)
 {
 	int	i;
 
 	i = 0;
-	parse_list->tkns_list = parse_list->tkns_list->start;
-	while (parse_list->tkns_list)
+	parse_list.tkns_list = parse_list.tkns_list->start;
+	while (parse_list.tkns_list)
 	{
-		if (parse_list->tkns_list == NULL)
+		if (parse_list.tkns_list == NULL)
 			return ;
-		while (parse_list->tkns_list->vector_cmd
-			&& parse_list->tkns_list->vector_cmd[i])
+		while (parse_list.tkns_list->vector_cmd
+			&& parse_list.tkns_list->vector_cmd[i])
 		{
-			printf("list %d array %d : %s\n", parse_list->tkns_list->argv_pos,
-				i, parse_list->tkns_list->vector_cmd[i]);
+			printf("list %d array %d : %s\n", parse_list.tkns_list->argv_pos,
+				i, parse_list.tkns_list->vector_cmd[i]);
 			i++;
 		}
-		parse_list->tkns_list = parse_list->tkns_list->next;
+		parse_list.tkns_list = parse_list.tkns_list->next;
 		i = 0;
 	}
 }
