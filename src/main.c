@@ -67,8 +67,7 @@ int	main(int argc, char **argv, char **env)
 			//basic execute function
 			if (b_in == false)
 			{
-				// parse->infile = 0;
-				// parse->outfile = 1;
+
 				i = 0;
 				path = path_to_starrr(new_env, "PATH=");
 				if (path == NULL)
