@@ -36,6 +36,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->b_in = false;
 	parse_list->cmd = false;
 	parse_list->status = status;
+	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int));
 }
 
 t_parsing	*start_parse(char *line, int status)

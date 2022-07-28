@@ -80,10 +80,12 @@ bool			search_path_exec(const char *p_arr, const char *cmd);
 //pipex.c
 // int				calling_the_execs(int argc, char **argv,
 					// char **env, t_files *f);
-void	execute_solo(char **cmd, int *p, char **env, t_parsing *parse);
-// void			execute_out(const char *cmd, int fds[2], int *p, char **env);
-// int				execute(const char *cmd, int fd_in, int *p, char **env);
-void			parse_and_exec_cmd(char **cmd, char **env);
+void			parse_and_exec_cmd(char *cmd, char **env);
+void				calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse);
+void			execute_solo(char **cmd, char **env, t_parsing *parse);
+void			execute_out(char *cmd, int fds[2], int *p, char **env);
+int				execute(char *cmd, int fd_in, int *p, char **env);
+void			parse_and_exec_cmd_shell(char **cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
 void			look_for_builtins(char **line, char ***s_line, char ***new_env, t_parsing *parse);

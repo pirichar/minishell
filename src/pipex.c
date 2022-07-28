@@ -29,7 +29,7 @@ char	**split_cmd(const char *path, const char *cmd)
 		command is not found and free everything	
 */
 
-void	parse_and_exec_cmd(char **cmd, char **env)
+void	parse_and_exec_cmd_shell(char **cmd, char **env)
 {
 	int			i;
 	t_exec_ptrs	p;
@@ -53,31 +53,32 @@ void	parse_and_exec_cmd(char **cmd, char **env)
 	// free (p.cmd_with_slash);
 	exit(1);
 }
-// void	parse_and_exec_cmd(const char *cmd, char **env)
-// {
-// 	int			i;
-// 	t_exec_ptrs	p;
 
-// 	p.path = path_to_starrr(env, "PATH=");
-// 	p.cmd_with_slash = ft_strjoin("/", cmd);
-// 	p.cmd_split = ft_split(cmd, ' ');
-// 	i = 0;
-// 	while (p.path[i])
-// 	{
-// 		if (search_path(p.path[i], p.cmd_split[0]) == true)
-// 		{
-// 			p.final_cmd = split_cmd(p.path[i], p.cmd_with_slash);
-// 			execve(p.final_cmd[0], p.final_cmd, env);
-// 			exit(1);
-// 		}
-// 		i++;
-// 	}
-// 	printf("MINISHELL : Command not found\n"); // change this for an error function
-// 	free (p.path);
-// 	free (p.cmd_split);
-// 	free (p.cmd_with_slash);
-// 	exit(1);
-// }
+void	parse_and_exec_cmd(char *cmd, char **env)
+{
+	int			i;
+	t_exec_ptrs	p;
+
+	p.path = path_to_starrr(env, "PATH=");
+	p.cmd_with_slash = ft_strjoin("/", cmd);
+	p.cmd_split = ft_split(cmd, ' ');
+	i = 0;
+	while (p.path[i])
+	{
+		if (search_path(p.path[i], p.cmd_split[0]) == true)
+		{
+			p.final_cmd = split_cmd(p.path[i], p.cmd_with_slash);
+			execve(p.final_cmd[0], p.final_cmd, env);
+			exit(1);
+		}
+		i++;
+	}
+	printf("MINISHELL : Command not found\n"); // change this for an error function
+	free (p.path);
+	free (p.cmd_split);
+	free (p.cmd_with_slash);
+	exit(1);
+}
 
 /*
 	Execute take as input the CMD to execute
@@ -110,54 +111,78 @@ void	parse_and_exec_cmd(char **cmd, char **env)
 
 */
 
-// int	execute(const char *cmd, int fd_in, int *p, char **env)
-// {
-// 	int	pipes[2];
-// 	int	pid;
+int	execute(char *cmd, int fd_in, int *p, char **env)
+{
+	int	pipes[2];
+	int	pid;
 
-// 	pipe(pipes);
-// 	if (fd_in != -1)
-// 	{
-// 		pid = fork();
-// 		if (pid == 0)
-// 		{
-// 			dup2(fd_in, 0);
-// 			close(fd_in);
-// 			dup2(pipes[1], 1);
-// 			close(pipes[1]);
-// 			parse_and_exec_cmd(cmd, env);
-// 			exit(1);
-// 		}
-// 	}
-// 	close(fd_in);
-// 	close(pipes[1]);
-// 	if (fd_in != -1)
-// 		*p = pid;
-// 	return (pipes[0]);
-// }
+	pipe(pipes);
+	if (fd_in != -1)
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			dup2(fd_in, 0);
+			close(fd_in);
+			dup2(pipes[1], 1);
+			close(pipes[1]);
+			parse_and_exec_cmd(cmd, env);
+			exit(1);
+		}
+	}
+	close(fd_in);
+	close(pipes[1]);
+	if (fd_in != -1)
+		*p = pid;
+	return (pipes[0]);
+}
 
 /*
 	Execute out function was created to respect the limit of inputs
 	I was using only execute at first and had to switch it around
 */
-// void	execute_out(const char *cmd, int fds[2], int *p, char **env)
-// {
-// 	int	pid;
+void	execute_out(char *cmd, int fds[2], int *p, char **env)
+{
+	int	pid;
 
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		dup2(fds[0], 0);
-// 		close(fds[0]);
-// 		dup2(fds[1], 1);
-// 		close(fds[1]);
-// 		parse_and_exec_cmd(cmd, env);
-// 	}
-// 	close(fds[0]);
-// 	*p = pid;
-// }
+	pid = fork();
+	if (pid == 0)
+	{
+		dup2(fds[0], 0);
+		close(fds[0]);
+		dup2(fds[1], 1);
+		close(fds[1]);
+		parse_and_exec_cmd(cmd, env);
+	}
+	close(fds[0]);
+	*p = pid;
+}
 
-void	execute_solo(char **cmd, int *p, char **env, t_parsing *parse)
+void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
+{
+	int	fd;
+	int i;
+
+	i = 1;
+	if (parse->nb_of_pipes == 0)
+	{
+		printf("This is parse->nb_of_pipes %d\n", parse->nb_of_pipes);
+		execute_solo(cmd, new_env, parse);
+		return;
+	}
+	else
+	{
+		fd = execute(cmd[i], parse->infile, &parse->pids[0], new_env);
+		while (i < parse->nb_of_pipes)
+		{
+			fd = execute(cmd[i], fd, &parse->pids[i], new_env);
+			i++;
+		}
+		execute_out(cmd[i], (int [2]){fd, parse->outfile},
+			&parse->pids[parse->nb_of_pipes], new_env);
+	}
+}
+void	execute_solo(char **cmd, char **env, t_parsing *parse)
 {
 	int	pid;
 	int	pipes[2];
@@ -185,11 +210,11 @@ void	execute_solo(char **cmd, int *p, char **env, t_parsing *parse)
 				exit(1);
 			}
 			else
-				parse_and_exec_cmd(cmd, env);
+				parse_and_exec_cmd_shell(cmd, env);
 		}
 	}
 	if (parse->infile != -1)
-		*p = pid;
+		parse->pids[0] = pid;
 }
 // void	execute_solo(const char *cmd, int *p, char **env)
 // {
