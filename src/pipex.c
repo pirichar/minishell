@@ -28,7 +28,6 @@ char	**split_cmd(const char *path, const char *cmd)
 		It will display an error message an says that 
 		command is not found and free everything	
 */
-
 void	parse_and_exec_cmd_shell(char **cmd, char **env)
 {
 	int			i;
@@ -51,32 +50,6 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 	free_strrarr(p.path);
 	// free (p.cmd_split);
 	// free (p.cmd_with_slash);
-	exit(1);
-}
-
-void	parse_and_exec_cmd(char *cmd, char **env)
-{
-	int			i;
-	t_exec_ptrs	p;
-
-	p.path = path_to_starrr(env, "PATH=");
-	p.cmd_with_slash = ft_strjoin("/", cmd);
-	p.cmd_split = ft_split(cmd, ' ');
-	i = 0;
-	while (p.path[i])
-	{
-		if (search_path(p.path[i], p.cmd_split[0]) == true)
-		{
-			p.final_cmd = split_cmd(p.path[i], p.cmd_with_slash);
-			execve(p.final_cmd[0], p.final_cmd, env);
-			exit(1);
-		}
-		i++;
-	}
-	printf("MINISHELL : Command not found\n"); // change this for an error function
-	free (p.path);
-	free (p.cmd_split);
-	free (p.cmd_with_slash);
 	exit(1);
 }
 
@@ -111,22 +84,25 @@ void	parse_and_exec_cmd(char *cmd, char **env)
 
 */
 
-int	execute(char *cmd, int fd_in, int *p, char **env)
+int	execute(char **cmd, int fd_in, int *p, char **env)
 {
 	int	pipes[2];
 	int	pid;
-
+	printf("WITHIN EXECUTE\n");
 	pipe(pipes);
 	if (fd_in != -1)
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			dup2(fd_in, 0);
-			close(fd_in);
+			if (fd_in != 0)
+			{
+				dup2(fd_in, 0);
+				close(fd_in);
+			}
 			dup2(pipes[1], 1);
 			close(pipes[1]);
-			parse_and_exec_cmd(cmd, env);
+			parse_and_exec_cmd_shell(cmd, env);
 			exit(1);
 		}
 	}
@@ -141,23 +117,28 @@ int	execute(char *cmd, int fd_in, int *p, char **env)
 	Execute out function was created to respect the limit of inputs
 	I was using only execute at first and had to switch it around
 */
-void	execute_out(char *cmd, int fds[2], int *p, char **env)
+void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 {
 	int	pid;
 
+	printf("WITHIN EXECUTE_OUT\n");
 	pid = fork();
 	if (pid == 0)
 	{
 		dup2(fds[0], 0);
 		close(fds[0]);
-		dup2(fds[1], 1);
-		close(fds[1]);
-		parse_and_exec_cmd(cmd, env);
+		if (parse->outfile != 1)
+		{
+			dup2(fds[1], 1);
+			close(fds[1]);
+		}
+		parse_and_exec_cmd_shell(cmd, env);
 	}
 	close(fds[0]);
-	*p = pid;
+	parse->pids[parse->nb_of_pipes] = pid;
 }
 
+//présentement je ne reçois que la première commande il faut que je trouve un moyen d'en recevoir + qu'une 
 void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 {
 	int	fd;
@@ -165,28 +146,26 @@ void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 
 	i = 1;
 	if (parse->nb_of_pipes == 0)
-	{
-		printf("This is parse->nb_of_pipes %d\n", parse->nb_of_pipes);
 		execute_solo(cmd, new_env, parse);
-		return;
-	}
 	else
 	{
-		fd = execute(cmd[i], parse->infile, &parse->pids[0], new_env);
+		fd = execute(cmd, parse->infile, &parse->pids[0], new_env);//changer ca pour execute cmd_shell et passer cmd
 		while (i < parse->nb_of_pipes)
 		{
-			fd = execute(cmd[i], fd, &parse->pids[i], new_env);
+			//changer de liste ici et passer le vector_cmd de la bonne liste en cmd
+			fd = execute(cmd, fd, &parse->pids[i], new_env);
 			i++;
 		}
-		execute_out(cmd[i], (int [2]){fd, parse->outfile},
-			&parse->pids[parse->nb_of_pipes], new_env);
+		execute_out(cmd, (int [2]){fd, parse->outfile}, new_env, parse);
 	}
 }
+
 void	execute_solo(char **cmd, char **env, t_parsing *parse)
 {
 	int	pid;
 	int	pipes[2];
 
+	printf("WITHIN EXECUTE_SOLO\n");
 	pipe(pipes);
 	if (parse->infile != -1)
 	{
@@ -205,7 +184,6 @@ void	execute_solo(char **cmd, char **env, t_parsing *parse)
 			}
 			if (access (cmd[0], X_OK) == 0)
 			{
-				// char **cmdo = ft_split(cmd, ' ');
 				execve(cmd[0], cmd, env);
 				exit(1);
 			}
@@ -216,63 +194,3 @@ void	execute_solo(char **cmd, char **env, t_parsing *parse)
 	if (parse->infile != -1)
 		parse->pids[0] = pid;
 }
-// void	execute_solo(const char *cmd, int *p, char **env)
-// {
-// 	int	pid;
-
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		if (access (cmd, X_OK) == 0)
-// 		{
-// 			char **cmdo = ft_split(cmd, ' ');
-// 			execve(cmdo[0], cmdo, env);
-// 			exit(1);
-// 		}
-// 		else
-// 			parse_and_exec_cmd(cmd, env);
-// 	}
-// 	*p = pid;
-// }
-
-
-/* 
-	Calling the exec goes through all the commands and run execute on that command
-	It will give execute different parameters depending on 
-	the command on are working with
-	If it is the first command you will pas the infile to execute instead of fd
-
-	argc == 8
-	argc - 2 == 6
-	process count == 5
-	pendant que J (3) est plus petit que 6
-	PREMIER PROCESS pid[0]
-	j = 2e process = 3 = pids[3 - 2 (1)]
-	j = 3e process == 4 = pids[4 -2 (2)]
-	j = 4e process == 5 = pids[5 -2 (3)]
-	j = 5e process == 6 = I GET OUT OF THE LOOP
-	LAST PROCESS = pids[process_count-1 (5) - 1 (4)]
-*/
-
-// int	calling_the_execs(int argc, char **argv, char **env, t_files *f)
-// {
-// 	int	fd;
-// 	int	j;
-
-// 	fd = execute(argv[2], f->infile, &f->pids[0], env);
-// 	j = 3;
-// 	while (j < argc - 2)
-// 	{
-// 		fd = execute(argv[j], fd, &f->pids[j - 2], env);
-// 		j++;
-// 	}
-// 	f->outfile = open(argv[argc - 1], O_CREAT | O_WRONLY | O_TRUNC, 0777);
-// 	if (f->outfile == -1)
-// 	{
-// 		printf("MINISHELL : could not open output file\n"); //change this for an error function
-// 		return (1);
-// 	}
-// 	execute_out(argv[argc - 2], (int [2]){fd, f->outfile},
-// 		&f->pids[f->process_count - 1], env);
-// 	return (0);
-// }
