@@ -10,21 +10,6 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
-static void	wait_for_pids(t_parsing *parse)
-{
-	int	i;
-
-	i = 0;
-	while (i <= parse->nb_of_pipes)
-	{
-		waitpid(parse->pids[i], &parse->status, 0);
-		i++;
-	}
-	if (parse->infile != 0)
-		close(parse->infile);
-	free(parse->pids);
-}
-
 int	main(int argc, char **argv, char **env)
 {
 	int		i;
@@ -63,22 +48,20 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(line);
 			parse = start_parse(line, status);
-			if (parse == NULL)
+			if (parse == NULL)//pas certain de à quoi ça sert de if là
 			{
 				free(line);
 				continue;
 			}
-			//on dirait que vector_cmd c'est celui du dernier list qui est passé
 			parse->tkns_list = parse->tkns_list->start;
-			s_line = parse->tkns_list->vector_cmd;// yen a combien de vctor cmd de creers
-			if (s_line[0] == NULL)
+			s_line = parse->tkns_list->vector_cmd;
+			if (s_line[0] == NULL)// pas certain de savoir  à quoi ça sert ce if là
 			{
 				free(line);
 				free_strrarr(s_line);
 				continue ;
 			}
-			//je n'aurai pas le choix de rentrer look_for_builtins dans la fonction d'execution je crois bien 
-			look_for_builtins(&line, &s_line, &new_env, parse);
+			look_for_builtins(&line, &s_line, &new_env, parse);//je n'aurai pas le choix de rentrer look_for_builtins dans la fonction d'execution je crois bien 
 			//basic execute function
 			if (parse->b_in == false)
 			{
@@ -88,22 +71,10 @@ int	main(int argc, char **argv, char **env)
 					printf("TERM environment variable not set\n");
 				else
 				{
-					while (path[i])
-					{
-						if (search_path(path[i], s_line[0]) == true)
-							break ;
-						i++;
-					}
-					if (i != nb_of_charstrstr(path) || access(s_line[0], X_OK) == 0)
-					{
-						parse->cmd = true;
 						calling_the_execs_shell(s_line, new_env, parse);
 						wait_for_pids(parse);
-					}
 				}
 			}
-			if (parse->b_in == false && parse->cmd == false)
-				printf("Please provide a built-in command to test or a valid command in the path\n");
 			free_strrarr(s_line);
 		}
 		free(line);

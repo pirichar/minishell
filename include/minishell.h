@@ -127,6 +127,8 @@ char 			**copy_strarr(char **env);
 void			set_3_variables(char ***env);
 //ft_strjoin_free.c
 char	*ft_strjoin_free(char *s1, const char *s2);
+//wait_for_pids.c
+void	wait_for_pids(t_parsing *parse);
 
 //prompt
 char			*pwd_not_there(char *blue_user);

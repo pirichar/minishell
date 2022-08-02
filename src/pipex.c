@@ -46,10 +46,8 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 		}
 		i++;
 	}
-	printf("MINISHELL : Command not found\n"); // change this for an error function
+	fprintf(stderr,"MINISHELL : Command not found\n"); // change this for an error function
 	free_strrarr(p.path);
-	// free (p.cmd_split);
-	// free (p.cmd_with_slash);
 	exit(1);
 }
 
@@ -104,7 +102,14 @@ int	execute(char **cmd, int fd_in, int *p, char **env)
 			}
 			dup2(pipes[1], 1);
 			close(pipes[1]);
-			parse_and_exec_cmd_shell(cmd, env);
+			if (access (cmd[0], X_OK) == 0)
+			{
+				printf("LOCAL EXECUTION IN EXECUTE\n");
+				execve(cmd[0], cmd, env);
+				exit(1);
+			}
+			else
+				parse_and_exec_cmd_shell(cmd, env);
 			exit(1);
 		}
 	}
@@ -136,7 +141,14 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 			dup2(fds[1], 1);
 			close(fds[1]);
 		}
-		parse_and_exec_cmd_shell(cmd, env);
+		if (access (cmd[0], X_OK) == 0)
+		{
+				printf("LOCAL EXECUTION IN EXECUTE\n");
+				execve(cmd[0], cmd, env);
+				exit(1);
+		}
+		else
+			parse_and_exec_cmd_shell(cmd, env);
 	}
 	close(fds[0]);
 	parse->pids[parse->nb_of_pipes] = pid;
@@ -153,7 +165,7 @@ void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 		execute_solo(cmd, new_env, parse);
 	else
 	{
-		fd = execute(cmd, parse->infile, &parse->pids[0], new_env);//changer ca pour execute cmd_shell et passer cmd
+		fd = execute(cmd, parse->infile, &parse->pids[0], new_env);
 		parse->tkns_list = parse->tkns_list->next;
 		cmd = parse->tkns_list->vector_cmd;
 		while (i < parse->nb_of_pipes)
