@@ -89,6 +89,8 @@ int	execute(char **cmd, int fd_in, int *p, char **env)
 	int	pipes[2];
 	int	pid;
 	printf("WITHIN EXECUTE\n");
+	for(int i = 0;cmd[i];i++)
+		printf("CMD[%d] = %s\n",i, cmd[i]);
 	pipe(pipes);
 	if (fd_in != -1)
 	{
@@ -122,6 +124,8 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 	int	pid;
 
 	printf("WITHIN EXECUTE_OUT\n");
+	for(int i = 0;cmd[i];i++)
+		printf("CMD[%d] = %s\n",i, cmd[i]);
 	pid = fork();
 	if (pid == 0)
 	{

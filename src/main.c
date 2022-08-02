@@ -68,6 +68,7 @@ int	main(int argc, char **argv, char **env)
 				free(line);
 				continue;
 			}
+			//on dirait que vector_cmd c'est celui du dernier list qui est passé
 			s_line = parse->tkns_list->vector_cmd;// yen a combien de vctor cmd de creers
 			if (s_line[0] == NULL)
 			{
