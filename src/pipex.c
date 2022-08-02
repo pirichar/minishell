@@ -154,11 +154,14 @@ void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 	else
 	{
 		fd = execute(cmd, parse->infile, &parse->pids[0], new_env);//changer ca pour execute cmd_shell et passer cmd
+		parse->tkns_list = parse->tkns_list->next;
+		cmd = parse->tkns_list->vector_cmd;
 		while (i < parse->nb_of_pipes)
 		{
-			//changer de liste ici et passer le vector_cmd de la bonne liste en cmd
 			fd = execute(cmd, fd, &parse->pids[i], new_env);
 			i++;
+			parse->tkns_list = parse->tkns_list->next;
+			cmd = parse->tkns_list->vector_cmd;
 		}
 		execute_out(cmd, (int [2]){fd, parse->outfile}, new_env, parse);
 	}

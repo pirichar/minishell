@@ -69,6 +69,7 @@ int	main(int argc, char **argv, char **env)
 				continue;
 			}
 			//on dirait que vector_cmd c'est celui du dernier list qui est passé
+			parse->tkns_list = parse->tkns_list->start;
 			s_line = parse->tkns_list->vector_cmd;// yen a combien de vctor cmd de creers
 			if (s_line[0] == NULL)
 			{
@@ -76,6 +77,7 @@ int	main(int argc, char **argv, char **env)
 				free_strrarr(s_line);
 				continue ;
 			}
+			//je n'aurai pas le choix de rentrer look_for_builtins dans la fonction d'execution je crois bien 
 			look_for_builtins(&line, &s_line, &new_env, parse);
 			//basic execute function
 			if (parse->b_in == false)
