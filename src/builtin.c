@@ -51,10 +51,10 @@ void	mini_dollar(char **s_line, char ***new_env,  t_parsing *parse)
 		return;
 	if (s_line[1][0] == '?' && s_line[1][1] == '\0')
 	{
-		if (parse->status != 0)
+		if (parse->ex->cmd_rtn != 0)
 			printf("1\n");
 		else	
-			printf("%d\n", parse->status); 
+			printf("%d\n", parse->ex->cmd_rtn); 
 		return;
 	}
 	to_print = return_variable(*new_env, s_line[1]);

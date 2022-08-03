@@ -217,9 +217,7 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 {
 	int	pid;
-	int	pipes[2];
 
-	pipe(pipes);
 	if (parse->infile != -1)
 	{
 		if (look_for_exit(cmd))

@@ -16,6 +16,17 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+typedef struct	s_exec
+{
+	char	*line;
+	char	**s_line;
+	char	**path;
+	char	**new_env;
+	char	*prompt;
+	int		status;
+	int		cmd_rtn;
+}				t_exec;
+
 typedef struct s_files
 {
 	char	infile;
@@ -70,6 +81,8 @@ typedef struct s_parsing
 	bool	b_in;
 	bool	cmd;
 	int		status;
+	t_exec 	*ex;
+	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
 }				t_parsing;
 
 

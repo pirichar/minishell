@@ -12,15 +12,11 @@ int	nb_of_charstrstr(char **path)
 
 int	main(int argc, char **argv, char **env)
 {
-	char	*line;
-	char	**s_line;
-	char	**path;
-	char	**new_env;
-	char	*prompt;
-	int		status;
+	t_exec		*ex;
 	t_parsing 	*parse;
 
-	status = 0;
+	ex = ft_calloc(1, sizeof(t_exec));
+	ex->status = 0;
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
@@ -28,48 +24,45 @@ int	main(int argc, char **argv, char **env)
 	}
 	(void)argv;
 	print_logo(env);
-	new_env = copy_strarr(env);
+	ex->new_env = copy_strarr(env);
 	//main loop
 	while (1)
 	{
-		prompt = set_prompt(new_env);
-		line = readline(prompt);
-		free(prompt);
-		if (line == NULL)
+		ex->prompt = set_prompt(ex->new_env);
+		ex->line = readline(ex->prompt);
+		free(ex->prompt);
+		if (ex->line == NULL)
 		{
-			free(line);
-			free_strrarr(new_env);
+			free(ex->line);
+			free_strrarr(ex->new_env);
 			return (0);
 		}
-		if (*line)
+		if (*ex->line)
 		{
-			add_history(line);
-			parse = start_parse(line, status);
+			add_history(ex->line);
+			parse = start_parse(ex->line, ex->status);
+			parse->ex = ex;
 			if (parse == NULL)//pas certain de à quoi ça sert de if là
 			{
-				free(line);
+				free(ex->line);
 				continue;
 			}
 			parse->tkns_list = parse->tkns_list->start;
-			s_line = parse->tkns_list->vector_cmd;
-			if (s_line[0] == NULL)// pas certain de savoir  à quoi ça sert ce if là
+			ex->s_line = parse->tkns_list->vector_cmd;
+			if (ex->s_line[0] == NULL)// pas certain de savoir  à quoi ça sert ce if là
 			{
-				free(line);
-				free_strrarr(s_line);
+				free(ex->line);
+				free_strrarr(ex->s_line);
 				continue ;
 			}
-			/*
-					LE PROBLÈME C'EST QUE JE PASSE UNE COPIE DE NEW_ENV JE CROIS ET QUE C'EST PAS MALLOC ? 
-
-			*/
-			calling_the_execs_shell(s_line, &new_env, parse);
+			calling_the_execs_shell(ex->s_line, &ex->new_env, parse);
 			wait_for_pids(parse); 
-			free_strrarr(s_line);
+			free_strrarr(ex->s_line);
 		}
-		free(line);
+		free(ex->line);
 	}
-	free_strrarr(path);
-	free(prompt);
+	free_strrarr(ex->path);
+	free(ex->prompt);
 }
 
 void	print_logo(char **env)
