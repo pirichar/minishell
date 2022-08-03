@@ -153,7 +153,7 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 			close(fds[1]);
 		}
 		look_for_builtins(&cmd, &env, parse);
-		if (parse->b_in == false && access (cmd[0], X_OK) == 0)
+		if (parse->b_in == false && access(cmd[0], X_OK) == 0)
 		{
 				// printf("LOCAL EXECUTION IN EXECUTE\n");
 				execve(cmd[0], cmd, env);
@@ -172,8 +172,25 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 		close(fds[1]);
 	parse->pids[parse->nb_of_pipes] = pid;
 }
+/*
+	calling the execs shell take in input the cmd passed by the main
+	(could only take parse and get the command throught it tho)
+	Case A:
+		It firstly checks the number of pipes in the line
+		If the number is 0 it will run the command alone with execute_solo
+	Case B:
+		If the number is greater then 0 it will passe the first command to execute
+		Execute will call the 
+		Execute will then return the pipe reading end of the pipe (pipe[0]) to the next command
+		Then it will move the list forward to the next node
+		If there is more then 2 commands it will get into the while 
+		it will stay into this while until the last command
+		Then the last command is executed with execute out
+		every execution process places the pid in the right place within the parse->pids array
+*/
 
-void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
+//it should be char ***new_env
+void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 {
 	int	fd;
 	int i;
@@ -183,21 +200,21 @@ void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 		execute_solo(cmd, new_env, parse);
 	else
 	{
-		fd = execute(cmd, parse->infile, &parse->pids[0], new_env, parse);
+		fd = execute(cmd, parse->infile, &parse->pids[0], *(new_env), parse);
 		parse->tkns_list = parse->tkns_list->next;
 		cmd = parse->tkns_list->vector_cmd;
 		while (i < parse->nb_of_pipes)
 		{
-			fd = execute(cmd, fd, &parse->pids[i], new_env, parse);
+			fd = execute(cmd, fd, &parse->pids[i], *(new_env), parse);
 			i++;
 			parse->tkns_list = parse->tkns_list->next;
 			cmd = parse->tkns_list->vector_cmd;
 		}
-		execute_out(cmd, (int [2]){fd, parse->outfile}, new_env, parse);
+		execute_out(cmd, (int [2]){fd, parse->outfile}, *(new_env), parse);
 	}
 }
 
-void	execute_solo(char **cmd, char **env, t_parsing *parse)
+void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 {
 	int	pid;
 	int	pipes[2];
@@ -206,32 +223,40 @@ void	execute_solo(char **cmd, char **env, t_parsing *parse)
 	if (parse->infile != -1)
 	{
 		if (look_for_exit(cmd))
-			mini_exit(cmd,parse);
-		pid = fork();
-		if(pid == 0)
+			mini_exit(cmd, parse);
+		else if (look_for_export(cmd))
+			mini_export(cmd,env, parse);
+		else if (look_for_unset(cmd))
+			mini_unset(cmd, env, parse);
+		else
 		{
-			if (parse->infile != 0)
+			pid = fork();
+			if(pid == 0)
 			{
-				dup2(parse->infile, 0);
-				close(parse->infile);
+				fprintf(stderr,"Within child\n");
+				if (parse->infile != 0)
+				{
+					dup2(parse->infile, 0);
+					close(parse->infile);
+				}
+				if (parse->outfile != 1)
+				{
+					dup2(parse->outfile,1);
+					close(parse->outfile);
+				}
+				look_for_builtins(&cmd, env, parse);
+				if (parse->b_in == false && access (cmd[0], X_OK) == 0)
+				{
+					execve(cmd[0], cmd, *(env));
+					exit(1);	
+				}
+				else if (parse->b_in == false)
+				{
+					parse_and_exec_cmd_shell(cmd, *(env));
+					exit (1);
+				}
+				exit (0);
 			}
-			if (parse->outfile != 1)
-			{
-				dup2(parse->outfile,1);
-				close(parse->outfile);
-			}
-			look_for_builtins(&cmd, &env, parse);
-			if (parse->b_in == false && access (cmd[0], X_OK) == 0)
-			{
-				execve(cmd[0], cmd, env);
-				exit(1);	
-			}
-			else if (parse->b_in == false)
-			{
-				parse_and_exec_cmd_shell(cmd, env);
-				exit (1);
-			}
-			exit (0);
 		}
 	}
 	if (parse->infile != -1)

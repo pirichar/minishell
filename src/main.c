@@ -28,7 +28,6 @@ int	main(int argc, char **argv, char **env)
 	}
 	(void)argv;
 	print_logo(env);
-	//set the env
 	new_env = copy_strarr(env);
 	//main loop
 	while (1)
@@ -59,8 +58,12 @@ int	main(int argc, char **argv, char **env)
 				free_strrarr(s_line);
 				continue ;
 			}
-				calling_the_execs_shell(s_line, new_env, parse);
-				wait_for_pids(parse); 
+			/*
+					LE PROBLÈME C'EST QUE JE PASSE UNE COPIE DE NEW_ENV JE CROIS ET QUE C'EST PAS MALLOC ? 
+
+			*/
+			calling_the_execs_shell(s_line, &new_env, parse);
+			wait_for_pids(parse); 
 			free_strrarr(s_line);
 		}
 		free(line);

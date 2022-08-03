@@ -65,6 +65,7 @@ void	mini_dollar(char **s_line, char ***new_env,  t_parsing *parse)
 		free_strrarr(splitted);
 	}
 }
+
 bool	look_for_exit(char **s_line)
 {
 	if (ft_strncmp(s_line[0], "exit",5) == 0)
@@ -73,6 +74,26 @@ bool	look_for_exit(char **s_line)
 	}
 	return (false);
 }
+
+bool	look_for_export(char **s_line)
+{
+	if (ft_strncmp(s_line[0], "export",ft_strlen("export")) == 0)
+	{
+		return (true);
+	}
+	return (false);
+}
+
+bool	look_for_unset(char **s_line)
+{
+	if (ft_strncmp(s_line[0], "unset",ft_strlen("unset")) == 0)
+	{
+		return (true);
+	}
+	return (false);
+}
+
+
 
 void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 {
