@@ -57,6 +57,8 @@ typedef struct s_parsing
 	char 	**tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
 	char	*user;
+	char	*line;
+	char	**s_line;
 	int		index;
 	int		nb_of_pipes;
 	int		i_arr;

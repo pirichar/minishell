@@ -14,8 +14,8 @@ int	main(int argc, char **argv, char **env)
 {
 	int		i;
 	char	*line;
-	char	**path;
 	char	**s_line;
+	char	**path;
 	char	**new_env;
 	char	*prompt;
 	int		status;
@@ -32,7 +32,7 @@ int	main(int argc, char **argv, char **env)
 	print_logo(env);
 	//set the env
 	new_env = copy_strarr(env);
-	//start the loop
+	//main loop
 	while (1)
 	{
 		prompt = set_prompt(new_env);

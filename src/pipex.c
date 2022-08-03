@@ -113,7 +113,8 @@ int	execute(char **cmd, int fd_in, int *p, char **env)
 			exit(1);
 		}
 	}
-	close(fd_in);
+	if (fd_in != 0)
+		close(fd_in);
 	close(pipes[1]);
 	if (fd_in != -1)
 		*p = pid;
@@ -149,12 +150,12 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 		}
 		else
 			parse_and_exec_cmd_shell(cmd, env);
+		exit(1);
 	}
 	close(fds[0]);
 	parse->pids[parse->nb_of_pipes] = pid;
 }
 
-//présentement je ne reçois que la première commande il faut que je trouve un moyen d'en recevoir + qu'une 
 void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 {
 	int	fd;
@@ -165,6 +166,7 @@ void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 		execute_solo(cmd, new_env, parse);
 	else
 	{
+		//maybe I could start looking for builtins into each execute functinons or before it
 		fd = execute(cmd, parse->infile, &parse->pids[0], new_env);
 		parse->tkns_list = parse->tkns_list->next;
 		cmd = parse->tkns_list->vector_cmd;
