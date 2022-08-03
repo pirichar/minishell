@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <stdio.h>
 
 int	check_metachar(t_parsing *parse_list)
 {
@@ -34,7 +35,7 @@ int	check_metachar(t_parsing *parse_list)
 						return (1);
 					parse_list->infile = open(parse_list->tkns_array[i+1], O_RDONLY);
 					if (parse_list->infile == -1)
-						printf("Could not open input file\n");
+						fprintf(stderr, "Could not open input file\n");
 					else
 						printf("did the redir in this is parse_list->infile %d\n", parse_list->infile);
 				}

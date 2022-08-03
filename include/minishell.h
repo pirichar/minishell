@@ -45,6 +45,7 @@ typedef struct s_tkns
 	int				argv_pos;
 	bool			sing_quotes;
 	bool			dollar_sign;
+	bool			b_in;
 	struct s_tkns	*next;
 	struct s_tkns	*prev;
 	struct s_tkns	*start;
