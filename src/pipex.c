@@ -109,7 +109,7 @@ int	execute(char **cmd, int fd_in, int *p, char **env, t_parsing *parse)
 			dup2(pipes[1], 1);
 			close(pipes[1]);
 			look_for_builtins(&cmd, &env, parse);
-			if (parse->b_in == access (cmd[0], X_OK) == 0)
+			if (parse->b_in == false && access (cmd[0], X_OK) == 0)
 			{
 				// printf("LOCAL EXECUTION IN EXECUTE\n");
 				execve(cmd[0], cmd, env);
