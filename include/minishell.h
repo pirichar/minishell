@@ -84,17 +84,17 @@ bool			search_path_exec(const char *p_arr, const char *cmd);
 void			calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse);
 void			execute_solo(char **cmd, char **env, t_parsing *parse);
 void			execute_out(char **cmd, int fds[2], char **env, t_parsing *parse);
-int				execute(char **cmd, int fd_in, int *p, char **env);
-// int				execute(char **cmd, int fd_in, int *p, char **env);
+int				execute(char **cmd, int fd_in, int *p, char **env, t_parsing *parse);
 void			parse_and_exec_cmd_shell(char **cmd, char **env);
 char			**split_cmd(const char *path, const char *cmd);
 //builtin
-void			look_for_builtins(char **line, char ***s_line, char ***new_env, t_parsing *parse);
+void			look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
+bool			look_for_exit(char **s_line);
 
 //exit.c
 void			exit_was_too_long(char **s_line);
-void			mini_exit(char *line, char **s_line, t_parsing *parse);
+void			mini_exit(char **s_line, t_parsing *parse);
 //export.c
 char			**bubble_sort_strarr(char **rtn);
 char			**sort_strarr(char **to_sort);

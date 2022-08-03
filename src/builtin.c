@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <stdbool.h>
 
 
 void	add_new_variable(char ***env, char *var, char *variable)
@@ -64,8 +65,16 @@ void	mini_dollar(char **s_line, char ***new_env,  t_parsing *parse)
 		free_strrarr(splitted);
 	}
 }
+bool	look_for_exit(char **s_line)
+{
+	if (ft_strncmp(s_line[0], "exit",5) == 0)
+	{
+		return (true);
+	}
+	return (false);
+}
 
-void	look_for_builtins(char **line, char ***s_line, char ***new_env, t_parsing *parse)
+void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 {
 	//mettre le bool b_in dans la struct parse
 	if (ft_strncmp(*s_line[0], "echo", 5) == 0)
@@ -81,7 +90,7 @@ void	look_for_builtins(char **line, char ***s_line, char ***new_env, t_parsing *
 	else if (ft_strncmp(*s_line[0], "env", 5) == 0)
 		mini_env((*new_env), parse);
 	else if (ft_strncmp(*s_line[0], "exit",5) == 0)
-		mini_exit(*line, *s_line, parse);
+		mini_exit(*s_line, parse);
 	else if (ft_strncmp(*s_line[0], "$", ft_strlen(*s_line[0])) == 0)
 		mini_dollar(*s_line, new_env, parse);
 }

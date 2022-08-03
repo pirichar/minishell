@@ -48,9 +48,9 @@ t_parsing	*start_parse(char *line, int status)
 	init_master_list(parse_list, status);
 	init_first_token_nodes(parse_list);
 	parse_list->tkns_array = ft_split(line, ' ');
-	if (parse_list->tkns_array == NULL)
+	if (parse_list->tkns_array == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 		return (NULL);
-	if (check_metachar(parse_list) != 0)
+	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 		return (NULL);
 	get_cmd(parse_list);
 	// print_tkns_array_debug(*(parse_list));

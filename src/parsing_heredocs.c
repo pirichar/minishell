@@ -73,7 +73,7 @@ int	check_metachar(t_parsing *parse_list)
 				{
 					if (check_pipe_name(parse_list, i, j) == 1)
 						return (1);
-					printf("do the pipe\n");
+					// printf("do the pipe\n");
 					break ;
 				}
 				if (parse_list->tkns_array[i][1] != '\0')

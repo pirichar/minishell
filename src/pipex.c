@@ -34,6 +34,11 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 	t_exec_ptrs	p;
 
 	p.path = path_to_starrr(env, "PATH=");
+	if (p.path == NULL)
+	{
+		fprintf(stderr, "PATH environment variable not set\n");
+		return;
+	}
 	cmd[0] = ft_strjoin("/", cmd[0]);//verifier le leak ici il faudrait surement passer par adresse le s_line pour le modifier
 	i = 0;
 	while (p.path[i])
@@ -52,6 +57,7 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 }
 
 /*
+	OLD DESCRIPTION FOR PIPEX MIGHT HAVE TO BE UPDATED
 	Execute take as input the CMD to execute
 	It will at first create a pipe for each command
 	The second input is the fd for its input
@@ -82,13 +88,13 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 
 */
 
-int	execute(char **cmd, int fd_in, int *p, char **env)
+int	execute(char **cmd, int fd_in, int *p, char **env, t_parsing *parse)
 {
 	int	pipes[2];
 	int	pid;
-	printf("WITHIN EXECUTE\n");
-	for(int i = 0;cmd[i];i++)
-		printf("CMD[%d] = %s\n",i, cmd[i]);
+	// printf("WITHIN EXECUTE\n");
+	// for(int i = 0;cmd[i];i++)
+	// 	printf("CMD[%d] = %s\n",i, cmd[i]);
 	pipe(pipes);
 	if (fd_in != -1)
 	{
@@ -102,15 +108,19 @@ int	execute(char **cmd, int fd_in, int *p, char **env)
 			}
 			dup2(pipes[1], 1);
 			close(pipes[1]);
-			if (access (cmd[0], X_OK) == 0)
+			look_for_builtins(&cmd, &env, parse);
+			if (parse->b_in == access (cmd[0], X_OK) == 0)
 			{
-				printf("LOCAL EXECUTION IN EXECUTE\n");
+				// printf("LOCAL EXECUTION IN EXECUTE\n");
 				execve(cmd[0], cmd, env);
 				exit(1);
 			}
-			else
+			else if (parse->b_in == false)
+			{
 				parse_and_exec_cmd_shell(cmd, env);
-			exit(1);
+				exit(1);
+			}
+			exit (0);
 		}
 	}
 	if (fd_in != 0)
@@ -129,9 +139,9 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 {
 	int	pid;
 
-	printf("WITHIN EXECUTE_OUT\n");
-	for(int i = 0;cmd[i];i++)
-		printf("CMD[%d] = %s\n",i, cmd[i]);
+	// printf("WITHIN EXECUTE_OUT\n");
+	// for(int i = 0;cmd[i];i++)
+	// 	printf("CMD[%d] = %s\n",i, cmd[i]);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -142,15 +152,20 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 			dup2(fds[1], 1);
 			close(fds[1]);
 		}
-		if (access (cmd[0], X_OK) == 0)
+		look_for_builtins(&cmd, &env, parse);
+		if (parse->b_in == false && access (cmd[0], X_OK) == 0)
 		{
-				printf("LOCAL EXECUTION IN EXECUTE\n");
+				// printf("LOCAL EXECUTION IN EXECUTE\n");
 				execve(cmd[0], cmd, env);
 				exit(1);
 		}
-		else
+		else if (parse->b_in == false)
+		{
 			parse_and_exec_cmd_shell(cmd, env);
-		exit(1);
+			exit(1);
+		}
+		else
+			exit(0);
 	}
 	close(fds[0]);
 	if (parse->outfile != 1)
@@ -168,15 +183,12 @@ void	calling_the_execs_shell(char **cmd, char **new_env, t_parsing *parse)
 		execute_solo(cmd, new_env, parse);
 	else
 	{
-		//maybe I could start looking for builtins into each execute functinons or before it
-		//mettre look for builtin ici
-		//mettre un if parse->b_in = false ici et passer execute après
-		fd = execute(cmd, parse->infile, &parse->pids[0], new_env);
+		fd = execute(cmd, parse->infile, &parse->pids[0], new_env, parse);
 		parse->tkns_list = parse->tkns_list->next;
 		cmd = parse->tkns_list->vector_cmd;
 		while (i < parse->nb_of_pipes)
 		{
-			fd = execute(cmd, fd, &parse->pids[i], new_env);
+			fd = execute(cmd, fd, &parse->pids[i], new_env, parse);
 			i++;
 			parse->tkns_list = parse->tkns_list->next;
 			cmd = parse->tkns_list->vector_cmd;
@@ -190,12 +202,13 @@ void	execute_solo(char **cmd, char **env, t_parsing *parse)
 	int	pid;
 	int	pipes[2];
 
-	printf("WITHIN EXECUTE_SOLO\n");
 	pipe(pipes);
 	if (parse->infile != -1)
 	{
+		if (look_for_exit(cmd))
+			mini_exit(cmd,parse);
 		pid = fork();
-		if (pid == 0)
+		if(pid == 0)
 		{
 			if (parse->infile != 0)
 			{
@@ -207,13 +220,18 @@ void	execute_solo(char **cmd, char **env, t_parsing *parse)
 				dup2(parse->outfile,1);
 				close(parse->outfile);
 			}
-			if (access (cmd[0], X_OK) == 0)
+			look_for_builtins(&cmd, &env, parse);
+			if (parse->b_in == false && access (cmd[0], X_OK) == 0)
 			{
 				execve(cmd[0], cmd, env);
-				exit(1);
+				exit(1);	
 			}
-			else
+			else if (parse->b_in == false)
+			{
 				parse_and_exec_cmd_shell(cmd, env);
+				exit (1);
+			}
+			exit (0);
 		}
 	}
 	if (parse->infile != -1)

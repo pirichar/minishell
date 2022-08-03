@@ -12,7 +12,6 @@ int	nb_of_charstrstr(char **path)
 
 int	main(int argc, char **argv, char **env)
 {
-	int		i;
 	char	*line;
 	char	**s_line;
 	char	**path;
@@ -20,7 +19,6 @@ int	main(int argc, char **argv, char **env)
 	char	*prompt;
 	int		status;
 	t_parsing 	*parse;
-	// pid_t	p;
 
 	status = 0;
 	if (argc > 1)
@@ -61,20 +59,8 @@ int	main(int argc, char **argv, char **env)
 				free_strrarr(s_line);
 				continue ;
 			}
-			look_for_builtins(&line, &s_line, &new_env, parse);//je n'aurai pas le choix de rentrer look_for_builtins dans la fonction d'execution je crois bien 
-			//basic execute function
-			if (parse->b_in == false)
-			{
-				i = 0;
-				path = path_to_starrr(new_env, "PATH=");
-				if (path == NULL)
-					printf("TERM environment variable not set\n");
-				else
-				{
-						calling_the_execs_shell(s_line, new_env, parse);
-						wait_for_pids(parse);
-				}
-			}
+				calling_the_execs_shell(s_line, new_env, parse);
+				wait_for_pids(parse); 
 			free_strrarr(s_line);
 		}
 		free(line);
