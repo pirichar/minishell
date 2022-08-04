@@ -13,5 +13,4 @@ void	wait_for_pids(t_parsing *parse)
 	if (parse->infile != 0)
 		close(parse->infile);
 	free(parse->pids);
-	printf("This is &parse->ex->cmd_rtn %d\n", parse->ex->cmd_rtn);
 }

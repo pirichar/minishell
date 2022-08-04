@@ -62,7 +62,8 @@ int	main(int argc, char **argv, char **env)
 		free(ex->line);
 	}
 	free_strrarr(ex->path);
-	free(ex->prompt);
+	// free(ex->prompt);
+	free (ex); // valider comment bien free toute la structure
 }
 
 void	print_logo(char **env)

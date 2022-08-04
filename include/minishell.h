@@ -94,18 +94,19 @@ char			**path_to_starrr(char **env, char *var);
 char			*var_to_str(char **env, char *var);
 bool			search_path_exec(const char *p_arr, const char *cmd);
 //pipex.c
-void			calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse);
 void			execute_solo(char **cmd, char ***env, t_parsing *parse);
 void			execute_out(char **cmd, int fds[2], char **env, t_parsing *parse);
 int				execute(char **cmd, int fd_in, int *p, char **env, t_parsing *parse);
 void			parse_and_exec_cmd_shell(char **cmd, char **env);
-char			**split_cmd(const char *path, const char *cmd);
+//caling_the_exec_shell.c
+void			calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse);
 //builtin
 void			look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
 bool			look_for_exit(char **s_line);
 bool			look_for_export(char **s_line);
 bool			look_for_unset(char **s_line);
+bool			look_for_cd(char **s_line);
 //exit.c
 void			exit_was_too_long(char **s_line);
 void			mini_exit(char **s_line, t_parsing *parse);

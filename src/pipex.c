@@ -1,16 +1,5 @@
 #include "../include/minishell.h"
 
-char	**split_cmd(const char *path, const char *cmd)
-{
-	char	**rtn;
-	char	*cmd_with_path;
-
-	cmd_with_path = ft_strjoin(path, cmd);
-	rtn = ft_split(cmd_with_path, ' ');
-	free (cmd_with_path);
-	return (rtn);
-}
-
 /*
 	parse and exec CMD taks as input the command
 	It also takes as input the environment variable
@@ -111,7 +100,6 @@ int	execute(char **cmd, int fd_in, int *p, char **env, t_parsing *parse)
 			look_for_builtins(&cmd, &env, parse);
 			if (parse->b_in == false && access (cmd[0], X_OK) == 0)
 			{
-				// printf("LOCAL EXECUTION IN EXECUTE\n");
 				execve(cmd[0], cmd, env);
 				exit(1);
 			}
@@ -155,7 +143,6 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 		look_for_builtins(&cmd, &env, parse);
 		if (parse->b_in == false && access(cmd[0], X_OK) == 0)
 		{
-				// printf("LOCAL EXECUTION IN EXECUTE\n");
 				execve(cmd[0], cmd, env);
 				exit(1);
 		}
@@ -172,47 +159,6 @@ void	execute_out(char **cmd, int fds[2],char **env , t_parsing *parse)
 		close(fds[1]);
 	parse->pids[parse->nb_of_pipes] = pid;
 }
-/*
-	calling the execs shell take in input the cmd passed by the main
-	(could only take parse and get the command throught it tho)
-	Case A:
-		It firstly checks the number of pipes in the line
-		If the number is 0 it will run the command alone with execute_solo
-	Case B:
-		If the number is greater then 0 it will passe the first command to execute
-		Execute will call the 
-		Execute will then return the pipe reading end of the pipe (pipe[0]) to the next command
-		Then it will move the list forward to the next node
-		If there is more then 2 commands it will get into the while 
-		it will stay into this while until the last command
-		Then the last command is executed with execute out
-		every execution process places the pid in the right place within the parse->pids array
-*/
-
-//it should be char ***new_env
-void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
-{
-	int	fd;
-	int i;
-
-	i = 1;
-	if (parse->nb_of_pipes == 0)
-		execute_solo(cmd, new_env, parse);
-	else
-	{
-		fd = execute(cmd, parse->infile, &parse->pids[0], *(new_env), parse);
-		parse->tkns_list = parse->tkns_list->next;
-		cmd = parse->tkns_list->vector_cmd;
-		while (i < parse->nb_of_pipes)
-		{
-			fd = execute(cmd, fd, &parse->pids[i], *(new_env), parse);
-			i++;
-			parse->tkns_list = parse->tkns_list->next;
-			cmd = parse->tkns_list->vector_cmd;
-		}
-		execute_out(cmd, (int [2]){fd, parse->outfile}, *(new_env), parse);
-	}
-}
 
 void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 {
@@ -226,6 +172,8 @@ void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 			mini_export(cmd,env, parse);
 		else if (look_for_unset(cmd))
 			mini_unset(cmd, env, parse);
+		else if (look_for_cd(cmd))
+			mini_cd(cmd, env, parse);
 		else
 		{
 			pid = fork();

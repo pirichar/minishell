@@ -92,6 +92,14 @@ bool	look_for_unset(char **s_line)
 	}
 	return (false);
 }
+bool	look_for_cd(char **s_line)
+{
+	if (ft_strncmp(s_line[0], "cd",ft_strlen("cd")) == 0)
+	{
+		return (true);
+	}
+	return (false);
+}
 
 
 
