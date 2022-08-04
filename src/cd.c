@@ -20,6 +20,7 @@ void	go_to_home(char ***new_env)
 	free(actual_pwd);
 	free(buff);
 }
+
 /*
 	our version of CD;
 	It used to change directory with every argument 

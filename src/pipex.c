@@ -34,7 +34,7 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 	{
 		if (search_path_exec(p.path[i], cmd[0]) == true)
 		{
-			cmd[0] = ft_strjoin(p.path[i], cmd[0]); //leak ici for sur il faudrait que je free le s2
+			cmd[0] = ft_strjoin(p.path[i], cmd[0]); //leak ici for sur il faudrait que je free le s2 
 			execve(cmd[0], cmd, env);
 			exit(1);
 		}

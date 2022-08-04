@@ -12,33 +12,25 @@ void	mini_echo(char **s_line, t_parsing *parse)
 {
 	int		i;
 	int		j;
-	bool	with_nl;
-	bool	check_nl;
 
 	i = 1;
 	j = 1;
-	with_nl = true;
-	check_nl = true;
+	parse->with_nl = true;
+	parse->check_nl = true;
 	parse->b_in = true;
 	while (s_line[i])
 	{
-		parse_echo(s_line, &check_nl, &with_nl, &i);
+		parse_echo(s_line, &parse->check_nl, &parse->with_nl, &i);
 		if (s_line[i] == NULL)
 			return ;
-		check_nl = false;
-		if (s_line[i][0] == '*' && s_line[i][1] == 0)
-		{
-			mom_i_am_a_star_p();
-			i++;
-			continue;
-		}
+		parse->check_nl = false;
 		if (s_line[i + 1])
-			dprintf(parse->outfile,"%s ", s_line[i]);
+			dprintf(parse->outfile, "%s ", s_line[i]);
 		else
-			dprintf(parse->outfile,"%s", s_line[i]);
+			dprintf(parse->outfile, "%s", s_line[i]);
 		i++;
 	}
-	if (with_nl)
+	if (parse->with_nl)
 		dprintf(parse->outfile,"\n");
 }
 

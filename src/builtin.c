@@ -1,7 +1,6 @@
 #include "../include/minishell.h"
 #include <stdbool.h>
 
-
 void	add_new_variable(char ***env, char *var, char *variable)
 {
 	int		i;
@@ -41,71 +40,33 @@ void	set_variable(char ***env, char *var, char *new_var)
 		add_new_variable(env, var, new_var);
 }
 
-void	mini_dollar(char **s_line, char ***new_env,  t_parsing *parse)
+void	mini_dollar(char **s_line, char ***new_env, t_parsing *parse)
 {
 	char	*to_print;
 	char	**splitted;
 
 	parse->b_in = true;
 	if (s_line[1] == NULL)
-		return;
+		return ;
 	if (s_line[1][0] == '?' && s_line[1][1] == '\0')
 	{
 		if (parse->ex->cmd_rtn != 0)
 			printf("1\n");
-		else	
-			printf("%d\n", parse->ex->cmd_rtn); 
-		return;
+		else
+			printf("%d\n", parse->ex->cmd_rtn);
+		return ;
 	}
 	to_print = return_variable(*new_env, s_line[1]);
 	if (to_print)
 	{
 		splitted = ft_split(to_print, '=');
-		printf("%s\n",splitted[1]);
+		printf("%s\n", splitted[1]);
 		free_strrarr(splitted);
 	}
 }
 
-bool	look_for_exit(char **s_line)
-{
-	if (ft_strncmp(s_line[0], "exit",5) == 0)
-	{
-		return (true);
-	}
-	return (false);
-}
-
-bool	look_for_export(char **s_line)
-{
-	if (ft_strncmp(s_line[0], "export",ft_strlen("export")) == 0)
-	{
-		return (true);
-	}
-	return (false);
-}
-
-bool	look_for_unset(char **s_line)
-{
-	if (ft_strncmp(s_line[0], "unset",ft_strlen("unset")) == 0)
-	{
-		return (true);
-	}
-	return (false);
-}
-bool	look_for_cd(char **s_line)
-{
-	if (ft_strncmp(s_line[0], "cd",ft_strlen("cd")) == 0)
-	{
-		return (true);
-	}
-	return (false);
-}
-
-
-
 void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 {
-	//mettre le bool b_in dans la struct parse
 	if (ft_strncmp(*s_line[0], "echo", 5) == 0)
 		mini_echo(*s_line, parse);
 	else if (ft_strncmp(*s_line[0], "cd", 3) == 0)
@@ -118,7 +79,7 @@ void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 		mini_pwd(parse);
 	else if (ft_strncmp(*s_line[0], "env", 5) == 0)
 		mini_env((*new_env), parse);
-	else if (ft_strncmp(*s_line[0], "exit",5) == 0)
+	else if (ft_strncmp(*s_line[0], "exit", 5) == 0)
 		mini_exit(*s_line, parse);
 	else if (ft_strncmp(*s_line[0], "$", ft_strlen(*s_line[0])) == 0)
 		mini_dollar(*s_line, new_env, parse);

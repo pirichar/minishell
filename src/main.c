@@ -10,22 +10,29 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
+/*
+	So here we have 2 struct one for the execution and one for the parsing
+	We malloc ex and give the stats of 0 (I don't understand why yet tho)
+
+*/
+
+
 int	main(int argc, char **argv, char **env)
 {
 	t_exec		*ex;
 	t_parsing 	*parse;
+	(void)argv;
 
 	ex = ft_calloc(1, sizeof(t_exec));
 	ex->status = 0;
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
+		free(ex);
 		return (1);
 	}
-	(void)argv;
 	print_logo(env);
 	ex->new_env = copy_strarr(env);
-	//main loop
 	while (1)
 	{
 		ex->prompt = set_prompt(ex->new_env);
@@ -41,12 +48,12 @@ int	main(int argc, char **argv, char **env)
 		{
 			add_history(ex->line);
 			parse = start_parse(ex->line, ex->status);
-			parse->ex = ex;
-			if (parse == NULL)//pas certain de à quoi ça sert de if là
+			if (parse == NULL)
 			{
 				free(ex->line);
 				continue;
 			}
+			parse->ex = ex; 
 			parse->tkns_list = parse->tkns_list->start;
 			ex->s_line = parse->tkns_list->vector_cmd;
 			if (ex->s_line[0] == NULL)// pas certain de savoir  à quoi ça sert ce if là
