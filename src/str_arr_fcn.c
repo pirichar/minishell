@@ -10,6 +10,8 @@ int	strarr_len(char **str_arr)
 	return (i);
 }
 
+
+
 void	free_strrarr(char **to_free)
 {
 	int	i;

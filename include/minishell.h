@@ -83,6 +83,8 @@ typedef struct s_parsing
 	int		status;
 	bool	with_nl;
 	bool	check_nl;
+	int		i;
+	char 	*to_unset;
 	t_exec 	*ex;
 	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
 }				t_parsing;
@@ -95,6 +97,7 @@ void			look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
 //caling_the_exec_shell.c
 void			calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse);
+void			parse_and_exec_cmd_shell(char **cmd, char **env);
 //cd.c
 void			go_to_home(char ***new_env);
 void			mini_cd(char **s_line, char ***new_env,  t_parsing *parse);
@@ -102,6 +105,10 @@ void			mini_cd(char **s_line, char ***new_env,  t_parsing *parse);
 void			mini_echo(char **s_line, t_parsing *parse);
 bool			check_only_n(char *str);
 void			parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i);
+//env.c
+void			mini_env(char **new_env,  t_parsing *parse);
+int				ft_strcmp(const char *s1, const char *s2);
+void			print_out_dir(char **to_print);
 //environement.c
 bool			search_path(const char *p_arr, const char *cmd);
 char			**path_to_starrr(char **env, char *var);
@@ -110,16 +117,18 @@ bool			search_path_exec(const char *p_arr, const char *cmd);
 //exit.c
 void			exit_was_too_long(char **s_line);
 void			mini_exit(char **s_line, t_parsing *parse);
+//execute.c
+int				execute(int fd_in, int *p, char **env, t_parsing *parse);
+//execute_out.c
+void			execute_out(char **cmd, int fds[2], char **env, t_parsing *parse);
+//execute_solo.c
+void			execute_solo(char **cmd, char ***env, t_parsing *parse);
 //export.c
 char			**bubble_sort_strarr(char **rtn);
 char			**sort_strarr(char **to_sort);
 void			print_export(char ***new_env);
 void			actually_set_variables(char **s_line, char ***new_env);
 void			mini_export(char **s_line, char ***new_env, t_parsing *parse);
-//env.c
-void			mini_env(char **new_env,  t_parsing *parse);
-int				ft_strcmp(const char *s1, const char *s2);
-void			print_out_dir(char **to_print);
 //ft_strjoin_free.c
 char	*ft_strjoin_free(char *s1, const char *s2);
 //look_for.c
@@ -127,11 +136,6 @@ bool			look_for_exit(char **s_line);
 bool			look_for_export(char **s_line);
 bool			look_for_unset(char **s_line);
 bool			look_for_cd(char **s_line);
-//pipex.c
-void			execute_solo(char **cmd, char ***env, t_parsing *parse);
-void			execute_out(char **cmd, int fds[2], char **env, t_parsing *parse);
-int				execute(char **cmd, int fd_in, int *p, char **env, t_parsing *parse);
-void			parse_and_exec_cmd_shell(char **cmd, char **env);
 //pwd.c
 void			mini_pwd(t_parsing *parse);
 //str_arr_fcn.c
@@ -139,12 +143,6 @@ void			free_strrarr(char **to_free);
 int				strarr_len(char **str_arr);
 char 			**copy_strarr(char **env);
 void			set_3_variables(char ***env);
-//tmp_star_function.c
-int				get_nb_items_in_folder(void);
-int				get_nb_items_chars_in_folder(void);
-char			*mom_i_am_a_star(char *to_replace);
-char			**mom_i_am_a_star_d(void);
-void			mom_i_am_a_star_p(void);
 //unset.c
 char*			return_variable(char **env, char *var);
 void			mini_unset(char **s_line, char ***new_env,  t_parsing *parse);

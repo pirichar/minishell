@@ -29,17 +29,66 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 		execute_solo(cmd, new_env, parse);
 	else
 	{
-		fd = execute(cmd, parse->infile,
-				&parse->pids[0], *(new_env), parse);
+		fd = execute(parse->infile, &parse->pids[0], *(new_env), parse);
 		parse->tkns_list = parse->tkns_list->next;
 		cmd = parse->tkns_list->vector_cmd;
 		while (i < parse->nb_of_pipes)
 		{
-			fd = execute(cmd, fd, &parse->pids[i], *(new_env), parse);
+			fd = execute(fd, &parse->pids[i], *(new_env), parse);
 			i++;
 			parse->tkns_list = parse->tkns_list->next;
 			cmd = parse->tkns_list->vector_cmd;
 		}
 		execute_out(cmd, (int [2]){fd, parse->outfile}, *(new_env), parse);
 	}
+}
+
+/*
+	parse and exec CMD taks as input the command
+	It also takes as input the environment variable
+	First it ill get the path within the env variable and put it in a 2d array
+	Then it will add a slash to the cmd so 
+	it can look at the end of each line of the 2d array
+	It will then loop trough all the element of the path line by line 
+	It will look with s_argv1 using access if 
+	the command is accessible with any of the proved path
+	CASE A:
+		If it is iit will split the command to 
+		create the final vector wanted by execve
+		Run EXECVE and add an exit for safety if anything goes wrong
+	BASE B:
+		It will display an error message an says that 
+		command is not found and free everything	
+*/
+//verifier le leak ici il faudrait surement passer 
+//par adresse le s_line pour le modifier
+//les leaks sont sur les cmd[0] avec les strjoin 
+//il faudrait que je fasse un strjoin free s2
+// maybe change the fprintf for an error function
+void	parse_and_exec_cmd_shell(char **cmd, char **env)
+{
+	int			i;
+	t_exec_ptrs	p;
+
+	p.path = path_to_starrr(env, "PATH=");
+	if (p.path == NULL)
+	{
+		fprintf(stderr, "PATH environment variable not set\n");
+		return ;
+	}
+	cmd[0] = ft_strjoin("/", cmd[0]);
+	i = 0;
+	while (p.path[i])
+	{
+		if (search_path_exec(p.path[i], cmd[0]) == true)
+		{
+			cmd[0] = ft_strjoin(p.path[i], cmd[0]);
+			execve(cmd[0], cmd, env);
+			exit(1);
+		}
+		i++;
+	}
+	fprintf(stderr, "MINISHELL : Command not found\n");
+	free_strrarr(p.path);
+	exit(1);
 }

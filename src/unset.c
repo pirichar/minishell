@@ -1,7 +1,7 @@
 #include "../include/minishell.h"
 
 /*returns a copy of a variable or null if not found*/
-char*	return_variable(char **env, char *var)
+char	*return_variable(char **env, char *var)
 {
 	int		i;
 
@@ -46,34 +46,30 @@ static void	delete_variable(char ***env, char *var)
 		free_strrarr(tmp);
 }
 
-/*peut etre un probleme a la ligne var_to_unset =
- path_to_starrr((*new_env), s_line[i]); (ancienne note)*/
-void	mini_unset(char **s_line, char ***new_env, t_parsing *parse)
+void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 {
-	char	*var_to_unset;
-	int		i;
-
-	parse->b_in = true;
+	p->b_in = true;
 	if (s_line[1] == NULL)
 		printf("unset : not enough arguments\n");
 	else
 	{
-		i = 1;
-		while (s_line[i])
+		p->i = 1;
+		while (s_line[p->i])
 		{
-			if(s_line[i] && s_line[i][0] == '=' && s_line[i][1] == '\0')
+			if (s_line[p->i] && s_line[p->i][0] == '=' &&
+					s_line[p->i][1] == '\0')
 			{
 				printf("Minishell: unset: \"=\": not a valid identifier\n");
-				i++;
-				continue;
+				p->i++;
+				continue ;
 			}
-			var_to_unset = return_variable((*new_env), s_line[i]);
-			if (var_to_unset == NULL)
-				i++;
+			p->to_unset = return_variable((*new_env), s_line[p->i]);
+			if (p->to_unset == NULL)
+				p->i++;
 			else
 			{
-				delete_variable(new_env, s_line[i]);
-				i++;
+				delete_variable(new_env, s_line[p->i]);
+				p->i++;
 			}
 		}
 	}

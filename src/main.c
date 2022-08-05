@@ -16,7 +16,6 @@ int	nb_of_charstrstr(char **path)
 
 */
 
-
 int	main(int argc, char **argv, char **env)
 {
 	t_exec		*ex;
