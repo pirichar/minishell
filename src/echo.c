@@ -31,7 +31,7 @@ void	mini_echo(char **s_line, t_parsing *parse)
 		i++;
 	}
 	if (parse->with_nl)
-		dprintf(parse->outfile,"\n");
+		dprintf(parse->outfile, "\n");
 }
 
 //s'assurer que dans la version officielle echo "-n" 
