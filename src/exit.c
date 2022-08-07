@@ -1,5 +1,13 @@
 #include "../include/minishell.h"
 
+/* I should free :
+		the new_env,
+		all the parsing structure, 
+		la structure EX, 
+		la LINE 
+		closer mes FD
+		*/
+
 /* lol */
 void	exit_was_too_long(char **s_line)
 {

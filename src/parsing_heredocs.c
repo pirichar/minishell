@@ -21,9 +21,9 @@ int	check_metachar(t_parsing *parse_list)
 						if (check_file_and_delim_name(parse_list, i, j + 1) == 1)
 							return (1);
 						printf("do the heredoc\n");
-						parse_list->file = open("here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
+						parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
 						if (parse_list->file == -1)
-							return (1);
+							return (1);//should call the exit function here
 						while (1)
 						{
 							write(1, "heredoc>", 9);
@@ -35,7 +35,7 @@ int	check_metachar(t_parsing *parse_list)
 						}
 						free (parse_list->buf);
 						close(parse_list->file);
-						parse_list->infile = open("here_doc", O_RDONLY);
+						parse_list->infile = open("./div/here_doc", O_RDONLY);
 						j++;
 						break ;
 					}

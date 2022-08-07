@@ -52,7 +52,7 @@ int	main(int argc, char **argv, char **env)
 				free(ex->line);
 				continue;
 			}
-			parse->ex = ex; 
+			parse->ex = ex;  //valider si ca ca ne fait pas un leak je pense que oui
 			parse->tkns_list = parse->tkns_list->start;
 			ex->s_line = parse->tkns_list->vector_cmd;
 			if (ex->s_line[0] == NULL)// pas certain de savoir  à quoi ça sert ce if là
