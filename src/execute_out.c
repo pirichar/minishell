@@ -38,6 +38,7 @@ void	execute_out(char **cmd, int fds[2], char **env, t_parsing *parse)
 	int	pid;
 
 	pid = fork();
+	parse->ex->cmd_rtn = 0;
 	if (pid == 0)
 		exec_out_child(&fds, parse, cmd, env);
 	close(fds[0]);

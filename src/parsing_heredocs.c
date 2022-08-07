@@ -21,6 +21,21 @@ int	check_metachar(t_parsing *parse_list)
 						if (check_file_and_delim_name(parse_list, i, j + 1) == 1)
 							return (1);
 						printf("do the heredoc\n");
+						parse_list->file = open("here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
+						if (parse_list->file == -1)
+							return (1);
+						while (1)
+						{
+							write(1, "heredoc>", 9);
+							parse_list->buf = get_next_line(0);
+							if (!ft_strncmp(parse_list->tkns_array[i+1], parse_list->buf, ft_strlen(parse_list->tkns_array[i+1])))
+								break ;
+							write(parse_list->file, parse_list->buf, ft_strlen(parse_list->buf));
+							free (parse_list->buf);
+						}
+						free (parse_list->buf);
+						close(parse_list->file);
+						parse_list->infile = open("here_doc", O_RDONLY);
 						j++;
 						break ;
 					}

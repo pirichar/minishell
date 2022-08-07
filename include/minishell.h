@@ -86,6 +86,8 @@ typedef struct s_parsing
 	int		i;
 	char 	*to_unset;
 	t_exec 	*ex;
+	int		file;
+	char	*buf;
 	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
 }				t_parsing;
 
