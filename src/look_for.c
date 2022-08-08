@@ -35,3 +35,12 @@ bool	look_for_cd(char **s_line)
 	}
 	return (false);
 }
+
+bool	look_for_echo(char **s_line)
+{
+	if (ft_strncmp(s_line[0], "echo", ft_strlen("echo")) == 0)
+	{
+		return (true);
+	}
+	return (false);
+}

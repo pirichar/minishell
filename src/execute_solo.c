@@ -27,10 +27,11 @@ void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 	exit (0);
 }
 
+// for(int i = 0;cmd[i];i++)
+// 	printf("CMD[%d] = %s\n",i, cmd[i]);
 void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 {
 	int	pid;
-
 	if (parse->infile != -1)
 	{
 		if (look_for_exit(cmd))
@@ -41,6 +42,8 @@ void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 			mini_unset(cmd, env, parse);
 		else if (look_for_cd(cmd))
 			mini_cd(cmd, env, parse);
+		else if (look_for_echo(cmd))
+			mini_echo(cmd,parse);
 		else
 		{
 			pid = fork();

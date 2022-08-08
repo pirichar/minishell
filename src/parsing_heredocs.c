@@ -1,6 +1,47 @@
 #include "../include/minishell.h"
 #include <stdio.h>
 
+
+/*
+	Probablement qu'il faudrait que l'on change la manière dont on call les redirection pour les mettre avec leur bon pipe
+	Ca serait plus simple pour reproduire le comportement de bash qui ne passe pas l'input entre les pipes mais bien l'output du pipe
+	à l'input de la prochaine commande. 
+	Autrement dit, il ne faudrait pas que si on redirige l'entrée dans la première commande, que ce soit passée vers la 2e pareil pour l'output ;
+	Peut-être que cela pourrait être corrigée directement dans le child ou dans l'exécution, oui mais ca va prendre une redirection par tkns_list
+
+	Sinon on pourrait mettre le parse->infile dans la token list et prendre ça pour l'exécution
+	Il faudrait à chaque fois qu'on tape un | faire avancer la liste pour être certain d'être au bon endroit
+
+	quand on fait > PL dans bash ça créer un fichier PL
+	quand on fait  > PL | echo allo ça créer un fichier echo allo dans bash
+	*****Si on veut garder notre programme comme ça il faudrait que la ligne d'en haut soit vrai et qu'on fasse une exception pour le cas ou on a > FILE | 
+	
+	Ca veut donc dire que bash ne passe pas les redirections d'output entre les pipes ?
+	Par contre ça serait surement plus simple de faire une règle que si ya juste une redirection sans commande (d'entrée du moins) on la passe pas
+	> PL echo allo | echo popa  il faudrait régler ce cas et pour faire cela il faudrait que chacune des redirections soit traitée
+	dans sa propre liste en fonction de ou elle est dans le LINE 
+
+	dans BASH > PL echo allo | echo popa 	ca ca écris dans PL et echo popa dans le term
+	dans BASH > PL | echo allo 				
+	dans BASH < PL | > PLO 					ca ouvre PLO mais ca ecris rien dedans
+	dans BASH < PL 							ca fait rien
+	dans BASH < PL | cat 					ca fait rien
+
+	dans ZSH > PL echo allo | echo popa 	ca echo popa dans le terme mais n'écris pas allo dans PL;
+	dans ZSH > PL | echo allo 				ca créer un fichier echo allo et ça attend le STDIN est ouvert jusqu'à ce que l'on fasse CTRL C
+	dans ZSH < PL | > PLO 					ca ouvre PLO et ca ecris dedans
+	dans ZSH < PL 							ca affiche ce qu'il y a dans PL dans le stdin avec un end
+	dans ZSL < PL | cat 					ca affiche PL car < PL affiche de base dans le stdout
+
+	dans DUNDER < PL | cat 					ca marche mais pas pour la bonne raison, ca marche pcq on passe le stdin pas pcq on l'imprime dans le term
+	dans DUNDER < PL | > PLO 				ca ouvre PLO mais ca ecris rien dedans
+	Dans DUNDER < PL						ca fait rien
+	dans DUNDER echo allo > PL				Régler ca marche j'ai ajouté look_for_echo dans execute solo pour eviter que ca se fasse ds le child
+	dans DUNDER > PL echo allo | echo popa 	ca ecris les deux dans PL **** PROBLEME *****
+	dans DUNDER > PL | echo allo 			ca segfault XD 				*** PROBLEME VOIR NOTION DANS TO-DO POUR DÉTAILS****; 
+
+
+*/
 int	check_metachar(t_parsing *parse_list)
 {
 	int	i;
@@ -66,7 +107,7 @@ int	check_metachar(t_parsing *parse_list)
 							fprintf(stderr, "MINISHELL: Could not open output file\n");
 							return (1);
 						}
-						printf("do_the_append_out\n");
+						printf("did_the_append_out\n");
 						j++;
 						break ;
 					}

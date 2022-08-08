@@ -138,6 +138,7 @@ bool			look_for_exit(char **s_line);
 bool			look_for_export(char **s_line);
 bool			look_for_unset(char **s_line);
 bool			look_for_cd(char **s_line);
+bool			look_for_echo(char **s_line);
 //pwd.c
 void			mini_pwd(t_parsing *parse);
 //str_arr_fcn.c
