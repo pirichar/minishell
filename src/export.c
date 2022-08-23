@@ -3,11 +3,9 @@
 char	**bubble_sort_strarr(char **rtn)
 {
 	int		i;
-	int		j;
 	char	*tmp;
 
 	i = 0;
-	j = 0;
 	while (rtn[i + 1])
 	{
 		if (ft_strcmp(rtn[i], rtn[i + 1]) > 0)

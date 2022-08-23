@@ -88,7 +88,7 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 		}
 		i++;
 	}
-	fprintf(stderr, "MINISHELL : Command not found\n");
+	fprintf(stderr, "%s: command not found\n", cmd[0]+1);
 	free_strrarr(p.path);
 	exit(2);
 }

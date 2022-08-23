@@ -111,6 +111,37 @@ $(NAME)	:	$(SRCS) $(OBJS) $(HEADERS)
 				echo "__________________________________"; \
 			fi
 			
+WSL		:	$(SRCS) $(OBJS) $(HEADERS)
+			@if [ ! -d "./objs" ]; then \
+				clear && \
+				echo "__________________________________" && \
+				echo "\n       Compiling.....\n" && \
+				echo "__________________________________" && \
+				touch a ;\
+			fi 
+			$(FTMAKE) 
+			@ if [ ! -d "./objs" ]; then \
+				echo "__________________________________" && \
+				echo "\n      Libft compiled \n" && \
+				echo "__________________________________"; \
+			fi
+			$(CC) $(SRCS) $(LIBS) $(CFLAGS)
+			@if [ -p "./objs" ]; then \
+				rm -rf ./objs; \
+			fi
+			$(OB)
+			@if [ -f "./a" ]; then \
+				sleep 1 && \
+				echo "__________________________________" && \
+				echo "\n Project succesfully compiled!\n" && \
+				echo "__________________________________" && \
+				rm -f ./a; else \
+				clear && \
+				echo "__________________________________" && \
+				echo "\n\n             Done\n" && \
+				echo "__________________________________"; \
+			fi
+
 clean	:	
 			@clear
 			@echo "__________________________________"

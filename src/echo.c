@@ -11,10 +11,8 @@
 void	mini_echo(char **s_line, t_parsing *parse)
 {
 	int		i;
-	int		j;
 
 	i = 1;
-	j = 1;
 	parse->with_nl = true;
 	parse->check_nl = true;
 	parse->b_in = true;
