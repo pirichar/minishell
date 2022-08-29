@@ -51,7 +51,10 @@ size_t	token_count(char const *s, char c)
 				if (j > 0)
 					i = j + 1;
 				else
-					break ;
+				{
+					i++;
+					continue ;
+				}
 			}
 			else if (s[i] == '\"')
 			{
@@ -59,14 +62,40 @@ size_t	token_count(char const *s, char c)
 				if (j > 0)
 					i = j + 1;
 				else
-					break;
+				{
+					i++;
+					continue ;
+				}
 			}
-			while (s[i] != c && s[i] && s[i] != '\'' && s[i] != '"')
+			else if (s[i] == '<')
+			{
+				if (s[i + 1] == '<')
+					i++;
+				nb++;
 				i++;
-			if (s[i] != '\'' && s[i] != '"')
+				continue ;
+			}
+			else if (s[i] == '>')
+			{
+				if (s[i + 1] == '>')
+					i++;
+				nb++;
+				i++;
+				continue ;
+			}
+			else if (s[i] == '|')
+			{
+				i++;
+				nb++;
+				continue ;
+			}
+			while (s[i] != c && s[i] && s[i] != '\'' && s[i] != '"' && s[i] != '>' && s[i] != '<' && s[i] != '|')
+				i++;
+			if ((s[i + 1] != '\0' ))
 				nb++;
 		}
 	}
+	printf("real nb ======== %lu\n", nb);
 	return (nb);
 }
 
@@ -77,19 +106,31 @@ char const	*quote_alloc(char const *s, char **matrix, char c, char quote)
 
 	len_ptr = 0;
 	start = 0;
-	while (s[start] != quote)
+	while (s[start] != quote && s[start] != '<' && s[start] != '>' && s[start] != '|')
 		start++;
+	printf("start = %d\n", start);
+	if (s[start] == '<' || s[start] == '>' || s[start] == '|')
+	{
+		printf("ici???? %s\n", s);
+		if (start[s + 1] && s[start + 1] == s[start])
+			start++;
+		*matrix = ft_substr(s, 0, (start));
+		s = s + start - 1;
+		return (s);
+	}
 	len_ptr = start;
-	while (s[len_ptr+1] && s[len_ptr + 1] != quote)
+	while (s[len_ptr+1] && s[len_ptr + 1] != quote && s[start] != '<' && s[start] != '>' && s[start] != '|')
 		len_ptr++;
-	while (s[len_ptr + 1] && s[len_ptr + 1] != c)
+	printf("len ptr = %d\n", len_ptr);
+	while (s[len_ptr + 1] && s[len_ptr + 1] != c && s[len_ptr + 1] != '<' && s[len_ptr + 1] != '>' && s[len_ptr + 1] != '|')
 		len_ptr++;
-	*matrix = ft_substr(s, 0, (len_ptr + 2));
+	printf("sssss avant = %s\n", s);
+	*matrix = ft_substr(s, 0, (len_ptr + 1));
 	s = s + len_ptr;
-	s++;
 	s++;
 	while (*s == c)
 		s++;
+	printf("sssss = %s\n", s);
 	return (s);
 }
 
@@ -98,7 +139,7 @@ int	is_not_quote(const char *s, char c, int i, char **matrix)
 	int	len_ptr;
 
 	len_ptr = 0;
-	while (s[len_ptr] != c && s[len_ptr])
+	while (s[len_ptr] != c && s[len_ptr] && s[len_ptr] != '<' && s[len_ptr] != '>' && s[len_ptr] != '|')
 		len_ptr++;
 	matrix[i] = ft_substr(s, 0, len_ptr);
 	if (matrix[i] == NULL)
@@ -110,28 +151,55 @@ int	quote_inside(const char *s, char c)
 {
 	int		i;
 	char	quote;
-	bool closed;
+	bool	closed;
 
 	closed = false;
 	i = 0;
-	while (s[i])
+	while (s[i] != c)
 	{
-		if (closed == false && s[i] == c)
-			return (1);
 		if ((s[i] == '\'' || s[i] == '"') && closed == false)
 		{
-			printf("string %c\n", s[i -1]);
 			closed = true;
 			quote = s[i];
 		}
 		else if (closed == true && s[i] == quote)
-		{
-			printf("closed %c\n", s[i-1]);
 			return (0);
-		}
 		i++;
 	}
-	return (1);
+	if (closed == false)
+		return (1);
+	else
+		return (0);
+}
+
+char	search_quote(const char *s)
+{
+	char	quote;
+	int		i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == '\'' || s[i] == '"')
+			quote = s[i];
+		i++;
+	}
+	return (quote);
+}
+
+void	delim_alloc(const char *s, char **matrix, int i, char c)
+{
+	int j;
+
+	j = 0;
+	if (*s + 1 && *s + 1 == c)
+		i++;
+	matrix[i] = calloc(i + 1, sizeof(char));
+	while (*s == c)
+	{
+		matrix[i][j] = *s;
+		s++;
+	}
 }
 
 void	letter_alloc(char **matrix, char const *s, char c, size_t nb_token)
@@ -149,16 +217,22 @@ void	letter_alloc(char **matrix, char const *s, char c, size_t nb_token)
 			while (*++s == c)
 				;
 		}
+		if (*s == '<' || *s == '>' || *s == '|')
+		{
+			delim_alloc(s, matrix, i, *s);
+			i++;
+			s++;
+			continue ;
+		}
 		if (*s != c && *s != '\'' && *s != '\"' && quote_inside(s, c) != 0)
 		{
-			printf("kjsadgjkasdhjk\n");
 			len_ptr = is_not_quote(s, c, i, matrix);
 			s = s + len_ptr;
 		}
 		else if (*s != c && *s != '\'' && *s != '\"' && quote_inside(s, c) == 0)
 		{
-			quote = '"';
-			s = quote_alloc(s, &matrix[i], c, quote)+1;
+			quote = search_quote(s);
+			s = quote_alloc(s, &matrix[i], c, quote);
 		}
 		if (*s == '\'')
 		{
@@ -195,39 +269,44 @@ char	**ft_split2(char const *s, char c)
 	if (!s)
 		return (NULL);
 	nb_token = token_count(s, c);
-	matrix = (char **)calloc(((sizeof(char *)), (nb_token + 1)));
+	matrix = (char **)calloc(sizeof(char *), nb_token + 1);
 	if (!matrix)
 		return (NULL);
 	letter_alloc(matrix, s, c, nb_token);
-	int i = 0;
+	//DEBUG
+		int i = 0;
+		int j = 0;
 	while (matrix[i])
 	{
-		printf("matrix = %s\n", matrix[i++]);
+		printf("matrix = %s\n", matrix[i]);
+		while (matrix[i][j])
+		{
+			j++;
+		}
+		j = 0;
+		i++;
 	}
-
 	return (matrix);
 }
 
-/*int main(int argc, char const *argv[])
-{
-	char **retour;
-	char *line;
+// int main(int argc, char const *argv[])
+// {
+// 	char **retour;
+// 	char *line;
 
-	// while (1)
-	{
-		line = calloc(10000, sizeof(char));
-		read(1, line, 100000);
-		retour = ft_split2(line, ' ');
-		for(int i = 0; retour[i]; i++)
-			printf("retour %d = %s\n", i, retour[i]);
-		free(line);
-	}
-	int k = 0;
-	while (retour[k])
-	{
-		free(retour[k]);
-		k++;
-	}
-	free(retour);
-	return 0;
-}*/
+// 	// while (1)
+// 	{
+// 		line = "         un\"un      un\" deux \"trois\"<cinq'cinq six\"\0";
+// 		retour = ft_split2(line, ' ');
+// 		for(int i = 0; retour[i]; i++)
+// 			printf("retour %d = %s\n", i, retour[i]);
+// 	}
+// 	int k = 0;
+// 	while (retour[k])
+// 	{
+// 		free(retour[k]);
+// 		k++;
+// 	}
+// 	free(retour);
+// 	return 0;
+// }

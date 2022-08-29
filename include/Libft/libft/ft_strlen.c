@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 10:02:45 by jvigneau          #+#    #+#             */
-/*   Updated: 2022/06/16 21:49:41 by pirichar         ###   ########.fr       */
+/*   Updated: 2021/10/04 12:56:53 by jvigneau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s && s[i])
+	while (s[i])
 		i++;
 	return (i);
 }

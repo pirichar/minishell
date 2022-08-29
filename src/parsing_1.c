@@ -50,7 +50,9 @@ t_parsing	*start_parse(char *line, int status)
 
 	init_master_list(parse_list, status);
 	init_first_token_nodes(parse_list);
-		parse_list->tkns_array = ft_split2(line, ' ');
+	printf("line ==== %s\n", line);
+	parse_list->tkns_array = split_set_quotes(line, "<>|");
+	printf("first %s\n", parse_list->tkns_array[0]);
 	if (parse_list->tkns_array == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 		return (NULL);
 	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
