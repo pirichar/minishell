@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+        */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/14 13:53:16 by jvigneau          #+#    #+#             */
-/*   Updated: 2022/08/26 20:24:24 by jvigneau         ###   ########          */
+/*   Updated: 2024/03/02 09:13:37 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-#define OPEN_MAX 12000
+
+#ifndef OPEN_MAX
+# define OPEN_MAX 12000
+#endif
 
 char	*get_next_line(int fd)
 {
