@@ -31,6 +31,9 @@ typedef struct	s_exec
 
 }				t_exec;
 
+// ex est ma seul variable globale pour l'instant , je l'utilise
+t_exec		*ex;
+
 typedef struct s_files
 {
 	char	infile;
@@ -145,6 +148,12 @@ bool			look_for_cd(char **s_line);
 bool			look_for_echo(char **s_line);
 //pwd.c
 void			mini_pwd(t_parsing *parse);
+//signals
+void handle_sigint(int sig);
+void handle_sigquit(int sig);
+void setup_signal_handlers();
+void update_sigquit_handling();
+
 //str_arr_fcn.c
 void			free_strrarr(char **to_free);
 int				strarr_len(char **str_arr);

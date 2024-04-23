@@ -1,49 +1,3 @@
-define JR
-	BIG LEAK!!!! A PICTURE OF ME WORKING
-
-                        .="=.
-                      _/.-.-.\_     _
-                     ( ( o o ) )    ))
-                      |/  "  \|    //
-      .-------.        \'---'/    //
-     _|~~ ~~  |_       /`"""`\\  ((
-   =(_|_______|_)=    / /_,_\ \\  \\
-     |:::::::::|      \_\\_'__/ \  ))
-     |:::::::[]|       /`  /`~\  |//
-     |o=======.|      /   /    \ //
-     `"""""""""`  ,--`,--'\/\   //
-                  '-- "--'  '--'
-endef
-export JR
-
-define TEA
-
-		TEABAG THAT MOTHERF***ER
-
-            .------.____
-         .-'       \ ___)
-      .-'         \\\\
-   .-'        ___  \\)
-.-'          /  (\  |)
-         __  \  ( | |
-        /  \  \__'| |
-       /    \____).-'
-     .'       /   |
-    /     .  /    |
-  .'     / \/     |
- /      /   \     |
-       /    /    _|_
-       \   /    /\ /\\
-        \ /    /__v__\\
-         '    |       |
-              |     .#|
-              |#.  .##|
-              |#######|
-              |#######|
-
-endef
-export TEA
-
 SRCS	=	src/environement.c src/main.c src/builtin.c src/execute.c src/parsing_1.c \
 			src/minisplit.c src/exit.c src/export.c src/env.c src/unset.c\
 			src/pwd.c src/echo.c  src/cd.c\
@@ -51,7 +5,7 @@ SRCS	=	src/environement.c src/main.c src/builtin.c src/execute.c src/parsing_1.c
 			src/parsing_utils.c src/parsing_heredocs.c src/parsing_redir_in.c \
 			src/parsing_redir_out.c src/parsing_pipes.c src/wait_for_pids.c\
 			src/calling_the_execs_shell.c ./src/look_for.c ./src/execute_out.c\
-			src/execute_solo.c 
+			src/execute_solo.c src/ft_signals.c 
 
 HEADERS	=	minishell.h colors.h
 

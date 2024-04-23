@@ -1,62 +1,10 @@
 #include "../include/minishell.h"
 
 
-t_exec		*ex;
 
-// This function handles the Ctrl-C (SIGINT) event
-// Move to a new line
-void handle_sigint(int sig)
+
+void configure_terminal()
 {
-	(void)sig;
-    write(STDOUT_FILENO, "\n", 1);
-	char* prompt = set_prompt(ex->new_env);
-	write(STDOUT_FILENO, prompt, ft_strlen(prompt));
-	free(prompt);
-}
-
-// This function handles the Ctrl-\ (SIGINT) event
-// Move to a new line
-void handle_sigquit(int sig)
- {
-    (void)sig;
-	if (ex->foreground_job_active)
-	{
-		write(STDOUT_FILENO, "\nQuit signal (SIGQUIT) received by job.\n", 40);
-		// Here you might handle the SIGQUIT for the job, e.g., terminate it
-	}
-}
-
-void setup_signal_handlers() {
-    struct sigaction sa_int;
-
-    // Setup for SIGINT
-	sa_int.sa_handler = handle_sigint;
-	sigemptyset(&sa_int.sa_mask);
-	sa_int.sa_flags = SA_RESTART; // Auto-restart functions if interrupted
-	sigaction(SIGINT, &sa_int, NULL);
-
-    // Setup for SIGTSTP
-	struct sigaction sa_quit;
-   // SIGQUIT handler setup
-    sigemptyset(&sa_quit.sa_mask);
-    sa_quit.sa_flags = 0;  // No flags
-    sa_quit.sa_handler = handle_sigquit;  // Set our custom handler
-
-    sigaction(SIGQUIT, &sa_quit, NULL);
-}
-
-void update_sigquit_handling()
- {
-    if (ex->foreground_job_active) {
-        // Set to custom handler when a job is active
-        signal(SIGQUIT, handle_sigquit);
-    } else {
-        // Ignore SIGQUIT when no job is active
-        signal(SIGQUIT, SIG_IGN);
-    }
-}
-
-void configure_terminal() {
     struct termios term;
     tcgetattr(STDIN_FILENO, &term);  // Get the current terminal attributes
     term.c_lflag &= ~ECHOCTL;        // Clear the ECHOCTL flag to stop echoing Ctrl characters
