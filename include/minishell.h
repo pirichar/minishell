@@ -13,6 +13,8 @@
 # include "./colors.h"
 # include "./Libft/libft/libft.h"
 # include <errno.h>
+#include <signal.h>
+#include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
@@ -25,6 +27,8 @@ typedef struct	s_exec
 	char	*prompt;
 	int		status;
 	int		cmd_rtn;
+	int 	foreground_job_active;  // 0 means no job is active, 1 means a job is active
+
 }				t_exec;
 
 typedef struct s_files
