@@ -1,8 +1,5 @@
 #include "../include/minishell.h"
 
-
-
-
 void configure_terminal()
 {
     struct termios term;
@@ -26,14 +23,16 @@ int	nb_of_charstrstr(char **path)
 	We malloc ex and give the stats of 0 (I don't understand why yet tho)
 
 */
+
 int	main(int argc, char **argv, char **env)
 {
 	t_parsing 	*parse;
 	(void)argv;
 
     configure_terminal(); // Configure terminal settings to suppress ^C
-
 	ex = ft_calloc(1, sizeof(t_exec));
+	if (ex == NULL)
+		exit(1);
 	ex->status = 0;
 	ex->foreground_job_active = 0;
 	if (argc > 1)
@@ -45,6 +44,7 @@ int	main(int argc, char **argv, char **env)
 	print_logo(env);
 	ex->new_env = copy_strarr(env);
 	setup_signal_handlers(); // Set up signal handling
+
 	while (1)
 	{
 		ex->prompt = set_prompt(ex->new_env);
@@ -55,7 +55,6 @@ int	main(int argc, char **argv, char **env)
 		{
 			free(ex->line);
 			free_strrarr(ex->new_env);
-			printf("exit\n");
 			return (0);
 		}
 		if (*ex->line)
@@ -74,16 +73,15 @@ int	main(int argc, char **argv, char **env)
 			{
 				free(ex->line);
 				free_strrarr(ex->s_line);
+				printf("exit\n");
 				continue ;
 			}
 			ex->foreground_job_active = 1; // Job is starting
 			update_sigquit_handling();
-
 			calling_the_execs_shell(ex->s_line, &ex->new_env, parse);
 			wait_for_pids(parse); 
 			ex->foreground_job_active = 0; // Job is complete
 			update_sigquit_handling();
-
 			free_strrarr(ex->s_line);
 		}
 		free(ex->line);

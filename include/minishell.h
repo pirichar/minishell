@@ -28,7 +28,6 @@ typedef struct	s_exec
 	int		status;
 	int		cmd_rtn;
 	int 	foreground_job_active;  // 0 means no job is active, 1 means a job is active
-
 }				t_exec;
 
 // ex est ma seul variable globale pour l'instant , je l'utilise

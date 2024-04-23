@@ -37,7 +37,6 @@ void setup_signal_handlers()
     sigemptyset(&sa_quit.sa_mask);
     sa_quit.sa_flags = 0;  // No flags
     sa_quit.sa_handler = handle_sigquit;  // Set our custom handler
-
     sigaction(SIGQUIT, &sa_quit, NULL);
 }
 
