@@ -23,14 +23,24 @@ void handle_sigquit(int sig)
 		write(1, "\nQuit signal (SIGQUIT) received by job.\n", 40);
 }
 
+/**
+ * @brief Set the up signal handlers object 
+            Sigaction(signaltype, struct sig action (handle, mask, flags), pointer to another sigaction structure)
+            The mask is the signals we want to block
+            the flag helps to control with more details
+
+            A signalset is a bunch of bits hidden behind macros
+            Sigemptyset will initialise a signalset and will clear everything
+ * 
+ */
 void setup_signal_handlers()
 {
     struct sigaction sa_int;
 	struct sigaction sa_quit;
 
     // Setup for SIGINT
-	sa_int.sa_handler = handle_sigint;
 	sigemptyset(&sa_int.sa_mask);
+	sa_int.sa_handler = handle_sigint;
 	sa_int.sa_flags = SA_RESTART; // Auto-restart functions if interrupted
 	sigaction(SIGINT, &sa_int, NULL);
 

@@ -43,7 +43,6 @@ int	main(int argc, char **argv, char **env)
 	print_logo(env);
 	ex->new_env = copy_strarr(env);
 	setup_signal_handlers(); // Set up signal handling
-
 	while (1)
 	{
 		ex->prompt = set_prompt(ex->new_env);
