@@ -21,9 +21,7 @@ int	nb_of_charstrstr(char **path)
 /*
 	So here we have 2 struct one for the execution and one for the parsing
 	We malloc ex and give the stats of 0 (I don't understand why yet tho)
-
 */
-
 int	main(int argc, char **argv, char **env)
 {
 	t_parsing 	*parse;
@@ -35,6 +33,7 @@ int	main(int argc, char **argv, char **env)
 		exit(1);
 	ex->status = 0;
 	ex->foreground_job_active = 0;
+	ex->interrupted = 0;
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
@@ -49,6 +48,12 @@ int	main(int argc, char **argv, char **env)
 	{
 		ex->prompt = set_prompt(ex->new_env);
 		update_sigquit_handling();
+		if (ex->interrupted)
+		{
+        	ex->interrupted = 0;  // Reset the flag
+       	 	//free(ex->line);       // Free the line buffer if needed
+        	continue;              // Skip processing and re-prompt
+    	}
 		ex->line = readline(ex->prompt);
 		free(ex->prompt);
 		if (ex->line == NULL)
@@ -57,7 +62,7 @@ int	main(int argc, char **argv, char **env)
 			free_strrarr(ex->new_env);
 			return (0);
 		}
-		if (*ex->line)
+		if (*ex->line && !ex->interrupted)
 		{
 			add_history(ex->line);
 			parse = start_parse(ex->line, ex->status);

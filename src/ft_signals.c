@@ -7,6 +7,7 @@ void	handle_sigint(int sig)
 	(void)sig;
 	char* prompt;
 
+    ex->interrupted = 1;
     write (1, "\n", 1);
 	prompt = set_prompt(ex->new_env);
 	write(1, prompt, ft_strlen(prompt));
@@ -35,8 +36,8 @@ void setup_signal_handlers()
 
    // SIGQUIT handler setup
     sigemptyset(&sa_quit.sa_mask);
+    sa_quit.sa_handler = handle_sigquit; 
     sa_quit.sa_flags = 0;  // No flags
-    sa_quit.sa_handler = handle_sigquit;  // Set our custom handler
     sigaction(SIGQUIT, &sa_quit, NULL);
 }
 

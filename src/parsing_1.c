@@ -58,7 +58,7 @@ t_parsing	*start_parse(char *line, int status)
 	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 		return (NULL);
 	get_cmd(parse_list);
-	// print_tkns_array_debug(*(parse_list));
+	print_tkns_array_debug(*(parse_list));
 	return (parse_list);
 }
 
