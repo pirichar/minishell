@@ -1,5 +1,8 @@
-gcc -Wall -Werror -Wextra ./src/*.c -lreadline
+# gcc -Wall -Werror -Wextra ./src/*.c ./include/Libft/libft/libft.a -lreadline
 
-./a.out
+# ./a.out
 
-rm -rf a.out
+# rm -rf a.out
+
+
+./DunderShell

@@ -1,171 +1,123 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/29 10:06:15 by pirichar          #+#    #+#             */
-/*   Updated: 2022/06/04 09:41:27 by pirichar         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
 #include "../include/minishell.h"
 
-// void	print_env()
-// {
-// 	char	*tmp;
-
-
-// }
-
-// int main(int argc, char **argv, char **env)
-// {
-// 	(void)argc;
-// 	(void)argv;
-// 	char *line;
-// 	int		i;
-// 	char **path;	
-// 	path = path_to_strarr(env);
-// 	i = 0;
-// 	while(1)
-// 	{
-// 		line = readline("MINISHELL: ");
-// 		if (line && *line) // not sure I need this but saw it in the man
-// 			add_history(line);
-// 		while(path[i])
-// 		{
-// 			if (search_path(path[i], line) == true)
-// 				printf("VALID COMMAND WILL HANDLE LATER\n");
-// 			else
-// 				printf("Invalid command\n");
-// 			i++;
-// 		}
-// 		if (ft_strncmp(line, "env",5) == 0)
-// 		{
-// 			i = 0;
-// 			while(env[i])
-// 			{
-// 				printf("%s\n",env[i]);
-// 				i++;
-// 			}
-// 			printf("\n");
-// 			free(line);
-// 		}
-// 		else if(ft_strncmp(line, "exit",5) == 0)
-// 		{
-// 			free(line);
-// 			return (0);
-// 		}
-// 		else
-// 			free(line);
-// 	}
-// 	free(path);
-// }
-
-
-int	nb_of_paths(char **path)
+void configure_terminal()
 {
-	int i;
+    struct termios term;
+    tcgetattr(STDIN_FILENO, &term);  // Get the current terminal attributes
+    term.c_lflag &= ~ECHOCTL;        // Clear the ECHOCTL flag to stop echoing Ctrl characters
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);  // Apply the modified settings
+}
+
+int	nb_of_charstrstr(char **path)
+{
+	int	i;
 
 	i = 0;
-	while(path[i])
+	while (path[i])
 		i++;
 	return (i);
 }
 
-int main(int argc, char **argv, char **env)
+/*
+	So here we have 2 struct one for the execution and one for the parsing
+	We malloc ex and give the stats of 0 (I don't understand why yet tho)
+*/
+int	main(int argc, char **argv, char **env)
 {
-	(void)argc;
+	t_parsing 	*parse;
 	(void)argv;
-	char *line;
-	int		i;
-	char **path;
-	
-	path = path_to_strarr(env);
-	while(1)
-	{
-		i = 0;
-		line = readline("MINISHELL: ");
-		if (line && *line) // not sure I need this but saw it in the man
-			add_history(line);
-		/* parse the line here
-			1- first round check the special characters - set the quotes to their number ;
-				check for the start at the same time and filter the " " ' ' and spaces at first
-				check the number of pipe 
-				check the ammount of strings to malloc
-				at the end if quotes % 2 != 0 invalid command
-				
-			2- reparse taking in count special character and fill the cmd array spliting with spaces
-				-- FOR THE CMDS ; I WILL NEED TO IMPLEMENT A LIST OR A STRUCT WITH THE STRING ITSELF AND ITS POSITION + A POINTER TO THE NEXT ELEMENT --
-				--ASSUME THAT IF YOU ARE IN QUOTES YOULL BE IN AN OTHER MODE OF PARSING--
-				--PARSE EVERYTHING THEN RUN ALL IN PARRALLEL LIKE YOU DID IN PIPEX--
-				***** << allo " ; IN THIS SCENARIO THE " QUOTE WOULD PROMPT THE QUOTE PROMPT BEFORE THE HERE DOC SO THE PROMPT GOES OVER ALL ****
-				If you encounter a < dup2 the input with the file; open as well; if you dont find the file return and empty pipe and prompt an error
-				if you encounter a << at the begining of the line with  a valid herdoc word after you prompt an heredoc and pass the output to the other command if there is any
-				if you encounter a > you dup2 the ouput and open the file ** THINK ABOUT THIS ONE COMPARE TO YOUR PIPEX
-				if you encounter a >> you dup2 the ouput and open the file with append
-				if you encounter a " " any character goes into the array no mather what except for valid path with $; each time you hit a " nb_dbquote-- ; dbquotes = true;enter dbquotes mode
-				if you encounter a ' ' any character goes into the array untill you hit another one each time you hit a ' nb_quote-- ; quotes = true;enter quote mode
-				if you encounter a $	if the word next to the $ is a valid env var the env var pointed by the word replace the word into the array
-				if you encounter a space you should try to access the word and see if its a valid command
-					if its not valid prompt a message error and pass an empty pipe to next command 
-						if last command just prompt empty message and return prompt
-					if its valid add everything to the string formed by the accessed command so you can use them as its arguments ; nb of wd in this node ++;
-					each time you cross a space nb of word in this node ++
-					go untill you meet the \0 or a |  character or a < or a > or a & 
-				if you encounter a | 	you must absolutely stop the actual array with \0  and move to the next command; pipe--
-					you could also check after a space how many space there is before to add the next argument the the array
-					while it is space and the next character is a space or the same kind of quote you might be in i++;
-					if char +1 = \0 stop the parsing of the line
-				if you encounter a \0  stop the parsing of the line
-				else
-					you add the char into the array 
-			3- give that to the command that search the path OR exec the cmds
-							*/
-		/* 
-			initiate program for this and work in the child after
-			create an array of pids depending on the count of commands
-			pass the array of argument as it was char **argv in calling_the_execs
-			Calculate the amount of argument and pass it as argc 
-			set fd in ; set fd out; prepare stuff for the execute command function
-		*/
-		while(path[i]) //this could be inserted into something else I used it to see if the command is in the path or not
-		{
-			if (search_path(path[i], line) == true)
-				break ;
-			i++;
-		}
-		if (i == nb_of_paths(path))
-				printf("Invalid command\n");
-		else
-		{
-			printf("VALID COMMAND WILL HANDLE LATER\n");
-			//here I should probably fork and start to do stuff with that command
-		}
 
-		if (ft_strncmp(line, "env",5) == 0)
+    configure_terminal(); // Configure terminal settings to suppress ^C
+	ex = ft_calloc(1, sizeof(t_exec));
+	if (ex == NULL)
+		exit(1);
+	ex->status = 0;
+	ex->foreground_job_active = 0;
+	ex->interrupted = 0;
+	if (argc > 1)
+	{
+		fprintf(stderr, "Why U put params?!?!\n");
+		free(ex);
+		return (1);
+	}
+	print_logo(env);
+	ex->new_env = copy_strarr(env);
+	setup_signal_handlers(); // Set up signal handling
+	while (1)
+	{
+		ex->prompt = set_prompt(ex->new_env);
+		update_sigquit_handling();
+		if (ex->interrupted)
 		{
-			i = 0;
-			while(env[i])
-			{
-				printf("%s\n",env[i]);
-				i++;
-			}
-			printf("\n");
-			free(line);
-		}
-		else if(ft_strncmp(line, "exit",5) == 0)
+        	ex->interrupted = 0;  // Reset the flag
+       	 	//free(ex->line);       // Free the line buffer if needed
+        	continue;              // Skip processing and re-prompt
+    	}
+		ex->line = readline(ex->prompt);
+		free(ex->prompt);
+		if (ex->line == NULL)
 		{
-			free(line);
+			free(ex->line);
+			free_strrarr(ex->new_env);
 			return (0);
 		}
-		else
-			free(line);
+		if (*ex->line && !ex->interrupted)
+		{
+			add_history(ex->line);
+			parse = start_parse(ex->line, ex->status);
+			if (parse == NULL)
+			{
+				free(ex->line);
+				continue;
+			}
+			parse->ex = ex;  //valider si ca ca ne fait pas un leak je pense que oui
+			parse->tkns_list = parse->tkns_list->start;
+			ex->s_line = parse->tkns_list->vector_cmd;
+			if (ex->s_line[0] == NULL)// pas certain de savoir  à quoi ça sert ce if là
+			{
+				free(ex->line);
+				free_strrarr(ex->s_line);
+				printf("exit\n");
+				continue ;
+			}
+			ex->foreground_job_active = 1; // Job is starting
+			update_sigquit_handling();
+			calling_the_execs_shell(ex->s_line, &ex->new_env, parse);
+			wait_for_pids(parse); 
+			ex->foreground_job_active = 0; // Job is complete
+			update_sigquit_handling();
+			free_strrarr(ex->s_line);
+		}
+		free(ex->line);
 	}
-	free(path);
+	free_strrarr(ex->path);
+	// free(ex->prompt);
+	free (ex); // valider comment bien free toute la structure
+}
+
+void	print_logo(char **env)
+{
+	char	*lol[15];
+	int		pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		lol[0] = "/usr/bin/clear";
+		lol[1] = NULL;
+		execve(lol[0], lol, env);
+	}
+	wait(NULL);
+	printf(RED"\n __________________________________________________________________\n");
+	printf("|    ____                  __             __  ____ ___________     |\n");
+	printf("|   / __ \\__  ______  ____/ /__  _____   /  |/  (_) __/ __/ (_)___ |\n");
+	printf("|  / / / / / / / __ \\/ __  / _ \\/ ___/  / /|_/ / / /_/ /_/ / / __ \\|\n");
+	printf("| / /_/ / /_/ / / / / /_/ /  __/ /     / /  / / / __/ __/ / / / / /|\n");
+	printf("|/_____/\\____/_/ /_/\\__,_/\\___/_/   __/_/  /_/_/_/ /_/ /_/_/_/ /_/ |\n");
+	printf(BLU"|        / /_  __  __   _________ _/ /_  ________                  |\n");
+	printf("|       / __ \\/ / / /  / ___/ __ `/ __ \\/ ___/ _ \\                 |\n");
+	printf("|      / /_/ / /_/ /  (__  ) /_/ / /_/ / /  /  __/                 |\n");
+	printf("|     /_.___/\\__, /  /____/\\__,_/_.___/_/   \\___/                  |\n");
+	printf("|          /____/                                                  |\n");
+	printf("|__________________________________________________________________|\n\n\n"RESET);
 }

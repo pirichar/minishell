@@ -1,0 +1,89 @@
+#include "../include/minishell.h"
+
+int	strarr_len(char **str_arr)
+{
+	int	i;
+
+	i = 0;
+	while (str_arr[i])
+		i++;
+	return (i);
+}
+
+
+
+void	free_strrarr(char **to_free)
+{
+	int	i;
+
+	i = 0;
+	while (to_free[i])
+	{
+		free(to_free[i]);
+		i++;
+	}
+	free(to_free);
+}
+
+/*
+	This function takes care of setting the 3 variables when we open the shell
+	Those variables are
+	PWD
+	SHLVL
+	_=
+*/
+void	set_3_variables(char ***env)
+{
+	char	*actual_pwd;
+	char	*buff;
+	char	*binary;
+	char	*shlvl;
+	int		nb;
+
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	set_variable(env, "PWD=", actual_pwd);
+	binary = ft_strjoin(actual_pwd, "./DunderShell");
+	set_variable(env, "_=", binary);
+	shlvl = var_to_str((*env), "SHLVL");
+	if (shlvl == NULL)
+		nb = 1;
+	else
+	{
+		nb = shlvl[ft_strlen(shlvl) - 1] - '0';
+		nb++;
+	}
+	shlvl = ft_itoa(nb);
+	set_variable(env, "SHLVL=", shlvl);
+	free(actual_pwd);
+	free(buff);
+	free(binary);
+	free(shlvl);
+}
+
+/*
+	This function copies the env variables passed by the main
+	It then sets 3 variables that are the SHLVL, the actual pwd 
+	and the binary using the function set 3 variabless
+*/
+char	**copy_strarr(char **env)
+{
+	int		i;
+	char	**rtn;
+
+	i = 0;
+	while (env && env[i])
+		i++;
+	rtn = ft_calloc((i + 1), sizeof(char *));
+	if (i != 0)
+	{
+		i = 0;
+		while (env[i])
+		{
+			rtn[i] = ft_strdup(env[i]);
+			i++;
+		}
+	}
+	set_3_variables(&rtn);
+	return (rtn);
+}

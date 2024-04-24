@@ -1,26 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   environement.c                                     :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/31 13:24:27 by pirichar          #+#    #+#             */
-/*   Updated: 2022/05/31 13:39:37 by pirichar         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../include/minishell.h"
-
-// static void	strarr_free(char **arr)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (arr[i])
-// 		free(arr[i++]);
-// 	free(arr);
-// }
 
 static int	strlen_path(char **env)
 {
@@ -53,7 +31,7 @@ static int	strlen_path(char **env)
 	The output represent all the possible
 	 path to try with execve with the command
 */
-char	**path_to_strarr(char **env)
+char	**path_to_starrr(char **env, char *var)
 {
 	int		i;
 	int		len;
@@ -62,11 +40,11 @@ char	**path_to_strarr(char **env)
 
 	p_arr = NULL;
 	len = strlen_path(env);
-	path = malloc(sizeof(char) * len);
+	path = calloc(sizeof(char), len);
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
 		{
 			ft_strlcpy(path, env[i], len);
 			p_arr = ft_split(path + 5, ':');
@@ -75,6 +53,27 @@ char	**path_to_strarr(char **env)
 	}
 	free (path);
 	return (p_arr);
+}
+
+/*
+	Basically the same as getenv() but you pass
+	the environment table you want as the first argument
+	then pass the variable you look for
+	The functions return a pointer to the variable 
+	or NULL if nothing is found
+*/
+char	*var_to_str(char **env, char *var)
+{
+	int	i;
+
+	i = 0;
+	while (env && env[i])
+	{
+		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
+			break ;
+		i++;
+	}
+	return (env[i]);
 }
 
 /*
@@ -99,5 +98,19 @@ bool	search_path(const char *p_arr, const char *cmd)
 	}
 	free(line);
 	free(with_slash);
+	return (false);
+}
+
+bool	search_path_exec(const char *p_arr, const char *cmd)
+{
+	char	*line;
+
+	line = ft_strjoin(p_arr, cmd);
+	if (access(line, X_OK) == 0)
+	{
+		free(line);
+		return (true);
+	}
+	free(line);
 	return (false);
 }
