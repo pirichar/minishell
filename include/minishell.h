@@ -29,9 +29,12 @@ typedef struct	s_exec
 	int		cmd_rtn;
 	int 	foreground_job_active;  // 0 means no job is active, 1 means a job is active
 	volatile sig_atomic_t interrupted;  // Flag to indicate interruption by SIGINT - VALIDER SI JE PREND ÇA OU UN INT 
+	struct sigaction sa_int;
+	struct sigaction sa_quit;
 }				t_exec;
 
-// ex est ma seul variable globale pour l'instant , je l'utilise
+// ex est ma seul variable globale pour l'instant , je l'utilise avec les signaux et à travers l'exécution en général
+// pour des raison de facilite d'acces j'ai choisi cette variable comme variable global
 t_exec		*ex;
 
 typedef struct s_files

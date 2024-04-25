@@ -18,16 +18,9 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
-/*
-	So here we have 2 struct one for the execution and one for the parsing
-	We malloc ex and give the stats of 0 (I don't understand why yet tho)
-*/
-int	main(int argc, char **argv, char **env)
+int Setup_minishell(int argc, char **env)
 {
-	t_parsing 	*parse;
-	(void)argv;
-
-    configure_terminal(); // Configure terminal settings to suppress ^C
+	configure_terminal(); // Configure terminal settings to suppress ^C
 	ex = ft_calloc(1, sizeof(t_exec));
 	if (ex == NULL)
 		exit(1);
@@ -43,21 +36,41 @@ int	main(int argc, char **argv, char **env)
 	print_logo(env);
 	ex->new_env = copy_strarr(env);
 	setup_signal_handlers(); // Set up signal handling
+	return (0);
+}
+
+
+/*
+	So here we have 2 struct one for the execution and one for the parsing
+	We malloc ex and give the stats of 0 (I don't understand why yet tho)
+*/
+int	main(int argc, char **argv, char **env)
+{
+	t_parsing 	*parse;
+	(void)argv;
+
+	if (Setup_minishell(argc, env) == 1)
+	{
+		fprintf(stderr, "Why U put params?!?!\n");
+		free(ex);
+		return (1);
+	}
 	while (1)
 	{
-		ex->prompt = set_prompt(ex->new_env);
-		update_sigquit_handling();
-		if (ex->interrupted)
+		if (ex->interrupted == 1)
 		{
         	ex->interrupted = 0;  // Reset the flag
        	 	//free(ex->line);       // Free the line buffer if needed
-        	continue;              // Skip processing and re-prompt
+        	break;              // Skip processing and re-prompt
     	}
+		ex->prompt = set_prompt(ex->new_env);
+		update_sigquit_handling();
 		ex->line = readline(ex->prompt);
 		free(ex->prompt);
 		if (ex->line == NULL)
 		{
 			free(ex->line);
+			write(1,"exit\n",5);
 			free_strrarr(ex->new_env);
 			return (0);
 		}
