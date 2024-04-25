@@ -30,7 +30,7 @@ int Setup_minishell(int argc, char **env)
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
-		free(ex);
+		//free(ex);
 		return (1);
 	}
 	print_logo(env);
@@ -57,16 +57,16 @@ int	main(int argc, char **argv, char **env)
 	}
 	while (1)
 	{
-		if (ex->interrupted == 1)
-		{
-        	ex->interrupted = 0;  // Reset the flag
-       	 	//free(ex->line);       // Free the line buffer if needed
-        	break;              // Skip processing and re-prompt
-    	}
 		ex->prompt = set_prompt(ex->new_env);
 		update_sigquit_handling();
 		ex->line = readline(ex->prompt);
 		free(ex->prompt);
+		if (ex->interrupted == 1)
+		{
+        	ex->interrupted = 0;  // Reset the flag
+       	 	free(ex->line);       // Free the line buffer if needed
+        	continue;              // Skip processing and re-prompt
+    	}
 		if (ex->line == NULL)
 		{
 			free(ex->line);
