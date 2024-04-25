@@ -6,13 +6,13 @@
 void	handle_sigint(int sig)
 {
 	(void)sig;
-	//char* prompt;
+	char* prompt;
 
     ex->interrupted = 1;
     write (1, "\n", 1);
-	//prompt = set_prompt(ex->new_env);
-	//write(1, prompt, ft_strlen(prompt));
-	//free(prompt);
+	prompt = set_prompt(ex->new_env);
+	write(1, prompt, ft_strlen(prompt));
+	free(prompt);
 }
 
 // This function handles the Ctrl-\ (SIGINT) event

@@ -102,8 +102,9 @@ typedef struct s_parsing
 }				t_parsing;
 
 
-//logo
+//main.c
 void			print_logo(char **env);
+void 			prompt_and_read_input();
 //builtin
 void			look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
