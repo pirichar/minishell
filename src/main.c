@@ -18,7 +18,7 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
-int Setup_minishell(int argc, char **env)
+int	Setup_minishell(int argc, char **env)
 {
 	configure_terminal(); // Configure terminal settings to suppress ^C
 	ex = ft_calloc(1, sizeof(t_exec));
@@ -41,7 +41,7 @@ int Setup_minishell(int argc, char **env)
 	return (0);
 }
 
-void prompt_and_read_input()
+void	prompt_and_read_input()
  {
     ex->prompt = set_prompt(ex->new_env);
     update_sigquit_handling();
@@ -49,7 +49,8 @@ void prompt_and_read_input()
     free(ex->prompt);
 }
 
-void execute_command_shell(t_parsing *parse) {
+void	execute_command_shell(t_parsing *parse)
+{
     ex->foreground_job_active = 1; // Job is starting
     update_sigquit_handling();
     calling_the_execs_shell(ex->s_line, &ex->new_env, parse);
@@ -59,8 +60,8 @@ void execute_command_shell(t_parsing *parse) {
     free_strrarr(ex->s_line);
 }
 
-
-bool process_command() {
+bool	process_command()
+{
     t_parsing *parse;
 
     if (*ex->line && !ex->interrupted)
@@ -88,10 +89,13 @@ bool process_command() {
     return false;  // Continue with the main loop normally
 }
 
-bool handle_interruption() {
-    if (ex->interrupted == 1) {
+bool	handle_interruption()
+{
+    if (ex->interrupted == 1)
+	{
         ex->interrupted = 0;  // Reset the flag
-        if (ex->line != NULL) {
+        if (ex->line != NULL)
+		{
             free(ex->line);  // Free the line buffer if needed
             ex->line = NULL;
         }
