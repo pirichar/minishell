@@ -32,7 +32,7 @@ int	Setup_minishell(int argc, char **env)
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
-		//free(ex);
+		free(ex);
 		return (1);
 	}
 	print_logo(env);
@@ -96,7 +96,7 @@ bool	handle_interruption()
         ex->interrupted = 0;  // Reset the flag
         if (ex->line != NULL)
 		{
-            free(ex->line);  // Free the line buffer if needed
+          //  free(ex->line);  // Free the line buffer if needed
             ex->line = NULL;
         }
         return true;  // Indicate that main should skip processing

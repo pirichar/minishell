@@ -15,7 +15,7 @@ void	handle_sigint(int sig)
 	free(prompt);
 }
 
-// This function handles the Ctrl-\ (SIGINT) event
+// This function handles the Ctrl-\  event
 // Move to a new line
 void handle_sigquit(int sig)
  {
