@@ -18,77 +18,121 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
-/*
-	So here we have 2 struct one for the execution and one for the parsing
-	We malloc ex and give the stats of 0 (I don't understand why yet tho)
-*/
-int	main(int argc, char **argv, char **env)
+int	Setup_minishell(int argc, char **env)
 {
-	t_parsing 	*parse;
-	(void)argv;
-
-    configure_terminal(); // Configure terminal settings to suppress ^C
+	configure_terminal(); // Configure terminal settings to suppress ^C
 	ex = ft_calloc(1, sizeof(t_exec));
 	if (ex == NULL)
 		exit(1);
 	ex->status = 0;
 	ex->foreground_job_active = 0;
 	ex->interrupted = 0;
+	ex->line = NULL;
+	ex->prompt = NULL;
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
-		free(ex);
+		//free(ex);
 		return (1);
 	}
 	print_logo(env);
 	ex->new_env = copy_strarr(env);
 	setup_signal_handlers(); // Set up signal handling
+	return (0);
+}
+
+void	prompt_and_read_input()
+ {
+    ex->prompt = set_prompt(ex->new_env);
+    update_sigquit_handling();
+    ex->line = readline(ex->prompt);
+    free(ex->prompt);
+}
+
+void	execute_command_shell(t_parsing *parse)
+{
+    ex->foreground_job_active = 1; // Job is starting
+    update_sigquit_handling();
+    calling_the_execs_shell(ex->s_line, &ex->new_env, parse);
+    wait_for_pids(parse); 
+    ex->foreground_job_active = 0; // Job is complete
+    update_sigquit_handling();
+    free_strrarr(ex->s_line);
+}
+
+bool	process_command()
+{
+    t_parsing *parse;
+
+    if (*ex->line && !ex->interrupted)
+	{
+        add_history(ex->line);
+        parse = start_parse(ex->line, ex->status);
+        if (parse == NULL)
+		{
+            free(ex->line);
+            return true;  // Skip the remaining processing in the main loop
+        }
+        parse->ex = ex;
+        parse->tkns_list = parse->tkns_list->start;
+        ex->s_line = parse->tkns_list->vector_cmd;
+        if (ex->s_line[0] == NULL)
+		{
+            free(ex->line);
+            free_strrarr(ex->s_line);
+            printf("exit\n");
+            return true;  // Skip the remaining processing in the main loop
+        }
+        execute_command_shell(parse);
+    }
+    free(ex->line);
+    return false;  // Continue with the main loop normally
+}
+
+bool	handle_interruption()
+{
+    if (ex->interrupted == 1)
+	{
+        ex->interrupted = 0;  // Reset the flag
+        if (ex->line != NULL)
+		{
+            free(ex->line);  // Free the line buffer if needed
+            ex->line = NULL;
+        }
+        return true;  // Indicate that main should skip processing
+    }
+    return false;  // Indicate that processing should continue
+}
+
+/*
+	So here we have 2 struct one for the execution and one for the parsing
+	We malloc ex and give the stats of 0 (I don't understand why yet tho)
+*/
+int	main(int argc, char **argv, char **env)
+{
+	(void)argv;
+
+	if (Setup_minishell(argc, env) == 1)
+	{
+		fprintf(stderr, "Why U put params?!?!\n");
+		free(ex);
+		return (1);
+	}
 	while (1)
 	{
-		ex->prompt = set_prompt(ex->new_env);
-		update_sigquit_handling();
-		if (ex->interrupted)
-		{
-        	ex->interrupted = 0;  // Reset the flag
-       	 	//free(ex->line);       // Free the line buffer if needed
-        	continue;              // Skip processing and re-prompt
-    	}
-		ex->line = readline(ex->prompt);
-		free(ex->prompt);
-		if (ex->line == NULL)
+		if (ex->interrupted == 0)
+			prompt_and_read_input();
+		if(handle_interruption())
+       		 continue;  // Skip the rest of the loop
+		if (ex->line == NULL) // when ctrl D is pressed
 		{
 			free(ex->line);
+			write(1,"exit\n",5);
 			free_strrarr(ex->new_env);
-			return (0);
+			return (0); // should probably break here ? and properly end everything
 		}
-		if (*ex->line && !ex->interrupted)
-		{
-			add_history(ex->line);
-			parse = start_parse(ex->line, ex->status);
-			if (parse == NULL)
-			{
-				free(ex->line);
-				continue;
-			}
-			parse->ex = ex;  //valider si ca ca ne fait pas un leak je pense que oui
-			parse->tkns_list = parse->tkns_list->start;
-			ex->s_line = parse->tkns_list->vector_cmd;
-			if (ex->s_line[0] == NULL)// pas certain de savoir  à quoi ça sert ce if là
-			{
-				free(ex->line);
-				free_strrarr(ex->s_line);
-				printf("exit\n");
-				continue ;
-			}
-			ex->foreground_job_active = 1; // Job is starting
-			update_sigquit_handling();
-			calling_the_execs_shell(ex->s_line, &ex->new_env, parse);
-			wait_for_pids(parse); 
-			ex->foreground_job_active = 0; // Job is complete
-			update_sigquit_handling();
-			free_strrarr(ex->s_line);
-		}
-		free(ex->line);
+		if (process_command())
+			continue;
 	}
 	free_strrarr(ex->path);
 	// free(ex->prompt);

@@ -176,9 +176,12 @@ void	alloc_vector(t_parsing *parse_list, int ind_vector,
 	parse_list->i_str = 0;
 }
 
+/*
+	// DEBUG - HERE i added if parse_list ; we had a segfault 
+*/
 int	is_it_redir(t_parsing *parse_list)
 {
-	if (ft_strchr("<>", parse_list->tkns_array[parse_list->i_arr][parse_list->i_str]))
+	if (parse_list && ft_strchr("<>", parse_list->tkns_array[parse_list->i_arr][parse_list->i_str]))
 	{
 		parse_list->i_arr += 2;
 		if (parse_list->tkns_array[parse_list->i_arr - 1] == NULL
@@ -195,7 +198,7 @@ int	is_it_redir(t_parsing *parse_list)
 
 int	is_it_pipe(t_parsing *parse_list)
 {
-	if (ft_strchr("|", parse_list->tkns_array[parse_list->i_arr]
+	if (parse_list->tkns_array[parse_list->i_arr] && ft_strchr("|", parse_list->tkns_array[parse_list->i_arr]
 			[parse_list->i_str]))
 	{
 		if (parse_list->i_vect == 0

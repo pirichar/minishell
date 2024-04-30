@@ -1,5 +1,11 @@
 #include "../include/minishell.h"
 
+
+/*
+	// DEBUG - HERE WE HAD A PROBLEM WHEN WE HAVE A LINE LIKE 
+	< notes.txt > out where there is not parse_lit->tkns_array[parse_list->i_arr] (no command)
+	I added some check in the while loop 
+*/
 int	get_cmd(t_parsing *parse_list)
 {
 	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **),
@@ -7,7 +13,9 @@ int	get_cmd(t_parsing *parse_list)
 	while (parse_list->tkns_array[parse_list->i_arr])
 	{
 		alloc_vector(parse_list, parse_list->i_vect, parse_list->i_arr, false);
-		while (parse_list->tkns_array[parse_list->i_arr][parse_list->i_str])
+		while (parse_list && parse_list->tkns_array &&
+		 parse_list->tkns_array[parse_list->i_arr] &&
+		 parse_list->tkns_array[parse_list->i_arr][parse_list->i_str])
 		{
 			if (is_it_redir(parse_list) == 1)
 				return (0);
@@ -58,13 +66,16 @@ t_parsing	*start_parse(char *line, int status)
 	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 		return (NULL);
 	get_cmd(parse_list);
-	print_tkns_array_debug(*(parse_list));
+	//print_tkns_array_debug(*(parse_list));
 	return (parse_list);
 }
 
 void	do_copy_cmd(t_parsing *parse_list)
 {
-	parse_list->tkns_list->vector_cmd[parse_list->i_vect][parse_list->i_str]
-		= parse_list->tkns_array[parse_list->i_arr][parse_list->i_str];
-	parse_list->i_str++;
+	if (parse_list && parse_list->tkns_array && parse_list->tkns_array[parse_list->i_arr])
+	{
+		parse_list->tkns_list->vector_cmd[parse_list->i_vect][parse_list->i_str]
+			= parse_list->tkns_array[parse_list->i_arr][parse_list->i_str];
+		parse_list->i_str++;
+	}
 }
