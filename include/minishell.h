@@ -112,12 +112,9 @@ void			set_variable(char ***env, char *var, char *new_var);
 void			calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse);
 void			parse_and_exec_cmd_shell(char **cmd, char **env);
 //cd.c
-void			go_to_home(char ***new_env);
 void			mini_cd(char **s_line, char ***new_env,  t_parsing *parse);
 //echo.c
 void			mini_echo(char **s_line, t_parsing *parse);
-bool			check_only_n(char *str);
-void			parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i);
 //env.c
 void			mini_env(char **new_env,  t_parsing *parse);
 int				ft_strcmp(const char *s1, const char *s2);

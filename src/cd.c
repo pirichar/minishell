@@ -1,6 +1,11 @@
 #include "../include/minishell.h"
 
-void	go_to_home(char ***new_env)
+/**
+ * @brief function called by CD when no option with it
+ * 
+ * @param new_env passwd to set the PWD
+ */
+static void	go_to_home(char ***new_env)
 {
 	char	**home;
 	char	*actual_pwd;

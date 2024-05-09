@@ -1,13 +1,25 @@
 #include "../include/minishell.h"
 
+/**
+ * @brief Get the current terminal attributes
+			Clear the ECHOCTL flag to stop echoing Ctrl characters
+			Apply the modified settings
+ * 
+ */
 void configure_terminal()
 {
     struct termios term;
-    tcgetattr(STDIN_FILENO, &term);  // Get the current terminal attributes
-    term.c_lflag &= ~ECHOCTL;        // Clear the ECHOCTL flag to stop echoing Ctrl characters
-    tcsetattr(STDIN_FILENO, TCSANOW, &term);  // Apply the modified settings
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag &= ~ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
+/**
+ * @brief 
+ * 
+ * @param path 
+ * @return int 
+ */
 int	nb_of_charstrstr(char **path)
 {
 	int	i;
@@ -18,9 +30,20 @@ int	nb_of_charstrstr(char **path)
 	return (i);
 }
 
-int	Setup_minishell(int argc, char **env)
+/**
+ * @brief Configure the terminal settings to suppress ^C
+			Allocate the main execution struct called T_EXEC
+			Setup variables and validate if the user uses args
+			Print logo , get the env and setup signal handling
+ * 
+ * @param argc 
+ * @param env 
+ * @return int 
+ */
+
+int	setup_minishell(int argc, char **env)
 {
-	configure_terminal(); // Configure terminal settings to suppress ^C
+	configure_terminal();
 	ex = ft_calloc(1, sizeof(t_exec));
 	if (ex == NULL)
 		exit(1);
@@ -37,10 +60,14 @@ int	Setup_minishell(int argc, char **env)
 	}
 	print_logo(env);
 	ex->new_env = copy_strarr(env);
-	setup_signal_handlers(); // Set up signal handling
+	setup_signal_handlers();
 	return (0);
 }
 
+/**
+ * @brief 
+ * 
+ */
 void	prompt_and_read_input()
  {
     ex->prompt = set_prompt(ex->new_env);
@@ -49,6 +76,11 @@ void	prompt_and_read_input()
     free(ex->prompt);
 }
 
+/**
+ * @brief 
+ * 
+ * @param parse 
+ */
 void	execute_command_shell(t_parsing *parse)
 {
     ex->foreground_job_active = 1; // Job is starting
@@ -60,6 +92,12 @@ void	execute_command_shell(t_parsing *parse)
     free_strrarr(ex->s_line);
 }
 
+/**
+ * @brief 
+ * 
+ * @return true 
+ * @return false 
+ */
 bool	process_command()
 {
     t_parsing *parse;
@@ -89,6 +127,12 @@ bool	process_command()
     return false;  // Continue with the main loop normally
 }
 
+/**
+ * @brief 
+ * 
+ * @return true 
+ * @return false 
+ */
 bool	handle_interruption()
 {
     if (ex->interrupted == 1)
@@ -104,15 +148,20 @@ bool	handle_interruption()
     return false;  // Indicate that processing should continue
 }
 
-/*
-	So here we have 2 struct one for the execution and one for the parsing
-	We malloc ex and give the stats of 0 (I don't understand why yet tho)
-*/
+
+/**
+ * @brief 
+ * 
+ * @param argc 
+ * @param argv 
+ * @param env 
+ * @return int 
+ */
 int	main(int argc, char **argv, char **env)
 {
 	(void)argv;
 
-	if (Setup_minishell(argc, env) == 1)
+	if (setup_minishell(argc, env) == 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
 		free(ex);
@@ -139,6 +188,11 @@ int	main(int argc, char **argv, char **env)
 	free (ex); // valider comment bien free toute la structure
 }
 
+/**
+ * @brief 
+ * 
+ * @param env 
+ */
 void	print_logo(char **env)
 {
 	char	*lol[15];
