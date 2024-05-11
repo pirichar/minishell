@@ -120,12 +120,10 @@ void			mini_env(char **new_env,  t_parsing *parse);
 int				ft_strcmp(const char *s1, const char *s2);
 void			print_out_dir(char **to_print);
 //environement.c
-bool			search_path(const char *p_arr, const char *cmd);
 char			**path_to_starrr(char **env, char *var);
 char			*var_to_str(char **env, char *var);
 bool			search_path_exec(const char *p_arr, const char *cmd);
 //exit.c
-void			exit_was_too_long(char **s_line);
 void			mini_exit(char **s_line, t_parsing *parse);
 //execute.c
 int				execute(int fd_in, int *p, char **env, t_parsing *parse);
@@ -135,9 +133,6 @@ void			execute_out(char **cmd, int fds[2], char **env, t_parsing *parse);
 void			execute_solo(char **cmd, char ***env, t_parsing *parse);
 //export.c
 char			**bubble_sort_strarr(char **rtn);
-char			**sort_strarr(char **to_sort);
-void			print_export(char ***new_env);
-void			actually_set_variables(char **s_line, char ***new_env);
 void			mini_export(char **s_line, char ***new_env, t_parsing *parse);
 //ft_strjoin_free.c
 char	*ft_strjoin_free(char *s1, const char *s2);

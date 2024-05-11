@@ -70,13 +70,19 @@ char	**path_to_starrr(char **env, char *var)
 	return (p_arr);
 }
 
-/*
-	Basically the same as getenv() but you pass
-	the environment table you want as the first argument
-	then pass the variable you look for
-	The functions return a pointer to the variable 
-	or NULL if nothing is found
-*/
+/**
+ * @brief Basically the same as getenv() but you pass
+			the environment table you want as the first argument
+			then pass the variable you look for
+			The functions return a pointer to the variable 
+			or NULL if nothing is found
+ * 
+ * @param env env to look into 
+ * @param var to look into env
+ * @return a copy of the variable you found into env
+
+ // TO-DO This function is dangerous I have no check in it
+ */
 char	*var_to_str(char **env, char *var)
 {
 	int	i;
@@ -91,32 +97,21 @@ char	*var_to_str(char **env, char *var)
 	return (env[i]);
 }
 
-/*
-	This function takes as input a line of the path
-	and the argv[1] passed by main
-	It also takes as an input the CMD you are trying to look for
-	It will add the slash to the cmd; do a strjoin of the path and the cmd 
-	It will then try to acces it if it does it will return true
-	Otherwise it will return false
-*/
-bool	search_path(const char *p_arr, const char *cmd)
-{
-	char	*line;
-	char	*with_slash;
+/**
+ * @brief This function takes as input a line of the path
+			It also takes as an input the CMD you are trying to look for
+			It will add the slash to the cmd;
+			do a strjoin of the path and the cmd 
+			It will then try to acces it if it does it will return true
+			Otherwise it will return false
 
-	with_slash = ft_strjoin("/", cmd);
-	line = ft_strjoin(p_arr, with_slash);
-	if (access(line, X_OK) == 0)
-	{
-		free(line);
-		free(with_slash);
-		return (true);
-	}
-	free(line);
-	free(with_slash);
-	return (false);
-}
-
+			This function is called in parse_and_exec_cmd_shell
+ * 
+ * @param One of the avaialable Paths 
+ * @param cmd to check with all the paths
+ * @return true if we find are able to access the cmd
+ * @return false if we can't acces the cmd
+ */
 bool	search_path_exec(const char *p_arr, const char *cmd)
 {
 	char	*line;
