@@ -103,8 +103,7 @@ typedef struct s_parsing
 
 
 //main.c
-void			print_logo(char **env);
-void 			prompt_and_read_input();
+void	prompt_and_read_input(void);
 //builtin
 void			look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
@@ -136,6 +135,10 @@ char			**bubble_sort_strarr(char **rtn);
 void			mini_export(char **s_line, char ***new_env, t_parsing *parse);
 //ft_strjoin_free.c
 char	*ft_strjoin_free(char *s1, const char *s2);
+//logo_n_setup
+void			print_logo(char **env);
+void			configure_terminal(void);
+int				setup_minishell(int argc, char **env);
 //look_for.c
 bool			look_for_exit(char **s_line);
 bool			look_for_export(char **s_line);
@@ -145,8 +148,6 @@ bool			look_for_echo(char **s_line);
 //pwd.c
 void			mini_pwd(t_parsing *parse);
 //signals
-void handle_sigint(int sig);
-void handle_sigquit(int sig);
 void setup_signal_handlers();
 void update_sigquit_handling();
 

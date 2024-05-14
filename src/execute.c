@@ -65,7 +65,7 @@ static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
 		if the fd is other then -1 (is valid) execute will fork
 
 		The child process will then dup the passed
-		 fd_in into stdin and close fd_in
+		fd_in into stdin and close fd_in
 		Then the process will dup the writing part of the pipe 
 		into the stdin then close the pipe[1]
 		Finally its gonna call parse and exec cmd which 
