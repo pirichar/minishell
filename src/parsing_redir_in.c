@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-int	check_redir_in(t_parsing *parse_list)
+int	check_redir_in(t_parsing *parse_list) //simplify with token types
 {
 	int	i;
 	int	j;

@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-int	init_first_token_nodes(t_parsing *parse_list)
+int	init_first_token_nodes(t_parsing *parse_list)  //lets see if this is even useful now
 {
 	parse_list->tkns_list = calloc(1, sizeof(t_tkns));
 	parse_list->tkns_list->dollar_sign = false;
@@ -32,7 +32,7 @@ void	print_tkns_array_debug(t_parsing parse_list)
 	}
 }
 
-int	count_cmd(char **tkns_array, int ind_array)
+int	count_cmd(char **tkns_array, int ind_array)  //find how many tokens are type command
 {
 	int	count;
 
@@ -52,7 +52,7 @@ int	count_cmd(char **tkns_array, int ind_array)
 	return (count);
 }
 
-int	check_file_and_delim_name(t_tkns *tkns_array, int j)
+int	check_file_and_delim_name(t_tkns *tkns_array, int j) //this should work as-is
 {
 	if (tkns_array->next != NULL)
 	{
@@ -72,7 +72,7 @@ int	check_file_and_delim_name(t_tkns *tkns_array, int j)
 	return (0);
 }
 
-int	check_pipe_name(t_tkns *tkns_array, int j)
+int	check_pipe_name(t_tkns *tkns_array, int j) //this should work as-is
 {
 	if (tkns_array->next
 		&& tkns_array->next->data[0] == '|')

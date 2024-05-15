@@ -12,7 +12,7 @@ t_tkns	*make_node(char *s)
 	return (new);
 }
 
-t_tkns *new_split(char *s, char *set)
+t_tkns *new_split(char *s, char *set) // make shorter
 {
 	t_tkns	*matrix;
 	t_tkns	*new;
@@ -62,6 +62,7 @@ t_tkns *new_split(char *s, char *set)
 					s++;
 					i++;
 				}
+				new->data[i] = '\0';
 				new->next = NULL;
 				if (!matrix->data)
 					matrix = new;
