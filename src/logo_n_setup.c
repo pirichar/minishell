@@ -90,7 +90,7 @@ int	setup_minishell(int argc, char **env)
 		return (1);
 	}
 	print_logo(env);
-	ex->new_env = copy_strarr(env);
+	ex->new_env = copy_env(env);
 	setup_signal_handlers();
 	return (0);
 }

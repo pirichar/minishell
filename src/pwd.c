@@ -1,5 +1,12 @@
 #include "../include/minishell.h"
 
+/**
+* @brief Builtin function
+		Our version of PWD
+		Using getCWD to get it
+ * 
+ * @param parse to set b_in true
+ */
 void	mini_pwd(t_parsing *parse)
 {
 	char	*to_print;

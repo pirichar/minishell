@@ -150,21 +150,16 @@ void			mini_pwd(t_parsing *parse);
 //signals
 void setup_signal_handlers();
 void update_sigquit_handling();
-
 //str_arr_fcn.c
 void			free_strrarr(char **to_free);
 int				strarr_len(char **str_arr);
-char 			**copy_strarr(char **env);
-void			set_3_variables(char ***env);
+char 			**copy_env(char **env);
 //unset.c
 char*			return_variable(char **env, char *var);
 void			mini_unset(char **s_line, char ***new_env,  t_parsing *parse);
 //wait_for_pids.c
 void	wait_for_pids(t_parsing *parse);
-
 //prompt
-char			*pwd_not_there(char *blue_user);
-char			*pwd_prompt(char *new_env[], char *blue_user);
 char			*set_prompt(char *new_env[]);
 //parsing
 t_parsing		*start_parse(char *line, int status);
