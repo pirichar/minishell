@@ -1,6 +1,15 @@
-#include "../include/minishell.h"		
+#include "../include/minishell.h"
 
-char	*pwd_not_there(char *blue_user)
+/**
+ * @brief Function used when there is no PWD
+			it will only print out 
+			the user followed by
+			dunder shell
+ * 
+ * @param blue_user passed to join
+ * @return sent to pwd_prompt
+ */
+static char	*pwd_not_there(char *blue_user)
 {
 	char	*pwd;
 	char	*prompt;
@@ -12,7 +21,17 @@ char	*pwd_not_there(char *blue_user)
 	return (prompt);
 }
 
-char	*pwd_prompt(char *new_env[], char *blue_user)
+/**
+ * @brief Function designed by JR (old member of the team)
+			This function will look for the PWD in the env
+			If not found it will use pwd not there
+			If found it will use the PWD to create the prompt
+ * 
+ * @param new_env used to search PWD
+ * @param blue_user used to add to the prompt
+ * @return string with pwd or not and user
+ */
+static char	*pwd_prompt(char *new_env[], char *blue_user)
 {
 	int		i;
 	char	*user;
@@ -39,6 +58,18 @@ char	*pwd_prompt(char *new_env[], char *blue_user)
 	return (prompt);
 }
 
+/**
+ * @brief Function called to return a prompt to give to minishell
+			Its called in main.c for ex->prompt
+			or in ft_signals for the prompt in sigint
+			It will use its local functions to
+			Get the PWD if available
+			Get the User if available
+			If not available we just return DunderShell
+ * 
+ * @param new_env to look for USER and PWD
+ * @return prompt returned
+ */
 char	*set_prompt(char *new_env[])
 {
 	char	*user;
@@ -52,7 +83,7 @@ char	*set_prompt(char *new_env[])
 		i++;
 		if (new_env[i] == NULL)
 		{
-			prompt = ft_strjoin("\e[1;32m", "DunderShell $> \e[0m");	
+			prompt = ft_strjoin("\e[1;32m", "DunderShell $> \e[0m");
 			return (prompt);
 		}
 	}

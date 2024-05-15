@@ -1,7 +1,14 @@
 #include "../include/minishell.h"
 #include <stdbool.h>
 
-void	add_new_variable(char ***env, char *var, char *variable)
+/**
+ * @brief Add new variable to the env ONLY CALLED BY SET_VARIABLE
+
+ * @param env Pointer to the char** env 
+ * @param var Variable to set
+ * @param variable its value
+ */
+static void	add_new_variable(char ***env, char *var, char *value)
 {
 	int		i;
 	char	**tmp;
@@ -15,10 +22,17 @@ void	add_new_variable(char ***env, char *var, char *variable)
 		(*env)[i] = ft_strdup(tmp[i]);
 		i++;
 	}
-	(*env)[i] = ft_strjoin(var, variable);
+	(*env)[i] = ft_strjoin(var, value);
 	free_strrarr(tmp);
 }
 
+/**
+ * @brief Set or add a new variable with EXPORT popa=MOMAN
+ * 
+ * @param env env variables passed by pointer
+ * @param var variable to set
+ * @param new_var 
+ */
 void	set_variable(char ***env, char *var, char *new_var)
 {
 	int		i;
@@ -40,6 +54,13 @@ void	set_variable(char ***env, char *var, char *new_var)
 		add_new_variable(env, var, new_var);
 }
 
+/**
+ * @brief 
+ * 
+ * @param s_line 
+ * @param new_env 
+ * @param parse 
+ */
 void	mini_dollar(char **s_line, char ***new_env, t_parsing *parse)
 {
 	char	*to_print;
@@ -67,6 +88,22 @@ void	mini_dollar(char **s_line, char ***new_env, t_parsing *parse)
 	}
 }
 
+/**
+ * @brief Basically what the name of the function says , not bad eh?
+			This function is called from execution functions
+			Echo
+			Cd
+			Export
+			Unset
+			pwd
+			env
+			exit
+			$
+ * 
+ * @param s_line Pointer to the Char** cmd
+ * @param new_env the env whihc is needed in some builtins
+ * @param parse  the parse structure so I can set builtin to true
+ */
 void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 {
 	if (ft_strncmp(*s_line[0], "echo", 5) == 0)

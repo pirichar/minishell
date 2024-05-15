@@ -1,6 +1,13 @@
 #include "../include/minishell.h"
 
-/*returns a copy of a variable or null if not found*/
+/**
+ * @brief returns a copy of a variable or null if not found
+			Used in builtin.c, cd.c and unset.c
+ * 
+ * @param env variables to look into
+ * @param var to search
+ * @return Copy of a vraible or null
+ */
 char	*return_variable(char **env, char *var)
 {
 	int		i;
@@ -17,9 +24,12 @@ char	*return_variable(char **env, char *var)
 	return (NULL);
 }
 
-/*
-	Function to use in unset
-*/
+/**
+ * @brief 
+ * 
+ * @param env 
+ * @param var 
+ */
 static void	delete_variable(char ***env, char *var)
 {
 	int		i;
@@ -46,6 +56,20 @@ static void	delete_variable(char ***env, char *var)
 		free_strrarr(tmp);
 }
 
+/**
+ * @brief Builtin function
+			Our version of unset
+			Will first check if enough arguments
+			Then will loop over everything to unset
+			If we try to unset = we will give an error
+ * 
+ // TO-DO Double check the behavior with = like
+ popa=moman or === , bash wont unset if there is at least one
+ = in the stuff to unset this is not my behavior
+ * @param s_line 
+ * @param new_env 
+ * @param p parsing struct used for the i, 
+ */
 void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 {
 	p->b_in = true;
