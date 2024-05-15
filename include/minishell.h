@@ -62,11 +62,13 @@ typedef struct s_ptrs
 //il va falloir rajouter des bool redir in; redir out; heredoc
 typedef struct s_tkns
 {
-	char			**vector_cmd;
+	char			**vector_cmd; //why? this struct can be a linked list, no need for this?? (to confirm)
 	int				argv_pos;
+	char			type;
 	bool			sing_quotes;
 	bool			dollar_sign;
 	bool			b_in;
+	char			*data;
 	struct s_tkns	*next;
 	struct s_tkns	*prev;
 	struct s_tkns	*start;
@@ -76,7 +78,7 @@ typedef struct s_tkns
 typedef struct s_parsing
 {
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
-	char 	**tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
+	t_tkns	*tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
 	char	*user;
 	char	*line;
@@ -177,8 +179,8 @@ char			*set_prompt(char *new_env[]);
 t_parsing		*start_parse(char *line, int status);
 int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
-int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
-int				check_pipe_name(t_parsing *parse_list, int i, int j);
+// int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
+// int				check_pipe_name(t_parsing *parse_list, int i, int j);
 int				count_cmd(char **tkns_array, int ind_array);
 int				get_cmd(t_parsing *parse_list);
 void			print_tkns_array_debug(t_parsing parse_list);
@@ -188,5 +190,10 @@ void			alloc_vector(t_parsing *parse_list, int ind_vector, int ind_array, bool t
 int				is_it_redir(t_parsing *parse_list);
 int				is_it_pipe(t_parsing *parse_list);
 void			do_copy_cmd(t_parsing *parse_list);
+
+//new_parsing
+t_tkns 			*new_split(char *s, char *set);
+int				check_file_and_delim_name(t_tkns *tkns_array, int j);
+int				check_pipe_name(t_tkns *tkns_array, int j);
 
 #endif

@@ -52,19 +52,19 @@ int	count_cmd(char **tkns_array, int ind_array)
 	return (count);
 }
 
-int	check_file_and_delim_name(t_parsing *parse_list, int i, int j)
+int	check_file_and_delim_name(t_tkns *tkns_array, int j)
 {
-	if (parse_list->tkns_array[i + 1])
+	if (tkns_array->next != NULL)
 	{
-		if (ft_strchr("<|>", parse_list->tkns_array[i + 1][0]))
+		if (ft_strchr("<|>", tkns_array->next->data))
 		{
 			printf("Dundershell: syntax error near unexpected token `%c'\n",
-				parse_list->tkns_array[i + 1][0]);
+				tkns_array->next->data);
 			return (1);
 		}
 	}
-	if (!parse_list->tkns_array[i + 1]
-		|| parse_list->tkns_array[i][j + 1] != '\0')
+	if (!tkns_array->next
+		|| tkns_array->data[j + 1] != '\0')
 	{
 		printf("Dundershell: syntax error near unexpected token `newline'\n");
 		return (1);
@@ -72,16 +72,16 @@ int	check_file_and_delim_name(t_parsing *parse_list, int i, int j)
 	return (0);
 }
 
-int	check_pipe_name(t_parsing *parse_list, int i, int j)
+int	check_pipe_name(t_tkns *tkns_array, int j)
 {
-	if (parse_list->tkns_array[i + 1]
-		&& parse_list->tkns_array[i + 1][0] == '|')
+	if (tkns_array->next
+		&& tkns_array->next->data[0] == '|')
 	{
 		printf("Dundershell: syntax error near unexpected token `|'\n");
 		return (1);
 	}
-	if (!parse_list->tkns_array[i + 1]
-		|| parse_list->tkns_array[i][j + 1] != '\0')
+	if (!tkns_array->next
+		|| tkns_array->next->data[j + 1] != '\0')
 	{
 		printf("Dundershell: syntax error near unexpected token `newline'\n");
 		return (1);

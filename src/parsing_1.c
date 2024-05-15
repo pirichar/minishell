@@ -44,7 +44,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->b_in = false;
 	parse_list->cmd = false;
 	parse_list->status = status;
-	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int));
+	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int)); //nb pipe est 0, faire cette étape plus tard??
 	parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	close(parse_list->file);
 
@@ -59,13 +59,15 @@ t_parsing	*start_parse(char *line, int status)
 	init_master_list(parse_list, status);
 	init_first_token_nodes(parse_list);
 	//printf("line ==== %s\n", line);
-	parse_list->tkns_array = split_set_quotes(line, "<>|");
+	parse_list->tkns_array = new_split(line, "<>|");  //change to split function only
 	//printf("first %s\n", parse_list->tkns_array[0]);
-	if (parse_list->tkns_array == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
+	if (parse_list->tkns_array == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ? ALEX note: null retourne seulement si la *line de depart est vide... idk si cest un check necessaire ou fait plus tot?
 		return (NULL);
 	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 		return (NULL);
 	get_cmd(parse_list);
+	//parse_list->tkns_array = del_quotes();
+	//parse_list->tkns_array = expend_var();
 	//print_tkns_array_debug(*(parse_list));
 	return (parse_list);
 }

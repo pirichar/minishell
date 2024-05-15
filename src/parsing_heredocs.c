@@ -49,17 +49,17 @@ int	check_metachar(t_parsing *parse_list)
 
 	i = 0;
 	j = 0;
-	while (parse_list->tkns_array[i])
+	while (parse_list->tkns_array != NULL)
 	{
-		while (parse_list->tkns_array[i][j])
+		while (parse_list->tkns_array != NULL && parse_list->tkns_array->data[j])
 		{
-			if (ft_strchr("<|>", parse_list->tkns_array[i][0]))
+			if (ft_strchr("<|>", parse_list->tkns_array->data[0])) //change for something like:  if (parse_list->tkns_array->type == "APPEND") then do each type
 			{
-				if (parse_list->tkns_array[i][0] == '<')
+				if (parse_list->tkns_array->data[0] == '<')
 				{
-					if (parse_list->tkns_array[i][1] == '<')
+					if (parse_list->tkns_array->data[1] == '<')
 					{
-						if (check_file_and_delim_name(parse_list, i, j + 1) == 1)
+						if (check_file_and_delim_name(parse_list->tkns_array, j + 1) == 1)
 							return (1);
 						printf("do the heredoc\n");
 						parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
@@ -69,7 +69,7 @@ int	check_metachar(t_parsing *parse_list)
 						{
 							write(1, "heredoc>", 9);
 							parse_list->buf = get_next_line(0);
-							if (!ft_strncmp(parse_list->tkns_array[i+1], parse_list->buf, ft_strlen(parse_list->tkns_array[i+1])))
+							if (!ft_strncmp(parse_list->tkns_array->next->data, parse_list->buf, ft_strlen(parse_list->tkns_array->next->data)))
 								break ;
 							write(parse_list->file, parse_list->buf, ft_strlen(parse_list->buf));
 							free (parse_list->buf);
@@ -80,28 +80,28 @@ int	check_metachar(t_parsing *parse_list)
 						j++;
 						break ;
 					}
-					if (parse_list->tkns_array[i][1] == '>')
+					if (parse_list->tkns_array->data[1] == '>')
 					{
-						if (check_file_and_delim_name(parse_list, i, j + 1) == 1)
+						if (check_file_and_delim_name(parse_list->tkns_array, j + 1) == 1)
 							return (1);
 						printf("do the redir out\n");
 						break ;
 					}
-					if (check_file_and_delim_name(parse_list, i, j) == 1)
+					if (check_file_and_delim_name(parse_list->tkns_array, j) == 1)
 						return (1);
-					parse_list->infile = open(parse_list->tkns_array[i+1], O_RDONLY);
+					parse_list->infile = open(parse_list->tkns_array->next->data, O_RDONLY);
 					if (parse_list->infile == -1)
 						fprintf(stderr, "Could not open input file\n");
 					else
 						printf("did the redir in this is parse_list->infile %d\n", parse_list->infile);
 				}
-				if (parse_list->tkns_array[i][0] == '>')
+				if (parse_list->tkns_array->data[0] == '>')
 				{
-					if (parse_list->tkns_array[i][1] == '>')
+					if (parse_list->tkns_array->data[1] == '>')
 					{
-						if (check_file_and_delim_name(parse_list, i , j + 1) == 1)
+						if (check_file_and_delim_name(parse_list->tkns_array, j + 1) == 1)
 							return (1);
-						parse_list->outfile = open(parse_list->tkns_array[i+1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+						parse_list->outfile = open(parse_list->tkns_array->next->data, O_CREAT | O_WRONLY | O_APPEND, 0644);
 						if (parse_list->outfile == -1)
 						{
 							fprintf(stderr, "MINISHELL: Could not open output file\n");
@@ -111,11 +111,11 @@ int	check_metachar(t_parsing *parse_list)
 						j++;
 						break ;
 					}
-					if (parse_list->tkns_array[i][1] == '|' || parse_list->tkns_array[i][1] == '\0')
+					if (parse_list->tkns_array->data[1] == '|' || parse_list->tkns_array->data[1] == '\0')
 					{
-						if (check_file_and_delim_name(parse_list, i, j + 1) == 1)
+						if (check_file_and_delim_name(parse_list->tkns_array, j + 1) == 1)
 							return (1);
-						parse_list->outfile = open(parse_list->tkns_array[i+1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+						parse_list->outfile = open(parse_list->tkns_array->next->data, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 						if (parse_list->outfile == -1)
 						{
 							fprintf(stderr, "MINISHELL: Could not open output file\n");
@@ -125,23 +125,23 @@ int	check_metachar(t_parsing *parse_list)
 						break ;
 					}
 				}
-				if (parse_list->tkns_array[i][0] == '|')
+				if (parse_list->tkns_array->data[0] == '|')
 				{
-					if (check_pipe_name(parse_list, i, j) == 1)
+					if (check_pipe_name(parse_list->tkns_array, j) == 1)
 						return (1);
 					// printf("do the pipe\n");
 					break ;
 				}
-				if (parse_list->tkns_array[i][1] != '\0')
+				if (parse_list->tkns_array->data[1] != '\0')
 				{
-					printf("Dundershell: syntax error near unexpected token `%c'\n", parse_list->tkns_array[i][1]);
+					printf("Dundershell: syntax error near unexpected token `%c'\n", parse_list->tkns_array->data[1]);
 					return (1);
 				}
 			}
 			j++;
 		}
 		j = 0;
-		i++;
+		parse_list->tkns_array = parse_list->tkns_array->next;
 	}
 	return (0);
 }
