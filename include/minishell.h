@@ -18,6 +18,15 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# define EMPTY 0
+# define CMD 1
+# define ARG 2
+# define TRUNC 3
+# define APPEND 4
+# define INPUT 5
+# define OUTPUT 6
+# define PIPE 7
+
 typedef struct	s_exec
 {
 	char	*line;
@@ -62,9 +71,9 @@ typedef struct s_ptrs
 //il va falloir rajouter des bool redir in; redir out; heredoc
 typedef struct s_tkns
 {
-	char			**vector_cmd; //why? this struct can be a linked list, no need for this?? (to confirm)
+	char			**vector_cmd;
 	int				argv_pos;
-	char			type;
+	int				tok_type;
 	bool			sing_quotes;
 	bool			dollar_sign;
 	bool			b_in;

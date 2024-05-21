@@ -8,37 +8,29 @@
 */
 int	get_cmd(t_parsing *parse_list)
 {
+	int i;
+	i = 0;
 	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **),
 			count_cmd(parse_list->tkns_array, parse_list->i_arr) + 1);
-	while (parse_list->tkns_array[parse_list->i_arr])
+	while (parse_list->tkns_list != NULL)
 	{
 		alloc_vector(parse_list, parse_list->i_vect, parse_list->i_arr, false);
-		while (parse_list && parse_list->tkns_array &&
-		 parse_list->tkns_array[parse_list->i_arr] &&
-		 parse_list->tkns_array[parse_list->i_arr][parse_list->i_str])
-		{
-			if (is_it_redir(parse_list) == 1)
-				return (0);
-			else if (is_it_redir(parse_list) == 0)
-				continue ;
-			if (is_it_pipe(parse_list) == 0)
-				continue ;
-			else
-				do_copy_cmd(parse_list);
-		}
-		parse_list->i_str = 0;
-		parse_list->i_arr++;
-		parse_list->i_vect++;
+		if (parse_list->tkns_list->tok_type != CMD)
+			continue ;
+		else
+			do_copy_cmd(parse_list);
+	parse_list->tkns_list = parse_list->tkns_list->next;
 	}
 	return (0);
 }
 
+
 void	init_master_list(t_parsing *parse_list, int status)
 {
 	parse_list->nb_of_pipes = 0;
-	parse_list->i_arr = 0;
-	parse_list->i_str = 0;
-	parse_list->i_vect = 0;
+	// parse_list->i_arr = 0;
+	// parse_list->i_str = 0;
+	// parse_list->i_vect = 0;
 	parse_list->infile = 0;
 	parse_list->outfile = 1;
 	parse_list->b_in = false;
@@ -59,22 +51,22 @@ t_parsing	*start_parse(char *line, int status)
 	init_master_list(parse_list, status);
 	init_first_token_nodes(parse_list);
 	//printf("line ==== %s\n", line);
-	parse_list->tkns_array = new_split(line, "<>|");  //change to split function only
+	parse_list->tkns_list = new_split(line, "<>|");
 	//printf("first %s\n", parse_list->tkns_array[0]);
-	if (parse_list->tkns_array == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ? ALEX note: null retourne seulement si la *line de depart est vide... idk si cest un check necessaire ou fait plus tot?
-		return (NULL);
+	// if (parse_list->tkns_list == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ? ALEX note: null retourne seulement si la *line de depart est vide... idk si cest un check necessaire ou fait plus tot?
+	// 	return (NULL);
 	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 		return (NULL);
 	get_cmd(parse_list);
-	//parse_list->tkns_array = del_quotes();
-	//parse_list->tkns_array = expend_var();
+	//parse_list->tkns_list = del_quotes();
+	//parse_list->tkns_list = expend_var();
 	//print_tkns_array_debug(*(parse_list));
 	return (parse_list);
 }
 
-void	do_copy_cmd(t_parsing *parse_list)
+void	do_copy_cmd(t_parsing *parse_list) //how is the vector_cmd used. this could be 1 and only 1 function to tranform ffrom list to tab(vector)
 {
-	if (parse_list && parse_list->tkns_array && parse_list->tkns_array[parse_list->i_arr])
+	if (parse_list && parse_list->tkns_list != NULL)
 	{
 		parse_list->tkns_list->vector_cmd[parse_list->i_vect][parse_list->i_str]
 			= parse_list->tkns_array[parse_list->i_arr][parse_list->i_str];

@@ -1,29 +1,27 @@
 #include "../include/minishell.h"
 
-int	check_pipes(t_parsing *parse_list) //should work as-is
+int	check_pipes(t_parsing *parse_list) //should work as-is, can simplify with PIPE tok_type
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
-	while (parse_list->tkns_array != NULL)
+	while (parse_list->tkns_list != NULL)
 	{
-		while (parse_list->tkns_array->data[j])
+		while (parse_list->tkns_list->data[i])
 		{
-			if (parse_list->tkns_array->data[j] == '|'
-				&& parse_list->tkns_array->data[j + 1] == '\0'
-				&& j == 0)
+			if (parse_list->tkns_list->data[i] == '|'
+				&& parse_list->tkns_list->data[i + 1] == '\0'
+				&& i == 0)
 			{
-				if (check_pipe_name(parse_list->tkns_array, j) != 0)
+				if (check_pipe_name(parse_list->tkns_array, i) != 0)
 					return (1);
 				printf("do the pipe\n");
 				break ;
 			}
-			j++;
+			i++;
 		}
-		j = 0;
-		i++;
+		i = 0;
+		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
 	return (0);
 }
