@@ -42,6 +42,53 @@ void	init_master_list(t_parsing *parse_list, int status)
 
 }
 
+t_parsing	*quotes_line(char *line)
+{
+	int	i;
+	t_parsing	*parse_list;
+
+	i = 0;
+	parse_list = calloc(1, sizeof(t_parsing));
+	while (line[i] != '\0' && line[i] != 34 && line[i] != 39)
+		i++;
+	if (line[i] == 34 || line[i] == 39)
+	{
+		parse_list->quote_start = i;
+		parse_list->quote_type = line[i];
+	}
+	i = ft_strlen(line);
+	while (line[i] != '\0' && line[i] != parse_list->quote_type)
+		i--;
+	if (parse_list->quote_start != i)
+	{
+		parse_list->quote_end = i;
+		parse_list->quotes = true;
+	}
+	return (parse_list);
+}
+
+char *del_quotes(t_parsing *parse_list, char *line)
+{
+	int i;
+	int y;
+	char *newline;
+	i = 0;
+	y = 0;
+
+	//malloc or calloc newline here
+	while (line[i])
+	{
+		if (line[i] != parse_list->quote_type || i == parse_list->quote_start || i == parse_list->quote_end)
+		{
+			newline[y] = line[i];
+			y++;
+		}
+		i++;
+	}
+	newline[y] = '\0';
+	return (newline);
+}
+
 t_parsing	*start_parse(char *line, int status)
 {
 	t_parsing	*parse_list;
@@ -51,6 +98,9 @@ t_parsing	*start_parse(char *line, int status)
 	init_master_list(parse_list, status);
 	init_first_token_nodes(parse_list);
 	//printf("line ==== %s\n", line);
+	parse_list = quotes_line(line);    //new step, take care of quotes first
+	if (parse_list->quotes == true)
+		line = del_quotes(parse_list, line);
 	parse_list->tkns_list = new_split(line, "<>|");
 	//printf("first %s\n", parse_list->tkns_array[0]);
 	// if (parse_list->tkns_list == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ? ALEX note: null retourne seulement si la *line de depart est vide... idk si cest un check necessaire ou fait plus tot?

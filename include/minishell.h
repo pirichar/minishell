@@ -109,6 +109,10 @@ typedef struct s_parsing
 	t_exec 	*ex;
 	int		file;
 	char	*buf;
+	int		quote_start;
+	int		quote_end;
+	char	quote_type;
+	bool	quotes;
 	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
 }				t_parsing;
 
