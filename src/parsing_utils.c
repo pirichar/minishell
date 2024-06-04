@@ -56,15 +56,14 @@ int	check_file_and_delim_name(t_tkns *tkns_list, int j)
 {
 	if (tkns_list->next != NULL)
 	{
-		if (ft_strchr("<|>", tkns_list->next->data))
+		if (ft_strchr("<|>", tkns_list->next->data[j])) //data[0] ou data[1], ya un espace a data[0] pratiquement tout le temps, non^
 		{
 			printf("Dundershell: syntax error near unexpected token `%c'\n",
-				tkns_list->next->data);
+				tkns_list->next->data[j]);
 			return (1);
 		}
 	}
-	if (!tkns_list->next
-		|| tkns_list->data[j + 1] != '\0')
+	if (!tkns_list->next || !tkns_list->next->data == NULL)
 	{
 		printf("Dundershell: syntax error near unexpected token `newline'\n");
 		return (1);
