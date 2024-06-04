@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include <readline/history.h>
 /**
  * @brief General note about signals: 
 You can't have data of your own passed to the signal handler as parameters.
@@ -47,9 +48,23 @@ be expected to to for itself, it must do itself.
 
 // TO-DO DEBUG - Here i should probably try to just generate a new line
 and call readline instead of cheating
+
+// TO-DO Double check why mik add g_mini.code =  INTERRUPT_SIG 
  * 
  * @param sig is required by the sig action struct
  */
+static void	handle_sigint(int sig)
+{
+	//char	*prompt;
+
+	(void) sig;
+	ex->interrupted = 1;
+	write(1, "\n", 1);
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    rl_redisplay();
+}
+/*
 static void	handle_sigint(int sig)
 {
 	char	*prompt;
@@ -60,7 +75,8 @@ static void	handle_sigint(int sig)
 	prompt = set_prompt(ex->new_env);
 	write(1, prompt, ft_strlen(prompt));
 	free(prompt);
-}
+	//rl_on_new_line();
+}*/
 
 /**
  * @brief This function handles the Ctrl-\  (sigquit) event
