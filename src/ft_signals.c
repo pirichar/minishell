@@ -58,7 +58,6 @@ static void	handle_sigint(int sig)
 	//char	*prompt;
 
 	(void) sig;
-	ex->interrupted = 1;
 	write(1, "\n", 1);
     rl_on_new_line();
     rl_replace_line("", 0);

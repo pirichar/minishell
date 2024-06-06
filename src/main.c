@@ -79,7 +79,7 @@ static bool	process_command(void)
 {
 	t_parsing	*parse;
 
-	if (*ex->line && !ex->interrupted)
+	if (*ex->line)
 	{
 		add_history(ex->line);
 		parse = start_parse(ex->line, ex->status);
@@ -105,76 +105,13 @@ static bool	process_command(void)
 }
 
 /**
- * @brief Function called by main to know if it should
-			skip processing
-			it will check if ex->interrupted == 1
-			if we are in this if , it means we have pressed ctrl C
-			We might have press on an empty line; on
-			we reset ex->interrupted to 0
-
-			Then we check if the first charcter of line is not \0
-			if we are inside this we have something in our line,
-			we probably used ctrl c with a pending function
-			or on a new line or on a line before entering text
-
-			We then try to execute the command and return true if possible
-
-// TO-DO Double check why I cant free(ex-Line after my if process_command)
-	It does not make sense; it gives me a double free 
-
-// TO-DO Understand how I can manage the ctrl C when empty line 
-I had this before EX->line = NULL;
-if (!process_command())
-			{
-				return (true);
-			}
-
- * 
- * @return true Indicate that main should skip processing
- * @return false Indicate that processing should continue
- */
-bool	handle_interruption(void)
-{
-	if (ex->interrupted == 1)
-	{
-		ex->interrupted = 0;
-		if (*ex->line != '\0')
-		{
-			ex->line = NULL;
-		}
-		return (true);
-	}
-	return (false);
-}
-
-/* Ancienne fonction
-bool	handle_interruption(void)
-{
-	if (ex->interrupted == 1)
-	{
-		ex->interrupted = 0;  // Reset the flag
-		if (ex->line != NULL)
-		{
-			//  free(ex->line);  // Free the line buffer if needed
-			ex->line = NULL;
-		}
-		return true;  // Indicate that main should skip processing
-	}
-	return false;  // Indicate that processing should continue
-}*/
-
-/**
  * @brief Will setup by calling setupminishell
 			If it returns 1 it means we have an error
 			we will prompt an error message to the client
 			free ex and return 1;
 
 			Then we start the main loop
-			We first check if we are not interupted
-			If not we prompt adn read the input of the client
-
-			then if handle_interruption returns true
-			we skip the rest of the loop
+			we prompt adn read the input of the client
 
 			Then if line == NULL (when ctrl D is pressed)
 			we free line
@@ -208,10 +145,7 @@ int	main(int argc, char **argv, char **env)
 	}
 	while (1)
 	{
-		if (ex->interrupted == 0)
-			prompt_and_read_input();
-		if (handle_interruption())
-			continue ;
+		prompt_and_read_input();
 		if (ex->line == NULL)
 		{
 			free(ex->line);
