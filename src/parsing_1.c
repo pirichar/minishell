@@ -8,8 +8,6 @@
 */
 int	get_cmd(t_parsing *parse_list)
 {
-	int i;
-	i = 0;
 	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **),
 			count_cmd(parse_list->tkns_list));
 	while (parse_list->tkns_list != NULL)

@@ -63,7 +63,7 @@ int	check_file_and_delim_name(t_tkns *tkns_list, int j)
 			return (1);
 		}
 	}
-	if (!tkns_list->next || !tkns_list->next->data == NULL)
+	if (!tkns_list->next || tkns_list->next->data == NULL)
 	{
 		printf("Dundershell: syntax error near unexpected token `newline'\n");
 		return (1);
