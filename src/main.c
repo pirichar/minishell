@@ -121,10 +121,6 @@ static bool	process_command(void)
 
 			Finally we process then command and continue to the next one
 
-// TO-DO Not sure why I checked interruped before I read
-maybe this could solve my Ctrl c logic problem - NO but 
-I think its useless
-
 // TO-DO valider comment bien free toute la structure, valider
 valider aussi que l'on oublie de rien free jamais
 genre quand line == NULL

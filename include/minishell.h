@@ -11,7 +11,7 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include "./colors.h"
-# include "./Libft/libft/libft.h"
+# include "./libft/libft/libft.h"
 # include <errno.h>
 #include <signal.h>
 #include <termios.h>
