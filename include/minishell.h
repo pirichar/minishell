@@ -116,6 +116,7 @@ typedef struct s_parsing
 	char	quote_type;
 	int		quote_count;
 	bool	quotes;
+	int		cmd_count;
 	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
 }				t_parsing;
 
@@ -198,14 +199,14 @@ char			**split(const char *s);
 // int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
 // int				check_pipe_name(t_parsing *parse_list, int i, int j);
 int				count_cmd(t_tkns *tkns_list);
-int				get_cmd(t_parsing *parse_list);
+t_parsing	*get_cmd(t_parsing *parse_list);
 void			print_tkns_array_debug(t_parsing parse_list);
 int				check_metachar(t_parsing *parse_list);
 void			prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array);
 void			alloc_vector(t_parsing *parse_list, int ind_vector, int ind_array, bool to_free);
 int				is_it_redir(t_parsing *parse_list);
 int				is_it_pipe(t_parsing *parse_list);
-void	do_copy_cmd(t_parsing *parse_list, char *tkns_list);
+t_parsing	*do_copy_cmd(t_parsing *parse_list, char *tkns_list);
 
 //new_parsing
 t_parsing 		*new_split(char *s, t_parsing *parse_list);

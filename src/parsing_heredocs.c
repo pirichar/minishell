@@ -174,7 +174,6 @@ void	alloc_vector(t_parsing *parse_list, int ind_vector,
 	parse_list->tkns_list->vector_cmd[ind_vector]
 		= calloc(ft_strlen(parse_list->tkns_list->vector_cmd[ind_array]) //to confirm size here, im unsure
 			+ 1, sizeof(char));
-	parse_list->i_str = 0;
 }
 
 /*

@@ -21,30 +21,49 @@ t_tkns *set_toktype(t_tkns *matrix)
 	return (matrix);
 }
 
+t_tkns	*my_lstlast(t_tkns *lst)
+{
+	if (!lst)
+		return (NULL);
+	while (lst -> next)
+		lst = lst -> next;
+	return (lst);
+}
+
+void	nodeaddback(t_tkns **lst, t_tkns *new)
+{
+	t_tkns	*last;
+
+	if (!new)
+		return ;
+	if (!*lst)
+	{
+		*lst = new;
+		return ;
+	}
+	last = my_lstlast(*lst);
+	last -> next = new;
+}
+
 t_tkns *make_node(t_tkns *matrix, char *s)
 {
 	t_tkns	*new;
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(t_tkns));
+	new = (t_tkns *)malloc(sizeof(*new));
 	if (new == NULL)
 		return (NULL);
 	new->data = malloc(sizeof(char *));
 	while (s[i] != '\0' && (s[i] != '<' && s[i] != '>' && s[i] != '|'))
 	{
 		new->data[i] = s[i];
-		printf("letters inside node ==== %c\n", new->data[i]);
 		i++;
 	}
 	new->data[i] = '\0';
-	printf("line inside node ==== %s\n", new->data);
 	new->next = NULL;
-	if (!matrix->data)
-		matrix = new;
-	else
-		matrix->next = new;
-	matrix = new;
+	nodeaddback(&matrix, new);
+	printf("line inside node ==== %s\n", new->data);
 	return(set_toktype(matrix));
 }
 
@@ -54,33 +73,32 @@ t_tkns *node_redir(t_tkns *matrix, char *s, int size)
 	int		i;
 
 	i = 0;
-	new = malloc(sizeof(t_tkns));
+	new = (t_tkns *)malloc(sizeof(*new));
 	if (new == NULL)
 		return (NULL);
 	new->data = malloc(sizeof(char *));
 	while (i < size)
 	{
 		new->data[i] = s[i];
-		printf("letters inside noderedir ==== %c\n", new->data[i]);
 		i++;
 	}
 	new->data[i] = '\0';
-	printf("line inside nodredire ==== %s\n", new->data);
 	new->next = NULL;
-	if (!matrix->data)
-		matrix = new;
-	else
-		matrix->next = new;
-	matrix = new;
+	nodeaddback(&matrix, new);
+	printf("line inside node redir ==== %s\n", new->data);
 	return(set_toktype(matrix));
 }
 
 t_parsing *new_split(char *s, t_parsing *parse_list)
 {
-	parse_list->tkns_list = malloc(sizeof(t_tkns *));
+	parse_list->tkns_list = (t_tkns *)malloc(sizeof(*parse_list->tkns_list));
 	if (parse_list->tkns_list == NULL)
 		return (NULL);
-	printf("line in newsplit start ==== %s\n", s);	
+	parse_list->tkns_list->dollar_sign = false;
+	parse_list->tkns_list->argv_pos = 0;
+	parse_list->tkns_list->data = s;
+	parse_list->tkns_list->next = NULL;
+	parse_list->tkns_list->start = NULL;
 	while (*s)
 	{
 		if ((*s == '<' || *s == '>') && (s[1]  == '<' || s[1]  == '>' || s[1]  == '|'))
@@ -97,11 +115,17 @@ t_parsing *new_split(char *s, t_parsing *parse_list)
 		{
 			printf("line in newsplit ==== %s\n", s);
 			parse_list->tkns_list = make_node(parse_list->tkns_list, s);
-			printf("line in newsplit after node made ==== %s\n", s);
+			printf("line in newsplit after node made ==== %s\n", parse_list->tkns_list->data);
 			while (*s != '\0' && (*s != '<' && *s != '>' && *s != '|'))
 				s += 1;
+			if (parse_list->tkns_list->tok_type == CMD)
+				parse_list->cmd_count++;
 		}
 	}
-	printf("hello before returning parse list\n");
-	return parse_list;
+	while (parse_list->tkns_list)
+	{
+		printf("I am checking the nodes 1 after the other: %s\n", parse_list->tkns_list->data);
+		parse_list->tkns_list = parse_list->tkns_list->next;
+	}
+	return (parse_list);
 }

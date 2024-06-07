@@ -6,7 +6,7 @@ int	init_first_token_nodes(t_parsing *parse_list)  //may 21, should be ok. but i
 	parse_list->tkns_list->dollar_sign = false;
 	parse_list->tkns_list->prev = NULL;
 	parse_list->tkns_list->argv_pos = 0;
-	parse_list->tkns_list->start = parse_list->tkns_list;
+	parse_list->tkns_list->start = NULL;
 	return (0);
 }
 
@@ -37,18 +37,19 @@ int	count_cmd(t_tkns *tkns_list)  //may 21, should be ok
 	int	count;
 
 	count = 0;
-	while (tkns_list != NULL)
+	while (tkns_list->data != NULL)
 	{
-		if (ft_strchr("<>", tkns_list->data[0]))
-		{
-			tkns_list = tkns_list->next;
-			continue ;
-		}
-		if (ft_strchr("|", tkns_list->data[0])) //why return when pipe found and not at the end?
-			return (count);
+		//if (ft_strchr("<>", tkns_list->data[0]))
+		//{
+		//	tkns_list = tkns_list->next;
+		//	continue ;
+		//}
+		//if (ft_strchr("|", tkns_list->data[0])) //why return when pipe found and not at the end?
+		//	return (count);
 		count++;
 		tkns_list = tkns_list->next;
 	}
+	printf("token count %d", count);
 	return (count);
 }
 
