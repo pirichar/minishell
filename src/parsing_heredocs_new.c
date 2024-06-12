@@ -100,7 +100,7 @@ int	check_metachar(t_parsing *parse_list)
 		if (parse_list->tkns_list->tok_type == PIPE)
 			if (do_pipe(parse_list) == 1)
 				return (1);
-		if (parse_list->tkns_array->tok_type == SPECIAL_PIPE || parse_list->tkns_array->tok_type == OUTPUT)
+		if (parse_list->tkns_list->tok_type == SPECIAL_PIPE || parse_list->tkns_list->tok_type == OUTPUT)
 			if (do_output(parse_list) == 1)
 				return (1);
 		parse_list->tkns_list = parse_list->tkns_list->next;

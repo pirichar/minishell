@@ -74,11 +74,11 @@ typedef struct s_ptrs
 typedef struct s_tkns
 {
 	char			**vector_cmd;
-	int				argv_pos;
+//	int				argv_pos;
 	int				tok_type;
-	bool			sing_quotes;
+//	bool			sing_quotes;
 	bool			dollar_sign;
-	bool			b_in;
+//	bool			b_in;
 	char			*data;
 	struct s_tkns	*next;
 	struct s_tkns	*prev;
@@ -89,20 +89,20 @@ typedef struct s_tkns
 typedef struct s_parsing
 {
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
-	t_tkns	*tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
+//	t_tkns	*tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
-	char	*user;
+//	char	*user;
 	char	*line;
-	char	**s_line;
-	int		index;
+//	char	**s_line;
+//	int		index;
 	int		nb_of_pipes;
-	int		i_arr;
+//	int		i_arr;
 	int		i_vect;
-	int		i_str;
+//	int		i_str;
 	int		infile;
 	int		outfile;
 	bool	b_in;
-	bool	cmd;
+//	bool	cmd;
 	int		status;
 	bool	with_nl;
 	bool	check_nl;
@@ -212,5 +212,6 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *tkns_list);
 t_parsing 		*new_split(char *s, t_parsing *parse_list);
 int				check_file_and_delim_name(t_tkns *tkns_list);
 int				check_pipe_name(t_tkns *tkns_array);
+t_tkns 			*init_list(char *s);
 
 #endif

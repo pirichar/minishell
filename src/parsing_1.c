@@ -23,21 +23,20 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 	parse_list->tkns_list = parse_list->tkns_list->next;
 	}
 	printf("I am after vectorisation\n");
-	printf("I am the vector before going out of get_cmd : %s\n", parse_list->tkns_list->prev->vector_cmd[parse_list->i_vect - 1]);
 	return (parse_list);
 }
 
 
 void	init_master_list(t_parsing *parse_list, int status)
 {
-	parse_list->nb_of_pipes = 0;
-	parse_list->i_arr = 0;
-	parse_list->i_str = 0;
-	parse_list->i_vect = 0;
+//	parse_list->nb_of_pipes = 0;
+//	parse_list->i_arr = 0;
+//	parse_list->i_str = 0;
+//	parse_list->i_vect = 0;
 	parse_list->infile = 0;
 	parse_list->outfile = 1;
-	parse_list->b_in = false;
-	parse_list->cmd = false;
+//	parse_list->b_in = false;
+//	parse_list->cmd = false;
 	parse_list->status = status;
 	parse_list->quote_count = 0;
 	parse_list->quote_start = 0;
@@ -63,7 +62,7 @@ t_parsing	*quotes_line(char *line, t_parsing *parse_list)
 		parse_list->quote_type = line[i];
 	}
 	i = ft_strlen(line) - 1;
-	while (line[i] != '\0' && line[i] != parse_list->quote_type)
+	while (line[i] != '\0' && line[i] != parse_list->quote_type && i > 0)
 		i--;
 	if (parse_list->quote_start != i)
 	{
@@ -112,17 +111,18 @@ t_parsing	*start_parse(char *line, int status)
 	if (parse_list->quotes == true)
 		line = del_quotes(*&parse_list, line);
 	printf("line after del_quotes ==== %s\n", line);
+	parse_list->tkns_list = init_list(line);
 	parse_list = new_split(line, parse_list);		//is the parse list actually ok??
-//	printf("token is ==== %s\n", parse_list->tkns_list->data);
+	printf("token is ==== %s\n", parse_list->tkns_list->data);
 //	if (parse_list->tkns_list == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ? ALEX note: null retourne seulement si la *line de depart est vide... idk si cest un check necessaire ou fait plus tot?
 //		return (NULL);
-//	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
-//		return (NULL);
+	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
+		return (NULL);
 //	printf("I am just before get cmd function 2 %s\n", parse_list->tkns_list->data);
 	printf("I am before get_cmd\n");
 	parse_list = get_cmd(parse_list);
 	printf("I am after get_cmd\n");
-	//parse_list->tkns_list = expend_var();
+	//parse_list->tkns_list = expend_var(); TODO : expend variabled
 	//print_tkns_array_debug(*(parse_list));
 //	printf("I am the vector before returning : %s\n", parse_list->tkns_list->vector_cmd[1]);
 	return (parse_list);

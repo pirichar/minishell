@@ -6,7 +6,7 @@ int	check_pipes(t_parsing *parse_list)
 	{
 		if (parse_list->tkns_list->tok_type == PIPE)
 		{
-			if (check_pipe_name(parse_list->tkns_array) != 0)
+			if (check_pipe_name(parse_list->tkns_list) != 0)
 				return (1);
 			printf("do the pipe\n");
 			break ;

@@ -97,7 +97,7 @@ t_tkns *init_list(char *s)
 	if (list == NULL)
 		return (NULL);
 	list->dollar_sign = false;
-	list->argv_pos = 0;
+//	list->argv_pos = 0;
 	list->data = s;
 	list->next = NULL;
 	list->start = NULL;
@@ -106,7 +106,7 @@ t_tkns *init_list(char *s)
 
 t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les printf et les {} en trop sont enlever
 {
-	parse_list->tkns_list = init_list(s);
+//	parse_list->tkns_list = init_list(s);
 	while (*s)
 	{
 		if ((*s == '<' || *s == '>') && (s[1]  == '<' || s[1]  == '>' || s[1]  == '|'))
