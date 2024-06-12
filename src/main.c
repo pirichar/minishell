@@ -71,30 +71,30 @@ bool	process_command()
 		printf("I am after all the parsing\n");
 		int i = 0;
 		printf("I am parse_line tab: %s\n", parse->tkns_list->vector_cmd[i]);
-    //    if (parse == NULL)
-	//	{
-    //        free(ex->line);
-     //       return true;  // Skip the remaining processing in the main loop
-      //  }
-    //    parse->ex = ex;
-     //   parse->tkns_list = parse->tkns_list->start;
-      //  ex->s_line = parse->tkns_list->vector_cmd;
-//		int i = 0;
-//		while (ex->s_line[i])
-//			printf("I am s_line tab: %s\n", ex->s_line[i++]);
-		// int i = 0;
-		// while (parse->tkns_list->vector_cmd[i])
-		// 	printf("I am s_line tab: %s\n", parse->tkns_list->vector_cmd[i++]);
-        // if (ex->s_line[0] == NULL)
-		// {
-        //     free(ex->line);
-        //     free_strrarr(ex->s_line);
-        //     printf("exit\n");
-        //     return true;  // Skip the remaining processing in the main loop
-        // }
-        // execute_command_shell(parse);
+       if (parse == NULL)
+		{
+            free(ex->line);
+            return true;  // Skip the remaining processing in the main loop
+        }
+       parse->ex = ex;
+       parse->tkns_list = parse->start;
+       ex->s_line = parse->tkns_list->vector_cmd;
+		i = 0;
+		while (ex->s_line[i])
+			printf("I am s_line tab: %s\n", ex->s_line[i++]);
+		i = 0;
+		while (parse->tkns_list->vector_cmd[i])
+			printf("I am s_line tab: %s\n", parse->tkns_list->vector_cmd[i++]);
+        if (ex->s_line[0] == NULL)
+		{
+            free(ex->line);
+            free_strrarr(ex->s_line);
+            printf("exit\n");
+            return true;  // Skip the remaining processing in the main loop
+        }
+        execute_command_shell(parse);
     }
- //   free(ex->line);
+    free(ex->line);
     return false;  // Continue with the main loop normally
 }
 

@@ -73,9 +73,9 @@ typedef struct s_ptrs
 //il va falloir rajouter des bool redir in; redir out; heredoc
 typedef struct s_tkns
 {
-	char			**vector_cmd;
 //	int				argv_pos;
 	int				tok_type;
+	char			**vector_cmd;
 //	bool			sing_quotes;
 	bool			dollar_sign;
 //	bool			b_in;
@@ -92,6 +92,7 @@ typedef struct s_parsing
 //	t_tkns	*tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
 	t_tkns	*start;
+	char	**vector_cmd;
 //	char	*user;
 	char	*line;
 //	char	**s_line;
@@ -202,7 +203,7 @@ char			**split(const char *s);
 int				count_cmd(t_tkns *tkns_list);
 t_parsing	*get_cmd(t_parsing *parse_list);
 void			print_tkns_array_debug(t_parsing parse_list);
-int				check_metachar(t_parsing *parse_list);
+t_parsing	*check_metachar(t_parsing *parse_list);
 void			prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array);
 void			alloc_vector(t_parsing *parse_list, int ind_vector, int ind_array, bool to_free);
 int				is_it_redir(t_parsing *parse_list);

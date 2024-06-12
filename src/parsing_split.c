@@ -2,19 +2,21 @@
 
 t_tkns *set_toktype(t_tkns *matrix)
 {
+	while (matrix -> next)
+		matrix = matrix -> next;
 	if (matrix->data[0] == '<' && matrix->data[1]  == '<')
 		matrix->tok_type = TRUNC;
 	else if (matrix->data[0] == '<' && matrix->data[1]  == '>')
 		matrix->tok_type = IN_OUT; 
 	else if (matrix->data[0] == '<')
 		matrix->tok_type = INPUT;
-	if (matrix->data[0] == '>' && matrix->data[1]  == '>')
+	else if (matrix->data[0] == '>' && matrix->data[1]  == '>')
 		matrix->tok_type = APPEND;
-	if (matrix->data[0] == '>' && matrix->data[1]  == '|')
+	else if (matrix->data[0] == '>' && matrix->data[1]  == '|')
 		matrix->tok_type = SPECIAL_PIPE; 
 	else if (matrix->data[0] == '>')
 		matrix->tok_type = OUTPUT;
-	if (matrix->data[0] == '|')
+	else if (matrix->data[0] == '|')
 		matrix->tok_type = PIPE;
 	else
 		matrix->tok_type = CMD;
@@ -110,18 +112,18 @@ t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les print
 	{
 		if ((*s == '<' || *s == '>') && (s[1]  == '<' || s[1]  == '>' || s[1]  == '|'))
 		{
-			parse_list->tkns_list = node_redir(parse_list->tkns_list, s, 2);
+			parse_list->tkns_list->next = node_redir(parse_list->tkns_list->next, s, 2);
 			s += 2;
 		}
 		else if (*s == '<' || *s == '>' || *s == '|')
 		{
-			parse_list->tkns_list = node_redir(parse_list->tkns_list, s, 1);
+			parse_list->tkns_list->next = node_redir(parse_list->tkns_list->next, s, 1);
 			s += 1;
 		}
 		else if (*s != '<' && *s != '>' && *s != '|')
 		{
 			printf("line in newsplit ==== %s\n", s);
-			parse_list->tkns_list = make_node(parse_list->tkns_list, s);
+			parse_list->tkns_list->next = make_node(parse_list->tkns_list->next, s);
 			printf("line in newsplit after node made ==== %s\n", parse_list->tkns_list->data);
 			while (*s != '\0' && (*s != '<' && *s != '>' && *s != '|'))
 				s += 1;
@@ -129,7 +131,7 @@ t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les print
 				parse_list->cmd_count++;
 		}
 		if (parse_list->start == NULL)
-			parse_list->start = parse_list->tkns_list;
+			parse_list->start = parse_list->tkns_list->next;
 	}
 	while (parse_list->tkns_list)
 	{

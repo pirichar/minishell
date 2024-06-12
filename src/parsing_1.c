@@ -8,21 +8,26 @@
 */
 t_parsing	*get_cmd(t_parsing *parse_list)
 {
-	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **), parse_list->cmd_count);
+	parse_list->vector_cmd = ft_calloc(parse_list->cmd_count, sizeof(char **));
+	
 	printf("I am after calloc of vector\n");
-	while (parse_list->tkns_list != NULL)
+	parse_list->start = parse_list->tkns_list;
+	while (parse_list->tkns_list)
 	{
-		if (parse_list->tkns_list->tok_type != CMD)
-			continue ;
-		else
+		if (parse_list->tkns_list->tok_type == CMD)
 		{
 			//alloc_vector(parse_list, parse_list->i_vect, parse_list->i_arr, false);
 			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
 			parse_list->i_vect++;
 		}
-	parse_list->tkns_list = parse_list->tkns_list->next;
+		if (parse_list->tkns_list->next)
+			parse_list->tkns_list = parse_list->tkns_list->next;
+		else
+			break ;
 	}
 	printf("I am after vectorisation\n");
+	parse_list->tkns_list = parse_list->start;
+	parse_list->tkns_list->vector_cmd = parse_list->vector_cmd;
 	return (parse_list);
 }
 
@@ -116,8 +121,7 @@ t_parsing	*start_parse(char *line, int status)
 	printf("token is ==== %s\n", parse_list->tkns_list->data);
 //	if (parse_list->tkns_list == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ? ALEX note: null retourne seulement si la *line de depart est vide... idk si cest un check necessaire ou fait plus tot?
 //		return (NULL);
-	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
-		return (NULL);
+	parse_list = check_metachar(parse_list); // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
 //	printf("I am just before get cmd function 2 %s\n", parse_list->tkns_list->data);
 	printf("I am before get_cmd\n");
 	parse_list = get_cmd(parse_list);
@@ -128,20 +132,20 @@ t_parsing	*start_parse(char *line, int status)
 	return (parse_list);
 }
 
-t_parsing	*do_copy_cmd(t_parsing *parse_list, char *tkns_list) //how is the vector_cmd used. this could be 1 and only 1 function to tranform from list to tab(vector)
+t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str) //how is the vector_cmd used. this could be 1 and only 1 function to tranform from list to tab(vector)
 {
 	int i;
 	i = 0;
-	parse_list->tkns_list->vector_cmd[parse_list->i_vect] = ft_calloc(sizeof(char *), ft_strlen(tkns_list));
+	parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(str), sizeof(char *));
 	printf("I am after vector small alloc\n");
-	while (parse_list && tkns_list[i] != '\0' && tkns_list != NULL)
+	while (parse_list && str[i] != '\0' && str != NULL)
 	{
-		parse_list->tkns_list->vector_cmd[parse_list->i_vect][i]
-			= tkns_list[i];
+		parse_list->vector_cmd[parse_list->i_vect][i]
+			= str[i];
 		i++;
 	}
-	parse_list->tkns_list->vector_cmd[parse_list->i_vect][i] = '\0';
+	parse_list->vector_cmd[parse_list->i_vect][i] = '\0';
 	printf("I am after data is entered in vector\n");
-	printf("I am the vector: %s\n", parse_list->tkns_list->vector_cmd[parse_list->i_vect]);
+	printf("I am the vector: %s\n", parse_list->vector_cmd[parse_list->i_vect]);
 	return (parse_list);
 }
