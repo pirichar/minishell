@@ -2,13 +2,12 @@
 #include <stdio.h>
 
 
-
-if (parse_list->tkns_list->tok_type == TRUNC)
+int	do_trunc(t_parsing *parse_list)
 {
-	if (check_file_and_delim_name(parse_list->tkns_list, j + 1) == 1)
+	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
 		return (1);
 	printf("do the heredoc\n");
-	parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);	
+	parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
 	if (parse_list->file == -1)
 		return (1);//should call the exit function here
 	while (1)
@@ -23,25 +22,88 @@ if (parse_list->tkns_list->tok_type == TRUNC)
 	free (parse_list->buf);
 	close(parse_list->file);
 	parse_list->infile = open("./div/here_doc", O_RDONLY);
-	j++;
-	break ;
+	return (0) ;
 }
 
-if (parse_list->tkns_list->tok_type == OUT_IN)
+int	do_in_out(t_parsing *parse_list)
 {
-	if (check_file_and_delim_name(parse_list->tkns_list, j + 1) == 1)
+	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
 		return (1);
-	printf("do the redir out\n");
-	break ;
+		printf("do the redir out\n");
+	return (0) ;
 }
 
-if (parse_list->tkns_list->tok_type == INPUT)
+int	do_input(t_parsing *parse_list)
 {
-	if (check_file_and_delim_name(parse_list->tkns_list, j) == 1)
+	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
 		return (1);
 	parse_list->infile = open(parse_list->tkns_list->next->data, O_RDONLY);
 	if (parse_list->infile == -1)
 		fprintf(stderr, "Could not open input file\n");
 	else
-		fprintf("did the redir in this is parse_list->infile %d\n", parse_list->infile);
+		printf("did the redir in this is parse_list->infile %d\n", parse_list->infile);
+	return (0);
+}
+
+int	do_append(t_parsing *parse_list)
+{
+	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
+		return (1);
+	parse_list->outfile = open(parse_list->tkns_list->next->data, O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (parse_list->outfile == -1)
+	{
+		fprintf(stderr, "MINISHELL: Could not open output file\n");
+		return (1);
+	}
+	printf("did_the_append_out\n");
+	return (0);
+}
+
+int	do_output(t_parsing *parse_list)
+{
+	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
+		return (1);
+	parse_list->outfile = open(parse_list->tkns_list->next->data, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (parse_list->outfile == -1)
+	{
+		fprintf(stderr, "MINISHELL: Could not open output file\n");
+		return (1);
+	}
+	printf("did the redir out\n");
+	return (0);
+}
+
+int	do_pipe(t_parsing *parse_list)
+{
+	if (check_pipe_name(parse_list->tkns_list) == 1)
+		return (1);
+	printf("do the pipe\n");
+	return (0);
+}
+
+int	check_metachar(t_parsing *parse_list)
+{
+	while (parse_list->tkns_list != NULL)
+	{
+		if (parse_list->tkns_list->tok_type == TRUNC)
+			if (do_trunc(parse_list) == 1)
+				return (1);
+		if (parse_list->tkns_list->tok_type == IN_OUT)
+			if (do_in_out(parse_list) == 1)
+				return (1);
+		if (parse_list->tkns_list->tok_type == INPUT)
+			if (do_input(parse_list) == 1)
+				return (1);
+		if (parse_list->tkns_list->tok_type == APPEND)
+			if (do_append(parse_list) == 1)
+				return (1);
+		if (parse_list->tkns_list->tok_type == PIPE)
+			if (do_pipe(parse_list) == 1)
+				return (1);
+		if (parse_list->tkns_array->tok_type == SPECIAL_PIPE || parse_list->tkns_array->tok_type == OUTPUT)
+			if (do_output(parse_list) == 1)
+				return (1);
+		parse_list->tkns_list = parse_list->tkns_list->next;
+	}
+	return (0);
 }

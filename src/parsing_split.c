@@ -5,7 +5,7 @@ t_tkns *set_toktype(t_tkns *matrix)
 	if (matrix->data[0] == '<' && matrix->data[1]  == '<')
 		matrix->tok_type = TRUNC;
 	else if (matrix->data[0] == '<' && matrix->data[1]  == '>')
-		matrix->tok_type = OUT_IN; 
+		matrix->tok_type = IN_OUT; 
 	else if (matrix->data[0] == '<')
 		matrix->tok_type = INPUT;
 	if (matrix->data[0] == '>' && matrix->data[1]  == '>')
@@ -89,16 +89,24 @@ t_tkns *node_redir(t_tkns *matrix, char *s, int size)
 	return(set_toktype(matrix));
 }
 
-t_parsing *new_split(char *s, t_parsing *parse_list)
+t_tkns *init_list(char *s)
 {
-	parse_list->tkns_list = (t_tkns *)malloc(sizeof(*parse_list->tkns_list));
-	if (parse_list->tkns_list == NULL)
+	t_tkns *list;
+
+	list = (t_tkns *)malloc(sizeof(*list));
+	if (list == NULL)
 		return (NULL);
-	parse_list->tkns_list->dollar_sign = false;
-	parse_list->tkns_list->argv_pos = 0;
-	parse_list->tkns_list->data = s;
-	parse_list->tkns_list->next = NULL;
-	parse_list->tkns_list->start = NULL;
+	list->dollar_sign = false;
+	list->argv_pos = 0;
+	list->data = s;
+	list->next = NULL;
+	list->start = NULL;
+	return (list);
+}
+
+t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les printf et les {} en trop sont enlever
+{
+	parse_list->tkns_list = init_list(s);
 	while (*s)
 	{
 		if ((*s == '<' || *s == '>') && (s[1]  == '<' || s[1]  == '>' || s[1]  == '|'))

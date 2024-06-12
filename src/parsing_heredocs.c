@@ -147,7 +147,7 @@ int	check_metachar(t_parsing *parse_list)
 
 //quite sure this is not useful. I made my own "make tokens node" functions
 
-// void	prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array) //this can be 1000 times easier wwith linked list - mak a ADD NEW NODE FUNCTION. check in libft
+// void	prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array)
 // {
 // 	parse_list->tkns_list->next = calloc(sizeof(t_tkns), 1);
 // 	parse_list->tkns_list->next->prev = parse_list->tkns_list; //next->prev????

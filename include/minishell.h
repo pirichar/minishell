@@ -26,7 +26,7 @@
 # define INPUT 5
 # define OUTPUT 6
 # define PIPE 7
-# define OUT_IN 8
+# define IN_OUT 8
 # define SPECIAL_PIPE 9
 
 typedef struct	s_exec
@@ -210,7 +210,7 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *tkns_list);
 
 //new_parsing
 t_parsing 		*new_split(char *s, t_parsing *parse_list);
-int				check_file_and_delim_name(t_tkns *tkns_list, int j);
-int				check_pipe_name(t_tkns *tkns_array, int j);
+int				check_file_and_delim_name(t_tkns *tkns_list);
+int				check_pipe_name(t_tkns *tkns_array);
 
 #endif

@@ -32,7 +32,7 @@ void	print_tkns_array_debug(t_parsing parse_list)
 	}
 }
 
-int	count_cmd(t_tkns *tkns_list)  //may 21, should be ok
+int	count_cmd(t_tkns *tkns_list)  //is it still used?
 {
 	int	count;
 
@@ -44,7 +44,7 @@ int	count_cmd(t_tkns *tkns_list)  //may 21, should be ok
 		//	tkns_list = tkns_list->next;
 		//	continue ;
 		//}
-		//if (ft_strchr("|", tkns_list->data[0])) //why return when pipe found and not at the end?
+		//if (ft_strchr("|", tkns_list->data[0]))
 		//	return (count);
 		count++;
 		tkns_list = tkns_list->next;
@@ -53,14 +53,14 @@ int	count_cmd(t_tkns *tkns_list)  //may 21, should be ok
 	return (count);
 }
 
-int	check_file_and_delim_name(t_tkns *tkns_list, int j)
+int	check_file_and_delim_name(t_tkns *tkns_list)
 {
 	if (tkns_list->next != NULL)
 	{
-		if (ft_strchr("<|>", tkns_list->next->data[j])) //data[0] ou data[1], ya un espace a data[0] pratiquement tout le temps, non^
+		if (ft_strchr("<|>", tkns_list->next->data[0])) 
 		{
 			printf("Dundershell: syntax error near unexpected token `%c'\n",
-				tkns_list->next->data[j]);
+				tkns_list->next->data[0]);
 			return (1);
 		}
 	}
@@ -72,7 +72,7 @@ int	check_file_and_delim_name(t_tkns *tkns_list, int j)
 	return (0);
 }
 
-int	check_pipe_name(t_tkns *tkns_list, int j) //may 21, should be ok
+int	check_pipe_name(t_tkns *tkns_list) //may 21, should be ok
 {
 	if (tkns_list->next
 		&& tkns_list->next->data[0] == '|')
@@ -80,8 +80,7 @@ int	check_pipe_name(t_tkns *tkns_list, int j) //may 21, should be ok
 		printf("Dundershell: syntax error near unexpected token `|'\n");
 		return (1);
 	}
-	if (!tkns_list->next
-		|| tkns_list->next->data[j + 1] != '\0')
+	if (!tkns_list->next || tkns_list->next->data == NULL)
 	{
 		printf("Dundershell: syntax error near unexpected token `newline'\n");
 		return (1);
