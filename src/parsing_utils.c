@@ -6,7 +6,7 @@ int	init_first_token_nodes(t_parsing *parse_list)  //may 21, should be ok. but i
 	parse_list->tkns_list->dollar_sign = false;
 	parse_list->tkns_list->prev = NULL;
 //	parse_list->tkns_list->argv_pos = 0;
-	parse_list->tkns_list->start = NULL;
+	parse_list->start = NULL;
 	return (0);
 }
 

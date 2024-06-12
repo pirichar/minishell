@@ -100,13 +100,12 @@ t_tkns *init_list(char *s)
 //	list->argv_pos = 0;
 	list->data = s;
 	list->next = NULL;
-	list->start = NULL;
 	return (list);
 }
 
 t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les printf et les {} en trop sont enlever
 {
-//	parse_list->tkns_list = init_list(s);
+	parse_list->start = NULL;
 	while (*s)
 	{
 		if ((*s == '<' || *s == '>') && (s[1]  == '<' || s[1]  == '>' || s[1]  == '|'))
@@ -129,11 +128,14 @@ t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les print
 			if (parse_list->tkns_list->tok_type == CMD)
 				parse_list->cmd_count++;
 		}
+		if (parse_list->start == NULL)
+			parse_list->start = parse_list->tkns_list;
 	}
 	while (parse_list->tkns_list)
 	{
 		printf("I am checking the nodes 1 after the other: %s\n", parse_list->tkns_list->data);
 		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
+	parse_list->tkns_list = parse_list->start;
 	return (parse_list);
 }

@@ -83,7 +83,9 @@ int	do_pipe(t_parsing *parse_list)
 
 int	check_metachar(t_parsing *parse_list)
 {
-	while (parse_list->tkns_list != NULL)
+	parse_list->tkns_list = parse_list->tkns_list->next;
+	parse_list->start = parse_list->tkns_list;
+	while (parse_list->tkns_list)
 	{
 		if (parse_list->tkns_list->tok_type == TRUNC)
 			if (do_trunc(parse_list) == 1)
@@ -103,7 +105,11 @@ int	check_metachar(t_parsing *parse_list)
 		if (parse_list->tkns_list->tok_type == SPECIAL_PIPE || parse_list->tkns_list->tok_type == OUTPUT)
 			if (do_output(parse_list) == 1)
 				return (1);
-		parse_list->tkns_list = parse_list->tkns_list->next;
+		if (parse_list->tkns_list->next)
+			parse_list->tkns_list = parse_list->tkns_list->next;
+		else
+			break ;
 	}
+	parse_list->tkns_list = parse_list->start;
 	return (0);
 }

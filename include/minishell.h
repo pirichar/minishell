@@ -82,7 +82,7 @@ typedef struct s_tkns
 	char			*data;
 	struct s_tkns	*next;
 	struct s_tkns	*prev;
-	struct s_tkns	*start;
+//	struct s_tkns	*start;
 
 }			t_tkns;
 
@@ -91,6 +91,7 @@ typedef struct s_parsing
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
 //	t_tkns	*tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
+	t_tkns	*start;
 //	char	*user;
 	char	*line;
 //	char	**s_line;
