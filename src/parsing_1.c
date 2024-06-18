@@ -119,7 +119,8 @@ t_parsing	*start_parse(char *line, int status)
 		line = del_quotes(*&parse_list, line);
 	printf("line after del_quotes ==== %s\n", line);
 	parse_list->tkns_list = init_list(line);
-	parse_list = new_split(line, parse_list);		//is the parse list actually ok??
+	parse_list = new_split(line, parse_list);
+	// parse_list = cmd_split(parse_list);	//is the parse list actually ok??
 	printf("token is ==== %s\n", parse_list->tkns_list->data);
 //	if (parse_list->tkns_list == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ? ALEX note: null retourne seulement si la *line de depart est vide... idk si cest un check necessaire ou fait plus tot?
 //		return (NULL);
@@ -141,68 +142,53 @@ bool	ft_isspace(char c)
 	return (false);
 }
 
-char	**make_minitab(char *str)
-{
-	char **new_str;
-	int tab;
-	int i;
-	int y;
+// char	**make_minitab(char *str)
+// {
+// 	char **new_str;
+// 	int tab;
+// 	int i;
+// 	int y;
 
-	i = 0;
-	tab = 0;
-	new_str = malloc(sizeof(char **));
-	while (str[i] != '\0')
-	{
-		while (ft_isspace(str[i]) == true && str[i])
-			i++;
-		if (!str[i])
-			break ;
-		new_str[tab] = malloc(sizeof(char *));
-		y = 0;
-		while (ft_isspace(str[i]) == false && str[i])
-		{
-			new_str[tab][y] = str[i];
-			i++;
-			y++;
-		}
-		new_str[tab][y] = '\0';
-		printf("i am the tab function : %s\n", new_str[tab]);
-		tab++;
-	}
-	return (new_str);
-}
+// 	i = 0;
+// 	tab = 0;
+// 	new_str = malloc(sizeof(char **));
+// 	while (str[i] != '\0')
+// 	{
+// 		while (ft_isspace(str[i]) == true && str[i])
+// 			i++;
+// 		if (!str[i])
+// 			break ;
+// 		new_str[tab] = malloc(sizeof(char *));
+// 		y = 0;
+// 		while (ft_isspace(str[i]) == false && str[i])
+// 		{
+// 			new_str[tab][y] = str[i];
+// 			i++;
+// 			y++;
+// 		}
+// 		new_str[tab][y] = '\0';
+// 		printf("i am the tab function : %s\n", new_str[tab]);
+// 		tab++;
+// 	}
+// 	return (new_str);
+// }
 
 t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str) //how is the vector_cmd used. this could be 1 and only 1 function to tranform from list to tab(vector)
 {
 	int i;
-	int y;
-	char **cmd_sep;
-	int count;
 
-	y = 0;
-	count = 0;
-	cmd_sep = make_minitab(str);
-	while (cmd_sep[count])
-		count++;
-	while (y < count)
+	i = 0;
+
+	parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(str), sizeof(char *));
+	printf("I am after vector small alloc\n");
+	while (parse_list && str[i] != '\0')
 	{
-		i = 0;
-		parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(cmd_sep[y]), sizeof(char *));
-		printf("I am after vector small alloc\n");
-		while (parse_list && cmd_sep[y][i] != '\0' && cmd_sep[y] != NULL)
-		{
-			parse_list->vector_cmd[parse_list->i_vect][i]
-				= cmd_sep[y][i];
-			i++;
-		}
-		parse_list->vector_cmd[parse_list->i_vect][i] = '\0';
-		printf("I am the vector: %s\n", parse_list->vector_cmd[parse_list->i_vect]);
-		y++;
-		if (y < count - 1)
-			parse_list->i_vect++;
-		else
-			break ;
+		parse_list->vector_cmd[parse_list->i_vect][i]
+			= str[i];
+		i++;
 	}
+	parse_list->vector_cmd[parse_list->i_vect][i] = '\0';
+	printf("I am the vector: %s\n", parse_list->vector_cmd[parse_list->i_vect]);
 	parse_list->i_vect++;
 	printf("I am after data is entered in vector\n");
 	return (parse_list);

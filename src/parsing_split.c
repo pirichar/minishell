@@ -57,7 +57,7 @@ t_tkns *make_node(t_tkns *matrix, char *s)
 	if (new == NULL)
 		return (NULL);
 	new->data = malloc(sizeof(char *));
-	while (s[i] != '\0' && (s[i] != '<' && s[i] != '>' && s[i] != '|'))
+	while (s[i] && (s[i] != '<' && s[i] != '>' && s[i] != '|') && ft_isspace(s[i]) == false)
 	{
 		new->data[i] = s[i];
 		i++;
@@ -108,6 +108,8 @@ t_tkns *init_list(char *s)
 t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les printf et les {} en trop sont enlever
 {
 	parse_list->start = NULL;
+	while (ft_isspace(*s) == true)
+		s += 1;
 	while (*s)
 	{
 		if ((*s == '<' || *s == '>') && (s[1]  == '<' || s[1]  == '>' || s[1]  == '|'))
@@ -125,13 +127,15 @@ t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les print
 			printf("line in newsplit ==== %s\n", s);
 			parse_list->tkns_list->next = make_node(parse_list->tkns_list->next, s);
 			printf("line in newsplit after node made ==== %s\n", parse_list->tkns_list->data);
-			while (*s != '\0' && (*s != '<' && *s != '>' && *s != '|'))
+			while (*s && (*s != '<' && *s != '>' && *s != '|') && ft_isspace(*s) == false)
 				s += 1;
 			if (parse_list->tkns_list->tok_type == CMD)
 				parse_list->cmd_count++;
 		}
 		if (parse_list->start == NULL)
 			parse_list->start = parse_list->tkns_list->next;
+		while (ft_isspace(*s) == true)
+			s += 1;
 	}
 	while (parse_list->tkns_list)
 	{
@@ -141,3 +145,4 @@ t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les print
 	parse_list->tkns_list = parse_list->start;
 	return (parse_list);
 }
+

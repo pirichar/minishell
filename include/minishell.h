@@ -215,5 +215,6 @@ t_parsing 		*new_split(char *s, t_parsing *parse_list);
 int				check_file_and_delim_name(t_tkns *tkns_list);
 int				check_pipe_name(t_tkns *tkns_array);
 t_tkns 			*init_list(char *s);
+bool	ft_isspace(char c);
 
 #endif
