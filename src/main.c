@@ -77,14 +77,14 @@ bool	process_command()
             return true;  // Skip the remaining processing in the main loop
         }
        parse->ex = ex;
-       parse->tkns_list = parse->start;
+ //      parse->tkns_list = parse->start;
        ex->s_line = parse->tkns_list->vector_cmd;
 		i = 0;
-//		while (ex->s_line[i])
-//			printf("I am s_line tab: %s\n", ex->s_line[i++]);
+	//	while (ex->s_line[i] && ex->s_line[i] != NULL)
+	//		printf("I am s_line tab: %s\n", ex->s_line[i++]);
 //		i = 0;
-		while (parse->tkns_list->vector_cmd[i])
-			printf("I am vector tab: %s\n", parse->tkns_list->vector_cmd[i++]);
+//		while (parse->tkns_list->vector_cmd[i])
+//			printf("I am vector tab: %s\n", parse->tkns_list->vector_cmd[i++]);
         if (ex->s_line[0] == NULL)
 		{
             free(ex->line);

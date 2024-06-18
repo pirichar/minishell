@@ -15,11 +15,7 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 	while (parse_list->tkns_list)
 	{
 		if (parse_list->tkns_list->tok_type == CMD)
-		{
-			//alloc_vector(parse_list, parse_list->i_vect, parse_list->i_arr, false);
 			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
-			parse_list->i_vect++;
-		}
 		if (parse_list->tkns_list->next)
 			parse_list->tkns_list = parse_list->tkns_list->next;
 		else
@@ -27,6 +23,12 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 	}
 	printf("I am after vectorisation\n");
 	parse_list->tkns_list = parse_list->start;
+	int i = 0;
+	while (parse_list->vector_cmd[i])
+	{
+		printf("CHECKING HERE: %s\n ", parse_list->vector_cmd[i]);
+		i++;
+	}
 	parse_list->tkns_list->vector_cmd = parse_list->vector_cmd;
 	return (parse_list);
 }
@@ -153,6 +155,8 @@ char	**make_minitab(char *str)
 	{
 		while (ft_isspace(str[i]) == true && str[i])
 			i++;
+		if (!str[i])
+			break ;
 		new_str[tab] = malloc(sizeof(char *));
 		y = 0;
 		while (ft_isspace(str[i]) == false && str[i])
@@ -199,6 +203,7 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str) //how is the vector_cmd
 		else
 			break ;
 	}
+	parse_list->i_vect++;
 	printf("I am after data is entered in vector\n");
 	return (parse_list);
 }
