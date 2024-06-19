@@ -124,8 +124,7 @@ typedef struct s_parsing
 
 
 //main.c
-void			print_logo(char **env);
-void 			prompt_and_read_input();
+void	prompt_and_read_input(void);
 //builtin
 void			look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
@@ -133,23 +132,18 @@ void			set_variable(char ***env, char *var, char *new_var);
 void			calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse);
 void			parse_and_exec_cmd_shell(char **cmd, char **env);
 //cd.c
-void			go_to_home(char ***new_env);
 void			mini_cd(char **s_line, char ***new_env,  t_parsing *parse);
 //echo.c
 void			mini_echo(char **s_line, t_parsing *parse);
-bool			check_only_n(char *str);
-void			parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i);
 //env.c
 void			mini_env(char **new_env,  t_parsing *parse);
 int				ft_strcmp(const char *s1, const char *s2);
 void			print_out_dir(char **to_print);
 //environement.c
-bool			search_path(const char *p_arr, const char *cmd);
 char			**path_to_starrr(char **env, char *var);
 char			*var_to_str(char **env, char *var);
 bool			search_path_exec(const char *p_arr, const char *cmd);
 //exit.c
-void			exit_was_too_long(char **s_line);
 void			mini_exit(char **s_line, t_parsing *parse);
 //execute.c
 int				execute(int fd_in, int *p, char **env, t_parsing *parse);
@@ -159,12 +153,13 @@ void			execute_out(char **cmd, int fds[2], char **env, t_parsing *parse);
 void			execute_solo(char **cmd, char ***env, t_parsing *parse);
 //export.c
 char			**bubble_sort_strarr(char **rtn);
-char			**sort_strarr(char **to_sort);
-void			print_export(char ***new_env);
-void			actually_set_variables(char **s_line, char ***new_env);
 void			mini_export(char **s_line, char ***new_env, t_parsing *parse);
 //ft_strjoin_free.c
 char	*ft_strjoin_free(char *s1, const char *s2);
+//logo_n_setup
+void			print_logo(char **env);
+void			configure_terminal(void);
+int				setup_minishell(int argc, char **env);
 //look_for.c
 bool			look_for_exit(char **s_line);
 bool			look_for_export(char **s_line);
@@ -174,25 +169,18 @@ bool			look_for_echo(char **s_line);
 //pwd.c
 void			mini_pwd(t_parsing *parse);
 //signals
-void handle_sigint(int sig);
-void handle_sigquit(int sig);
 void setup_signal_handlers();
 void update_sigquit_handling();
-
 //str_arr_fcn.c
 void			free_strrarr(char **to_free);
 int				strarr_len(char **str_arr);
-char 			**copy_strarr(char **env);
-void			set_3_variables(char ***env);
+char 			**copy_env(char **env);
 //unset.c
 char*			return_variable(char **env, char *var);
 void			mini_unset(char **s_line, char ***new_env,  t_parsing *parse);
 //wait_for_pids.c
 void	wait_for_pids(t_parsing *parse);
-
 //prompt
-char			*pwd_not_there(char *blue_user);
-char			*pwd_prompt(char *new_env[], char *blue_user);
 char			*set_prompt(char *new_env[]);
 //parsing
 t_parsing		*start_parse(char *line, int status);

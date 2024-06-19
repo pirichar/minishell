@@ -1,5 +1,11 @@
 #include "../include/minishell.h"
 
+/**
+ * @brief Return the lenght of an array of str
+ * 
+ * @param array of str to look into
+ * @return lenght of the array 
+ */
 int	strarr_len(char **str_arr)
 {
 	int	i;
@@ -10,8 +16,11 @@ int	strarr_len(char **str_arr)
 	return (i);
 }
 
-
-
+/**
+ * @brief Function to free an array of str
+ * 
+ * @param to_free to be free
+ */
 void	free_strrarr(char **to_free)
 {
 	int	i;
@@ -25,14 +34,18 @@ void	free_strrarr(char **to_free)
 	free(to_free);
 }
 
-/*
-	This function takes care of setting the 3 variables when we open the shell
-	Those variables are
-	PWD
-	SHLVL
-	_=
-*/
-void	set_3_variables(char ***env)
+/**
+ * @brief Local helper function
+ 			This function takes care of setting up
+ 			the 3 variables when we open the shell
+			Those variables are
+			PWD
+			SHLVL
+			_= (binary)
+ * 
+ * @param env passed by address by copy_env
+ */
+static void	set_3_variables(char ***env)
 {
 	char	*actual_pwd;
 	char	*buff;
@@ -61,12 +74,16 @@ void	set_3_variables(char ***env)
 	free(shlvl);
 }
 
-/*
-	This function copies the env variables passed by the main
-	It then sets 3 variables that are the SHLVL, the actual pwd 
-	and the binary using the function set 3 variabless
-*/
-char	**copy_strarr(char **env)
+/**
+ * @brief This function copies the env variables passed by the main
+			It then sets 3 variables that are the SHLVL, the actual pwd 
+			and the binary using the function set 3 variabless
+			Called by setup_minishell
+ * 
+ * @param env passed by main to be copied
+ * @return char** 
+ */
+char	**copy_env(char **env)
 {
 	int		i;
 	char	**rtn;

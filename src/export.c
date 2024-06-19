@@ -1,5 +1,12 @@
 #include "../include/minishell.h"
 
+/**
+ * @brief Bubble sort strings array
+			called by env.c and export.c
+ * 
+ * @param sorted array of strings
+ * @return unsorted array of strings
+ */
 char	**bubble_sort_strarr(char **rtn)
 {
 	int		i;
@@ -21,7 +28,18 @@ char	**bubble_sort_strarr(char **rtn)
 	return (rtn);
 }
 
-char	**sort_strarr(char **to_sort)
+/**
+ * @brief Helper static function for print export
+			Will malloc a copy of to_sort
+			and pass it to bubble_sort_strarr
+			I don't get why I do this this way
+ * 
+ // TO-DO  THE LOGIC HERE IS FUCKED TOP
+ 	WHY DONT I PASS RTN BY ADDRESS TO SORT_STRARR
+ * @param to_sort 
+ * @return char** 
+ */
+static char	**sort_strarr(char **to_sort)
 {
 	int		i;
 	char	**rtn;
@@ -39,7 +57,12 @@ char	**sort_strarr(char **to_sort)
 	return (bubble_sort_strarr(rtn));
 }
 
-void	print_export(char ***new_env)
+/**
+ * @brief will print the env vars sorted by sort_starr
+ * 
+ * @param new_env to print
+ */
+static void	print_export(char ***new_env)
 {
 	char	**to_print;
 	int		i;
@@ -54,7 +77,13 @@ void	print_export(char ***new_env)
 	free_strrarr(to_print);
 }
 
-void	actually_set_variables(char **s_line, char ***new_env)
+/**
+ * @brief Function called to set variable into our env
+ * 
+ * @param s_line splitted cmd line
+ * @param new_env the env to add the variable
+ */
+static void	actually_set_variables(char **s_line, char ***new_env)
 {
 	int		i;
 	char	**to_add;
@@ -64,7 +93,7 @@ void	actually_set_variables(char **s_line, char ***new_env)
 	{
 		to_add = ft_split(s_line[i], '=');
 		if (to_add[0] == NULL)
-			printf("DunderSHell: export: `=': not a valid identifierr\n");
+			printf("DunderSHell: export: `=': not a valid identifier\n");
 		else if (to_add[1] != NULL)
 		{
 			to_add[0] = ft_strjoin_free(to_add[0], "=");
@@ -80,6 +109,16 @@ void	actually_set_variables(char **s_line, char ***new_env)
 	}
 }
 
+/**
+ * @brief Builtin function
+			Our version of export
+			will call print export with no argument
+			else will call actually_set_variables
+ * 
+ * @param s_line splitted cmd line
+ * @param new_env the env since we want to export in it
+ * @param parse for the builtin bool
+ */
 void	mini_export(char **s_line, char ***new_env, t_parsing *parse)
 {
 	parse->b_in = true;

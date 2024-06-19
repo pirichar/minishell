@@ -1,15 +1,22 @@
 #include "../include/minishell.h"
 
-/* I should free :
+/**
+ * @brief The end of exit,
+			makes sure that exit acts like bash's exit
+			with exit or with a non numeric arg
+ * 
+// TO-DO MAKE SURE THIS IS FINE :
+	[I should free :
 		the new_env,
 		all the parsing structure, 
 		la structure EX, 
 		la LINE 
-		closer mes FD
-		*/
+		closer mes FD]
 
-/* lol */
-void	exit_was_too_long(char **s_line)
+ * @param s_line command line splitted
+ */
+
+static void	exit_was_too_long(char **s_line)
 {
 	int	i;
 
@@ -34,10 +41,18 @@ void	exit_was_too_long(char **s_line)
 	}
 }
 
-/*
+/**
+ * @brief Builtin function
+			Basically exit function
+			will not exit with more then one argument
+
+// TO-DO VÉRIFIER ÇA 
 	étrangement quand je free line et s_line j'ai un leak mais 
 	le leak part quand je ne les free pas ; je devrais vérifier pourquoi bientôt
-*/
+ * 
+ * @param s_line splitted line 
+ * @param parse for the builtin
+ */
 void	mini_exit( char **s_line, t_parsing *parse)
 {
 	int	tmp;
