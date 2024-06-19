@@ -9,7 +9,7 @@ int	do_trunc(t_parsing *parse_list)
 	printf("do the heredoc\n");
 	parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
 	if (parse_list->file == -1)
-		return (1);//should call the exit function here
+		return (1);//TODO: should call the exit function here
 	while (1)
 	{
 		write(1, "heredoc>", 9);

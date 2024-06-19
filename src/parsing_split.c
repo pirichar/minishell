@@ -65,7 +65,6 @@ t_tkns *make_node(t_tkns *matrix, char *s)
 	new->data[i] = '\0';
 	new->next = NULL;
 	nodeaddback(&matrix, new);
-	printf("line inside node ==== %s\n", new->data);
 	return(set_toktype(matrix));
 }
 
@@ -87,7 +86,6 @@ t_tkns *node_redir(t_tkns *matrix, char *s, int size)
 	new->data[i] = '\0';
 	new->next = NULL;
 	nodeaddback(&matrix, new);
-	printf("line inside node redir ==== %s\n", new->data);
 	return(set_toktype(matrix));
 }
 
@@ -105,7 +103,7 @@ t_tkns *init_list(char *s)
 	return (list);
 }
 
-t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les printf et les {} en trop sont enlever
+t_parsing *new_split(char *s, t_parsing *parse_list) 
 {
 	parse_list->start = NULL;
 	while (ft_isspace(*s) == true)
@@ -124,9 +122,7 @@ t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les print
 		}
 		else if (*s != '<' && *s != '>' && *s != '|')
 		{
-			printf("line in newsplit ==== %s\n", s);
 			parse_list->tkns_list->next = make_node(parse_list->tkns_list->next, s);
-			printf("line in newsplit after node made ==== %s\n", parse_list->tkns_list->data);
 			while (*s && (*s != '<' && *s != '>' && *s != '|') && ft_isspace(*s) == false)
 				s += 1;
 			if (parse_list->tkns_list->tok_type == CMD)
@@ -136,11 +132,6 @@ t_parsing *new_split(char *s, t_parsing *parse_list) //25 lignes quand les print
 			parse_list->start = parse_list->tkns_list->next;
 		while (ft_isspace(*s) == true)
 			s += 1;
-	}
-	while (parse_list->tkns_list)
-	{
-		printf("I am checking the nodes 1 after the other: %s\n", parse_list->tkns_list->data);
-		parse_list->tkns_list = parse_list->tkns_list->next;
 	}
 	parse_list->tkns_list = parse_list->start;
 	return (parse_list);

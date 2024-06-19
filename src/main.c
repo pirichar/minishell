@@ -68,9 +68,6 @@ bool	process_command()
 	{
         add_history(ex->line);
         parse = start_parse(ex->line, ex->status);
-		printf("I am after all the parsing\n");
-		int i = 0;
-		printf("I am parse_line tab: %s\n", parse->tkns_list->vector_cmd[i]);
        if (parse == NULL)
 		{
             free(ex->line);
@@ -79,7 +76,6 @@ bool	process_command()
        parse->ex = ex;
  //      parse->tkns_list = parse->start;
        ex->s_line = parse->tkns_list->vector_cmd;
-		i = 0;
 	//	while (ex->s_line[i] && ex->s_line[i] != NULL)
 	//		printf("I am s_line tab: %s\n", ex->s_line[i++]);
 //		i = 0;
