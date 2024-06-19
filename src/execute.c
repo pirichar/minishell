@@ -1,16 +1,25 @@
 #include "../include/minishell.h"
 
-/*
-	cette fonction remplace tout ce qui était 
-	dans la partie if pid==0de la fonction execute
-	En gros elle prend le fd in; s'il n'est pas à 0(donc qui a été changé)
-	elle va dup2 le fdin dans le stdin pour la fonction appelée plus tard
-	elle ferme ensuite le fdin, dup2 le pipe_1 dans stdout afin que la sortie
-	de la commande sorte dans le pipe et non dans le stdout
-	par la suite on verifie pour une builtin; 
-	s'il n,y en a pas on execute la commande
-	soit localement soit avec parse_and_exec_cmd_shell 
-*/
+/**
+ * @brief cette fonction remplace tout ce qui était 
+			dans la partie if pid==0 de la fonction execute
+			En gros elle prend le fd in;
+			s'il n'est pas à 0(donc qui a été changé)
+			elle va dup2 le fdin dans le stdin pour la fonction appelée plus tard
+			elle ferme ensuite le fdin,
+			dup2 le pipe_1 dans stdout afin que la sortie
+			de la commande sorte dans le pipe et non dans le stdout
+			par la suite on verifie pour une builtin; 
+			s'il n,y en a pas on execute la commande
+			soit localement soit avec parse_and_exec_cmd_shell 
+
+			
+ * 
+ * @param fd_in input file descriptor
+ * @param pipe_1 the end to be duped to stdout
+ * @param parse used to know if parse->b_in is true
+ * @param env required for execve
+ */
 static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
 {
 	if (fd_in != 0)
@@ -55,7 +64,8 @@ static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
 	CASE B:
 		if the fd is other then -1 (is valid) execute will fork
 
-		The child process will then dup the passed fd_in into stdin and close fd_in
+		The child process will then dup the passed
+		fd_in into stdin and close fd_in
 		Then the process will dup the writing part of the pipe 
 		into the stdin then close the pipe[1]
 		Finally its gonna call parse and exec cmd which 

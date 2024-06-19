@@ -6,12 +6,20 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 10:37:01 by pirichar          #+#    #+#             */
-/*   Updated: 2022/08/05 09:12:36 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/05/14 11:13:35 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Strjoin that will free s1
+			// TO-DO Might have to protect this one ?
+ * 
+ * @param s1 string to join that might be free
+ * @param s2 string to join to s1 , not to be free
+ * @return char* returning string result of s1 + s2
+ */
 char	*ft_strjoin_free(char *s1, const char *s2)
 {
 	char	*str;

@@ -1,6 +1,21 @@
 #include "../include/minishell.h"
 
-static void	exec_out_child(int *fds[2], t_parsing *parse, char **cmd, char **env)
+/**
+ * @brief Function made to exectute the last child
+			It will first look fit the outfile isnt 1
+			It will then look for builtins
+			If not successfull with builtins
+			It will try to run the command locally
+			If it cant it will try parse_exec_cmd
+			Which will run every possible paths
+ * 
+ * @param input and ouputfds passed by exec_out 
+ * @param parse mostly for the builtins
+ * @param cmd to be executed
+ * @param env 
+ */
+static void	exec_out_child(int *fds[2], t_parsing *parse,
+	char **cmd, char **env)
 {
 	dup2(*(fds[0]), 0);
 	close(*(fds[0]));
@@ -24,15 +39,22 @@ static void	exec_out_child(int *fds[2], t_parsing *parse, char **cmd, char **env
 		exit(0);
 }
 
-/*
-	Execute out function was created to respect the limit of inputs
-	I was using only execute at first and had to switch it around
-*/
-//à mettre au début de la fonction entre pid et 
-//le pipe pour voir ce qui est passé à la fonction
-// printf("WITHIN EXECUTE_OUT\n");
-// for(int i = 0;cmd[i];i++)
-// 	printf("CMD[%d] = %s\n", i, cmd[i]);
+/**
+ * @brief Execute out function was created to respect the limit of inputs
+			I was using only execute at first and had to switch it around
+
+			This function is called by calling_the_execs shell
+	//à mettre au début de la fonction entre pid et 
+	//le pipe pour voir ce qui est passé à la fonction
+	// printf("WITHIN EXECUTE_OUT\n");
+	// for(int i = 0;cmd[i];i++)
+	// 	printf("CMD[%d] = %s\n", i, cmd[i]);
+ * 
+ * @param cmd 
+ * @param fds 
+ * @param env 
+ * @param parse 
+ */
 void	execute_out(char **cmd, int fds[2], char **env, t_parsing *parse)
 {
 	int	pid;

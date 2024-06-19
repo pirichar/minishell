@@ -1,6 +1,11 @@
 #include "../include/minishell.h"
 
-void	go_to_home(char ***new_env)
+/**
+ * @brief function called by CD when no option with it
+ * 
+ * @param new_env passwd to set the PWD
+ */
+static void	go_to_home(char ***new_env)
 {
 	char	**home;
 	char	*actual_pwd;
@@ -21,12 +26,17 @@ void	go_to_home(char ***new_env)
 	free(buff);
 }
 
-/*
-	our version of CD;
-	It used to change directory with every argument 
-	like cd .. folder .. folder would get you back to folder
-	But now its only one argument or getting you back to home
-*/
+/**
+ * @brief Builtin function
+			our version of CD;
+			It used to change directory with every argument 
+			like cd .. folder .. folder would get you back to folder
+			But now its only one argument or getting you back to home
+ * 
+ * @param s_line splitted cmd line
+ * @param new_env the env passed by address
+ * @param parse for the b_in bool
+ */
 void	mini_cd(char **s_line, char ***new_env, t_parsing *parse)
 {
 	char	*actual_pwd;
