@@ -39,7 +39,8 @@ int	count_cmd(t_tkns *tkns_list)  //is it still used?
 	count = 0;
 	while (tkns_list != NULL)
 	{
-		count++;
+		if (tkns_list->tok_type == CMD)
+			count++;
 		tkns_list = tkns_list->next;
 	}
 	return (count);

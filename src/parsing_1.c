@@ -11,21 +11,26 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 	parse_list->cmd_count = count_cmd(parse_list->tkns_list);
 	parse_list->vector_cmd = malloc((sizeof(char *) * (parse_list->cmd_count - 1)));
 	parse_list->start = parse_list->tkns_list;
-	while (parse_list->tkns_list != NULL && parse_list->tkns_list->data != NULL)
+	while (parse_list->tkns_list != NULL && parse_list->tkns_list->data != NULL && (parse_list->i_vect < parse_list->cmd_count))
 	{
 		if (parse_list->tkns_list->tok_type == CMD)
+		{
 			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
+			printf("%s\n", parse_list->tkns_list->data);
+		}
 		if (parse_list->tkns_list->next)
 			parse_list->tkns_list = parse_list->tkns_list->next;
 		else
 			break ;
 	}
 	parse_list->tkns_list = parse_list->start;
-	parse_list->tkns_list->vector_cmd = malloc(sizeof(char **));
+	parse_list->tkns_list->vector_cmd = malloc((sizeof(char *) * (parse_list->cmd_count - 1)));
 	int i = 0;
-	while (i < (parse_list->cmd_count))
+	printf("I am the CMD count %d\n", parse_list->cmd_count);
+	while (i < (parse_list->cmd_count)) //TODO HERE is some printf to debug ex: it says "< notes.txt > out" has 4 cmds.... thats not right
 	{
 		parse_list->tkns_list->vector_cmd[i] = parse_list->vector_cmd[i];
+		printf("%d\n", i);
 		printf("%s\n", parse_list->tkns_list->vector_cmd[i]);
 		i++;
 	}
