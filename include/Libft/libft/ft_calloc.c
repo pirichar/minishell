@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jvigneau <jvigneau@student.42quebec>       +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 16:18:53 by jvigneau          #+#    #+#             */
-/*   Updated: 2021/10/01 15:14:20 by jvigneau         ###   ########.fr       */
+/*   Updated: 2024/06/20 14:50:11 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,16 @@
 
 #include "libft.h"
 
+//nouveau calloc de Alex
+
 void	*ft_calloc(size_t count, size_t size)
 {
-	char	*fin;
+	void	*ptr;
 
-	fin = malloc(count * size);
-	if (fin)
-		ft_bzero(fin, (count * size));
-	return (fin);
+	ptr = malloc(count * size);
+	if (ptr == NULL)
+		return (NULL);
+	else
+		ft_bzero(ptr, size * count);
+	return (ptr);
 }

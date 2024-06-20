@@ -37,19 +37,11 @@ int	count_cmd(t_tkns *tkns_list)  //is it still used?
 	int	count;
 
 	count = 0;
-	while (tkns_list->data != NULL)
+	while (tkns_list != NULL)
 	{
-		//if (ft_strchr("<>", tkns_list->data[0]))
-		//{
-		//	tkns_list = tkns_list->next;
-		//	continue ;
-		//}
-		//if (ft_strchr("|", tkns_list->data[0]))
-		//	return (count);
 		count++;
 		tkns_list = tkns_list->next;
 	}
-	printf("token count %d", count);
 	return (count);
 }
 

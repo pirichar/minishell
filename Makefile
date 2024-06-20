@@ -48,7 +48,7 @@ $(NAME)	:	$(SRCS) $(OBJS) $(HEADERS)
 				echo "\n      Libft compiled \n" && \
 				echo "__________________________________"; \
 			fi
-			$(CC) $(SRCS) $(LIBS) -Lm1lib -lhistory -lcurses $(CFLAGS)
+			$(CC) $(SRCS) $(LIBS) -Llib -lhistory -lcurses $(CFLAGS)
 			@if [ -p "./objs" ]; then \
 				rm -rf ./objs; \
 			fi

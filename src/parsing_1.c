@@ -8,9 +8,10 @@
 */
 t_parsing	*get_cmd(t_parsing *parse_list)
 {
-	parse_list->vector_cmd = ft_calloc(parse_list->cmd_count, sizeof(char **));
+	parse_list->cmd_count = count_cmd(parse_list->tkns_list);
+	parse_list->vector_cmd = malloc((sizeof(char *) * (parse_list->cmd_count - 1)));
 	parse_list->start = parse_list->tkns_list;
-	while (parse_list->tkns_list)
+	while (parse_list->tkns_list != NULL && parse_list->tkns_list->data != NULL)
 	{
 		if (parse_list->tkns_list->tok_type == CMD)
 			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
@@ -20,7 +21,15 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 			break ;
 	}
 	parse_list->tkns_list = parse_list->start;
-	parse_list->tkns_list->vector_cmd = parse_list->vector_cmd;
+	parse_list->tkns_list->vector_cmd = malloc(sizeof(char **));
+	int i = 0;
+	while (i < (parse_list->cmd_count))
+	{
+		parse_list->tkns_list->vector_cmd[i] = parse_list->vector_cmd[i];
+		printf("%s\n", parse_list->tkns_list->vector_cmd[i]);
+		i++;
+	}
+	free(parse_list->vector_cmd);
 	return (parse_list);
 }
 
@@ -120,8 +129,8 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str)
 	int i;
 
 	i = 0;
-	parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(str), sizeof(char *));
-	while (parse_list && str[i] != '\0')
+	parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(str), (sizeof(char *)));
+	while (parse_list && parse_list->tkns_list && str[i] != '\0' && (parse_list->i_vect < parse_list->cmd_count))
 	{
 		parse_list->vector_cmd[parse_list->i_vect][i]
 			= str[i];
