@@ -107,7 +107,6 @@ t_parsing	*start_parse(char *line, int status)
 	parse_list = new_split(line, parse_list);
 	parse_list = check_metachar(parse_list);
 	parse_list = get_cmd(parse_list);
-	//parse_list->tkns_list = expend_var(); TODO : expend variabled
 	return (parse_list);
 }
 

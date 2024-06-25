@@ -47,43 +47,50 @@ void	nodeaddback(t_tkns **lst, t_tkns *new)
 	last -> next = new;
 }
 
-t_tkns *make_node(t_tkns *matrix, char *s)
+t_tkns *make_node(t_tkns *matrix, char *s, t_parsing *parse_list, int i)
 {
 	t_tkns	*new;
-	int		i;
+	int		y;
 
-	i = 0;
+	y = 0;
 	new = (t_tkns *)malloc(sizeof(*new));
 	if (new == NULL)
 		return (NULL);
 	new->data = malloc(sizeof(char *));
-	while (s[i] && (s[i] != '<' && s[i] != '>' && s[i] != '|') && ft_isspace(s[i]) == false)
+	while (s[i])
 	{
-		new->data[i] = s[i];
+		if (ft_isspace(s[i]) == true && (parse_list->quotes == false || (parse_list->quotes == true && (i < parse_list->quote_start || i > parse_list->quote_end))))
+			break;
+		if ((s[i] == '<' || s[i] == '>' || s[i] == '|') && (parse_list->quotes == false || (parse_list->quotes == true && (i < parse_list->quote_start || i > parse_list->quote_end))))
+		break ;
+		if (s[i] == '$' && ((parse_list->quotes == false) || ((parse_list->quotes == true && (parse_list->quote_type == '\'' && (i < parse_list->quote_start || i > parse_list->quote_end))) || (parse_list->quote_type == '"' && (i >= parse_list->quote_start || i <= parse_list->quote_end)))))
+			s = expend_var(s, parse_list, i);
+		new->data[y] = s[i];
 		i++;
+		y++;
 	}
-	new->data[i] = '\0';
+	new->data[y] = '\0';
 	new->next = NULL;
 	nodeaddback(&matrix, new);
 	return(set_toktype(matrix));
 }
 
-t_tkns *node_redir(t_tkns *matrix, char *s, int size)
+t_tkns *node_redir(t_tkns *matrix, char *s, int size, int i)
 {
 	t_tkns	*new;
-	int		i;
+	int		y;
 
-	i = 0;
+	y = 0;
 	new = (t_tkns *)malloc(sizeof(*new));
 	if (new == NULL)
 		return (NULL);
 	new->data = malloc(sizeof(char *));
-	while (i < size)
+	while (y++ < size)
 	{
-		new->data[i] = s[i];
+		new->data[y] = s[i];
 		i++;
 	}
-	new->data[i] = '\0';
+	new->data[y] = '\0';
 	new->next = NULL;
 	nodeaddback(&matrix, new);
 	return(set_toktype(matrix));
@@ -97,7 +104,6 @@ t_tkns *init_list(char *s)
 	if (list == NULL)
 		return (NULL);
 	list->dollar_sign = false;
-//	list->argv_pos = 0;
 	list->data = s;
 	list->next = NULL;
 	return (list);
@@ -105,33 +111,43 @@ t_tkns *init_list(char *s)
 
 t_parsing *new_split(char *s, t_parsing *parse_list) 
 {
+	int i;
+
+	i = 0;
 	parse_list->start = NULL;
-	while (ft_isspace(*s) == true)
-		s += 1;
-	while (*s)
+	while (ft_isspace(s[i]) == true)
+		i += 1;
+	parse_list->old_quote_end = parse_list->quote_end;
+	parse_list->quote_pos = false;
+	while (s[i] != '\0')
 	{
-		if ((*s == '<' || *s == '>') && (s[1]  == '<' || s[1]  == '>' || s[1]  == '|'))
+		if (((s[i] == '<' || s[i] == '>') && (s[i + 1]  == '<' || s[i + 1]  == '>' || s[i + 1]  == '|')) && (parse_list->quotes == false || (parse_list->quotes == true && (i < parse_list->quote_start || i > parse_list->old_quote_end))))
 		{
-			parse_list->tkns_list->next = node_redir(parse_list->tkns_list->next, s, 2);
-			s += 2;
+			parse_list->tkns_list->next = node_redir(parse_list->tkns_list->next, s, 2, i);
+			i += 2;
 		}
-		else if (*s == '<' || *s == '>' || *s == '|')
+		else if ((s[i] == '<' || s[i] == '>' || s[i] == '|') && (parse_list->quotes == false || (parse_list->quotes == true && (i < parse_list->quote_start || i > parse_list->old_quote_end))))
 		{
-			parse_list->tkns_list->next = node_redir(parse_list->tkns_list->next, s, 1);
-			s += 1;
+			parse_list->tkns_list->next = node_redir(parse_list->tkns_list->next, s, 1, i);
+			i += 1;
 		}
-		else if (*s != '<' && *s != '>' && *s != '|')
+		else
 		{
-			parse_list->tkns_list->next = make_node(parse_list->tkns_list->next, s);
-			while (*s && (*s != '<' && *s != '>' && *s != '|') && ft_isspace(*s) == false)
-				s += 1;
+			parse_list->tkns_list->next = make_node(parse_list->tkns_list->next, s, parse_list, i);
+			if (parse_list->old_quote_end != parse_list->quote_end && parse_list->quote_pos == false)
+			{
+				i = parse_list->old_quote_end + 1;
+				parse_list->quote_pos = true;
+			}
+			else
+				i += ft_strlen(parse_list->tkns_list->next->data);
 			if (parse_list->tkns_list->tok_type == CMD)
 				parse_list->cmd_count++;
 		}
 		if (parse_list->start == NULL)
 			parse_list->start = parse_list->tkns_list->next;
-		while (ft_isspace(*s) == true)
-			s += 1;
+		while (ft_isspace(s[i]) == true)
+			i += 1;
 	}
 	parse_list->tkns_list = parse_list->start;
 	return (parse_list);
