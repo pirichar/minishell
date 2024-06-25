@@ -6,35 +6,24 @@
 	< notes.txt > out where there is not parse_lit->tkns_array[parse_list->i_arr] (no command)
 	I added some check in the while loop 
 */
+
+
 t_parsing	*get_cmd(t_parsing *parse_list)
 {
 	parse_list->cmd_count = count_cmd(parse_list->tkns_list);
-	parse_list->vector_cmd = malloc((sizeof(char *) * (parse_list->cmd_count - 1)));
+	parse_list->vector_cmd = ft_calloc((parse_list->cmd_count) + 1, sizeof(char *));
 	parse_list->start = parse_list->tkns_list;
 	while (parse_list->tkns_list != NULL && parse_list->tkns_list->data != NULL && (parse_list->i_vect < parse_list->cmd_count))
 	{
 		if (parse_list->tkns_list->tok_type == CMD)
-		{
 			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
-			printf("%s\n", parse_list->tkns_list->data);
-		}
 		if (parse_list->tkns_list->next)
 			parse_list->tkns_list = parse_list->tkns_list->next;
 		else
 			break ;
 	}
 	parse_list->tkns_list = parse_list->start;
-	parse_list->tkns_list->vector_cmd = malloc((sizeof(char *) * (parse_list->cmd_count - 1)));
-	int i = 0;
-	printf("I am the CMD count %d\n", parse_list->cmd_count);
-	while (i < (parse_list->cmd_count)) //TODO HERE is some printf to debug ex: it says "< notes.txt > out" has 4 cmds.... thats not right
-	{
-		parse_list->tkns_list->vector_cmd[i] = parse_list->vector_cmd[i];
-		printf("%d\n", i);
-		printf("%s\n", parse_list->tkns_list->vector_cmd[i]);
-		i++;
-	}
-	free(parse_list->vector_cmd);
+	parse_list->tkns_list->vector_cmd = parse_list->vector_cmd;
 	return (parse_list);
 }
 
@@ -88,7 +77,7 @@ char *del_quotes(t_parsing *parse_list, char *line)
 	i = 0;
 	y = 0;
 
-	newline = calloc(ft_strlen(line), sizeof(char *));
+	newline = ft_calloc(ft_strlen(line), sizeof(char *));
 	while (line[i] != '\0')
 	{
 		if (line[i] != parse_list->quote_type)
@@ -109,7 +98,7 @@ t_parsing	*start_parse(char *line, int status)
 {
 	t_parsing	*parse_list;
 
-	parse_list = calloc(1, sizeof(t_parsing));
+	parse_list = ft_calloc(1, sizeof(t_parsing));
 	init_master_list(parse_list, status);
 	parse_list = quotes_line(line, parse_list);
 	if (parse_list->quotes == true)
@@ -134,14 +123,12 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str)
 	int i;
 
 	i = 0;
-	parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(str), (sizeof(char *)));
+	parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(str) + 1, (sizeof(char)));
 	while (parse_list && parse_list->tkns_list && str[i] != '\0' && (parse_list->i_vect < parse_list->cmd_count))
 	{
-		parse_list->vector_cmd[parse_list->i_vect][i]
-			= str[i];
+		parse_list->vector_cmd[parse_list->i_vect][i] = str[i];
 		i++;
 	}
-	parse_list->vector_cmd[parse_list->i_vect][i] = '\0';
 	parse_list->i_vect++;
 	return (parse_list);
 }
