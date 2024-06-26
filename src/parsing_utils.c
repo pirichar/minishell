@@ -57,7 +57,7 @@ int	check_file_and_delim_name(t_tkns *tkns_list)
 			return (1);
 		}
 	}
-	if (!tkns_list->next || tkns_list->next->data == NULL)
+	if (!tkns_list->next)
 	{
 		printf("Dundershell: syntax error near unexpected token `newline'\n");
 		return (1);
@@ -73,7 +73,7 @@ int	check_pipe_name(t_tkns *tkns_list) //may 21, should be ok
 		printf("Dundershell: syntax error near unexpected token `|'\n");
 		return (1);
 	}
-	if (!tkns_list->next || tkns_list->next->data == NULL)
+	if (!tkns_list->next)
 	{
 		printf("Dundershell: syntax error near unexpected token `newline'\n");
 		return (1);
