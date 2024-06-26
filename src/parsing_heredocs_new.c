@@ -105,7 +105,7 @@ t_parsing	*check_metachar(t_parsing *parse_list)
 		if (parse_list->tkns_list->tok_type == SPECIAL_PIPE || parse_list->tkns_list->tok_type == OUTPUT)
 			if (do_output(parse_list) == 1)
 				return parse_list;//TODO exit command instead				return (1); //TODO exit command
-		if (parse_list->tkns_list->tok_type != CMD && parse_list->tkns_list->next)
+		if ((parse_list->tkns_list->tok_type != CMD && parse_list->tkns_list->tok_type != ARG)  && parse_list->tkns_list->next)
 			parse_list->tkns_list->next->tok_type = ARG;
 		if (parse_list->tkns_list->next)
 			parse_list->tkns_list = parse_list->tkns_list->next;
