@@ -128,8 +128,6 @@ t_parsing *new_split(char *s, t_parsing *parse_list)
 			if (parse_list->tkns_list->tok_type == CMD)
 				parse_list->cmd_count++;
 		}
-		if (parse_list->tkns_list->tok_type == PIPE)
-			parse_list->nb_of_pipes++;
 		if (parse_list->start == NULL)
 			parse_list->start = parse_list->tkns_list->next;
 		while (ft_isspace(*s) == true)

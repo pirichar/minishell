@@ -119,6 +119,7 @@ typedef struct s_parsing
 	int		quote_count;
 	bool	quotes;
 	int		cmd_count;
+	char	***pipes_args;
 	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
 }				t_parsing;
 

@@ -95,6 +95,46 @@ char *del_quotes(t_parsing *parse_list, char *line)
 	return (newline);
 }
 
+char ***get_argarray(t_parsing *parse_list)
+{
+	char ***tab_tab;
+	int i;
+	int y;
+	int z;
+
+	i = 0;
+	tab_tab = malloc(sizeof(char ***));
+	while(parse_list->tkns_list != NULL)
+	{
+		y = 0;
+		if(parse_list->tkns_list->tok_type == ARG && i < parse_list->nb_of_pipes)
+		{
+			tab_tab[i] = malloc(sizeof(char **));
+			while (parse_list->tkns_list->tok_type != PIPE)
+			{
+				z = 0;
+				tab_tab[i][y] = ft_calloc(ft_strlen(parse_list->tkns_list->data), sizeof(char *));
+				while (parse_list->tkns_list->data[z] != '\0')
+				{
+					tab_tab[i][y][z] = parse_list->tkns_list->data[z];
+					z++;
+				}
+				y++;
+				if (parse_list->tkns_list->next != NULL)
+					parse_list->tkns_list = parse_list->tkns_list->next;
+				else
+					break ;
+			}
+			i++;
+		}
+		else if (parse_list->tkns_list->next != NULL)
+			parse_list->tkns_list = parse_list->tkns_list->next;
+		else
+			break ;
+	}
+	return (tab_tab);
+}
+
 t_parsing	*start_parse(char *line, int status)
 {
 	t_parsing	*parse_list;
@@ -108,6 +148,8 @@ t_parsing	*start_parse(char *line, int status)
 	parse_list = new_split(line, parse_list);
 	parse_list = check_metachar(parse_list);
 	parse_list = get_cmd(parse_list);
+	if (parse_list->nb_of_pipes != 0)
+		parse_list->pipes_args = get_argarray(parse_list);
 	//parse_list->tkns_list = expend_var(); TODO : expend variabled
 	return (parse_list);
 }
