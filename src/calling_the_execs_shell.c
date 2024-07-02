@@ -25,31 +25,6 @@
  * @param new_env 
  * @param parse 
  */
- /*
-void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
-{
-	int	fd;
-	int	i;
-
-	i = 1;
-	if (parse->nb_of_pipes == 0)
-		execute_solo(cmd, new_env, parse);
-	else
-	{
-		fd = execute(parse->infile, &parse->pids[0], *(new_env), parse);
-		parse->tkns_list = parse->tkns_list->next;
-		cmd = parse->tkns_list->vector_cmd;
-		while (i < parse->nb_of_pipes)
-		{
-			fd = execute(fd, &parse->pids[i], *(new_env), parse);
-			i++;
-			parse->tkns_list = parse->tkns_list->next;
-			cmd = parse->tkns_list->vector_cmd;
-		}
-		execute_out(cmd, (int [2]){fd, parse->outfile}, *(new_env), parse);
-	}
-}
- */
 
 void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 {

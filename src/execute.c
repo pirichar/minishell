@@ -1,5 +1,6 @@
 #include "../include/minishell.h"
-static void process_cmd(t_parsing *parse, char **env, char** cmd)
+
+static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 {
 	if (parse->b_in == false
 		&& access(cmd[0], X_OK) == 0)

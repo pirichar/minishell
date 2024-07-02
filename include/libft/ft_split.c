@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec>       +#+  +:+       +#+        */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 08:48:04 by pirichar          #+#    #+#             */
-/*   Updated: 2021/09/29 13:54:54 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/07/02 14:20:28 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*ft_fill_word(const char *s, int *pos, char c)
 		rtn[i] = s[start];
 		i++;
 		start++;
-	}	
+	}
 	rtn[i] = '\0';
 	return (rtn);
 }
