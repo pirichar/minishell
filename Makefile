@@ -23,11 +23,11 @@ INC 	= include
 
 CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -g  -I${INC}
 
-LIBS	=	include/Libft/libft/libft.a -lreadline 
+LIBS	=	include/Libft/libft.a -lreadline 
 
 NAME	=	DunderShell
 
-FTMAKE	=	@cd include/Libft/libft && make -s 
+FTMAKE	=	@cd include/Libft && make bonus -s
 
 CLS		= 	clear
 
