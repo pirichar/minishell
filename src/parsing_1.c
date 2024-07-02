@@ -95,6 +95,24 @@ char *del_quotes(t_parsing *parse_list, char *line)
 	return (newline);
 }
 
+char **prep_tab(t_tkns *tkns_list)
+{
+	char **tab;
+	int count;
+
+	count = 0;
+	while (tkns_list->tok_type != PIPE)
+	{
+		count++;
+		if (tkns_list->next != NULL)
+			tkns_list = tkns_list->next;
+		else
+			break ;
+	}
+	tab = ft_calloc(count + 1, sizeof(char *));
+	return (tab);
+}
+
 char ***get_argarray(t_parsing *parse_list)
 {
 	char ***tab_tab;
@@ -103,17 +121,17 @@ char ***get_argarray(t_parsing *parse_list)
 	int z;
 
 	i = 0;
-	tab_tab = malloc(sizeof(char ***));
+	tab_tab = ft_calloc(parse_list->nb_of_pipes, sizeof(char **));
 	while(parse_list->tkns_list != NULL)
 	{
 		y = 0;
 		if(parse_list->tkns_list->tok_type == ARG && i < parse_list->nb_of_pipes)
 		{
-			tab_tab[i] = malloc(sizeof(char **));
+			tab_tab[i] = prep_tab(parse_list->tkns_list);
 			while (parse_list->tkns_list->tok_type != PIPE)
 			{
 				z = 0;
-				tab_tab[i][y] = ft_calloc(ft_strlen(parse_list->tkns_list->data), sizeof(char *));
+				tab_tab[i][y] = ft_calloc(ft_strlen(parse_list->tkns_list->data), sizeof(char));
 				while (parse_list->tkns_list->data[z] != '\0')
 				{
 					tab_tab[i][y][z] = parse_list->tkns_list->data[z];
