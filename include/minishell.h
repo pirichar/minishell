@@ -105,6 +105,7 @@ typedef struct s_parsing
 	int		outfile;
 	bool	b_in;
 //	bool	cmd;
+	bool	f_command;
 	int		status;
 	bool	with_nl;
 	bool	check_nl;
