@@ -2,10 +2,10 @@ SRCS	=	src/environement.c src/main.c src/builtin.c src/execute.c src/parsing_1.c
 			src/exit.c src/export.c src/env.c src/unset.c\
 			src/pwd.c src/echo.c  src/cd.c\
 			src/str_arr_fcn.c src/ft_strjoin_free.c  src/prompt.c  src/parsing_2.c \
-			src/parsing_utils.c src/parsing_heredocs.c src/parsing_redir_in.c \
+			src/parsing_utils.c src/parsing_heredocs_new.c src/parsing_redir_in.c \
 			src/parsing_redir_out.c src/parsing_pipes.c src/wait_for_pids.c\
 			src/calling_the_execs_shell.c ./src/look_for.c ./src/execute_out.c\
-			src/execute_solo.c src/ft_signals.c src/logo_n_setup.c
+			src/execute_solo.c src/ft_signals.c src/logo_n_setup.c src/parsing_split.c
 
 HEADERS	=	minishell.h colors.h
 
@@ -23,11 +23,11 @@ INC 	= include
 
 CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -g  -I${INC}
 
-LIBS	=	include/Libft/libft/libft.a -lreadline 
+LIBS	=	include/Libft/libft.a -lreadline 
 
 NAME	=	DunderShell
 
-FTMAKE	=	@cd include/Libft/libft && make -s 
+FTMAKE	=	@cd include/Libft && make bonus -s
 
 CLS		= 	clear
 

@@ -89,7 +89,7 @@ static bool	process_command(void)
 			return (true);
 		}
 		parse->ex = ex;
-		parse->tkns_list = parse->tkns_list->start;
+		parse->tkns_list = parse->start;
 		ex->s_line = parse->tkns_list->vector_cmd;
 		if (ex->s_line[0] == NULL)
 		{

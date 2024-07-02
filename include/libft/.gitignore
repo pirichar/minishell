@@ -1,0 +1,4 @@
+*.o
+.DS_Store
+libft.a
+.vscode/*

@@ -6,76 +6,190 @@
 	< notes.txt > out where there is not parse_lit->tkns_array[parse_list->i_arr] (no command)
 	I added some check in the while loop 
 */
-int	get_cmd(t_parsing *parse_list)
+
+
+t_parsing	*get_cmd(t_parsing *parse_list)
 {
-	parse_list->tkns_list->vector_cmd = calloc(sizeof(char **),
-			count_cmd(parse_list->tkns_array, parse_list->i_arr) + 1);
-	while (parse_list->tkns_array[parse_list->i_arr])
+	parse_list->cmd_count = count_cmd(parse_list->tkns_list);
+	parse_list->vector_cmd = ft_calloc((parse_list->cmd_count) + 1, sizeof(char *));
+	parse_list->start = parse_list->tkns_list;
+	while (parse_list->tkns_list != NULL && parse_list->tkns_list->data != NULL && (parse_list->i_vect < parse_list->cmd_count))
 	{
-		alloc_vector(parse_list, parse_list->i_vect, parse_list->i_arr, false);
-		while (parse_list && parse_list->tkns_array &&
-		 parse_list->tkns_array[parse_list->i_arr] &&
-		 parse_list->tkns_array[parse_list->i_arr][parse_list->i_str])
-		{
-			if (is_it_redir(parse_list) == 1)
-				return (0);
-			else if (is_it_redir(parse_list) == 0)
-				continue ;
-			if (is_it_pipe(parse_list) == 0)
-				continue ;
-			else
-				do_copy_cmd(parse_list);
-		}
-		parse_list->i_str = 0;
-		parse_list->i_arr++;
-		parse_list->i_vect++;
+		if (parse_list->tkns_list->tok_type == CMD)
+			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
+		if (parse_list->tkns_list->next)
+			parse_list->tkns_list = parse_list->tkns_list->next;
+		else
+			break ;
 	}
-	return (0);
+	parse_list->tkns_list = parse_list->start;
+	parse_list->tkns_list->vector_cmd = parse_list->vector_cmd;
+	return (parse_list);
 }
+
 
 void	init_master_list(t_parsing *parse_list, int status)
 {
-	parse_list->nb_of_pipes = 0;
-	parse_list->i_arr = 0;
-	parse_list->i_str = 0;
 	parse_list->i_vect = 0;
 	parse_list->infile = 0;
 	parse_list->outfile = 1;
-	parse_list->b_in = false;
-	parse_list->cmd = false;
 	parse_list->status = status;
+	parse_list->quote_count = 0;
+	parse_list->quote_start = 0;
+	parse_list->quote_end = 0;
+	parse_list->quote_type = EMPTY;
+	parse_list->cmd_count = 0;
+	parse_list->nb_of_pipes = 0;
 	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int));
 	parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	close(parse_list->file);
 
 }
 
+t_parsing	*quotes_line(char *line, t_parsing *parse_list)
+{
+	int	i;
+
+	i = 0;
+	while (line[i] != '\0' && line[i] != 34 && line[i] != 39)
+		i++;
+	if (line[i] == 34 || line[i] == 39)
+	{
+		parse_list->quote_start = i;
+		parse_list->quote_type = line[i];
+	}
+	i = ft_strlen(line) - 1;
+	while (line[i] != '\0' && line[i] != parse_list->quote_type && i > 0)
+		i--;
+	if (parse_list->quote_start != i)
+	{
+		parse_list->quote_end = i;
+		parse_list->quotes = true;
+	}
+	return (parse_list);
+}
+
+char *del_quotes(t_parsing *parse_list, char *line)
+{
+	int i;
+	int y;
+
+	char *newline;
+	i = 0;
+	y = 0;
+
+	newline = ft_calloc(ft_strlen(line), sizeof(char *));
+	while (line[i] != '\0')
+	{
+		if (line[i] != parse_list->quote_type)
+		{
+			newline[y] = line[i];
+			y++;
+		}
+		else
+			parse_list->quote_count++;
+		i++;
+	}
+	parse_list->quote_end = parse_list->quote_end - parse_list->quote_count;
+	newline[y] = '\0';
+	return (newline);
+}
+
+char **prep_tab(t_tkns *tkns_list)
+{
+	char **tab;
+	int count;
+
+	count = 0;
+	while (tkns_list->tok_type != PIPE)
+	{
+		count++;
+		if (tkns_list->next != NULL)
+			tkns_list = tkns_list->next;
+		else
+			break ;
+	}
+	tab = ft_calloc(count + 1, sizeof(char *));
+	return (tab);
+}
+
+char ***get_argarray(t_parsing *parse_list)
+{
+	char ***tab_tab;
+	int i;
+	int y;
+	int z;
+
+	i = 0;
+	tab_tab = ft_calloc(parse_list->nb_of_pipes, sizeof(char **));
+	while(parse_list->tkns_list != NULL)
+	{
+		y = 0;
+		if(parse_list->tkns_list->tok_type == ARG && i < parse_list->nb_of_pipes)
+		{
+			tab_tab[i] = prep_tab(parse_list->tkns_list);
+			while (parse_list->tkns_list->tok_type != PIPE)
+			{
+				z = 0;
+				tab_tab[i][y] = ft_calloc(ft_strlen(parse_list->tkns_list->data), sizeof(char));
+				while (parse_list->tkns_list->data[z] != '\0')
+				{
+					tab_tab[i][y][z] = parse_list->tkns_list->data[z];
+					z++;
+				}
+				y++;
+				if (parse_list->tkns_list->next != NULL)
+					parse_list->tkns_list = parse_list->tkns_list->next;
+				else
+					break ;
+			}
+			i++;
+		}
+		else if (parse_list->tkns_list->next != NULL)
+			parse_list->tkns_list = parse_list->tkns_list->next;
+		else
+			break ;
+	}
+	return (tab_tab);
+}
+
 t_parsing	*start_parse(char *line, int status)
 {
 	t_parsing	*parse_list;
 
-	parse_list = calloc(1, sizeof(t_parsing));
-
+	parse_list = ft_calloc(1, sizeof(t_parsing));
 	init_master_list(parse_list, status);
-	init_first_token_nodes(parse_list);
-	//printf("line ==== %s\n", line);
-	parse_list->tkns_array = split_set_quotes(line, "<>|");
-	//printf("first %s\n", parse_list->tkns_array[0]);
-	if (parse_list->tkns_array == NULL) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
-		return (NULL);
-	if (check_metachar(parse_list) != 0) // pk ça return NULL ça peux-tu me l'écrire dans la description de la fonction @JR ?
-		return (NULL);
-	get_cmd(parse_list);
-	//print_tkns_array_debug(*(parse_list));
+	parse_list = quotes_line(line, parse_list);
+	if (parse_list->quotes == true)
+		line = del_quotes(*&parse_list, line);
+	parse_list->tkns_list = init_list(line);
+	parse_list = new_split(line, parse_list);
+	parse_list = check_metachar(parse_list);
+	parse_list = get_cmd(parse_list);
+	if (parse_list->nb_of_pipes != 0)
+		parse_list->pipes_args = get_argarray(parse_list);
+	//parse_list->tkns_list = expend_var(); TODO : expend variabled
 	return (parse_list);
 }
 
-void	do_copy_cmd(t_parsing *parse_list)
+bool	ft_isspace(char c)
 {
-	if (parse_list && parse_list->tkns_array && parse_list->tkns_array[parse_list->i_arr])
+	if (c == ' ' || c == '	')
+		return (true);
+	return (false);
+}
+
+t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str)
+{
+	int i;
+
+	i = 0;
+	parse_list->vector_cmd[parse_list->i_vect] = ft_calloc(ft_strlen(str) + 1, (sizeof(char)));
+	while (parse_list && parse_list->tkns_list && str[i] != '\0' && (parse_list->i_vect < parse_list->cmd_count))
 	{
-		parse_list->tkns_list->vector_cmd[parse_list->i_vect][parse_list->i_str]
-			= parse_list->tkns_array[parse_list->i_arr][parse_list->i_str];
-		parse_list->i_str++;
+		parse_list->vector_cmd[parse_list->i_vect][i] = str[i];
+		i++;
 	}
+	parse_list->i_vect++;
+	return (parse_list);
 }

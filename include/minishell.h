@@ -11,12 +11,23 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include "./colors.h"
-# include "./Libft/libft/libft.h"
+# include "./libft/libft.h"
 # include <errno.h>
 #include <signal.h>
 #include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+
+# define EMPTY 0
+# define CMD 1
+# define ARG 2
+# define TRUNC 3
+# define APPEND 4
+# define INPUT 5
+# define OUTPUT 6
+# define PIPE 7
+# define IN_OUT 8
+# define SPECIAL_PIPE 9
 
 typedef struct	s_exec
 {
@@ -62,34 +73,39 @@ typedef struct s_ptrs
 //il va falloir rajouter des bool redir in; redir out; heredoc
 typedef struct s_tkns
 {
+//	int				argv_pos;
+	int				tok_type;
 	char			**vector_cmd;
-	int				argv_pos;
-	bool			sing_quotes;
+//	bool			sing_quotes;
 	bool			dollar_sign;
-	bool			b_in;
+//	bool			b_in;
+	char			*data;
 	struct s_tkns	*next;
 	struct s_tkns	*prev;
-	struct s_tkns	*start;
+//	struct s_tkns	*start;
 
 }			t_tkns;
 
 typedef struct s_parsing
 {
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
-	char 	**tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
+//	t_tkns	*tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
-	char	*user;
+	t_tkns	*start;
+	char	**vector_cmd;
+//	char	*user;
 	char	*line;
-	char	**s_line;
-	int		index;
+//	char	**s_line;
+//	int		index;
 	int		nb_of_pipes;
-	int		i_arr;
+//	int		i_arr;
 	int		i_vect;
-	int		i_str;
+//	int		i_str;
 	int		infile;
 	int		outfile;
 	bool	b_in;
-	bool	cmd;
+//	bool	cmd;
+	bool	f_command;
 	int		status;
 	bool	with_nl;
 	bool	check_nl;
@@ -98,6 +114,13 @@ typedef struct s_parsing
 	t_exec 	*ex;
 	int		file;
 	char	*buf;
+	int		quote_start;
+	int		quote_end;
+	char	quote_type;
+	int		quote_count;
+	bool	quotes;
+	int		cmd_count;
+	char	***pipes_args;
 	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
 }				t_parsing;
 
@@ -165,16 +188,23 @@ char			*set_prompt(char *new_env[]);
 t_parsing		*start_parse(char *line, int status);
 int				init_first_token_nodes(t_parsing *parse_list);
 char			**split(const char *s);
-int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
-int				check_pipe_name(t_parsing *parse_list, int i, int j);
-int				count_cmd(char **tkns_array, int ind_array);
-int				get_cmd(t_parsing *parse_list);
+// int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
+// int				check_pipe_name(t_parsing *parse_list, int i, int j);
+int				count_cmd(t_tkns *tkns_list);
+t_parsing	*get_cmd(t_parsing *parse_list);
 void			print_tkns_array_debug(t_parsing parse_list);
-int				check_metachar(t_parsing *parse_list);
+t_parsing	*check_metachar(t_parsing *parse_list);
 void			prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array);
 void			alloc_vector(t_parsing *parse_list, int ind_vector, int ind_array, bool to_free);
 int				is_it_redir(t_parsing *parse_list);
 int				is_it_pipe(t_parsing *parse_list);
-void			do_copy_cmd(t_parsing *parse_list);
+t_parsing	*do_copy_cmd(t_parsing *parse_list, char *tkns_list);
+
+//new_parsing
+t_parsing 		*new_split(char *s, t_parsing *parse_list);
+int				check_file_and_delim_name(t_tkns *tkns_list);
+int				check_pipe_name(t_tkns *tkns_array);
+t_tkns 			*init_list(char *s);
+bool	ft_isspace(char c);
 
 #endif

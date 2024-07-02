@@ -1,4 +1,20 @@
 #include "../include/minishell.h"
+static void process_cmd(t_parsing *parse, char **env, char** cmd)
+{
+	if (parse->b_in == false
+		&& access(cmd[0], X_OK) == 0)
+	{
+		execve(cmd[0],
+			cmd, env);
+		exit (1);
+	}
+	else if (parse->b_in == false)
+	{
+		parse_and_exec_cmd_shell(cmd, env);
+		exit (1);
+	}
+	exit (0);
+}
 
 /**
  * @brief cette fonction remplace tout ce qui était 
@@ -29,20 +45,16 @@ static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
 	}
 	dup2(pipe_1, 1);
 	close(pipe_1);
-	look_for_builtins(&parse->tkns_list->vector_cmd, &env, parse);
-	if (parse->b_in == false
-		&& access(parse->tkns_list->vector_cmd[0], X_OK) == 0)
+	if (parse->f_command == true)
 	{
-		execve(parse->tkns_list->vector_cmd[0],
-			parse->tkns_list->vector_cmd, env);
-		exit (1);
+		look_for_builtins(&parse->tkns_list->vector_cmd, &env, parse);
+		process_cmd(parse, env, parse->tkns_list->vector_cmd);
 	}
-	else if (parse->b_in == false)
+	else
 	{
-		parse_and_exec_cmd_shell(parse->tkns_list->vector_cmd, env);
-		exit (1);
+		look_for_builtins(&parse->pipes_args[parse->i], &env, parse);
+		process_cmd(parse, env, parse->pipes_args[parse->i]);
 	}
-	exit (0);
 }
 
 /*
