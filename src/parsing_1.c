@@ -40,6 +40,9 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->quote_type = EMPTY;
 	parse_list->cmd_count = 0;
 	parse_list->nb_of_pipes = 0;
+	parse_list->to_skip = 0;
+	parse_list->index = 0;
+	parse_list->new_i = 0;
 	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int));
 	parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	close(parse_list->file);
@@ -91,7 +94,6 @@ char *del_quotes(t_parsing *parse_list, char *line)
 		i++;
 	}
 	parse_list->quote_end = parse_list->quote_end - parse_list->quote_count;
-	newline[y] = '\0';
 	return (newline);
 }
 
@@ -153,6 +155,87 @@ char ***get_argarray(t_parsing *parse_list)
 	return (tab_tab);
 }
 
+char 	*search_env(char *s, int search, t_parsing *parse_list)
+{
+	int x;
+	int y;
+	int start;
+
+	x = 0;
+	start = search;
+	while (ex->new_env[x])
+	{
+		y = 0;
+		search = start;
+		while(ex->new_env[x][y] && s[search] != '\0' && ft_isspace(s[search]) == false)
+		{
+			if(s[search] != ex->new_env[x][y])
+				break ;
+			if ((ft_isspace(s[search + 1]) == true || s[search + 1] == '\0' || s[search + 1] == parse_list->quote_type) && ex->new_env[x][y + 1] == '=')
+			{
+				parse_list->index += y + 2;
+				parse_list->to_skip = y + 2;
+				return (ex->new_env[x]);
+			}
+			y++;
+			search++;
+		}
+		x++;
+	}
+	return(NULL);
+}
+
+char *joining(char *s1, char *s2, t_parsing *parse_list)
+{
+	char	*str;
+	int		j;
+	int		i;
+
+	i = 0;
+	j = parse_list->to_skip;
+	if (!s2)
+		return (s1);
+	if (!s1)
+		return (s2);
+	str = ft_calloc(MAX_INPUT, sizeof(char));
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i] = s2[j];
+		i++;
+		j++;
+	}
+	parse_list->new_i = i;
+	return (str);
+}
+
+char	*expand_var(char *line, t_parsing *parse_list)
+{
+	char	*new;
+
+	new = ft_calloc(MAX_INPUT, sizeof(char));
+	while (line[parse_list->index])
+	{
+		if (line[parse_list->index] == '$')
+		{
+			if (parse_list->quotes == true && (parse_list->index < parse_list->quote_start || parse_list->index > parse_list->quote_end))
+				new = joining(new, search_env(line, parse_list->index + 1, parse_list), *&parse_list);
+			else if (parse_list->quotes == true && parse_list->quote_type ==  34 && (parse_list->index > parse_list->quote_start || parse_list->index < parse_list->quote_end))
+				new = joining(new, search_env(line, parse_list->index + 1, parse_list), *&parse_list);
+			else if (parse_list->quotes == false)
+				new = joining(new, search_env(line, parse_list->index + 1, parse_list), *&parse_list);
+		}
+		if ((parse_list->index == parse_list->quote_end) && (line[parse_list->index] == parse_list->quote_type))
+			parse_list->quote_end = parse_list->new_i;
+		new[parse_list->new_i++] = line[parse_list->index++];
+	}
+	return (new);
+}
+
 t_parsing	*start_parse(char *line, int status)
 {
 	t_parsing	*parse_list;
@@ -160,6 +243,7 @@ t_parsing	*start_parse(char *line, int status)
 	parse_list = ft_calloc(1, sizeof(t_parsing));
 	init_master_list(parse_list, status);
 	parse_list = quotes_line(line, parse_list);
+	line = expand_var(line, *&parse_list);
 	if (parse_list->quotes == true)
 		line = del_quotes(*&parse_list, line);
 	parse_list->tkns_list = init_list(line);
@@ -168,7 +252,6 @@ t_parsing	*start_parse(char *line, int status)
 	parse_list = get_cmd(parse_list);
 	if (parse_list->nb_of_pipes != 0)
 		parse_list->pipes_args = get_argarray(parse_list);
-	//parse_list->tkns_list = expend_var(); TODO : expend variabled
 	return (parse_list);
 }
 
