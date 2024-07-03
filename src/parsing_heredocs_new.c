@@ -1,19 +1,23 @@
 #include "../include/minishell.h"
 #include <stdio.h>
 
+/*
+	// TODO We have a segfault here with the heredocs
+*/
 
 int	do_trunc(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
 		return (1);
-	printf("do the heredoc\n");
 	parse_list->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
 	if (parse_list->file == -1)
 		return (1);//TODO: should call the exit function here
 	while (1)
 	{
 		write(1, "heredoc>", 9);
+		printf("BEFORE GNL\n");
 		parse_list->buf = get_next_line(0);
+		printf("AFTER GNL\n");
 		if (!ft_strncmp(parse_list->tkns_list->next->data, parse_list->buf, ft_strlen(parse_list->tkns_list->next->data)))
 			break ;
 		write(parse_list->file, parse_list->buf, ft_strlen(parse_list->buf));
@@ -29,7 +33,7 @@ int	do_in_out(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
 		return (1);
-		printf("do the redir out\n");
+	printf("do the redir out\n");
 	return (0) ;
 }
 
