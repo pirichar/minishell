@@ -209,5 +209,19 @@ int				check_file_and_delim_name(t_tkns *tkns_list);
 int				check_pipe_name(t_tkns *tkns_array);
 t_tkns 			*init_list(char *s);
 bool	ft_isspace(char c);
-
+//parsing_split.c
+t_tkns	*set_toktype(t_tkns *matrix);
+t_parsing	*new_split(char *s, t_parsing *parse_list);
+//parsing_split2.c
+t_tkns	*my_lstlast(t_tkns *lst);
+void	nodeaddback(t_tkns **lst, t_tkns *new);
+t_tkns	*make_node(t_tkns *matrix, char *s);
+t_tkns	*node_redir(t_tkns *matrix, char *s, int size);
+t_tkns	*init_list(char *s);
+//parking_split_helper.c
+bool	should_do_it(char *s, t_parsing *parse_list);
+bool	should_do_it_else(char *s, t_parsing *parse_list);
+void	helper1(char *s, t_parsing *parse_list);
+void	helper2(char *s, t_parsing *parse_list);
+void	helper3(char *s, t_parsing *parse_list);
 #endif
