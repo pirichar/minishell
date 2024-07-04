@@ -40,6 +40,7 @@ bool	should_do_it_else(char *s, t_parsing *parse_list)
 				&& (parse_list->index < parse_list->quote_start
 					|| parse_list->index > parse_list->quote_end))));
 }
+
 /**
  * @brief 
  * // TODO trouver un nom intelligent

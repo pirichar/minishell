@@ -6,7 +6,7 @@ SRCS	=	src/environement.c src/main.c src/builtin.c src/execute.c src/parsing_1.c
 			src/parsing_redir_out.c src/parsing_pipes.c src/wait_for_pids.c\
 			src/calling_the_execs_shell.c ./src/look_for.c ./src/execute_out.c\
 			src/execute_solo.c src/ft_signals.c src/logo_n_setup.c src/parsing_split.c\
-			src/parsing_split2.c src/parsing_split_helpers.c
+			src/parsing_split2.c src/parsing_split_helpers.c src/parsing_3.c
 
 HEADERS	=	minishell.h colors.h
 

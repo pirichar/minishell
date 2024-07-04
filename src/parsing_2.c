@@ -1,97 +1,110 @@
-// #include "../include/minishell.h"
+#include "../include/minishell.h"
 
+t_parsing	*get_cmd(t_parsing *parse_list)
+{
+	parse_list->cmd_count
+		= count_cmd(parse_list->tkns_list);
+	parse_list->vector_cmd
+		= ft_calloc((parse_list->cmd_count) + 1, sizeof(char *));
+	parse_list->start = parse_list->tkns_list;
+	while (parse_list->tkns_list != NULL
+		&& parse_list->tkns_list->data != NULL
+		&& (parse_list->i_vect < parse_list->cmd_count))
+	{
+		if (parse_list->tkns_list->tok_type == CMD)
+			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
+		if (parse_list->tkns_list->next)
+			parse_list->tkns_list = parse_list->tkns_list->next;
+		else
+			break ;
+	}
+	parse_list->tkns_list = parse_list->start;
+	parse_list->tkns_list->vector_cmd = parse_list->vector_cmd;
+	return (parse_list);
+}
 
-// //checker les char des larray de la matrix, si une quote, et que closed, bool == true,
-// //(retour de check if closed, position de la quote de ferm, ou 0 si non fermer), 
-// // if bool == true, skip les delims, juska la quote de fermerture
-// // appliquer les cnt++ si un delim du set
+void	init_master_list(t_parsing *parse_list, int status)
+{
+	parse_list->i_vect = 0;
+	parse_list->infile = 0;
+	parse_list->outfile = 1;
+	parse_list->status = status;
+	parse_list->quote_count = 0;
+	parse_list->quote_start = 0;
+	parse_list->quote_end = 0;
+	parse_list->quote_type = EMPTY;
+	parse_list->cmd_count = 0;
+	parse_list->nb_of_pipes = 0;
+	parse_list->to_skip = 0;
+	parse_list->index = 0;
+	parse_list->new_i = 0;
+	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int));
+	parse_list->file
+		= open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	close(parse_list->file);
+}
 
-// int	check_if_close(char *string, int start)
-// {
-// 	char	quote;
-// 	int		i;
+t_parsing	*quotes_line(char *line, t_parsing *parse_list)
+{
+	int	i;
 
-// 	i = start;
-// 	quote = string[i++];
-// 	while (string[i])
-// 	{
-// 		if (string[i] == quote)
-// 			return (i);
-// 		i++;
-// 	}
-// 	return (0);
-// }
+	i = 0;
+	while (line[i] != '\0' && line[i] != 34 && line[i] != 39)
+		i++;
+	if (line[i] == 34 || line[i] == 39)
+	{
+		parse_list->quote_start = i;
+		parse_list->quote_type = line[i];
+	}
+	i = ft_strlen(line) - 1;
+	while (line[i] != '\0' && line[i] != parse_list->quote_type && i > 0)
+		i--;
+	if (parse_list->quote_start != i)
+	{
+		parse_list->quote_end = i;
+		parse_list->quotes = true;
+	}
+	return (parse_list);
+}
 
-// int	cnt_actual_tkns(char **matrix, char *set)
-// {
-// 	int			actual_cnt;
-// 	t_indexes	index;
+char	*del_quotes(t_parsing *parse_list, char *line)
+{
+	int		i;
+	int		y;
+	char	*newline;
 
-// 	init_index(&index);
-// 	actual_cnt = 0;
-// 	while (matrix[index.i])
-// 	{
-// 		while (matrix[index.i][index.j])
-// 		{
-// 			if (matrix[index.i][index.j] == '"' || matrix[index.i][index.j] == '\'')
-// 			{
-// 				if (check_if_close(matrix[index.i], index.j) != 0)
-// 				{
-// 					index.j = check_if_close(matrix[index.i], index.j);
-// 					printf("quotes = %s j = %d tkn %d\n", matrix[index.i], index.j, actual_cnt);
-// 				}
-// 			}
-// 			else if (matrix[index.i][index.j] == '>')
-// 			{
-// 				if (matrix[index.i][index.j + 1] != '\0')
-// 				{
-// 					printf("index j _ 1 %c\n", matrix[index.i][index.j + 1]);
-// 					actual_cnt += 2;
-// 				}
-// 			}
-// 			index.j++;
-// 		}
-// 		actual_cnt++;
-// 		printf("no quote = %s j = %d tkn = %d\n", matrix[index.i], index.j, actual_cnt);
-// 		index.j = 0;
-// 		index.i++;
-// 	}
-// 	return (actual_cnt);
-// }
+	i = 0;
+	y = 0;
+	newline = ft_calloc(ft_strlen(line), sizeof(char *));
+	while (line[i] != '\0')
+	{
+		if (line[i] != parse_list->quote_type)
+		{
+			newline[y] = line[i];
+			y++;
+		}
+		else
+			parse_list->quote_count++;
+		i++;
+	}
+	parse_list->quote_end = parse_list->quote_end - parse_list->quote_count;
+	return (newline);
+}
 
-// char	**split_with_set(char *string, char *set)
-// {
-// 	char		**return_matrix;
-// 	char		**temp_matrix;
-// 	char		quotes;
-// 	bool		closed;
-// 	int			actual_cnt;
+char	**prep_tab(t_tkns *tkns_list)
+{
+	char	**tab;
+	int		count;
 
-// 	return_matrix=NULL;
-// 	temp_matrix = ft_split2(string, ' ');
-// 	actual_cnt = cnt_actual_tkns(temp_matrix, set);
-// 	printf("actual tkn = %d\n", actual_cnt);
-// 	return (return_matrix);
-// }
-
-// int main(int argc, char const *argv[])
-// {
-// 	char **retour;
-// 	char *line;
-
-// 	while (1)
-// 	{
-// 		line = calloc(10000, sizeof(char));
-// 		read(1, line, 100000);
-// 		retour = split_with_set(line, "<>|");
-// 		free(line);
-// 	}
-// 	int k = 0;
-// 	while (retour[k])
-// 	{
-// 		free(retour[k]);
-// 		k++;
-// 	}
-// 	free(retour);
-// 	return 0;
-// }
+	count = 0;
+	while (tkns_list->tok_type != PIPE)
+	{
+		count++;
+		if (tkns_list->next != NULL)
+			tkns_list = tkns_list->next;
+		else
+			break ;
+	}
+	tab = ft_calloc(count + 1, sizeof(char *));
+	return (tab);
+}

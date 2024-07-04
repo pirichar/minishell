@@ -73,38 +73,27 @@ typedef struct s_ptrs
 //il va falloir rajouter des bool redir in; redir out; heredoc
 typedef struct s_tkns
 {
-//	int				argv_pos;
 	int				tok_type;
 	char			**vector_cmd;
-//	bool			sing_quotes;
 	bool			dollar_sign;
-//	bool			b_in;
 	char			*data;
 	struct s_tkns	*next;
 	struct s_tkns	*prev;
-//	struct s_tkns	*start;
 
 }			t_tkns;
 
 typedef struct s_parsing
 {
 	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
-//	t_tkns	*tkns_array;// probably a linked list here ; for now ima malloc like 10 commands when init // FOR SURE NEED LIST WITH EACH COMMAND AND ARGUMENTS WITH THEIR POSITITION IN THE CHAIN
 	t_tkns	*tkns_list;
 	t_tkns	*start;
 	char	**vector_cmd;
-//	char	*user;
 	char	*line;
-//	char	**s_line;
-//	int		index;
 	int		nb_of_pipes;
-//	int		i_arr;
 	int		i_vect;
-//	int		i_str;
 	int		infile;
 	int		outfile;
 	bool	b_in;
-//	bool	cmd;
 	bool	f_command;
 	int		status;
 	bool	with_nl;
@@ -124,7 +113,10 @@ typedef struct s_parsing
 	int		index;
 	int		new_i;
 	int		to_skip;
-	//pe ajouter un pointeur vers la struct t_exec ex pour avoir en tout temps accès 
+	int		p_x;
+	int		p_y;
+	int		p_start;
+	char	*p_new;
 }				t_parsing;
 
 
@@ -187,41 +179,53 @@ void			mini_unset(char **s_line, char ***new_env,  t_parsing *parse);
 void	wait_for_pids(t_parsing *parse);
 //prompt
 char			*set_prompt(char *new_env[]);
-//parsing
-t_parsing		*start_parse(char *line, int status);
-int				init_first_token_nodes(t_parsing *parse_list);
-char			**split(const char *s);
-// int				check_file_and_delim_name(t_parsing *parse_list, int i, int j);
-// int				check_pipe_name(t_parsing *parse_list, int i, int j);
-int				count_cmd(t_tkns *tkns_list);
-t_parsing	*get_cmd(t_parsing *parse_list);
-void			print_tkns_array_debug(t_parsing parse_list);
-t_parsing	*check_metachar(t_parsing *parse_list);
-void			prep_next_node(t_parsing *parse_list, int ind_vector, int ind_array);
-void			alloc_vector(t_parsing *parse_list, int ind_vector, int ind_array, bool to_free);
-int				is_it_redir(t_parsing *parse_list);
-int				is_it_pipe(t_parsing *parse_list);
-t_parsing	*do_copy_cmd(t_parsing *parse_list, char *tkns_list);
 
-//new_parsing
-t_parsing 		*new_split(char *s, t_parsing *parse_list);
-int				check_file_and_delim_name(t_tkns *tkns_list);
-int				check_pipe_name(t_tkns *tkns_array);
-t_tkns 			*init_list(char *s);
-bool	ft_isspace(char c);
+//parsing_1.c
+t_parsing		*start_parse(char *line, int status);
+bool			ft_isspace(char c);
+t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str);
+
+//pasring_2.c
+t_parsing	*get_cmd(t_parsing *parse_list);
+void	init_master_list(t_parsing *parse_list, int status);
+t_parsing	*quotes_line(char *line, t_parsing *parse_list);
+char	*del_quotes(t_parsing *parse_list, char *line);
+char	**prep_tab(t_tkns *tkns_list);
+
+//parsing_3.c
+void	helper_get_arg(t_parsing	*parse_list, int y, char ***tab_tab);
+char	***get_argarray(t_parsing *parse_list);
+char	*search_env(char *s, int search, t_parsing *p_list);
+char	*joining(char *s1, char *s2, t_parsing *parse_list);
+char	*expand_var(char *line, t_parsing *p_l);
+
 //parsing_split.c
 t_tkns	*set_toktype(t_tkns *matrix);
 t_parsing	*new_split(char *s, t_parsing *parse_list);
+
 //parsing_split2.c
 t_tkns	*my_lstlast(t_tkns *lst);
 void	nodeaddback(t_tkns **lst, t_tkns *new);
 t_tkns	*make_node(t_tkns *matrix, char *s);
 t_tkns	*node_redir(t_tkns *matrix, char *s, int size);
 t_tkns	*init_list(char *s);
+
 //parking_split_helper.c
 bool	should_do_it(char *s, t_parsing *parse_list);
 bool	should_do_it_else(char *s, t_parsing *parse_list);
 void	helper1(char *s, t_parsing *parse_list);
 void	helper2(char *s, t_parsing *parse_list);
 void	helper3(char *s, t_parsing *parse_list);
+
+//parsing_here_doc_new.c
+int				check_pipe_name(t_tkns *tkns_array);
+int				check_file_and_delim_name(t_tkns *tkns_list);
+t_parsing		*check_metachar(t_parsing *parse_list);
+
+// TODO je crois que rien n'est utilise dans ces fonctions a valider
+//parsing_utils.c
+void			print_tkns_array_debug(t_parsing parse_list);
+int				count_cmd(t_tkns *tkns_list);
+int				init_first_token_nodes(t_parsing *parse_list);
+
 #endif
