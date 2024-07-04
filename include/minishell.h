@@ -122,61 +122,81 @@ typedef struct s_parsing
 
 //main.c
 void	prompt_and_read_input(void);
+
 //builtin
 void			look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse);
 void			set_variable(char ***env, char *var, char *new_var);
+
 //caling_the_exec_shell.c
 void			calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse);
 void			parse_and_exec_cmd_shell(char **cmd, char **env);
+
 //cd.c
 void			mini_cd(char **s_line, char ***new_env,  t_parsing *parse);
+
 //echo.c
 void			mini_echo(char **s_line, t_parsing *parse);
+
 //env.c
 void			mini_env(char **new_env,  t_parsing *parse);
 int				ft_strcmp(const char *s1, const char *s2);
+
 void			print_out_dir(char **to_print);
 //environement.c
 char			**path_to_starrr(char **env, char *var);
 char			*var_to_str(char **env, char *var);
 bool			search_path_exec(const char *p_arr, const char *cmd);
+
 //exit.c
 void			mini_exit(char **s_line, t_parsing *parse);
+
 //execute.c
 int				execute(int fd_in, int *p, char **env, t_parsing *parse);
+
 //execute_out.c
 void			execute_out(char **cmd, int fds[2], char **env, t_parsing *parse);
+
 //execute_solo.c
 void			execute_solo(char **cmd, char ***env, t_parsing *parse);
+
 //export.c
 char			**bubble_sort_strarr(char **rtn);
 void			mini_export(char **s_line, char ***new_env, t_parsing *parse);
+
 //ft_strjoin_free.c
 char	*ft_strjoin_free(char *s1, const char *s2);
+
 //logo_n_setup
 void			print_logo(char **env);
 void			configure_terminal(void);
 int				setup_minishell(int argc, char **env);
+
 //look_for.c
 bool			look_for_exit(char **s_line);
 bool			look_for_export(char **s_line);
 bool			look_for_unset(char **s_line);
 bool			look_for_cd(char **s_line);
 bool			look_for_echo(char **s_line);
+
 //pwd.c
 void			mini_pwd(t_parsing *parse);
+
 //signals
 void setup_signal_handlers();
 void update_sigquit_handling();
+
 //str_arr_fcn.c
 void			free_strrarr(char **to_free);
 int				strarr_len(char **str_arr);
 char 			**copy_env(char **env);
+
 //unset.c
 char*			return_variable(char **env, char *var);
 void			mini_unset(char **s_line, char ***new_env,  t_parsing *parse);
+
 //wait_for_pids.c
 void	wait_for_pids(t_parsing *parse);
+
 //prompt
 char			*set_prompt(char *new_env[]);
 
@@ -218,14 +238,21 @@ void	helper2(char *s, t_parsing *parse_list);
 void	helper3(char *s, t_parsing *parse_list);
 
 //parsing_here_doc_new.c
-int				check_pipe_name(t_tkns *tkns_array);
-int				check_file_and_delim_name(t_tkns *tkns_list);
 t_parsing		*check_metachar(t_parsing *parse_list);
+
+//parsing_here_doc_new2.c
+int	do_trunc(t_parsing *p_l);
+int	do_in_out(t_parsing *parse_list);
+int	do_input(t_parsing *parse_list);
+int	do_append(t_parsing *parse_list);
+int	do_output(t_parsing *parse_list);
 
 // TODO je crois que rien n'est utilise dans ces fonctions a valider
 //parsing_utils.c
+int				check_file_and_delim_name(t_tkns *tkns_list);
 void			print_tkns_array_debug(t_parsing parse_list);
 int				count_cmd(t_tkns *tkns_list);
 int				init_first_token_nodes(t_parsing *parse_list);
+int				check_pipe_name(t_tkns *tkns_array);
 
 #endif
