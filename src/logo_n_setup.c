@@ -60,7 +60,6 @@ void	configure_terminal(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-
 /**
  * @brief First function called by main
  			Configure the terminal settings to suppress ^C

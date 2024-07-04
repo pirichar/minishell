@@ -1,11 +1,10 @@
 #include "../include/minishell.h"
 
-int	init_first_token_nodes(t_parsing *parse_list)  //may 21, should be ok. but is it useful
+int	init_first_token_nodes(t_parsing *parse_list)
 {
 	parse_list->tkns_list = calloc(1, sizeof(t_tkns));
 	parse_list->tkns_list->dollar_sign = false;
 	parse_list->tkns_list->prev = NULL;
-//	parse_list->tkns_list->argv_pos = 0;
 	parse_list->start = NULL;
 	return (0);
 }
@@ -31,8 +30,7 @@ int	init_first_token_nodes(t_parsing *parse_list)  //may 21, should be ok. but i
 // 		i = 0;
 // 	}
 // }
-
-int	count_cmd(t_tkns *tkns_list)  //is it still used?
+int	count_cmd(t_tkns *tkns_list)
 {
 	int	count;
 
@@ -50,7 +48,7 @@ int	check_file_and_delim_name(t_tkns *tkns_list)
 {
 	if (tkns_list->next != NULL)
 	{
-		if (ft_strchr("<|>", tkns_list->next->data[0])) 
+		if (ft_strchr("<|>", tkns_list->next->data[0]))
 		{
 			printf("Dundershell: syntax error near unexpected token `%c'\n",
 				tkns_list->next->data[0]);

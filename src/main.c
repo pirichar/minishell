@@ -95,7 +95,6 @@ static bool	process_command(void)
 		{
 			free(ex->line);
 			free_strrarr(ex->s_line);
-			printf("exit with CTRL-Dwight\n");
 			return (true);
 		}
 		execute_command_shell(parse);
