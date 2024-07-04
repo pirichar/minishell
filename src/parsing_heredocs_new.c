@@ -15,9 +15,7 @@ int	do_trunc(t_parsing *parse_list)
 	while (1)
 	{
 		write(1, "heredoc>", 9);
-		printf("BEFORE GNL\n");
 		parse_list->buf = get_next_line(0);
-		printf("AFTER GNL\n");
 		if (!ft_strncmp(parse_list->tkns_list->next->data, parse_list->buf, ft_strlen(parse_list->tkns_list->next->data)))
 			break ;
 		write(parse_list->file, parse_list->buf, ft_strlen(parse_list->buf));

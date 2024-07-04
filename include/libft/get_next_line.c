@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 14:19:30 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/02 14:19:35 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/07/03 23:50:12 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,25 @@
 
 char	*read_file(int fd, char *saved, char **new_line)
 {
-	char			*buff;
+	char			buff[BUFFER_SIZE + 1];
 	ssize_t			ret;
+	char			*tmp;
 
 	ret = BUFFER_SIZE;
 	while (ret == BUFFER_SIZE)
 	{
-		buff = malloc(sizeof(char) * BUFFER_SIZE + 1);
-		if (!buff)
-			return (NULL);
 		ret = read(fd, buff, BUFFER_SIZE);
 		if (ret == -1)
-		{
-			free (buff);
 			return (NULL);
-		}
 		buff[ret] = '\0';
-		saved = ft_strjoin_free(saved, buff);
-		free (buff);
+		if (saved == NULL)
+			saved = ft_strdup(buff);
+		else
+		{
+			tmp = ft_strjoin(saved, buff);
+			free (saved);
+			saved = tmp;
+		}
 		*new_line = ft_strchr(saved, '\n');
 		if (*new_line)
 			break ;
@@ -41,22 +42,24 @@ char	*read_file(int fd, char *saved, char **new_line)
 
 char	*get_next_line(int fd)
 {
-	static char		*saved[1024];
+	static char		*saved;
 	char			*rtn;
 	char			*new_line;
 
-	saved[fd] = read_file(fd, saved[fd], &new_line);
-	if (saved[fd] == NULL)
+	if (fd < 0)
+		return (NULL);
+	saved = read_file(fd, saved, &new_line);
+	if (saved == NULL)
 		return (NULL);
 	if (new_line)
 	{
-		rtn = ft_substr(saved[fd], 0, (new_line - saved[fd] + 1));
-		saved[fd] = free_stuff(saved[fd], new_line);
+		rtn = ft_substr(saved, 0, (new_line - saved + 1));
+		saved = free_stuff(saved, new_line);
 	}
 	else
 	{
-		rtn = saved[fd];
-		saved[fd] = NULL;
+		rtn = saved;
+		saved = NULL;
 		if (!*rtn)
 		{
 			free(rtn);
