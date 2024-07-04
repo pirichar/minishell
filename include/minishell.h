@@ -84,7 +84,7 @@ typedef struct s_tkns
 
 typedef struct s_parsing
 {
-	int 	*pids;//to be malloced with the right number of commands during the first phase of parsing
+	int 	*pids;
 	t_tkns	*tkns_list;
 	t_tkns	*start;
 	char	**vector_cmd;
@@ -149,6 +149,7 @@ bool			search_path_exec(const char *p_arr, const char *cmd);
 
 //exit.c
 void			mini_exit(char **s_line, t_parsing *parse);
+void			ft_exit(t_parsing* parse);
 
 //execute.c
 int				execute(int fd_in, int *p, char **env, t_parsing *parse);

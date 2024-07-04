@@ -93,8 +93,9 @@ static bool	process_command(void)
 		ex->s_line = parse->tkns_list->vector_cmd;
 		if (ex->s_line[0] == NULL)
 		{
-			free(ex->line);
-			free_strrarr(ex->s_line);
+			// free(ex->line);
+			// free_strrarr(ex->s_line);
+			ft_exit(parse); // TODO Double check if OK
 			return (true);
 		}
 		execute_command_shell(parse);

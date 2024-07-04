@@ -53,7 +53,7 @@ static void	exit_was_too_long(char **s_line)
  * @param s_line splitted line 
  * @param parse for the builtin
  */
-void	mini_exit( char **s_line, t_parsing *parse)
+void	mini_exit(char **s_line, t_parsing *parse)
 {
 	int	tmp;
 	int	i;
@@ -71,5 +71,68 @@ void	mini_exit( char **s_line, t_parsing *parse)
 	tmp = ft_atoi(s_line[1]);
 	printf("exit\n");
 	rl_clear_history();
+	ft_exit(parse); // TODO Double check if OK
 	exit (tmp);
+}
+
+
+void	ft_exit(t_parsing* parse)
+{
+	/* PARSING  */
+	// free parse_list->tkn->list 
+	// TODO maybe free tkn_list->vector_cmd here ?
+	if (parse && parse->tkns_list)
+	{
+		struct s_tkns	*tmp;
+		while(parse->tkns_list)
+		{
+			tmp = parse->tkns_list->next;
+			for (int i = 0; parse->tkns_list->vector_cmd[i]; i++)
+				free(parse->tkns_list->vector_cmd[i]);
+			free(parse->tkns_list->data);
+			free(parse->tkns_list);
+			parse->tkns_list = tmp;
+		}
+		parse->tkns_list = NULL;
+	}
+	// free parse->vector->cmd
+	if (parse && parse->vector_cmd)
+	{
+		for (int i = 0; parse->vector_cmd[i]; i++)
+			free(parse->tkns_list->vector_cmd[i]);
+	}
+	//free parse->pids
+	if (parse && parse->pids)
+		free (parse->pids);
+	// free parse->pipe_args
+	if (parse && parse->pipes_args)
+	{
+		for (int i = 0;parse->pipes_args[i]; i++)
+		{
+			for (int j = 0; parse->pipes_args[i][j];j++)
+			{
+				free(parse->pipes_args[i][j]);
+			}
+		}
+	}
+	//free parse->p_new (expand variables)
+
+	// free parse_list
+	if (parse)
+		free(parse);
+	/* EXEC  */
+	// free ex->line
+	if (ex && ex->line)
+		free(ex->line);
+	// free ex->s_line
+	if (ex && ex->s_line)
+		free_strrarr(ex->s_line);
+	// free env
+	if (ex && ex->new_env)
+		free_strrarr(ex->new_env);
+	// free ex
+	if (ex)
+		free(ex);
+
+
 }
