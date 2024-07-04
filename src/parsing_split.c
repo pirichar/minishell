@@ -36,7 +36,13 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 		else if (should_do_it_else(s, parse_list))
 			helper2(s, parse_list);
 		else
+<<<<<<< HEAD
 			helper3(s, parse_list);
+=======
+		{
+			helper3(s, parse_list);
+		}
+>>>>>>> 08d229c85e5485f530fd321ad0cc7f34531b2807
 		if (parse_list->start == NULL)
 			parse_list->start = parse_list->tkns_list->next;
 		while (ft_isspace(s[parse_list->index]) == true)
