@@ -16,7 +16,7 @@
  * @param s_line command line splitted
  */
 
-static void	exit_was_too_long(char **s_line)
+static void	exit_was_too_long(char **s_line, t_parsing **parse)
 {
 	int	i;
 
@@ -24,6 +24,7 @@ static void	exit_was_too_long(char **s_line)
 	{
 		printf("exit\n");
 		rl_clear_history();
+		ft_exit(*parse); // TODO Double check if OK
 		exit (0);
 	}
 	i = 0;
@@ -35,6 +36,7 @@ static void	exit_was_too_long(char **s_line)
 			printf("Dundershell: exit: %s: numeric argument required\n",
 				s_line[1]);
 			rl_clear_history();
+			ft_exit(*parse);// TODO Double check if OK
 			exit (255);
 		}
 		i++;
@@ -67,7 +69,7 @@ void	mini_exit(char **s_line, t_parsing *parse)
 		printf("Dundershell: exit: too many arguments\n");
 		return ;
 	}
-	exit_was_too_long(s_line);
+	exit_was_too_long(s_line, &parse);
 	tmp = ft_atoi(s_line[1]);
 	printf("exit\n");
 	rl_clear_history();
@@ -83,12 +85,13 @@ void	ft_exit(t_parsing* parse)
 	// TODO maybe free tkn_list->vector_cmd here ?
 	if (parse && parse->tkns_list)
 	{
-		struct s_tkns	*tmp;
+		t_tkns	*tmp;
 		while(parse->tkns_list)
 		{
 			tmp = parse->tkns_list->next;
 			for (int i = 0; parse->tkns_list->vector_cmd[i]; i++)
 				free(parse->tkns_list->vector_cmd[i]);
+			free(parse->tkns_list->vector_cmd);
 			free(parse->tkns_list->data);
 			free(parse->tkns_list);
 			parse->tkns_list = tmp;

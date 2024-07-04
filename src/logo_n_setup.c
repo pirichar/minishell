@@ -79,7 +79,6 @@ int	setup_minishell(int argc, char **env)
 		exit(1);
 	ex->status = 0;
 	ex->foreground_job_active = 0;
-	ex->interrupted = 0;
 	ex->line = NULL;
 	ex->prompt = NULL;
 	if (argc > 1)

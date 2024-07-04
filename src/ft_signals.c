@@ -43,9 +43,6 @@ be expected to to for itself, it must do itself.
  * @brief This function handles the Ctrl-C (SIGINT) event
             Move to a new line
             This function is binded by setup_signal_handlers
-            It will update ex->interrupted to 1 and print a new prompt
-            ex->interrupted is verified in in process_command(main)
-            and wont process the command if set to 1
 
 // TO-DO Double check why mik add g_mini.code =  INTERRUPT_SIG 
  * 
@@ -99,7 +96,6 @@ static	void	handle_sigquit(int sig)
 
 			First we setup the sigint (mask, handler, flags)
 			We setup the SA_RESTART flag for the flags so
-			it auto-restart the functions if interrupted
 			we finally call sigation on that SIGINT with ex->sa_int struct
 
 			Then we setup the sigquit handler without a flag

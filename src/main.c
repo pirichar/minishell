@@ -72,8 +72,8 @@ static void	execute_command_shell(t_parsing *parse)
 	 up givinng s_line[0] == NULL ? For now I cant recreate it
 // TO-DO Calrify if we correctly free all the parse at the end
  *
- * @return true if line is not NULL and ex->interrupted is false 
- * @return false if line is NULL or ex->interrupted is true 
+ * @return true if line is not NULL 
+ * @return false if line is NULL
  */
 static bool	process_command(void)
 {
