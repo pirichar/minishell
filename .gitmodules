@@ -1,0 +1,2 @@
+[submodule "libft"]
+	url = https://github.com/pirichar/libft.git

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+         #
+#    By: pirichar <pirichar@student.42quebec>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/27 11:00:22 by pirichar          #+#    #+#              #
-#    Updated: 2024/07/03 21:21:50 by pirichar         ###   ########.fr        #
+#    Updated: 2021/09/27 15:06:23 by pirichar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ OBJSB = $(SRCB:.c=.o)
 CFLAGS = -Wall -Werror -Wextra 
 
 .c.o : 
-	$(CC) $(CFLAGS) -g -c $< -o ${<:.c=.o}
+	$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
 all : $(NAME)
 
