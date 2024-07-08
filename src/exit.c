@@ -122,9 +122,9 @@ void	ft_exit(t_parsing* parse)
 	if (parse->p_new)
 		free(parse->p_new);
 	// free parse_list
+	*/
 	if (parse)
 		free(parse);
-	*/
 
 
 	/* EXEC  */
