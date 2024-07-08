@@ -95,7 +95,7 @@ static bool	process_command(void)
 		{
 			free(ex->line);
 			free_strrarr(ex->s_line);
-			ft_exit(parse); // TODO Double check if OK
+		//	ft_exit(parse); // TODO Double check if OK WAS NOT CREATED A PROBLEM
 			return (true);
 		}
 		execute_command_shell(parse);
