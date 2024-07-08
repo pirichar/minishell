@@ -23,6 +23,13 @@ t_tkns	*set_toktype(t_tkns *matrix)
 	return (matrix);
 }
 
+/**
+ * @brief 
+ * 
+ * @param s 
+ * @param parse_list 
+ * @return t_parsing* 
+ */
 t_parsing	*new_split(char *s, t_parsing *parse_list)
 {
 	parse_list->index = 0;
@@ -31,12 +38,12 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 		parse_list->index += 1;
 	while (s[parse_list->index])
 	{
-		if (should_do_it(s, parse_list))
-			helper1(s, parse_list);
-		else if (should_do_it_else(s, parse_list))
-			helper2(s, parse_list);
+		if (check_double_redir(s, parse_list))
+			init_redir_node_two_char(s, parse_list);
+		else if (check_in_out_file(s, parse_list))
+			init_redir_node_one_char(s, parse_list);
 		else
-			helper3(s, parse_list);
+			init_command_node(s, parse_list);
 		if (parse_list->start == NULL)
 			parse_list->start = parse_list->tkns_list->next;
 		while (ft_isspace(s[parse_list->index]) == true)

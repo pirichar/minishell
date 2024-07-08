@@ -231,11 +231,11 @@ t_tkns	*node_redir(t_tkns *matrix, char *s, int size);
 t_tkns	*init_list(char *s);
 
 //parking_split_helper.c
-bool	should_do_it(char *s, t_parsing *parse_list);
-bool	should_do_it_else(char *s, t_parsing *parse_list);
-void	helper1(char *s, t_parsing *parse_list);
-void	helper2(char *s, t_parsing *parse_list);
-void	helper3(char *s, t_parsing *parse_list);
+bool	check_double_redir(char *s, t_parsing *parse_list);
+bool	check_in_out_file(char *s, t_parsing *parse_list);
+void	init_redir_node_two_char(char *s, t_parsing *parse_list);
+void	init_redir_node_one_char(char *s, t_parsing *parse_list);
+void	init_command_node(char *s, t_parsing *parse_list);
 
 //parsing_here_doc_new.c
 t_parsing		*check_metachar(t_parsing *parse_list);

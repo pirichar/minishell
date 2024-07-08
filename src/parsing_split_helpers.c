@@ -1,14 +1,18 @@
 #include "../include/minishell.h"
 
 /**
- * @brief 
- * // TODO Trouver un bon nom pour la fonction
+ * @brief First we check if we find << >> or <| or >|
+			Then we look if there is quotes or not
+			If not we just execute the command
+			If yes we check if the index is smaller then the start 
+			or the index is bigger then the end
+ * 
  * @param s 
  * @param parse_list 
  * @return true 
  * @return false 
  */
-bool	should_do_it(char *s, t_parsing *parse_list)
+bool	check_double_redir(char *s, t_parsing *parse_list)
 {
 	return (((s[parse_list->index] == '<'
 				|| s[parse_list->index] == '>')
@@ -22,15 +26,17 @@ bool	should_do_it(char *s, t_parsing *parse_list)
 }
 
 /**
- * @brief 
- * // TODO Trouver un nom pour la fonction
+ * @brief First we look if we are a < > or a |
+			Then we do the same mechanism as the previous
+			function to see if we are within a quote
+ * 
  * @param s 
  * @param parse_list 
  * @return true 
  * @return false 
  */
 
-bool	should_do_it_else(char *s, t_parsing *parse_list)
+bool	check_in_out_file(char *s, t_parsing *parse_list)
 {
 	return ((s[parse_list->index] == '<'
 			|| s[parse_list->index] == '>'
@@ -42,12 +48,13 @@ bool	should_do_it_else(char *s, t_parsing *parse_list)
 }
 
 /**
- * @brief 
- * // TODO trouver un nom intelligent
+ * @brief To create a redirection node
+			When there is two symbols
+			like >> << 
  * @param s 
  * @param parse_list 
  */
-void	helper1(char *s, t_parsing *parse_list)
+void	init_redir_node_two_char(char *s, t_parsing *parse_list)
 {
 	parse_list->tkns_list->next
 		= node_redir(parse_list->tkns_list->next,
@@ -56,12 +63,14 @@ void	helper1(char *s, t_parsing *parse_list)
 }
 
 /**
- * @brief 
- * // TODO trouver un nom intelligent
+ * @brief To create a redirection node
+ 			When the node is a redir with only one
+			symbol
+ * 
  * @param s 
  * @param parse_list 
  */
-void	helper2(char *s, t_parsing *parse_list)
+void	init_redir_node_one_char(char *s, t_parsing *parse_list)
 {
 	parse_list->tkns_list->next
 		= node_redir(parse_list->tkns_list->next,
@@ -70,12 +79,12 @@ void	helper2(char *s, t_parsing *parse_list)
 }
 
 /**
- * @brief 
- * // TODO trouver un nom intelligent
+ * @brief When the node is a command
+ * 
  * @param s 
  * @param parse_list 
  */
-void	helper3(char *s, t_parsing *parse_list)
+void	init_command_node(char *s, t_parsing *parse_list)
 {
 	parse_list->tkns_list->next
 		= make_node(parse_list->tkns_list->next,

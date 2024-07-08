@@ -7,10 +7,33 @@ static int	do_pipe(t_parsing *parse_list)
 	return (0);
 }
 
+t_parsing	*helper1(t_parsing *p_l)
+{
+	if (p_l->tkns_list->tok_type == TRUNC)
+		if (do_trunc(p_l) == 1)
+			return (p_l);
+	if (p_l->tkns_list->tok_type == IN_OUT)
+		if (do_in_out(p_l) == 1)
+			return (p_l);
+	if (p_l->tkns_list->tok_type == INPUT)
+		if (do_input(p_l) == 1)
+			return (p_l);
+	if (p_l->tkns_list->tok_type == APPEND)
+		if (do_append(p_l) == 1)
+			return (p_l);
+	if (p_l->tkns_list->tok_type == PIPE)
+		if (do_pipe(p_l) == 1)
+			return (p_l);
+	if (p_l->tkns_list->tok_type == SPECIAL_PIPE
+		|| p_l->tkns_list->tok_type == OUTPUT)
+		if (do_output(p_l) == 1)
+			return (p_l);
+	return (NULL);
+}
+
 /**
  * @brief 
- * //TODO exit command instead or return parse_list
-	//TODO TROUVER UNE MOYEN DE SPLIT CETTE FONCTION LA
+
  * @param parse_list 
  * @return t_parsing* 
  */
@@ -19,25 +42,8 @@ t_parsing	*check_metachar(t_parsing *p_l)
 	p_l->start = p_l->tkns_list;
 	while (p_l->tkns_list)
 	{
-		if (p_l->tkns_list->tok_type == TRUNC)
-			if (do_trunc(p_l) == 1)
-				return (p_l);
-		if (p_l->tkns_list->tok_type == IN_OUT)
-			if (do_in_out(p_l) == 1)
-				return (p_l);
-		if (p_l->tkns_list->tok_type == INPUT)
-			if (do_input(p_l) == 1)
-				return (p_l);
-		if (p_l->tkns_list->tok_type == APPEND)
-			if (do_append(p_l) == 1)
-				return (p_l);
-		if (p_l->tkns_list->tok_type == PIPE)
-			if (do_pipe(p_l) == 1)
-				return (p_l);
-		if (p_l->tkns_list->tok_type == SPECIAL_PIPE
-			|| p_l->tkns_list->tok_type == OUTPUT)
-			if (do_output(p_l) == 1)
-				return (p_l);
+		if (helper1(p_l))
+			return (helper1(p_l));
 		if ((p_l->tkns_list->tok_type != CMD
 				&& p_l->tkns_list->tok_type != ARG) && p_l->tkns_list->next)
 			p_l->tkns_list->next->tok_type = ARG;
