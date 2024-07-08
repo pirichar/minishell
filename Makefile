@@ -36,7 +36,7 @@ CLS		= 	clear
 all		:	$(NAME)
 			
 
-$(NAME)	:	$(SRCS) $(OBJS) $(HEADERS)
+$(NAME)	:	$(OBJS) $(HEADERS)
 			@if [ ! -d "./objs" ]; then \
 				clear && \
 				echo "__________________________________" && \
@@ -50,7 +50,7 @@ $(NAME)	:	$(SRCS) $(OBJS) $(HEADERS)
 				echo "\n      Libft compiled \n" && \
 				echo "__________________________________"; \
 			fi
-			$(CC) $(SRCS) $(LIBS) -Llib -lhistory -lcurses $(CFLAGS)
+			$(CC) $(OBJS) $(LIBS) -Llib -lhistory -lcurses $(CFLAGS)
 			@if [ -p "./objs" ]; then \
 				rm -rf ./objs; \
 			fi

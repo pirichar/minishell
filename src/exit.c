@@ -126,12 +126,11 @@ void	ft_exit(t_parsing* parse)
 		free(parse);
 	*/
 
-
 	/* EXEC  */
 	// free ex->line
 	if (ex && ex->line)
 		free(ex->line);
-	if (ex && *ex->s_line) // TODO PK COLIS
+	if (ex && *ex->s_line)
 		free_strrarr(ex->s_line);
 	// free env
 	if (ex && ex->new_env)
