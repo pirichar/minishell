@@ -18,13 +18,14 @@
 
 static void	exit_was_too_long(char **s_line, t_parsing **parse)
 {
+	(void)parse;
 	int	i;
 
 	if (s_line[1] == NULL)
 	{
 		printf("exit\n");
 		rl_clear_history();
-		ft_exit(*parse); // TODO Double check if OK
+		//ft_exit(*parse); // TODO Double check if OK
 		exit (0);
 	}
 	i = 0;
@@ -36,7 +37,7 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 			printf("Dundershell: exit: %s: numeric argument required\n",
 				s_line[1]);
 			rl_clear_history();
-			ft_exit(*parse);// TODO Double check if OK
+			//ft_exit(*parse);// TODO Double check if OK
 			exit (255);
 		}
 		i++;
@@ -73,7 +74,7 @@ void	mini_exit(char **s_line, t_parsing *parse)
 	tmp = ft_atoi(s_line[1]);
 	printf("exit\n");
 	rl_clear_history();
-	ft_exit(parse); // TODO Double check if OK
+	//ft_exit(parse); // TODO Double check if OK
 	exit (tmp);
 }
 
@@ -89,9 +90,7 @@ void	ft_exit(t_parsing* parse)
 		while(parse->tkns_list)
 		{
 			tmp = parse->tkns_list->next;
-			for (int i = 0; parse->tkns_list->vector_cmd[i]; i++)
-				free(parse->tkns_list->vector_cmd[i]);
-			free(parse->tkns_list->vector_cmd);
+			free_strrarr(parse->tkns_list->vector_cmd);
 			free(parse->tkns_list->data);
 			free(parse->tkns_list);
 			parse->tkns_list = tmp;
