@@ -25,7 +25,7 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 	{
 		printf("exit\n");
 		rl_clear_history();
-		//ft_exit(*parse); // TODO Double check if OK
+		ft_exit(*parse); // TODO Double check if OK
 		exit (0);
 	}
 	i = 0;
@@ -37,7 +37,7 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 			printf("Dundershell: exit: %s: numeric argument required\n",
 				s_line[1]);
 			rl_clear_history();
-			//ft_exit(*parse);// TODO Double check if OK
+			ft_exit(*parse);// TODO Double check if OK
 			exit (255);
 		}
 		i++;
@@ -74,14 +74,21 @@ void	mini_exit(char **s_line, t_parsing *parse)
 	tmp = ft_atoi(s_line[1]);
 	printf("exit\n");
 	rl_clear_history();
-	//ft_exit(parse); // TODO Double check if OK
+	ft_exit(parse);
 	exit (tmp);
 }
 
-
+/**
+ * @brief to free:
+			Parse list from start_parse (PARSE LIST)
+			Make node parsing split 2 (NODE_LIST)
+			Expand variable CALL (parsing_3) (Parse_list->line)
+ * 
+ * @param parse 
+ */
 void	ft_exit(t_parsing* parse)
 {
-	/* PARSING  */
+	/* PARSING STRUCT*/
 	// free parse_list->tkn->list 
 	// TODO maybe free tkn_list->vector_cmd here ?
 	if (parse && parse->tkns_list)
@@ -90,7 +97,8 @@ void	ft_exit(t_parsing* parse)
 		while(parse->tkns_list)
 		{
 			tmp = parse->tkns_list->next;
-			free_strrarr(parse->tkns_list->vector_cmd);
+			if(parse->tkns_list->vector_cmd)
+				free_strrarr(parse->tkns_list->vector_cmd);
 			free(parse->tkns_list->data);
 			free(parse->tkns_list);
 			parse->tkns_list = tmp;
@@ -98,11 +106,8 @@ void	ft_exit(t_parsing* parse)
 		parse->tkns_list = NULL;
 	}
 	// free parse->vector->cmd
-	if (parse && parse->vector_cmd)
-	{
-		for (int i = 0; parse->vector_cmd[i]; i++)
-			free(parse->tkns_list->vector_cmd[i]);
-	}
+	if (parse && *parse->vector_cmd)
+		free_strrarr(parse->vector_cmd);
 	//free parse->pids
 	if (parse && parse->pids)
 		free (parse->pids);
@@ -110,24 +115,21 @@ void	ft_exit(t_parsing* parse)
 	if (parse && parse->pipes_args)
 	{
 		for (int i = 0;parse->pipes_args[i]; i++)
-		{
-			for (int j = 0; parse->pipes_args[i][j];j++)
-			{
-				free(parse->pipes_args[i][j]);
-			}
-		}
+			free_strrarr(parse->pipes_args[i]);
 	}
 	//free parse->p_new (expand variables)
-
+	if (parse->p_new)
+		free(parse->p_new);
 	// free parse_list
 	if (parse)
 		free(parse);
+
+
 	/* EXEC  */
 	// free ex->line
 	if (ex && ex->line)
 		free(ex->line);
-	// free ex->s_line
-	if (ex && ex->s_line)
+	if (ex && *ex->s_line) // TODO PK COLIS
 		free_strrarr(ex->s_line);
 	// free env
 	if (ex && ex->new_env)
