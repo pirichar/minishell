@@ -86,6 +86,7 @@ typedef struct s_parsing
 	int 	*pids;
 	t_tkns	*tkns_list;
 	t_tkns	*start;
+	t_tkns	*old;
 	char	**vector_cmd;
 	char	*line;
 	int		nb_of_pipes;

@@ -46,12 +46,14 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 			init_command_node(s, parse_list);
 		if (parse_list->start == NULL)
 		{
+			parse_list->old = parse_list->tkns_list;
 			parse_list->start = parse_list->tkns_list->next;
-			//free (parse_list->tkns_list); // TODO double check if it works
 		}
 		while (ft_isspace(s[parse_list->index]) == true)
 			parse_list->index += 1;
 	}
 	parse_list->tkns_list = parse_list->start;
+	if (parse_list->old)
+		free(parse_list->old);
 	return (parse_list);
 }
