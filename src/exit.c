@@ -105,8 +105,8 @@ void	ft_exit(t_parsing* parse)
 			parse->tkns_list = tmp;
 		}
 	}
-	/*
 	// free parse->vector->cmd
+	/*
 	if (parse && *parse->vector_cmd)
 		free_strrarr(parse->vector_cmd);
 	//free parse->pids
@@ -122,9 +122,9 @@ void	ft_exit(t_parsing* parse)
 	if (parse->p_new)
 		free(parse->p_new);
 	// free parse_list
+	*/
 	if (parse)
 		free(parse);
-	*/
 
 
 	/* EXEC  */
