@@ -7,7 +7,7 @@ static int	do_pipe(t_parsing *parse_list)
 	return (0);
 }
 
-t_parsing	*helper1(t_parsing *p_l)
+static t_parsing	*helper1(t_parsing *p_l)
 {
 	if (p_l->tkns_list->tok_type == TRUNC)
 		if (do_trunc(p_l) == 1)
@@ -45,7 +45,8 @@ t_parsing	*check_metachar(t_parsing *p_l)
 		if (helper1(p_l))
 			return (helper1(p_l));
 		if ((p_l->tkns_list->tok_type != CMD
-				&& p_l->tkns_list->tok_type != ARG) && p_l->tkns_list->next)
+				&& p_l->tkns_list->tok_type != ARG)
+			&& (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD))
 			p_l->tkns_list->next->tok_type = ARG;
 		if (p_l->tkns_list->tok_type == PIPE)
 			p_l->nb_of_pipes += 1;
