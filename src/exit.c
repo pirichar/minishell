@@ -92,20 +92,20 @@ void	ft_exit(t_parsing* parse)
 	/* PARSING STRUCT*/
 	// free parse_list->tkn->list 
 	// TODO maybe free tkn_list->vector_cmd here ?
-	/*if (parse && parse->tkns_list)
+	if (parse && parse->tkns_list)
 	{
 		t_tkns	*tmp;
 		while(parse->tkns_list)
 		{
 			tmp = parse->tkns_list->next;
-			if(parse->tkns_list->vector_cmd)
-				free_strrarr(parse->tkns_list->vector_cmd);
+			//if(*parse->tkns_list->vector_cmd)
+			//	free_strrarr(parse->tkns_list->vector_cmd);
 			free(parse->tkns_list->data);
 			free(parse->tkns_list);
 			parse->tkns_list = tmp;
 		}
-		parse->tkns_list = NULL;
 	}
+	/*
 	// free parse->vector->cmd
 	if (parse && *parse->vector_cmd)
 		free_strrarr(parse->vector_cmd);
@@ -123,7 +123,8 @@ void	ft_exit(t_parsing* parse)
 		free(parse->p_new);
 	// free parse_list
 	if (parse)
-		free(parse);*/
+		free(parse);
+	*/
 
 
 	/* EXEC  */
