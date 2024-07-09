@@ -113,6 +113,7 @@ void	ft_clean(t_parsing* parse)
 	//free parse->pids
 	if (parse && parse->pids)
 		free (parse->pids);
+	*/
 	// free parse->pipe_args
 	if (parse && parse->pipes_args)
 	{
@@ -123,7 +124,6 @@ void	ft_clean(t_parsing* parse)
 	if (parse->p_new)
 		free(parse->p_new);
 	// free parse_list
-	*/
 	if (parse)
 		free(parse);
 
