@@ -97,12 +97,11 @@ static bool	process_command(void)
 		{
 			free(ex->line);
 			free_strrarr(ex->s_line);
-		//	ft_exit(parse); // TODO Double check if OK WAS NOT CREATED A PROBLEM
 			return (true);
 		}
 		execute_command_shell(parse);
 	}
-	free(ex->line);
+	ft_clean(parse);
 	return (false);
 }
 
@@ -154,6 +153,6 @@ int	main(int argc, char **argv, char **env)
 		if (process_command())
 			continue ;
 	}
-	free_strrarr(ex->path);
 	free (ex);
+	//ft_exit()
 }

@@ -23,7 +23,7 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 
 	if (s_line[1] == NULL)
 	{
-		printf("exit\n");
+		printf("exit	if (s_line[1] == NULL) \n");
 		rl_clear_history();
 		ft_exit(*parse); // TODO Double check if OK
 		exit (0);
@@ -72,7 +72,7 @@ void	mini_exit(char **s_line, t_parsing *parse)
 	}
 	exit_was_too_long(s_line, &parse);
 	tmp = ft_atoi(s_line[1]);
-	printf("exit\n");
+	printf("exit within mini exit\n");
 	rl_clear_history();
 	ft_exit(parse);
 	exit (tmp);
@@ -86,6 +86,53 @@ void	mini_exit(char **s_line, t_parsing *parse)
  * 
  * @param parse 
  */
+
+void	ft_clean(t_parsing* parse)
+{
+	(void)parse;
+	/* PARSING STRUCT*/
+	// free parse_list->tkn->list 
+	// TODO maybe free tkn_list->vector_cmd here ?
+	if (parse && parse->tkns_list)
+	{
+		t_tkns	*tmp;
+		while(parse->tkns_list)
+		{
+			tmp = parse->tkns_list->next;
+			//if(*parse->tkns_list->vector_cmd)
+			//	free_strrarr(parse->tkns_list->vector_cmd);
+			free(parse->tkns_list->data);
+			free(parse->tkns_list);
+			parse->tkns_list = tmp;
+		}
+	}
+	/* 
+	// free parse->vector->cmd
+	if (parse && *parse->vector_cmd)
+		free_strrarr(parse->vector_cmd);
+	//free parse->pids
+	if (parse && parse->pids)
+		free (parse->pids);
+	// free parse->pipe_args
+	if (parse && parse->pipes_args)
+	{
+		for (int i = 0;parse->pipes_args[i]; i++)
+			free_strrarr(parse->pipes_args[i]);
+	}
+	//free parse->p_new (expand variables)
+	if (parse->p_new)
+		free(parse->p_new);
+	// free parse_list
+	*/
+	if (parse)
+		free(parse);
+
+	/* EXEC  */
+	// free ex->line
+	if (ex && ex->line)
+		free(ex->line);
+}
+
 void	ft_exit(t_parsing* parse)
 {
 	(void)parse;
@@ -105,8 +152,8 @@ void	ft_exit(t_parsing* parse)
 			parse->tkns_list = tmp;
 		}
 	}
+	/* 
 	// free parse->vector->cmd
-	/*
 	if (parse && *parse->vector_cmd)
 		free_strrarr(parse->vector_cmd);
 	//free parse->pids
@@ -130,14 +177,10 @@ void	ft_exit(t_parsing* parse)
 	// free ex->line
 	if (ex && ex->line)
 		free(ex->line);
-	if (ex && *ex->s_line)
-		free_strrarr(ex->s_line);
 	// free env
 	if (ex && ex->new_env)
 		free_strrarr(ex->new_env);
 	// free ex
 	if (ex)
 		free(ex);
-
-
 }
