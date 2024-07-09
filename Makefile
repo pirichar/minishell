@@ -2,7 +2,7 @@ NAME	=	DunderShell
 
 LIBFT		= ft
 LIBFTDIR	= include/libft
-MAKELIBFT	= @$(MAKE) -C $(LIBFTDIR)
+MAKELIBFT	= @$(MAKE) bonus -C $(LIBFTDIR)
 
 CFILES	=	environement.c main.c builtin.c execute.c parsing_1.c \
 			exit.c export.c env.c unset.c\
@@ -37,7 +37,7 @@ $(OBJ)/%.o:	$(SRC)/%.c
 			
 $(NAME)	:	$(OBJ) $(OBJS)
 			$(MAKELIBFT)
-			$(CC) $(OBJS) $(LIBS) -Llib -lhistory -lcurses -o $(NAME)
+			$(CC) $(OBJS) $(LIBS) -Lm1lib -lhistory -lcurses -o $(NAME)
 
 $(OBJ):
 			@mkdir -p $(OBJ)
