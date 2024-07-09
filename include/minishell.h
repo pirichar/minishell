@@ -45,7 +45,7 @@ typedef struct	s_exec
 
 // ex est ma seul variable globale pour l'instant , je l'utilise avec les signaux et à travers l'exécution en général
 // pour des raison de facilite d'acces j'ai choisi cette variable comme variable global
-t_exec		*ex;
+extern t_exec		*ex;
 
 typedef struct s_files
 {

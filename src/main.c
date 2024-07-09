@@ -1,5 +1,7 @@
 #include "../include/minishell.h"
 
+t_exec		*ex;
+
 /**
  * @brief First function called in our while(1)
 			It sets the prompt
