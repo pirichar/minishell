@@ -1,144 +1,62 @@
-SRCS	=	src/environement.c src/main.c src/builtin.c src/execute.c src/parsing_1.c \
-			src/exit.c src/export.c src/env.c src/unset.c\
-			src/pwd.c src/echo.c  src/cd.c\
-			src/str_arr_fcn.c src/ft_strjoin_free.c  src/prompt.c  src/parsing_2.c\
-			src/parsing_utils.c src/parsing_heredocs_new.c\
-			src/parsing_pipes.c src/wait_for_pids.c\
-			src/calling_the_execs_shell.c ./src/look_for.c ./src/execute_out.c\
-			src/execute_solo.c src/ft_signals.c src/logo_n_setup.c src/parsing_split.c\
-			src/parsing_split2.c src/parsing_split_helpers.c src/parsing_3.c\
-			src/parsing_heredocs_new2.c
-
-HEADERS	=	minishell.h colors.h
-
-vpath %.h include/
-
-OB		= @mkdir -p objs && mv ./src/*.o ./objs/ 
-
-OBJS	=	${SRCS:.c=.o}
-
-CC		=	@gcc
-
-RM		=	@rm -rf
-
-INC 	= include
-
-CFLAGS	=	-Wall -Wextra -Werror -o DunderShell -g  -I${INC}
-
-LIBS	=	include/Libft/libft.a -lreadline 
-
 NAME	=	DunderShell
 
-FTMAKE	=	@cd include/Libft && make bonus -s
+LIBFT		= ft
+LIBFTDIR	= include/libft
+MAKELIBFT	= @$(MAKE) -C $(LIBFTDIR)
 
-CLS		= 	clear
+CFILES	=	environement.c main.c builtin.c execute.c parsing_1.c \
+			exit.c export.c env.c unset.c\
+			pwd.c echo.c  cd.c\
+			str_arr_fcn.c ft_strjoin_free.c  prompt.c  parsing_2.c\
+			parsing_utils.c parsing_heredocs_new.c\
+			parsing_pipes.c wait_for_pids.c\
+			calling_the_execs_shell.c ./look_for.c ./execute_out.c\
+			execute_solo.c ft_signals.c logo_n_setup.c parsing_split.c\
+			parsing_split2.c parsing_split_helpers.c parsing_3.c\
+			parsing_heredocs_new2.c
+
+SRC			= src
+INC			= include
+OBJ			= obj
+
+HFILES		= colors.h mini_shell.h
+OFILES		= $(CFILES:.c=.o)
+SRCS		= $(addprefix $(SRC)/, $(CFILES))
+OBJS		= $(addprefix $(OBJ)/, $(OFILES))
+HEADERS		= $(addprefix $(INC)/, $(HFILES))
+
+CC		=	gcc
+CFLAGS	=	-Wall -Wextra -Werror -g 
+RM		=	rm -rf
+
+
+LIBS	=	include/libft/libft.a -lreadline 
+
+$(OBJ)/%.o:	$(SRC)/%.c
+			$(CC) $(CFLAGS) -I$(LIBFTDIR) -I$(INC) -I. -c $< -o $@
+			
+$(NAME)	:	$(OBJ) $(OBJS)
+			$(MAKELIBFT)
+			$(CC) $(OBJS) $(LIBS) -Llib -lhistory -lcurses -o $(NAME)
+
+$(OBJ):
+			@mkdir -p $(OBJ)
 
 all		:	$(NAME)
-			
-
-$(NAME)	:	$(OBJS) $(HEADERS)
-			@if [ ! -d "./objs" ]; then \
-				clear && \
-				echo "__________________________________" && \
-				echo "\n       Compiling.....\n" && \
-				echo "__________________________________" && \
-				touch a ;\
-			fi 
-			$(FTMAKE) 
-			@ if [ ! -d "./objs" ]; then \
-				echo "__________________________________" && \
-				echo "\n      Libft compiled \n" && \
-				echo "__________________________________"; \
-			fi
-			$(CC) $(OBJS) $(LIBS) -Llib -lhistory -lcurses $(CFLAGS)
-			@if [ -p "./objs" ]; then \
-				rm -rf ./objs; \
-			fi
-			$(OB)
-			@if [ -f "./a" ]; then \
-				sleep 1 && \
-				echo "__________________________________" && \
-				echo "\n Project succesfully compiled!\n" && \
-				echo "__________________________________" && \
-				rm -f ./a; else \
-				clear && \
-				echo "__________________________________" && \
-				echo "\n\n             Done\n" && \
-				echo "__________________________________"; \
-			fi
-			
-WSL		:	$(SRCS) $(OBJS) $(HEADERS)
-			@if [ ! -d "./objs" ]; then \
-				clear && \
-				echo "__________________________________" && \
-				echo "\n       Compiling.....\n" && \
-				echo "__________________________________" && \
-				touch a ;\
-			fi 
-			$(FTMAKE) 
-			@ if [ ! -d "./objs" ]; then \
-				echo "__________________________________" && \
-				echo "\n      Libft compiled \n" && \
-				echo "__________________________________"; \
-			fi
-			$(CC) $(SRCS) $(LIBS) $(CFLAGS)
-			@if [ -p "./objs" ]; then \
-				rm -rf ./objs; \
-			fi
-			$(OB)
-			@if [ -f "./a" ]; then \
-				sleep 1 && \
-				echo "__________________________________" && \
-				echo "\n Project succesfully compiled!\n" && \
-				echo "__________________________________" && \
-				rm -f ./a; else \
-				clear && \
-				echo "__________________________________" && \
-				echo "\n\n             Done\n" && \
-				echo "__________________________________"; \
-			fi
 
 clean	:	
-			@clear
-			@echo "__________________________________"
-			@echo "\n     Clearing object files... \n"
-			@echo "__________________________________"
-			${RM} ./objs
-			$(FTMAKE) $@
-			@sleep 1
-			@echo "__________________________________"
-			@echo "\n     Cleaning Successful! \n"
-			@echo "__________________________________"
-			@sleep 1
+			$(MAKELIBFT) fclean
+			@$(RM) $(OBJS)
 
 fclean	:	clean
-			@echo "__________________________________"
-			@echo "\n     Clearing other files... \n"
-			@echo "__________________________________"
-			@if [ -f "./DunderShell" ]; then \
-				rm -rf ./DunderShell; \
-			fi
-			$(FTMAKE) $@
-			@sleep 1
-			@echo "__________________________________"
-			@echo "\n         Cleaning done!\n"
-			@echo "__________________________________"
-			@sleep 1
+			@$(RM) $(NAME)
 			
 re		:	fclean all
 
 run :		fclean all 
 			$(RUN)
 
-jr		: 
-			clear
-			@echo "$$JR"
-
-tea	:
-			clear
-			@echo "$$TEA"
-
-.PHONY	:	all clean fclean re bonus jr
+.PHONY	:	all clean fclean re 
 
 .SILENT :   clean fclean
 
