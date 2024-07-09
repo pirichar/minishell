@@ -29,15 +29,12 @@ CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror -g 
 RM		=	rm -rf
 
-
-LIBS	=	include/libft/libft.a -lreadline 
-
 $(OBJ)/%.o:	$(SRC)/%.c
 			$(CC) $(CFLAGS) -I$(LIBFTDIR) -I$(INC) -I. -c $< -o $@
 			
 $(NAME)	:	$(OBJ) $(OBJS)
 			$(MAKELIBFT) bonus
-			$(CC) $(OBJS) $(LIBS) -Lm1lib -lhistory -lcurses -o $(NAME)
+			$(CC) $(OBJS) -L$(LIBFTDIR) -lft -Lm1lib -lreadline -lcurses -o $(NAME) 
 
 $(OBJ):
 			@mkdir -p $(OBJ)
