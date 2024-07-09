@@ -33,7 +33,6 @@ typedef struct	s_exec
 {
 	char	*line;
 	char	**s_line;
-	char	**path;
 	char	**new_env;
 	char	*prompt;
 	int		status;

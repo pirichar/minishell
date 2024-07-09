@@ -47,7 +47,7 @@ static void	execute_command_shell(t_parsing *parse)
 	wait_for_pids(parse);
 	ex->foreground_job_active = 0;
 	update_sigquit_handling();
-	free_strrarr(ex->s_line);
+	ft_clean(parse);
 }
 
 /**
@@ -101,7 +101,6 @@ static bool	process_command(void)
 		}
 		execute_command_shell(parse);
 	}
-	ft_clean(parse);
 	return (false);
 }
 

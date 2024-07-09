@@ -106,14 +106,9 @@ void	ft_clean(t_parsing* parse)
 			parse->tkns_list = tmp;
 		}
 	}
-	/* 
-	// free parse->vector->cmd
+	// free parse->vector->cmd and s_line 
 	if (parse && *parse->vector_cmd)
 		free_strrarr(parse->vector_cmd);
-	//free parse->pids
-	if (parse && parse->pids)
-		free (parse->pids);
-	*/
 	// free parse->pipe_args
 	if (parse && parse->pipes_args)
 	{
@@ -126,9 +121,9 @@ void	ft_clean(t_parsing* parse)
 	// free parse_list
 	if (parse)
 		free(parse);
-
 	/* EXEC  */
-	// free ex->line
+	// free ex->line since ex->s_line is
+	// allready freed by freing the parse->vector_cmd
 	if (ex && ex->line)
 		free(ex->line);
 }
