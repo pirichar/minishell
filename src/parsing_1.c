@@ -2,18 +2,18 @@
 
 // loop over the line to see if its only spaces 
 // once you meet something else then a space return false
-bool		is_empty(char *line)
+bool	is_empty(char *line)
 {
-	while(*line)
+	while (*line)
 	{
 		if (*line != ' ')
 			return (false);
 		line++;
 	}
-	if(*line == '\0')
-			return (true);
-		else
-			return (false);
+	if (*line == '\0')
+		return (true);
+	else
+		return (false);
 }
 
 t_parsing	*start_parse(char *line, int status)
@@ -21,7 +21,7 @@ t_parsing	*start_parse(char *line, int status)
 	t_parsing	*parse_list;
 
 	if (is_empty(line))
-		return(NULL);
+		return (NULL);
 	parse_list = ft_calloc(1, sizeof(t_parsing));
 	init_master_list(parse_list, status);
 	parse_list = quotes_line(line, parse_list);
