@@ -131,11 +131,7 @@ int	main(int argc, char **argv, char **env)
 {
 	(void)argv;
 	if (setup_minishell(argc, env) == 1)
-	{
-		fprintf(stderr, "Why U put params?!?!\n");
-		free(g_ex);
 		return (1);
-	}
 	while (1)
 	{
 		prompt_and_read_input();

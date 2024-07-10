@@ -30,7 +30,7 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 {
 	int		fd;
 	int		i;
-	char	**tmp;
+//	char	**tmp;
 
 	i = 1;
 	parse->i = 0;
@@ -40,9 +40,9 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 	{
 		parse->f_command = true;
 		fd = execute(parse->infile, &parse->pids[0], *(new_env), parse);
-		tmp = cmd;
+	//	tmp = cmd;
 		cmd = parse->pipes_args[parse->i];
-		free_strrarr(tmp);
+		//free_strrarr(tmp);
 		while (i < parse->nb_of_pipes)
 		{
 			fd = execute(fd, &parse->pids[i], *(new_env), parse);
