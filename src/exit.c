@@ -15,17 +15,15 @@
 
  * @param s_line command line splitted
  */
-
 static void	exit_was_too_long(char **s_line, t_parsing **parse)
 {
-	(void)parse;
 	int	i;
 
 	if (s_line[1] == NULL)
 	{
 		printf("exit	if (s_line[1] == NULL) \n");
 		rl_clear_history();
-		ft_exit(*parse); // TODO Double check if OK
+		ft_exit(*parse);
 		exit (0);
 	}
 	i = 0;
@@ -37,7 +35,7 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 			printf("Dundershell: exit: %s: numeric argument required\n",
 				s_line[1]);
 			rl_clear_history();
-			ft_exit(*parse);// TODO Double check if OK
+			ft_exit(*parse);
 			exit (255);
 		}
 		i++;
@@ -79,103 +77,78 @@ void	mini_exit(char **s_line, t_parsing *parse)
 }
 
 /**
- * @brief to free:
-			Parse list from start_parse (PARSE LIST)
-			Make node parsing split 2 (NODE_LIST)
-			Expand variable CALL (parsing_3) (Parse_list->line)
- * 
- * @param parse 
- */
-
-void	ft_clean(t_parsing* parse)
-{
-	(void)parse;
-	/* PARSING STRUCT*/
+ * @brief Function called at the end of each cycle of minishell
+	
+* 	PARSING STRUCT
 	// free parse_list->tkn->list 
-	// TODO maybe free tkn_list->vector_cmd here ?
+	// free parse->vector->cmd and s_line 
+	// free parse->pipe_args
+	//free parse->p_new (expand variables)
+	// free parse_list
+
+	EXEC
+	// free g_ex->line
+
+	Pids are freed in wait for pids
+ * 
+ * @param parse struct to free
+ */
+void	ft_clean(t_parsing	*parse)
+{
+	t_tkns	*tmp;
+
 	if (parse && parse->tkns_list)
 	{
-		t_tkns	*tmp;
-		while(parse->tkns_list)
+		while (parse->tkns_list)
 		{
 			tmp = parse->tkns_list->next;
-			//if(*parse->tkns_list->vector_cmd)
-			//	free_strrarr(parse->tkns_list->vector_cmd);
 			free(parse->tkns_list->data);
 			free(parse->tkns_list);
 			parse->tkns_list = tmp;
 		}
 	}
-	// free parse->vector->cmd and s_line 
 	if (parse && *parse->vector_cmd)
 		free_strrarr(parse->vector_cmd);
-	// free parse->pipe_args
 	if (parse && parse->pipes_args)
 	{
-		for (int i = 0;parse->pipes_args[i]; i++)
-			free_strrarr(parse->pipes_args[i]);
+		parse->i = 0;
+		while (parse->pipes_args[parse->i])
+			free_strrarr(parse->pipes_args[parse->i++]);
 	}
-	//free parse->p_new (expand variables)
-	if (parse->p_new)
-		free(parse->p_new);
-	// free parse_list
-	if (parse)
-		free(parse);
-	/* EXEC  */
-	// free g_ex->line since g_ex->s_line is
-	// allready freed by freing the parse->vector_cmd
-	if (g_ex && g_ex->line)
-		free(g_ex->line);
+	free (parse->p_new);
+	free (parse);
+	free (g_ex->line);
 }
 
-void	ft_exit(t_parsing* parse)
-{
-	(void)parse;
-	/* PARSING STRUCT*/
+/**
+ * @brief Function called when the program is closing
+	
+* 	PARSING STRUCT
 	// free parse_list->tkn->list 
-	// TODO maybe free tkn_list->vector_cmd here ?
+
+	EXEC
+	// free g_ex->line
+	// free env
+	// free ex
+
+ * 
+ * @param parse struct to free
+ */
+void	ft_exit(t_parsing	*parse)
+{
+	t_tkns	*tmp;
+
 	if (parse && parse->tkns_list)
 	{
-		t_tkns	*tmp;
-		while(parse->tkns_list)
+		while (parse->tkns_list)
 		{
 			tmp = parse->tkns_list->next;
-			//if(*parse->tkns_list->vector_cmd)
-			//	free_strrarr(parse->tkns_list->vector_cmd);
 			free(parse->tkns_list->data);
 			free(parse->tkns_list);
 			parse->tkns_list = tmp;
 		}
 	}
-	/* 
-	// free parse->vector->cmd
-	if (parse && *parse->vector_cmd)
-		free_strrarr(parse->vector_cmd);
-	//free parse->pids
-	if (parse && parse->pids)
-		free (parse->pids);
-	// free parse->pipe_args
-	if (parse && parse->pipes_args)
-	{
-		for (int i = 0;parse->pipes_args[i]; i++)
-			free_strrarr(parse->pipes_args[i]);
-	}
-	//free parse->p_new (expand variables)
-	if (parse->p_new)
-		free(parse->p_new);
-	// free parse_list
-	if (parse)
-		free(parse);
-	*/
-
-	/* EXEC  */
-	// free g_ex->line
-	if (g_ex && g_ex->line)
-		free(g_ex->line);
-	// free env
-	if (g_ex && g_ex->new_env)
-		free_strrarr(g_ex->new_env);
-	// free ex
-	if (g_ex)
-		free(g_ex);
+	free (g_ex->line);
+	free_strrarr(g_ex->new_env);
+	free (g_ex);
 }

@@ -141,14 +141,13 @@ int	main(int argc, char **argv, char **env)
 		prompt_and_read_input();
 		if (g_ex->line == NULL)
 		{
-			free(g_ex->line);
 			write(1, "exit\n", 5);
+			free(g_ex->line);
 			free_strrarr(g_ex->new_env);
+			free(g_ex);
 			exit (0);
 		}
 		if (process_command())
 			continue ;
 	}
-	free (g_ex);
-	//ft_exit()
 }
