@@ -62,9 +62,9 @@ static void	handle_sigint(int sig)
 	char	*prompt;
 
 	(void) sig;
-	ex->interrupted = 1;
+	g_ex->interrupted = 1;
 	write(1, "\n", 1);
-	prompt = set_prompt(ex->new_env);
+	prompt = set_prompt(g_ex->new_env);
 	write(1, prompt, ft_strlen(prompt));
 	free(prompt);
 	//rl_on_new_line();
@@ -80,7 +80,7 @@ static void	handle_sigint(int sig)
 static	void	handle_sigquit(int sig)
 {
 	(void) sig;
-	if (ex->foreground_job_active)
+	if (g_ex->foreground_job_active)
 		write(1, "\nQuit signal (SIGQUIT) received by job.\n", 40);
 }
 
@@ -96,7 +96,7 @@ static	void	handle_sigquit(int sig)
 
 			First we setup the sigint (mask, handler, flags)
 			We setup the SA_RESTART flag for the flags so
-			we finally call sigation on that SIGINT with ex->sa_int struct
+			we finally call sigation on that SIGINT with g_ex->sa_int struct
 
 			Then we setup the sigquit handler without a flag
 			This function is called in setup_minishell in main
@@ -104,19 +104,19 @@ static	void	handle_sigquit(int sig)
  */
 void	setup_signal_handlers(void)
 {
-	sigemptyset(&ex->sa_int.sa_mask);
-	ex->sa_int.sa_handler = handle_sigint;
-	ex->sa_int.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &ex->sa_int, NULL);
-	sigemptyset(&ex->sa_quit.sa_mask);
-	ex->sa_quit.sa_handler = handle_sigquit;
-	ex->sa_quit.sa_flags = 0;
-	sigaction(SIGQUIT, &ex->sa_quit, NULL);
+	sigemptyset(&g_ex->sa_int.sa_mask);
+	g_ex->sa_int.sa_handler = handle_sigint;
+	g_ex->sa_int.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &g_ex->sa_int, NULL);
+	sigemptyset(&g_ex->sa_quit.sa_mask);
+	g_ex->sa_quit.sa_handler = handle_sigquit;
+	g_ex->sa_quit.sa_flags = 0;
+	sigaction(SIGQUIT, &g_ex->sa_quit, NULL);
 }
 
 /**
  * @brief Will update the sigquit signal depending
-			on the bool ex->foreground_job_active
+			on the bool g_ex->foreground_job_active
  			Set to custom handler when a job is active
 			Ignore SIGQUIT when nob job is active
 
@@ -126,7 +126,7 @@ void	setup_signal_handlers(void)
  */
 void	update_sigquit_handling(void)
 {
-	if (ex->foreground_job_active)
+	if (g_ex->foreground_job_active)
 		signal(SIGQUIT, handle_sigquit);
 	else
 		signal(SIGQUIT, SIG_IGN);

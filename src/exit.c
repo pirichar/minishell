@@ -122,10 +122,10 @@ void	ft_clean(t_parsing* parse)
 	if (parse)
 		free(parse);
 	/* EXEC  */
-	// free ex->line since ex->s_line is
+	// free g_ex->line since g_ex->s_line is
 	// allready freed by freing the parse->vector_cmd
-	if (ex && ex->line)
-		free(ex->line);
+	if (g_ex && g_ex->line)
+		free(g_ex->line);
 }
 
 void	ft_exit(t_parsing* parse)
@@ -169,13 +169,13 @@ void	ft_exit(t_parsing* parse)
 	*/
 
 	/* EXEC  */
-	// free ex->line
-	if (ex && ex->line)
-		free(ex->line);
+	// free g_ex->line
+	if (g_ex && g_ex->line)
+		free(g_ex->line);
 	// free env
-	if (ex && ex->new_env)
-		free_strrarr(ex->new_env);
+	if (g_ex && g_ex->new_env)
+		free_strrarr(g_ex->new_env);
 	// free ex
-	if (ex)
-		free(ex);
+	if (g_ex)
+		free(g_ex);
 }

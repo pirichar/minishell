@@ -1,6 +1,6 @@
 #include "../include/minishell.h"
 
-t_exec		*ex;
+t_exec		*g_ex;
 
 /**
  * @brief First function called in our while(1)
@@ -17,10 +17,10 @@ NOTE:We update_sigquit_handling
  */
 void	prompt_and_read_input(void)
 {
-	ex->prompt = set_prompt(ex->new_env);
+	g_ex->prompt = set_prompt(g_ex->new_env);
 	update_sigquit_handling();
-	ex->line = readline(ex->prompt);
-	free(ex->prompt);
+	g_ex->line = readline(g_ex->prompt);
+	free(g_ex->prompt);
 }
 
 /**
@@ -41,11 +41,11 @@ void	prompt_and_read_input(void)
  */
 static void	execute_command_shell(t_parsing *parse)
 {
-	ex->foreground_job_active = 1;
+	g_ex->foreground_job_active = 1;
 	update_sigquit_handling();
-	calling_the_execs_shell(ex->s_line, &ex->new_env, parse);
+	calling_the_execs_shell(g_ex->s_line, &g_ex->new_env, parse);
 	wait_for_pids(parse);
-	ex->foreground_job_active = 0;
+	g_ex->foreground_job_active = 0;
 	update_sigquit_handling();
 	ft_clean(parse);
 }
@@ -81,22 +81,22 @@ static bool	process_command(void)
 {
 	t_parsing	*parse;
 
-	if (*ex->line)
+	if (*g_ex->line)
 	{
-		add_history(ex->line);
-		parse = start_parse(ex->line, ex->status);
+		add_history(g_ex->line);
+		parse = start_parse(g_ex->line, g_ex->status);
 		if (parse == NULL)
 		{
-			free(ex->line);
+			free(g_ex->line);
 			return (true);
 		}
-		parse->ex = ex;
+		parse->ex = g_ex;
 		parse->tkns_list = parse->start;
-		ex->s_line = parse->tkns_list->vector_cmd;
-		if (ex->s_line[0] == NULL)
+		g_ex->s_line = parse->tkns_list->vector_cmd;
+		if (g_ex->s_line[0] == NULL)
 		{
-			free(ex->line);
-			free_strrarr(ex->s_line);
+			free(g_ex->line);
+			free_strrarr(g_ex->s_line);
 			return (true);
 		}
 		execute_command_shell(parse);
@@ -121,9 +121,6 @@ static bool	process_command(void)
 
 			Finally we process then command and continue to the next one
 
-// TO-DO valider comment bien free toute la structure, valider
-valider aussi que l'on oublie de rien free jamais
-genre quand line == NULL
  * 
  * @param argc 
  * @param argv 
@@ -136,22 +133,22 @@ int	main(int argc, char **argv, char **env)
 	if (setup_minishell(argc, env) == 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
-		free(ex);
+		free(g_ex);
 		return (1);
 	}
 	while (1)
 	{
 		prompt_and_read_input();
-		if (ex->line == NULL)
+		if (g_ex->line == NULL)
 		{
-			free(ex->line);
+			free(g_ex->line);
 			write(1, "exit\n", 5);
-			free_strrarr(ex->new_env);
+			free_strrarr(g_ex->new_env);
 			exit (0);
 		}
 		if (process_command())
 			continue ;
 	}
-	free (ex);
+	free (g_ex);
 	//ft_exit()
 }

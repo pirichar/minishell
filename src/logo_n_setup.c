@@ -74,21 +74,21 @@ void	configure_terminal(void)
 int	setup_minishell(int argc, char **env)
 {
 	configure_terminal();
-	ex = ft_calloc(1, sizeof(t_exec));
-	if (ex == NULL)
+	g_ex = ft_calloc(1, sizeof(t_exec));
+	if (g_ex == NULL)
 		exit(1);
-	ex->status = 0;
-	ex->foreground_job_active = 0;
-	ex->line = NULL;
-	ex->prompt = NULL;
+	g_ex->status = 0;
+	g_ex->foreground_job_active = 0;
+	g_ex->line = NULL;
+	g_ex->prompt = NULL;
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
-		free(ex);
+		free(g_ex);
 		return (1);
 	}
 	print_logo(env);
-	ex->new_env = copy_env(env);
+	g_ex->new_env = copy_env(env);
 	setup_signal_handlers();
 	return (0);
 }

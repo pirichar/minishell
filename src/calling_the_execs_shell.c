@@ -28,9 +28,9 @@
 
 void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 {
-	int	fd;
-	int	i;
-	char **tmp;
+	int		fd;
+	int		i;
+	char	**tmp;
 
 	i = 1;
 	parse->i = 0;

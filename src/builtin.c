@@ -55,40 +55,6 @@ void	set_variable(char ***env, char *var, char *new_var)
 }
 
 /**
- * @brief 
- * 
- * @param s_line 
- * @param new_env 
- * @param parse 
- */
-void	mini_dollar(char **s_line, char ***new_env, t_parsing *parse)
-{
-	char	*to_print;
-	char	**splitted;
-
-	parse->b_in = true;
-	if (s_line[1] == NULL)
-		return ;
-	if (s_line[1][0] == '?' && s_line[1][1] == '\0')
-	{
-		if (parse->ex->cmd_rtn == 512)
-			printf("127\n");
-		else if (parse->ex->cmd_rtn != 0)
-			printf("1\n");
-		else
-			printf("%d\n", parse->ex->cmd_rtn);
-		return ;
-	}
-	to_print = return_variable(*new_env, s_line[1]);
-	if (to_print)
-	{
-		splitted = ft_split(to_print, '=');
-		printf("%s\n", splitted[1]);
-		free_strrarr(splitted);
-	}
-}
-
-/**
  * @brief Basically what the name of the function says , not bad eh?
 			This function is called from execution functions
 			Echo
@@ -120,6 +86,4 @@ void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 		mini_env((*new_env), parse);
 	else if (ft_strncmp(*s_line[0], "exit", 5) == 0)
 		mini_exit(*s_line, parse);
-	else if (ft_strncmp(*s_line[0], "$", ft_strlen(*s_line[0])) == 0)
-		mini_dollar(*s_line, new_env, parse);
 }
