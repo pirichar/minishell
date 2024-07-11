@@ -1,17 +1,17 @@
 #include "../include/minishell.h"
 
-void	helper_get_arg(t_parsing	*parse_list, int y, char ***tab_tab)
+void	helper_get_arg(t_parsing	*parse_list, int i, char ***tab_tab)
 {
-	int	i;
+	int	y;
 	int	z;
 
-	i = 0;
+	y = 0;
 	z = 0;
 	while (parse_list->tkns_list->tok_type != PIPE)
 	{
 		z = 0;
 		tab_tab[i][y] = ft_calloc(ft_strlen
-				(parse_list->tkns_list->data), sizeof(char));
+				(parse_list->tkns_list->data + 1), sizeof(char));
 		while (parse_list->tkns_list->data[z] != '\0')
 		{
 			tab_tab[i][y][z] = parse_list->tkns_list->data[z];
@@ -29,18 +29,16 @@ char	***get_argarray(t_parsing *parse_list)
 {
 	char	***tab_tab;
 	int		i;
-	int		y;
 
 	i = 0;
 	tab_tab = ft_calloc(parse_list->nb_of_pipes, sizeof(char **));
 	while (parse_list->tkns_list != NULL)
 	{
-		y = 0;
 		if (parse_list->tkns_list->tok_type
 			== ARG && i < parse_list->nb_of_pipes)
 		{
 			tab_tab[i] = prep_tab(parse_list->tkns_list);
-			helper_get_arg(parse_list, y, tab_tab);
+			helper_get_arg(parse_list, i, tab_tab);
 			i++;
 		}
 		else if (parse_list->tkns_list->next != NULL)

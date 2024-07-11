@@ -34,7 +34,7 @@ $(OBJ)/%.o:	$(SRC)/%.c
 			
 $(NAME)	:	$(OBJ) $(OBJS)
 			$(MAKELIBFT) bonus
-			$(CC) $(OBJS) -L$(LIBFTDIR) -lft -Llinlib -lreadline -lcurses -o $(NAME) 
+			$(CC) $(OBJS) -L$(LIBFTDIR) -lft -Lm1lib -lreadline -lcurses -o $(NAME) 
 
 $(OBJ):
 			@mkdir -p $(OBJ)
