@@ -84,6 +84,7 @@ static bool	process_command(void)
 		parse = start_parse(g_ex->line, g_ex->status);
 		if (g_ex->fail_heredoc)
 		{
+			free(parse->pids);
 			ft_clean(&parse);
 			g_ex->fail_heredoc = false;
 			return(false);
