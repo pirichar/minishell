@@ -120,6 +120,7 @@ void	ft_clean(t_parsing	**parse)
 	free ((*parse));
 	*parse = NULL;
 	free (g_ex->line);
+	g_ex->line = NULL;
 }
 
 /**
@@ -152,5 +153,6 @@ void	ft_exit(t_parsing	*parse)
 	}
 	free (g_ex->line);
 	free_strrarr(g_ex->new_env);
-	free (g_ex);
+	if (g_ex)
+		free (g_ex);
 }
