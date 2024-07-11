@@ -82,7 +82,12 @@ static bool	process_command(void)
 	{
 		add_history(g_ex->line);
 		parse = start_parse(g_ex->line, g_ex->status);
-		if (parse == NULL || g_ex->fail_heredoc)
+		if (g_ex->fail_heredoc)
+		{
+			ft_clean(&parse);
+			return(true);
+		}
+		if (parse == NULL)
 		{
 			ft_clean(&parse);
 			ft_exit(parse);
@@ -141,7 +146,6 @@ int	main(int argc, char **argv, char **env)
 			free(g_ex);
 			exit (0);
 		}
-		if (process_command())
-			continue ;
+		process_command();
 	}
 }
