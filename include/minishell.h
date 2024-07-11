@@ -259,4 +259,9 @@ int				check_pipe_name(t_tkns *tkns_array);
 // ft_signals
 void	handle_sigint(int sig);
 
+
+//arena_str
+char	**ft_split_arena(const char *s, char c);
+char	*ft_strjoin_arena(const char *s1, const char *s2);
+
 #endif

@@ -41,3 +41,5 @@ void    arena_clear(t_arena *arena);
  * @param arena 
  */
 void    arena_free(t_arena *arena);
+
+void    arena_log_watermark(t_arena *arena);

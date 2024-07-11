@@ -91,13 +91,13 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 		fprintf(stderr, "PATH environment variable not set\n");
 		return ;
 	}
-	cmd[0] = ft_strjoin("/", cmd[0]);
+	cmd[0] = ft_strjoin_arena("/", cmd[0]);
 	i = 0;
 	while (p.path[i])
 	{
 		if (search_path_exec(p.path[i], cmd[0]) == true)
 		{
-			cmd[0] = ft_strjoin(p.path[i], cmd[0]);
+			cmd[0] = ft_strjoin_arena(p.path[i], cmd[0]);
 			execve(cmd[0], cmd, env);
 			exit(1);
 		}

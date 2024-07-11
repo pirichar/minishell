@@ -6,7 +6,7 @@
 /*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/20 11:53:03 by pirichar          #+#    #+#             */
-/*   Updated: 2021/11/05 23:59:52 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/07/11 15:09:46 by pirichar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*ft_swap_neg(char *str)
 	return (str);
 }
 
-static char	*ft_swap(char *str)
+char	*ft_swap(char *str)
 {
 	int	i;
 	int	ri;

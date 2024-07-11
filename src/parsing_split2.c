@@ -30,10 +30,10 @@ t_tkns	*make_node(t_tkns *matrix, char *s)
 	int		i;
 
 	i = 0;
-	new = (t_tkns *)malloc(sizeof(*new));
+	new = (t_tkns *)arena_alloc(&g_ex.arena, sizeof(*new));
 	if (new == NULL)
 		return (NULL);
-	new->data = ft_calloc(MAX_INPUT, sizeof(char));
+	new->data = arena_alloc(&g_ex.arena, MAX_INPUT);
 	while (s[i] && ft_isspace(s[i]) == false)
 	{
 		new->data[i] = s[i];
@@ -50,10 +50,10 @@ t_tkns	*node_redir(t_tkns *matrix, char *s, int size)
 	int		i;
 
 	i = 0;
-	new = (t_tkns *)malloc(sizeof(*new));
+	new = (t_tkns *)arena_alloc(&g_ex.arena, sizeof(*new));
 	if (new == NULL)
 		return (NULL);
-	new->data = malloc(sizeof(char *));
+	new->data = arena_alloc(&g_ex.arena, sizeof(char *));
 	while (i < size)
 	{
 		new->data[i] = s[i];
@@ -69,7 +69,7 @@ t_tkns	*init_list(char *s)
 {
 	t_tkns	*list;
 
-	list = (t_tkns *)ft_calloc(1,sizeof(*list));
+	list = (t_tkns *)arena_alloc(&g_ex.arena, sizeof(*list));
 	if (list == NULL)
 		return (NULL);
 	list->dollar_sign = false;

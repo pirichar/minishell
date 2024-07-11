@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include "arena.h"
 
 /**
  * @brief Return the lenght of an array of str
@@ -34,6 +35,34 @@ void	free_strrarr(char **to_free)
 	free(to_free);
 }
 
+char	*ft_itoa_arena(long long n)
+{
+	char	*rtn;
+	int		i;
+
+	i = 0;
+	rtn = arena_alloc(&g_ex.arena, 12);
+	if (!rtn)
+		return (NULL);
+	if (n == 0)
+	{
+		rtn[0] = '0';
+		i++;
+	}
+	if (n < 0)
+	{
+		rtn[i++] = '-';
+		rtn[i++] = '0' - n % 10;
+		n = n / -10;
+	}
+	while (n)
+	{
+		rtn[i] = n % 10 + '0';
+		i++;
+		n = n / 10;
+	}
+	return (ft_swap(rtn));
+}
 /**
  * @brief Local helper function
  			This function takes care of setting up

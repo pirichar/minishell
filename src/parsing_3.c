@@ -10,8 +10,8 @@ void	helper_get_arg(t_parsing	*parse_list, int i, char ***tab_tab)
 	while (parse_list->tkns_list->tok_type != PIPE)
 	{
 		z = 0;
-		tab_tab[i][y] = ft_calloc(ft_strlen
-				(parse_list->tkns_list->data) + 1, sizeof(char));
+		tab_tab[i][y] = arena_alloc(&g_ex.arena,
+			ft_strlen(parse_list->tkns_list->data + 1) * sizeof(char));
 		while (parse_list->tkns_list->data[z] != '\0')
 		{
 			tab_tab[i][y][z] = parse_list->tkns_list->data[z];
@@ -31,7 +31,7 @@ char	***get_argarray(t_parsing *parse_list)
 	int		i;
 
 	i = 0;
-	tab_tab = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(char **));
+	tab_tab = arena_alloc(&g_ex.arena,(parse_list->nb_of_pipes + 1) * sizeof(char **));
 	while (parse_list->tkns_list != NULL)
 	{
 		if (parse_list->tkns_list->tok_type
@@ -90,7 +90,7 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 		return (s1);
 	if (!s1)
 		return (s2);
-	str = ft_calloc(MAX_INPUT, sizeof(char));
+	str = arena_alloc(&g_ex.arena, MAX_INPUT);
 	while (s1[i])
 	{
 		str[i] = s1[i];
@@ -108,7 +108,7 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 
 char	*expand_var(char *line, t_parsing *p_l)
 {
-	p_l->p_new = ft_calloc(MAX_INPUT, sizeof(char));
+	p_l->p_new = arena_alloc(&g_ex.arena, MAX_INPUT);
 	while (line[p_l->index])
 	{
 		if (line[p_l->index] == '$')

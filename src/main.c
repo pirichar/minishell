@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include "arena.h"
 
 t_exec		g_ex;
 
@@ -19,7 +20,6 @@ void	prompt_and_read_input(void)
 {
 	g_ex.prompt = set_prompt(g_ex.new_env);
 	g_ex.line = readline(g_ex.prompt);
-	free(g_ex.prompt);
 }
 
 /**
@@ -142,9 +142,11 @@ int	main(int argc, char **argv, char **env)
 			write(1, "exit\n", 5);
 			free(g_ex.line);
 			free_strrarr(g_ex.new_env);
-			exit (0);
+			break;
 		}
 		if (process_command())
 			break;
+		arena_clear(&g_ex.arena);
 	}
+	arena_free(&g_ex.arena);
 }

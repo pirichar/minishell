@@ -44,6 +44,7 @@ void	*arena_alloc(t_arena *arena, size_t size)
         dprintf(STDERR_FILENO, "Out of memory\n");
         exit(EXIT_FAILURE);
     }
+    ft_bzero(address, size);
     return address;
 }
 
