@@ -34,8 +34,7 @@ int	do_trunc(t_parsing *p_l)
 			p_l->buf = readline("heredoc>");
 			if (p_l->buf == NULL)
 				break;
-			if (!ft_strncmp(p_l->tkns_list->next->data,
-					p_l->buf, ft_strlen(p_l->tkns_list->next->data)))
+			if (!ft_strcmp(p_l->tkns_list->next->data, p_l->buf))
 				break ;
 			write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
 			free (p_l->buf);
