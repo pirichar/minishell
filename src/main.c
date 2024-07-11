@@ -85,7 +85,8 @@ static bool	process_command(void)
 		if (g_ex->fail_heredoc)
 		{
 			ft_clean(&parse);
-			return(true);
+			g_ex->fail_heredoc = false;
+			return(false);
 		}
 		if (parse == NULL)
 		{
@@ -146,6 +147,7 @@ int	main(int argc, char **argv, char **env)
 			free(g_ex);
 			exit (0);
 		}
-		process_command();
+		if (process_command())
+			break;
 	}
 }
