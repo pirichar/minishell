@@ -40,6 +40,7 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 	{
 		parse->f_command = true;
 		fd = execute(parse->infile, &parse->pids[0], *(new_env), parse);
+		parse->f_command = false;
 	//	tmp = cmd;
 		cmd = parse->pipes_args[parse->i];
 		//free_strrarr(tmp);
