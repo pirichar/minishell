@@ -115,6 +115,7 @@ void	ft_clean(t_parsing	*parse)
 		while (parse->pipes_args[parse->i])
 			free_strrarr(parse->pipes_args[parse->i++]);
 	}
+	free (parse->pipes_args);
 	free (parse->p_new);
 	free (parse);
 	free (g_ex->line);
