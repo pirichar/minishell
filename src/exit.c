@@ -87,7 +87,7 @@ void	mini_exit(char **s_line, t_parsing *parse)
 	// free parse_list
 
 	EXEC
-	// free g_ex->line
+	// free g_ex.line
 
 	Pids are freed in wait for pids
  * 
@@ -119,7 +119,7 @@ void	ft_clean(t_parsing	**parse)
 	free ((*parse)->p_new);
 	free ((*parse));
 	*parse = NULL;
-	free (g_ex->line);
+	free (g_ex.line);
 }
 
 /**
@@ -129,7 +129,7 @@ void	ft_clean(t_parsing	**parse)
 	// free parse_list->tkn->list 
 
 	EXEC
-	// free g_ex->line
+	// free g_ex.line
 	// free env
 	// free ex
 
@@ -150,7 +150,7 @@ void	ft_exit(t_parsing	*parse)
 			parse->tkns_list = tmp;
 		}
 	}
-	free (g_ex->line);
-	if (g_ex->fail_heredoc == false)
-		free_strrarr(g_ex->new_env);
+	free (g_ex.line);
+	if (g_ex.fail_heredoc == false)
+		free_strrarr(g_ex.new_env);
 }

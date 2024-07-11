@@ -17,6 +17,7 @@
 #include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include "../src/arena.h"
 
 # define EMPTY 0
 # define CMD 1
@@ -39,14 +40,12 @@ typedef struct	s_exec
 	int		status;
 	int		cmd_rtn;
 	bool	fail_heredoc;
-	int 	foreground_job_active;  // 0 means no job is active, 1 means a job is active
-	struct sigaction sa_int;
-	struct sigaction sa_quit;
+	t_arena arena;
 }				t_exec;
 
 // ex est ma seul variable globale pour l'instant , je l'utilise avec les signaux et à travers l'exécution en général
 // pour des raison de facilite d'acces j'ai choisi cette variable comme variable global
-extern t_exec		*g_ex;
+extern t_exec		g_ex;
 
 typedef struct s_files
 {
@@ -101,7 +100,6 @@ typedef struct s_parsing
 	bool	check_nl;
 	int		i;
 	char 	*to_unset;
-	t_exec 	*ex;
 	int		file;
 	char	*buf;
 	int		quote_start;

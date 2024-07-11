@@ -53,22 +53,22 @@ char	*search_env(char *s, int search, t_parsing *p_list)
 {
 	p_list->p_x = 0;
 	p_list->p_start = search;
-	while (g_ex->new_env[p_list->p_x])
+	while (g_ex.new_env[p_list->p_x])
 	{
 		p_list->p_y = 0;
 		search = p_list->p_start;
-		while (g_ex->new_env[p_list->p_x][p_list->p_y] && s[search] != '\0'
+		while (g_ex.new_env[p_list->p_x][p_list->p_y] && s[search] != '\0'
 			&& ft_isspace(s[search]) == false)
 		{
-			if (s[search] != g_ex->new_env[p_list->p_x][p_list->p_y])
+			if (s[search] != g_ex.new_env[p_list->p_x][p_list->p_y])
 				break ;
 			if ((ft_isspace(s[search + 1]) == true || s[search + 1] == '\0'
 					|| s[search + 1] == p_list->quote_type)
-				&& g_ex->new_env[p_list->p_x][p_list->p_y + 1] == '=')
+				&& g_ex.new_env[p_list->p_x][p_list->p_y + 1] == '=')
 			{
 				p_list->index += p_list->p_y + 2;
 				p_list->to_skip = p_list->p_y + 2;
-				return (g_ex->new_env[p_list->p_x]);
+				return (g_ex.new_env[p_list->p_x]);
 			}
 			p_list->p_y++;
 			search++;

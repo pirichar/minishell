@@ -60,7 +60,7 @@ static char	*pwd_prompt(char *new_env[], char *blue_user)
 
 /**
  * @brief Function called to return a prompt to give to minishell
-			Its called in main.c for g_ex->prompt
+			Its called in main.c for g_ex.prompt
 			or in ft_signals for the prompt in sigint
 			It will use its local functions to
 			Get the PWD if available

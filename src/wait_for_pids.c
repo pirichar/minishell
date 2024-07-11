@@ -14,7 +14,7 @@ void	wait_for_pids(t_parsing *parse)
 	i = 0;
 	while (i <= parse->nb_of_pipes)
 	{
-		waitpid(parse->pids[i], &parse->ex->cmd_rtn, 0);
+		waitpid(parse->pids[i], &g_ex.cmd_rtn, 0);
 		i++;
 	}
 	if (parse->infile != 0)
