@@ -117,6 +117,7 @@ typedef struct s_parsing
 	int		p_y;
 	int		p_start;
 	char	*p_new;
+	bool	fail_heredoc;
 }				t_parsing;
 
 

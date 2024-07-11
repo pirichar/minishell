@@ -10,8 +10,12 @@ static int	do_pipe(t_parsing *parse_list)
 static t_parsing	*helper1(t_parsing *p_l)
 {
 	if (p_l->tkns_list->tok_type == TRUNC)
+	{
 		if (do_trunc(p_l) == 1)
 			return (p_l);
+		else
+			return(NULL);
+	}
 	if (p_l->tkns_list->tok_type == IN_OUT)
 		if (do_in_out(p_l) == 1)
 			return (p_l);
@@ -39,11 +43,14 @@ static t_parsing	*helper1(t_parsing *p_l)
  */
 t_parsing	*check_metachar(t_parsing *p_l)
 {
+	t_parsing	*tmp;
+
 	p_l->start = p_l->tkns_list;
 	while (p_l->tkns_list)
 	{
-		if (helper1(p_l))
-			return (helper1(p_l));
+		tmp = helper1(p_l);
+		if (tmp)
+			return (tmp);
 		if ((p_l->tkns_list->tok_type == PIPE)
 			&& (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD))
 			p_l->tkns_list->next->tok_type = ARG;
