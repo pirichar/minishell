@@ -53,7 +53,5 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 			parse_list->index += 1;
 	}
 	parse_list->tkns_list = parse_list->start;
-	if (parse_list->old)
-		free(parse_list->old);
 	return (parse_list);
 }

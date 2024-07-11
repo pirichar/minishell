@@ -34,8 +34,8 @@ t_arena *arena_init(t_arena *arena, size_t size)
  */
 void	*arena_alloc(t_arena *arena, size_t size)
 {
-    char* address = arena->block + arena->index;
-    address = (char*)align_up((size_t)address, 16);
+    arena->index = align_up(arena->index, 16);
+    char *address = arena->block + arena->index;
     arena->index += size;
     if (arena->index > arena->high_watermark)
         arena->high_watermark = arena->index;

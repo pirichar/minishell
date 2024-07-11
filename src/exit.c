@@ -138,18 +138,7 @@ void	ft_clean(t_parsing	**parse)
  */
 void	ft_exit(t_parsing	*parse)
 {
-	t_tkns	*tmp;
-
-	if (parse && parse->tkns_list)
-	{
-		while (parse->tkns_list)
-		{
-			tmp = parse->tkns_list->next;
-			free(parse->tkns_list->data);
-			free(parse->tkns_list);
-			parse->tkns_list = tmp;
-		}
-	}
+	(void)parse;
 	free (g_ex.line);
 	if (g_ex.fail_heredoc == false)
 		free_strrarr(g_ex.new_env);

@@ -19,7 +19,5 @@ void	wait_for_pids(t_parsing *parse)
 	}
 	if (parse->infile != 0)
 		close(parse->infile);
-	if (parse->pids != 0)
-		free(parse->pids);
 	setup_signal_handlers();
 }
