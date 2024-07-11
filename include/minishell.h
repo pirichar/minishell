@@ -38,6 +38,7 @@ typedef struct	s_exec
 	char	*prompt;
 	int		status;
 	int		cmd_rtn;
+	bool	fail_heredoc;
 	int 	foreground_job_active;  // 0 means no job is active, 1 means a job is active
 	struct sigaction sa_int;
 	struct sigaction sa_quit;
@@ -117,7 +118,6 @@ typedef struct s_parsing
 	int		p_y;
 	int		p_start;
 	char	*p_new;
-	bool	fail_heredoc;
 }				t_parsing;
 
 

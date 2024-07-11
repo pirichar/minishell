@@ -48,7 +48,7 @@ int	do_trunc(t_parsing *p_l)
 	signal(SIGINT, &handle_sigint);
 	if (WIFEXITED(w_status) && WEXITSTATUS(w_status) == INTERRUPT_SIG)
 	{
-		p_l->fail_heredoc = true;
+		g_ex->fail_heredoc = true;
 		return(1);
 	}
 	return(0);

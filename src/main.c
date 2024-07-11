@@ -82,7 +82,7 @@ static bool	process_command(void)
 	{
 		add_history(g_ex->line);
 		parse = start_parse(g_ex->line, g_ex->status);
-		if (parse == NULL || parse->fail_heredoc)
+		if (parse == NULL || g_ex->fail_heredoc)
 		{
 			ft_clean(&parse);
 			ft_exit(parse);

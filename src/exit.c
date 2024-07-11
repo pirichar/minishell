@@ -152,7 +152,8 @@ void	ft_exit(t_parsing	*parse)
 		}
 	}
 	free (g_ex->line);
-	free_strrarr(g_ex->new_env);
+	if (g_ex->fail_heredoc == false)
+		free_strrarr(g_ex->new_env);
 	if (g_ex)
 		free (g_ex);
 }
