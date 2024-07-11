@@ -19,6 +19,8 @@ NOTE:We update_sigquit_handling
 void	prompt_and_read_input(void)
 {
 	g_ex.prompt = set_prompt(g_ex.new_env);
+	if (g_ex.line)
+		free(g_ex.line);
 	g_ex.line = readline(g_ex.prompt);
 }
 

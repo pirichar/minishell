@@ -55,7 +55,7 @@ char	**path_to_starrr(char **env, char *var)
 
 	p_arr = NULL;
 	len = strlen_path(env);
-	path = calloc(sizeof(char), len);
+	path = ft_calloc(sizeof(char), len);
 	i = 0;
 	while (env[i])
 	{
@@ -118,10 +118,6 @@ bool	search_path_exec(const char *p_arr, const char *cmd)
 
 	line = ft_strjoin_arena(p_arr, cmd);
 	if (access(line, X_OK) == 0)
-	{
-		free(line);
 		return (true);
-	}
-	free(line);
 	return (false);
 }
