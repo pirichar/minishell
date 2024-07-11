@@ -28,6 +28,7 @@
 # define PIPE 7
 # define IN_OUT 8
 # define SPECIAL_PIPE 9
+# define INTERRUPT_SIG 130
 
 typedef struct	s_exec
 {
@@ -255,5 +256,9 @@ void			print_tkns_array_debug(t_parsing parse_list);
 int				count_cmd(t_tkns *tkns_list);
 int				init_first_token_nodes(t_parsing *parse_list);
 int				check_pipe_name(t_tkns *tkns_array);
+
+
+// ft_signals
+void	handle_sigint(int sig);
 
 #endif

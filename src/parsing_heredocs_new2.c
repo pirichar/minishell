@@ -1,4 +1,12 @@
 #include "../include/minishell.h"
+#include <signal.h>
+
+void	stop_heredoc(int signal)
+{
+	(void)signal;
+	write(STDERR_FILENO, "\n", 1);
+	exit(INTERRUPT_SIG);
+}
 
 /**
  * @brief 
@@ -8,25 +16,38 @@
  */
 int	do_trunc(t_parsing *p_l)
 {
+	pid_t pid;
+	int w_status;
+	
 	if (check_file_and_delim_name(p_l->tkns_list) == 1)
 		return (1);
 	p_l->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
 	if (p_l->file == -1)
 		return (1);
-	while (1)
+	signal(SIGINT, SIG_IGN);
+	pid = fork();
+	if (pid == 0)
 	{
-		write(1, "heredoc>", 9);
-		p_l->buf = get_next_line(0);
-		if (!ft_strncmp(p_l->tkns_list->next->data,
-				p_l->buf, ft_strlen(p_l->tkns_list->next->data)))
-			break ;
-		write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
+		signal(SIGINT, &stop_heredoc);
+		while (1)
+		{
+			p_l->buf = readline("heredoc>");
+			if (p_l->buf == NULL)
+				break;
+			if (!ft_strncmp(p_l->tkns_list->next->data,
+					p_l->buf, ft_strlen(p_l->tkns_list->next->data)))
+				break ;
+			write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
+			free (p_l->buf);
+		}
 		free (p_l->buf);
+		close(p_l->file);
+		p_l->infile = open("./div/here_doc", O_RDONLY);
+		exit(0);
 	}
-	free (p_l->buf);
-	close(p_l->file);
-	p_l->infile = open("./div/here_doc", O_RDONLY);
-	return (0);
+	waitpid(pid, &w_status, 0);
+	signal(SIGINT, &handle_sigint);
+	return(0);
 }
 
 int	do_in_out(t_parsing *parse_list)

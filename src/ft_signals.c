@@ -48,7 +48,7 @@ be expected to to for itself, it must do itself.
  * 
  * @param sig is required by the sig action struct
  */
-static void	handle_sigint(int sig)
+void	handle_sigint(int sig)
 {
 	(void) sig;
 	write(1, "\n", 1);
