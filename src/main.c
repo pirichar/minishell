@@ -87,7 +87,8 @@ static bool	process_command(void)
 		parse = start_parse(g_ex->line, g_ex->status);
 		if (parse == NULL)
 		{
-			free(g_ex->line);
+			ft_clean(parse);
+			ft_exit(parse);
 			return (true);
 		}
 		parse->ex = g_ex;
