@@ -146,5 +146,6 @@ int	main(int argc, char **argv, char **env)
 			break;
 		arena_clear(&g_ex.arena);
 	}
+	arena_log_watermark(&g_ex.arena);
 	arena_free(&g_ex.arena);
 }

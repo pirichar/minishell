@@ -21,9 +21,11 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 
 	if (s_line[1] == NULL)
 	{
-		printf("exit	if (s_line[1] == NULL) \n");
+		printf("exit\n");
 		rl_clear_history();
 		ft_exit(*parse);
+		arena_log_watermark(&g_ex.arena);
+		arena_free(&g_ex.arena);
 		exit (0);
 	}
 	i = 0;
@@ -36,6 +38,8 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 				s_line[1]);
 			rl_clear_history();
 			ft_exit(*parse);
+			arena_log_watermark(&g_ex.arena);
+			arena_free(&g_ex.arena);
 			exit (255);
 		}
 		i++;
@@ -72,6 +76,8 @@ void	mini_exit(char **s_line, t_parsing *parse)
 	tmp = ft_atoi(s_line[1]);
 	printf("exit within mini exit\n");
 	rl_clear_history();
+	arena_log_watermark(&g_ex.arena);
+	arena_free(&g_ex.arena);
 	ft_exit(parse);
 	exit (tmp);
 }
