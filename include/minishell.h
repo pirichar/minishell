@@ -185,7 +185,6 @@ void			mini_pwd(t_parsing *parse);
 
 //signals
 void setup_signal_handlers();
-void update_sigquit_handling();
 
 //str_arr_fcn.c
 void			free_strrarr(char **to_free);

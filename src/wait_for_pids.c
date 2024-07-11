@@ -21,4 +21,6 @@ void	wait_for_pids(t_parsing *parse)
 		close(parse->infile);
 	if (parse->pids != 0)
 		free(parse->pids);
+	signal(SIGINT, &handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }

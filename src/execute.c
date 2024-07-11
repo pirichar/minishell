@@ -39,6 +39,8 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
  */
 static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (fd_in != 0)
 	{
 		dup2(fd_in, 0);
@@ -103,6 +105,7 @@ int	execute(int fd_in, int *p, char **env, t_parsing *parse)
 	pipe(pipes);
 	if (fd_in != -1)
 	{
+		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == 0)
 			exec_child(fd_in, pipes[1], parse, env);

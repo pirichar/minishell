@@ -31,6 +31,8 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 		close(parse->outfile);
 	}
 	look_for_builtins(&cmd, env, parse);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (parse->b_in == false && access (cmd[0], X_OK) == 0)
 	{
 		execve(cmd[0], cmd, *(env));
@@ -74,6 +76,7 @@ void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 			mini_echo(cmd, parse);
 		else
 		{
+			signal(SIGINT, SIG_IGN);
 			pid = fork();
 			if (pid == 0)
 				exec_solo_child(parse, cmd, env);

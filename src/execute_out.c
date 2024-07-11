@@ -25,6 +25,8 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 		close(fds[1]);
 	}
 	look_for_builtins(&cmd, &env, parse);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (parse->b_in == false && access(cmd[0], X_OK) == 0)
 	{
 		execve(cmd[0], cmd, env);
@@ -59,6 +61,7 @@ void	execute_out(char **cmd, int fds[2], char **env, t_parsing *parse)
 {
 	int	pid;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
 	parse->ex->cmd_rtn = 0;
 	if (pid == 0)

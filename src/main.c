@@ -18,7 +18,6 @@ NOTE:We update_sigquit_handling
 void	prompt_and_read_input(void)
 {
 	g_ex->prompt = set_prompt(g_ex->new_env);
-	update_sigquit_handling();
 	g_ex->line = readline(g_ex->prompt);
 	free(g_ex->prompt);
 }
@@ -42,11 +41,9 @@ void	prompt_and_read_input(void)
 static void	execute_command_shell(t_parsing *parse)
 {
 	g_ex->foreground_job_active = 1;
-	update_sigquit_handling();
 	calling_the_execs_shell(g_ex->s_line, &g_ex->new_env, parse);
 	wait_for_pids(parse);
 	g_ex->foreground_job_active = 0;
-	update_sigquit_handling();
 	ft_clean(parse);
 }
 
