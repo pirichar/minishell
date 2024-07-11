@@ -150,7 +150,7 @@ bool			search_path_exec(const char *p_arr, const char *cmd);
 
 //exit.c
 void			mini_exit(char **s_line, t_parsing *parse);
-void			ft_clean(t_parsing* parse);
+void			ft_clean(t_parsing	**parse);
 void			ft_exit(t_parsing* parse);
 
 //execute.c

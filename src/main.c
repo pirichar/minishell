@@ -44,7 +44,7 @@ static void	execute_command_shell(t_parsing *parse)
 	calling_the_execs_shell(g_ex->s_line, &g_ex->new_env, parse);
 	wait_for_pids(parse);
 	g_ex->foreground_job_active = 0;
-	ft_clean(parse);
+	ft_clean(&parse);
 }
 
 /**
@@ -84,7 +84,7 @@ static bool	process_command(void)
 		parse = start_parse(g_ex->line, g_ex->status);
 		if (parse == NULL || parse->fail_heredoc)
 		{
-			ft_clean(parse);
+			ft_clean(&parse);
 			ft_exit(parse);
 			return (true);
 		}

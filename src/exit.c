@@ -93,31 +93,32 @@ void	mini_exit(char **s_line, t_parsing *parse)
  * 
  * @param parse struct to free
  */
-void	ft_clean(t_parsing	*parse)
+void	ft_clean(t_parsing	**parse)
 {
 	t_tkns	*tmp;
 
-	if (parse && parse->tkns_list)
+	if ((*parse) && (*parse)->tkns_list)
 	{
-		while (parse->tkns_list)
+		while ((*parse)->tkns_list)
 		{
-			tmp = parse->tkns_list->next;
-			free(parse->tkns_list->data);
-			free(parse->tkns_list);
-			parse->tkns_list = tmp;
+			tmp = (*parse)->tkns_list->next;
+			free((*parse)->tkns_list->data);
+			free((*parse)->tkns_list);
+			(*parse)->tkns_list = tmp;
 		}
 	}
-	if (parse && *parse->vector_cmd)
-		free_strrarr(parse->vector_cmd);
-	if (parse && parse->pipes_args)
+	if ((*parse) && *(*parse)->vector_cmd)
+		free_strrarr((*parse)->vector_cmd);
+	if ((*parse) && (*parse)->pipes_args)
 	{
-		parse->i = 0;
-		while (parse->pipes_args[parse->i])
-			free_strrarr(parse->pipes_args[parse->i++]);
+		(*parse)->i = 0;
+		while ((*parse)->pipes_args[(*parse)->i])
+			free_strrarr((*parse)->pipes_args[(*parse)->i++]);
 	}
-	free (parse->pipes_args);
-	free (parse->p_new);
-	free (parse);
+	free ((*parse)->pipes_args);
+	free ((*parse)->p_new);
+	free ((*parse));
+	*parse = NULL;
 	free (g_ex->line);
 }
 
