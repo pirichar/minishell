@@ -3,6 +3,20 @@ NAME	=	DunderShell
 LIBFT		= ft
 LIBFTDIR	= include/libft
 MAKELIBFT	= @$(MAKE) -C $(LIBFTDIR)
+OS        = $(shell uname)
+ARCH    = $(shell uname -m)
+
+ifeq ($(OS), Linux)
+LIB_RDLINE    = linlib
+else ifeq ($(OS), Darwin)
+    ifeq ($(ARCH), x86_64)
+    LIB_RDLINE    = lib
+    else
+    LIB_RDLINE    = m1lib
+    endif
+else
+$(error "unsupported OS")
+endif
 
 CFILES	=	environement.c main.c builtin.c execute.c parsing_1.c \
 			exit.c export.c env.c unset.c\
@@ -34,7 +48,7 @@ $(OBJ)/%.o:	$(SRC)/%.c
 			
 $(NAME)	:	$(OBJ) $(OBJS)
 			$(MAKELIBFT) bonus
-			$(CC) $(OBJS) -L$(LIBFTDIR) -lft -Lm1lib -lreadline -lcurses -o $(NAME) 
+			$(CC) $(OBJS) -L$(LIBFTDIR) -lft -L$(LIB_RDLINE) -lreadline -lcurses -o $(NAME) 
 
 $(OBJ):
 			@mkdir -p $(OBJ)
