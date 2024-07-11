@@ -31,6 +31,7 @@ t_parsing	*start_parse(char *line, int status)
 	parse_list->tkns_list = init_list(line);
 	parse_list = new_split(line, parse_list);
 	parse_list = check_metachar(parse_list);
+	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int));
 	parse_list = get_cmd(parse_list);
 	if (parse_list->nb_of_pipes != 0)
 		parse_list->pipes_args = get_argarray(parse_list);

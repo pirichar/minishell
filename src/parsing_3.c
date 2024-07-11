@@ -11,7 +11,7 @@ void	helper_get_arg(t_parsing	*parse_list, int i, char ***tab_tab)
 	{
 		z = 0;
 		tab_tab[i][y] = ft_calloc(ft_strlen
-				(parse_list->tkns_list->data + 1), sizeof(char));
+				(parse_list->tkns_list->data) + 1, sizeof(char));
 		while (parse_list->tkns_list->data[z] != '\0')
 		{
 			tab_tab[i][y][z] = parse_list->tkns_list->data[z];
@@ -31,7 +31,7 @@ char	***get_argarray(t_parsing *parse_list)
 	int		i;
 
 	i = 0;
-	tab_tab = ft_calloc(parse_list->nb_of_pipes, sizeof(char **));
+	tab_tab = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(char **));
 	while (parse_list->tkns_list != NULL)
 	{
 		if (parse_list->tkns_list->tok_type

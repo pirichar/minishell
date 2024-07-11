@@ -38,7 +38,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->to_skip = 0;
 	parse_list->index = 0;
 	parse_list->new_i = 0;
-	parse_list->pids = ft_calloc(parse_list->nb_of_pipes + 1, sizeof(int));
+	parse_list->pids = 0;
 	parse_list->file
 		= open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	close(parse_list->file);

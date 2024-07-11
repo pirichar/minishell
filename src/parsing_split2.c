@@ -69,7 +69,7 @@ t_tkns	*init_list(char *s)
 {
 	t_tkns	*list;
 
-	list = (t_tkns *)malloc(sizeof(*list));
+	list = (t_tkns *)ft_calloc(1,sizeof(*list));
 	if (list == NULL)
 		return (NULL);
 	list->dollar_sign = false;
