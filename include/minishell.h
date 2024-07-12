@@ -29,6 +29,7 @@
 # define PIPE 7
 # define IN_OUT 8
 # define SPECIAL_PIPE 9
+# define TRUNC_ARG 10
 # define INTERRUPT_SIG 130
 
 typedef struct	s_exec

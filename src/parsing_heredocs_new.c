@@ -51,6 +51,8 @@ t_parsing	*check_metachar(t_parsing *p_l)
 		tmp = helper1(p_l);
 		if (tmp)
 			return (tmp);
+		if (p_l->tkns_list->tok_type == TRUNC)
+			p_l->tkns_list->next->tok_type = TRUNC_ARG;
 		if ((p_l->tkns_list->tok_type == PIPE)
 			&& (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD))
 			p_l->tkns_list->next->tok_type = ARG;

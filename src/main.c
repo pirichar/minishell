@@ -93,7 +93,7 @@ static bool	process_command(void)
 		}
 		parse->tkns_list = parse->start;
 		g_ex.s_line = parse->tkns_list->vector_cmd;
-		if (g_ex.s_line[0] == NULL)
+		if (g_ex.s_line && g_ex.s_line[0] == NULL)
 		{
 			free(g_ex.line);
 			free_strrarr(g_ex.s_line);
