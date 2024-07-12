@@ -117,6 +117,7 @@ typedef struct s_parsing
 	int		p_y;
 	int		p_start;
 	char	*p_new;
+	char	**trunc_args;
 }				t_parsing;
 
 
@@ -205,6 +206,7 @@ char			*set_prompt(char *new_env[]);
 t_parsing		*start_parse(char *line, int status);
 bool			ft_isspace(char c);
 t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str);
+t_parsing	*do_copy_trunc_arg(t_parsing *parse_list);
 
 //pasring_2.c
 t_parsing	*get_cmd(t_parsing *parse_list);

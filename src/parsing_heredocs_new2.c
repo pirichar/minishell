@@ -18,7 +18,7 @@ int	do_trunc(t_parsing *p_l)
 {
 	pid_t pid;
 	int w_status;
-	
+
 	if (check_file_and_delim_name(p_l->tkns_list) == 1)
 		return (1);
 	p_l->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
@@ -31,11 +31,12 @@ int	do_trunc(t_parsing *p_l)
 		signal(SIGINT, &stop_heredoc);
 		while (1)
 		{
-			p_l->buf = readline("heredoc>");
+			p_l->buf = readline("heredoc> ");
 			if (p_l->buf == NULL)
 				break;
 			if (!ft_strcmp(p_l->tkns_list->next->data, p_l->buf))
 				break ;
+			p_l->buf =  ft_strjoin(p_l->buf, "\n");
 			write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
 			free (p_l->buf);
 		}

@@ -61,3 +61,43 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str)
 	parse_list->i_vect++;
 	return (parse_list);
 }
+
+char	*str_del_one(char *str)
+{
+	char *new_str;
+	int	i;
+
+	i = 0;
+	new_str = arena_alloc(&g_ex.arena, ft_strlen(str) - 1);
+	while (str[i] != '\n')
+	{
+		new_str[i] = str[i];
+		i++;
+	}
+	return (new_str);
+}
+
+t_parsing	*do_copy_trunc_arg(t_parsing *parse_list)
+{
+	int		fd;
+	char	*tmp;
+
+	tmp = malloc(sizeof(char *));
+	fd = open("./div/here_doc", O_RDONLY);
+	parse_list->vector_cmd[parse_list->i_vect] = arena_alloc(&g_ex.arena, 5);
+	parse_list->vector_cmd[parse_list->i_vect] = "echo";
+	parse_list->i_vect++;
+	while (tmp != NULL)
+	{
+		tmp = get_next_line(fd);
+		if (tmp != NULL)
+		{
+			parse_list->vector_cmd[parse_list->i_vect]
+				= arena_alloc(&g_ex.arena,ft_strlen(tmp));
+			parse_list->vector_cmd[parse_list->i_vect] = tmp;
+			parse_list->i_vect++;
+		}
+	}
+	parse_list->vector_cmd[parse_list->i_vect - 1] = str_del_one(parse_list->vector_cmd[parse_list->i_vect - 1]);
+	return (parse_list);
+}

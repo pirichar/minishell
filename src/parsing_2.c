@@ -13,6 +13,8 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 	{
 		if (parse_list->tkns_list->tok_type == CMD)
 			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
+		if (parse_list->tkns_list->tok_type == TRUNC_ARG)
+			parse_list = do_copy_trunc_arg(parse_list);
 		if (parse_list->tkns_list->next)
 			parse_list->tkns_list = parse_list->tkns_list->next;
 		else
