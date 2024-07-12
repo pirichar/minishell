@@ -86,9 +86,9 @@ static bool	process_command(void)
 			g_ex.fail_heredoc = false;
 			return(false);
 		}
-		if (parse == NULL)
+		if (parse == NULL) // in the case we find an empty string
 		{
-			ft_exit(parse);
+		//	ft_exit(parse);
 			return (true);
 		}
 		parse->tkns_list = parse->start;
@@ -96,7 +96,8 @@ static bool	process_command(void)
 		if (g_ex.s_line && g_ex.s_line[0] == NULL)
 		{
 			free(g_ex.line);
-			free_strrarr(g_ex.s_line);
+			if (*g_ex.s_line != NULL)
+				free_strrarr(g_ex.s_line);
 			return (true);
 		}
 		execute_command_shell(parse);
@@ -142,8 +143,8 @@ int	main(int argc, char **argv, char **env)
 			free_strrarr(g_ex.new_env);
 			break;
 		}
-		if (process_command())
-			break;
+		if (process_command()) // if process command returns true 
+			continue;
 		arena_clear(&g_ex.arena);
 	}
 	arena_log_watermark(&g_ex.arena);
