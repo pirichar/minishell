@@ -84,6 +84,7 @@ int	setup_minishell(int argc, char **env)
 	g_ex.status = 0;
 	g_ex.line = NULL;
 	g_ex.prompt = NULL;
+	g_ex.only_delim = false;
 	print_logo(env);
 	g_ex.new_env = copy_env(env);
 	setup_signal_handlers();
