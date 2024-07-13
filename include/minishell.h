@@ -41,6 +41,7 @@ typedef struct	s_exec
 	int		status;
 	int		cmd_rtn;
 	bool	fail_heredoc;
+	bool	only_delim;
 	t_arena arena;
 }				t_exec;
 

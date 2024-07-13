@@ -19,9 +19,10 @@ NOTE:We update_sigquit_handling
 void	prompt_and_read_input(void)
 {
 	g_ex.prompt = set_prompt(g_ex.new_env);
-	if (g_ex.line)
+	if (g_ex.line && g_ex.only_delim == false)
 		free(g_ex.line);
 	g_ex.line = readline(g_ex.prompt);
+	g_ex.only_delim = false;
 }
 
 /**
@@ -93,8 +94,9 @@ static bool	process_command(void)
 		}
 		parse->tkns_list = parse->start;
 		g_ex.s_line = parse->tkns_list->vector_cmd;
-		if (g_ex.s_line && g_ex.s_line[0] == NULL)
+		if (g_ex.s_line && g_ex.s_line[0] == NULL) // in case we have < 
 		{
+			g_ex.only_delim = true;
 			free(g_ex.line);
 			if (*g_ex.s_line != NULL)
 				free_strrarr(g_ex.s_line);
