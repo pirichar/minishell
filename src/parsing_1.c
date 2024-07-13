@@ -69,35 +69,39 @@ char	*str_del_one(char *str)
 
 	i = 0;
 	new_str = arena_alloc(&g_ex.arena, ft_strlen(str) - 1);
-	while (str[i] != '\n')
+	while (str[i] != '\0')
 	{
+		if (str[i] == '\n' && str[i + 1] == '\0')
+			break ;
 		new_str[i] = str[i];
 		i++;
 	}
 	return (new_str);
 }
 
-t_parsing	*do_copy_trunc_arg(t_parsing *parse_list)
+t_parsing	*do_copy_trunc_arg(t_parsing *p_l)
 {
 	int		fd;
 	char	*tmp;
+	char	*new;
 
-	tmp = malloc(sizeof(char *));
+	new = malloc(sizeof(char *));
 	fd = open("./div/here_doc", O_RDONLY);
-	parse_list->vector_cmd[parse_list->i_vect] = arena_alloc(&g_ex.arena, 5);
-	parse_list->vector_cmd[parse_list->i_vect] = "echo";
-	parse_list->i_vect++;
+	p_l->vector_cmd[p_l->i_vect] = arena_alloc(&g_ex.arena, 5);
+	p_l->vector_cmd[p_l->i_vect] = "echo";
+	p_l->i_vect++;
+	tmp = get_next_line(fd);
 	while (tmp != NULL)
 	{
+		if (new)
+			new = ft_strjoin(new, tmp);
+		else
+			new = tmp;
 		tmp = get_next_line(fd);
-		if (tmp != NULL)
-		{
-			parse_list->vector_cmd[parse_list->i_vect]
-				= arena_alloc(&g_ex.arena,ft_strlen(tmp));
-			parse_list->vector_cmd[parse_list->i_vect] = tmp;
-			parse_list->i_vect++;
-		}
 	}
-	parse_list->vector_cmd[parse_list->i_vect - 1] = str_del_one(parse_list->vector_cmd[parse_list->i_vect - 1]);
-	return (parse_list);
+	p_l->vector_cmd[p_l->i_vect] = arena_alloc(&g_ex.arena,ft_strlen(new));
+	p_l->vector_cmd[p_l->i_vect] = new;
+	p_l->i_vect++;
+	p_l->vector_cmd[p_l->i_vect - 1] = str_del_one(p_l->vector_cmd[p_l->i_vect - 1]);
+	return (p_l);
 }
