@@ -36,7 +36,7 @@ int	do_trunc(t_parsing *p_l)
 				break;
 			if (!ft_strcmp(p_l->tkns_list->next->data, p_l->buf))
 				break ;
-			p_l->buf =  ft_strjoin(p_l->buf, "\n");
+			p_l->buf =  ft_strjoin_arena(p_l->buf, "\n");
 			write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
 			free (p_l->buf);
 		}
@@ -52,6 +52,7 @@ int	do_trunc(t_parsing *p_l)
 		g_ex.fail_heredoc = true;
 		return(1);
 	}
+	p_l->infile = open("./div/here_doc", O_RDONLY);
 	return(0);
 }
 

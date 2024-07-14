@@ -83,25 +83,13 @@ t_parsing	*do_copy_trunc_arg(t_parsing *p_l)
 {
 	int		fd;
 	char	*tmp;
-	char	*new;
 
-	new = malloc(sizeof(char *));
 	fd = open("./div/here_doc", O_RDONLY);
-	p_l->vector_cmd[p_l->i_vect] = arena_alloc(&g_ex.arena, 5);
-	p_l->vector_cmd[p_l->i_vect] = "echo";
-	p_l->i_vect++;
 	tmp = get_next_line(fd);
-	while (tmp != NULL)
+	while (tmp != NULL && p_l->outfile != 1)
 	{
-		if (new)
-			new = ft_strjoin(new, tmp);
-		else
-			new = tmp;
+		write(p_l->outfile, tmp, ft_strlen(tmp));
 		tmp = get_next_line(fd);
 	}
-	p_l->vector_cmd[p_l->i_vect] = arena_alloc(&g_ex.arena,ft_strlen(new));
-	p_l->vector_cmd[p_l->i_vect] = new;
-	p_l->i_vect++;
-	p_l->vector_cmd[p_l->i_vect - 1] = str_del_one(p_l->vector_cmd[p_l->i_vect - 1]);
 	return (p_l);
 }
