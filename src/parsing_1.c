@@ -78,18 +78,3 @@ char	*str_del_one(char *str)
 	}
 	return (new_str);
 }
-
-t_parsing	*do_copy_trunc_arg(t_parsing *p_l)
-{
-	int		fd;
-	char	*tmp;
-
-	fd = open("./div/here_doc", O_RDONLY);
-	tmp = get_next_line(fd);
-	while (tmp != NULL && p_l->outfile != 1)
-	{
-		write(p_l->outfile, tmp, ft_strlen(tmp));
-		tmp = get_next_line(fd);
-	}
-	return (p_l);
-}

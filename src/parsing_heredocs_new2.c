@@ -16,8 +16,9 @@ void	stop_heredoc(int signal)
  */
 int	do_trunc(t_parsing *p_l)
 {
-	pid_t pid;
-	int w_status;
+	pid_t 	pid;
+	int 	w_status;
+	char	*tmp;
 
 	if (check_file_and_delim_name(p_l->tkns_list) == 1)
 		return (1);
@@ -31,16 +32,16 @@ int	do_trunc(t_parsing *p_l)
 		signal(SIGINT, &stop_heredoc);
 		while (1)
 		{
-			p_l->buf = readline("heredoc> ");
-			if (p_l->buf == NULL)
+			tmp = readline("heredoc> ");
+			if (tmp == NULL)
 				break;
-			if (!ft_strcmp(p_l->tkns_list->next->data, p_l->buf))
+			if (!ft_strcmp(p_l->tkns_list->next->data, tmp))
 				break ;
-			p_l->buf =  ft_strjoin(p_l->buf, "\n");
+			p_l->buf =  ft_strjoin_arena(tmp, "\n");
 			write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
-			free (p_l->buf);
+			free(tmp);
 		}
-		free (p_l->buf);
+		free(tmp);
 		close(p_l->file);
 		p_l->infile = open("./div/here_doc", O_RDONLY);
 		exit(0);
