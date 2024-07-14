@@ -8,8 +8,7 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 		= arena_alloc(&g_ex.arena,(parse_list->cmd_count + 1) * sizeof(char *));//TODO AERENA
 	parse_list->start = parse_list->tkns_list;
 	while (parse_list->tkns_list != NULL
-		&& parse_list->tkns_list->data != NULL
-		&& (parse_list->i_vect < parse_list->cmd_count))
+		&& parse_list->tkns_list->data != NULL)
 	{
 		if (parse_list->tkns_list->tok_type == CMD)
 			parse_list = do_copy_cmd(parse_list, parse_list->tkns_list->data);
