@@ -1,4 +1,5 @@
 #include "../include/minishell.h"
+#include "arena.h"
 #include <signal.h>
 
 void	stop_heredoc(int signal)
@@ -43,7 +44,7 @@ int	do_trunc(t_parsing *p_l)
 		}
 		free(tmp);
 		close(p_l->file);
-		p_l->infile = open("./div/here_doc", O_RDONLY);
+		arena_free(&g_ex.arena);
 		exit(0);
 	}
 	waitpid(pid, &w_status, 0);
