@@ -92,7 +92,7 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 		if (search_path_exec(p.path[i], cmd[0]) == true)
 		{
 			cmd[0] = ft_strjoin_arena(p.path[i], cmd[0]);
-			g_ex.status = execve(cmd[0], cmd, env);
+			execve(cmd[0], cmd, env);
 			exit(1);
 		}
 		i++;

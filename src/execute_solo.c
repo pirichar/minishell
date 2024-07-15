@@ -35,7 +35,7 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 	signal(SIGQUIT, SIG_DFL);
 	if (parse->b_in == false && access (cmd[0], X_OK) == 0)
 	{
-		g_ex.status = execve(cmd[0], cmd, *(env));
+		execve(cmd[0], cmd, *(env));
 		exit(1);
 	}
 	else if (parse->b_in == false)

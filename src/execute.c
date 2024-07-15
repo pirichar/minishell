@@ -5,7 +5,7 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 	if (parse->b_in == false
 		&& access(cmd[0], X_OK) == 0)
 	{
-		g_ex.status = execve(cmd[0],
+		execve(cmd[0],
 			cmd, env);
 		exit (1);
 	}

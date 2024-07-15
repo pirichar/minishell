@@ -15,6 +15,8 @@ void	wait_for_pids(t_parsing *parse)
 	while (i <= parse->nb_of_pipes)
 	{
 		waitpid(parse->pids[i], &g_ex.cmd_rtn, 0);
+		if (WIFEXITED(g_ex.cmd_rtn))
+   			 g_ex.status = WEXITSTATUS(g_ex.cmd_rtn);
 		i++;
 	}
 	if (parse->infile != 0)
