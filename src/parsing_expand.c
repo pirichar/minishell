@@ -19,16 +19,11 @@ char *ret_value(char *s1, char *s2, t_parsing *p_l)
             i++;
         }
         while (num[y])
-        {
-            str[i] = num[y];
-            i++;
-            y++;
-        }
+            str[i++] = num[y++];
         free(num);
         p_l->new_i = i;
         p_l->index += 2;
 	    return (str);
     }
-    else
-        return (s1);
+    return (s1);
 }
