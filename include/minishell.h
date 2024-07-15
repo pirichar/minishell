@@ -224,6 +224,9 @@ char	*search_env(char *s, int search, t_parsing *p_list);
 char	*joining(char *s1, char *s2, t_parsing *parse_list);
 char	*expand_var(char *line, t_parsing *p_l);
 
+//parsing_expand
+char 	*ret_value(char *s1, char *s2, t_parsing *p_l);
+
 //parsing_split.c
 t_tkns	*set_toktype(t_tkns *matrix);
 t_parsing	*new_split(char *s, t_parsing *parse_list);
@@ -268,5 +271,6 @@ void	handle_sigint(int sig);
 //arena_str
 char	**ft_split_arena(const char *s, char c);
 char	*ft_strjoin_arena(const char *s1, const char *s2);
+
 
 #endif

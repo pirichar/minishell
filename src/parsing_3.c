@@ -125,6 +125,7 @@ char	*expand_var(char *line, t_parsing *p_l)
 			else if (p_l->quotes == false)
 				p_l->p_new = joining(p_l->p_new, search_env(line,
 							p_l->index + 1, p_l), *&p_l);
+			p_l->p_new = ret_value(p_l->p_new, line, *&p_l);
 		}
 		if ((p_l->index == p_l->quote_end)
 			&& (line[p_l->index] == p_l->quote_type))
