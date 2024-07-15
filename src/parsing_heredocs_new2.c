@@ -42,8 +42,9 @@ int	do_trunc(t_parsing *p_l)
 			write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
 			free(tmp);
 		}
-		free(tmp);
 		close(p_l->file);
+		free(tmp);
+		free_strrarr(g_ex.new_env);
 		arena_free(&g_ex.arena);
 		exit(0);
 	}
