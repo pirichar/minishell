@@ -87,14 +87,13 @@ static bool	process_command(void)
 			g_ex.fail_heredoc = false;
 			return(false);
 		}
-		if (parse == NULL) // in the case we find an empty string
+		if (parse == NULL)
 		{
-		//	ft_exit(parse);
 			return (true);
 		}
 		parse->tkns_list = parse->start;
 		g_ex.s_line = parse->tkns_list->vector_cmd;
-		if (g_ex.s_line && g_ex.s_line[0] == NULL) // in case we have < 
+		if (g_ex.s_line && g_ex.s_line[0] == NULL)
 		{
 			g_ex.only_delim = true;
 			free(g_ex.line);

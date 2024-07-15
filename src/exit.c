@@ -70,11 +70,15 @@ void	mini_exit(char **s_line, t_parsing *parse)
 	if (i > 3)
 	{
 		printf("Dundershell: exit: too many arguments\n");
-		return ;
+		rl_clear_history();
+		ft_exit(parse);
+		arena_log_watermark(&g_ex.arena);
+		arena_free(&g_ex.arena);
+		exit (255);
 	}
 	exit_was_too_long(s_line, &parse);
 	tmp = ft_atoi(s_line[1]);
-	printf("exit within mini exit\n");
+	printf("exit\n");
 	rl_clear_history();
 	arena_log_watermark(&g_ex.arena);
 	arena_free(&g_ex.arena);
@@ -138,7 +142,6 @@ void	ft_clean(t_parsing	**parse)
 	// free g_ex.line
 	// free env
 	// free ex
-
  * 
  * @param parse struct to free
  */

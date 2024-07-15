@@ -29,7 +29,7 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 	signal(SIGQUIT, SIG_DFL);
 	if (parse->b_in == false && access(cmd[0], X_OK) == 0)
 	{
-		execve(cmd[0], cmd, env);
+		g_ex.status = execve(cmd[0], cmd, env);
 		exit(1);
 	}
 	else if (parse->b_in == false)

@@ -70,12 +70,6 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 		command is not found and free everything
 	This function is called by executioin functions such as
 	execute_out excute_solo our execute exec_child
-
-// TO-DO verifier le leak ici il faudrait surement passer 
-//par adresse le s_line pour le modifier
-//les leaks sont sur les cmd[0] avec les strjoin 
-//il faudrait que je fasse un strjoin free s2
-// maybe change the fprintf for an error function
  * 
  * @param cmd to be executed
  * @param env variables passed 
@@ -98,7 +92,7 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 		if (search_path_exec(p.path[i], cmd[0]) == true)
 		{
 			cmd[0] = ft_strjoin_arena(p.path[i], cmd[0]);
-			execve(cmd[0], cmd, env);
+			g_ex.status = execve(cmd[0], cmd, env);
 			exit(1);
 		}
 		i++;

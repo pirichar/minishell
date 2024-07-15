@@ -38,6 +38,7 @@ typedef struct	s_exec
 	char	**s_line;
 	char	**new_env;
 	char	*prompt;
+	int		child_rtn;
 	int		status;
 	int		cmd_rtn;
 	bool	fail_heredoc;
