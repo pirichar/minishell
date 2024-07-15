@@ -49,7 +49,7 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 			parse_list->old = parse_list->tkns_list;
 			parse_list->start = parse_list->tkns_list->next;
 		}
-		while (ft_isspace(s[parse_list->index]) == true)
+		while ((ft_isspace(s[parse_list->index]) == true) || (parse_list->quote_type == '\'' && s[parse_list->index] == '\''))
 			parse_list->index += 1;
 	}
 	parse_list->tkns_list = parse_list->start;

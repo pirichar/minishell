@@ -24,7 +24,7 @@ void	nodeaddback(t_tkns **lst, t_tkns *new)
 	last -> next = new;
 }
 
-t_tkns	*make_node(t_tkns *matrix, char *s)
+t_tkns	*make_node(t_tkns *matrix, char *s, t_parsing *parse_list)
 {
 	t_tkns	*new;
 	int		i;
@@ -34,7 +34,7 @@ t_tkns	*make_node(t_tkns *matrix, char *s)
 	if (new == NULL)
 		return (NULL);
 	new->data = arena_alloc(&g_ex.arena, MAX_INPUT);
-	while (s[i] && ft_isspace(s[i]) == false)
+	while (s[i] && check_cmd_quotes(s, parse_list, i) == true)
 	{
 		new->data[i] = s[i];
 		i++;

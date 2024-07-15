@@ -78,6 +78,7 @@ void	init_redir_node_one_char(char *s, t_parsing *parse_list)
 	parse_list->index += 1;
 }
 
+
 /**
  * @brief When the node is a command
  * 
@@ -88,9 +89,9 @@ void	init_command_node(char *s, t_parsing *parse_list)
 {
 	parse_list->tkns_list->next
 		= make_node(parse_list->tkns_list->next,
-			&s[parse_list->index]);
+			&s[parse_list->index], parse_list);
 	while (s[parse_list->index]
-		&& ft_isspace(s[parse_list->index]) == false)
+		&& check_cmd_quotes(s, parse_list, parse_list->index) == true)
 		parse_list->index += 1;
 	if (parse_list->tkns_list->tok_type == CMD)
 		parse_list->cmd_count++;

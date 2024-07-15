@@ -210,7 +210,7 @@ bool			ft_isspace(char c);
 t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str);
 t_parsing	*do_copy_trunc_arg(t_parsing *parse_list);
 
-//pasring_2.c
+//parsing_2.c
 t_parsing	*get_cmd(t_parsing *parse_list);
 void	init_master_list(t_parsing *parse_list, int status);
 t_parsing	*quotes_line(char *line, t_parsing *parse_list);
@@ -231,7 +231,7 @@ t_parsing	*new_split(char *s, t_parsing *parse_list);
 //parsing_split2.c
 t_tkns	*my_lstlast(t_tkns *lst);
 void	nodeaddback(t_tkns **lst, t_tkns *new);
-t_tkns	*make_node(t_tkns *matrix, char *s);
+t_tkns	*make_node(t_tkns *matrix, char *s, t_parsing *parse_list);
 t_tkns	*node_redir(t_tkns *matrix, char *s, int size);
 t_tkns	*init_list(char *s);
 
@@ -255,10 +255,10 @@ int	do_output(t_parsing *parse_list);
 // TODO je crois que rien n'est utilise dans ces fonctions a valider
 //parsing_utils.c
 int				check_file_and_delim_name(t_tkns *tkns_list);
-void			print_tkns_array_debug(t_parsing parse_list);
 int				count_cmd(t_tkns *tkns_list);
 int				init_first_token_nodes(t_parsing *parse_list);
 int				check_pipe_name(t_tkns *tkns_array);
+bool			check_cmd_quotes(char *s, t_parsing *parse_list, int i);
 
 
 // ft_signals

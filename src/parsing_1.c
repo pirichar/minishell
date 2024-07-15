@@ -40,7 +40,7 @@ t_parsing	*start_parse(char *line, int status)
 
 bool	ft_isspace(char c)
 {
-	if (c == ' ' || c == '	')
+	if (c == 32 || c == 9)
 		return (true);
 	return (false);
 }
@@ -78,3 +78,4 @@ char	*str_del_one(char *str)
 	}
 	return (new_str);
 }
+
