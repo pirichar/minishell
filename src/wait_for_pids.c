@@ -12,14 +12,23 @@ void	wait_for_pids(t_parsing *parse)
 	int	i;
 
 	i = 0;
-	while (i <= parse->nb_of_pipes)
+	if (parse->nb_of_pipes == 0 && parse->bin_do_not_wait == true)
 	{
-		waitpid(parse->pids[i], &g_ex.cmd_rtn, 0);
-		if (WIFEXITED(g_ex.cmd_rtn))
-   			 g_ex.status = WEXITSTATUS(g_ex.cmd_rtn);
-		i++;
+		if (parse->infile != 0)
+			close(parse->infile);
+		setup_signal_handlers();
 	}
-	if (parse->infile != 0)
-		close(parse->infile);
-	setup_signal_handlers();
+	else
+	{
+		while (i <= parse->nb_of_pipes)
+		{
+			waitpid(parse->pids[i], &g_ex.cmd_rtn, 0);
+			if (WIFEXITED(g_ex.cmd_rtn))
+				g_ex.status = WEXITSTATUS(g_ex.cmd_rtn);
+			i++;
+		}
+		if (parse->infile != 0)
+			close(parse->infile);
+		setup_signal_handlers();
+	}
 }

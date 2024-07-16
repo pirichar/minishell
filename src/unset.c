@@ -73,6 +73,7 @@ static void	delete_variable(char ***env, char *var)
 void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 {
 	p->b_in = true;
+	p->bin_do_not_wait = true;
 	if (s_line[1] == NULL)
 		printf("unset : not enough arguments\n");
 	else

@@ -31,6 +31,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->quote_count = 0;
 	parse_list->quote_start = 0;
 	parse_list->quote_end = 0;
+	parse_list->bin_do_not_wait = false;
 	parse_list->quote_type = EMPTY;
 	parse_list->cmd_count = 0;
 	parse_list->nb_of_pipes = 0;

@@ -65,6 +65,7 @@ void	mini_echo(char **s_line, t_parsing *parse)
 	parse->with_nl = true;
 	parse->check_nl = true;
 	parse->b_in = true;
+	parse->bin_do_not_wait = true;
 	while (s_line[i])
 	{
 		parse_echo(s_line, &parse->check_nl, &parse->with_nl, &i);

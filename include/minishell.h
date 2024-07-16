@@ -120,6 +120,7 @@ typedef struct s_parsing
 	int		p_start;
 	char	*p_new;
 	char	**trunc_args;
+	bool	bin_do_not_wait;
 }				t_parsing;
 
 

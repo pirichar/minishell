@@ -65,6 +65,7 @@ void	mini_exit(char **s_line, t_parsing *parse)
 
 	i = 1;
 	parse->b_in = true;
+	parse->bin_do_not_wait = true;
 	while (s_line[i++])
 		;
 	if (i > 3)

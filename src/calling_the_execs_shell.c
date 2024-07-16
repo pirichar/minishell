@@ -53,7 +53,8 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 }
 
 /**
- * @brief parse and exec CMD taks as input the command the be executed
+ * @brief ONLY CALLED BY CHILD PROCESSES
+	parse and exec CMD taks as input the command the be executed
 	It also takes as input the environment variable
 	First it ill get the path within the env variable and put it in a 2d array
 	Then it will add a slash to the cmd so 
@@ -99,5 +100,7 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 	}
 	fprintf(stderr, "%s: command not found\n", cmd[0] + 1);
 	free_strrarr(p.path);
+	arena_free(&g_ex.arena);
+	free_strrarr(g_ex.new_env);
 	exit(2);
 }

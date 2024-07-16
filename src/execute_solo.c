@@ -43,6 +43,8 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 		parse_and_exec_cmd_shell(cmd, *(env));
 		exit (1);
 	}
+	arena_free(&g_ex.arena);
+	free_strrarr(g_ex.new_env);
 	exit (0);
 }
 
