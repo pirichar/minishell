@@ -51,6 +51,8 @@ t_parsing	*check_metachar(t_parsing *p_l)
 		tmp = helper1(p_l);
 		if (tmp)
 			return (tmp);
+		if (p_l->tkns_list->tok_type == PIPE)
+			p_l->nb_of_pipes += 1;
 		if ((p_l->tkns_list->tok_type == OUTPUT 
 			|| p_l->tkns_list->tok_type == INPUT 
 			|| p_l->tkns_list->tok_type == APPEND)
@@ -70,8 +72,6 @@ t_parsing	*check_metachar(t_parsing *p_l)
 			}
 		if (p_l->tkns_list->tok_type == TRUNC)
 			p_l->tkns_list->next->tok_type = TRUNC_ARG;
-		if (p_l->tkns_list->tok_type == PIPE)
-			p_l->nb_of_pipes += 1;
 		if (p_l->tkns_list->next)
 			p_l->tkns_list = p_l->tkns_list->next;
 		else
