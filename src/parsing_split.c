@@ -4,19 +4,19 @@ t_tkns	*set_toktype(t_tkns *matrix)
 {
 	while (matrix -> next)
 		matrix = matrix -> next;
-	if (matrix->data[0] == '<' && matrix->data[1] == '<')
+	if (matrix->data[0] == '<' && matrix->data[1] == '<' && matrix->data[2] == '\0')
 		matrix->tok_type = TRUNC;
-	else if (matrix->data[0] == '<' && matrix->data[1] == '>')
+	else if (matrix->data[0] == '<' && matrix->data[1] == '>' && matrix->data[2] == '\0')
 		matrix->tok_type = IN_OUT;
-	else if (matrix->data[0] == '<')
+	else if (matrix->data[0] == '<' && matrix->data[1] == '\0')
 		matrix->tok_type = INPUT;
-	else if (matrix->data[0] == '>' && matrix->data[1] == '>')
+	else if (matrix->data[0] == '>' && matrix->data[1] == '>' && matrix->data[2] == '\0')
 		matrix->tok_type = APPEND;
-	else if (matrix->data[0] == '>' && matrix->data[1] == '|')
+	else if (matrix->data[0] == '>' && matrix->data[1] == '|' && matrix->data[2] == '\0')
 		matrix->tok_type = SPECIAL_PIPE;
-	else if (matrix->data[0] == '>')
+	else if (matrix->data[0] == '>' && matrix->data[1] == '\0')
 		matrix->tok_type = OUTPUT;
-	else if (matrix->data[0] == '|')
+	else if (matrix->data[0] == '|' && matrix->data[1] == '\0')
 		matrix->tok_type = PIPE;
 	else
 		matrix->tok_type = CMD;

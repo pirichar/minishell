@@ -19,8 +19,7 @@ bool	check_double_redir(char *s, t_parsing *parse_list)
 			&& (s[parse_list->index + 1] == '<'
 				|| s[parse_list->index + 1] == '>'
 				|| s[parse_list->index + 1] == '|'))
-		&& ((parse_list->quotes == false)
-			|| (parse_list->quotes == true
+		&& ((parse_list->quotes == false) || (parse_list->quotes == true
 				&& (parse_list->index < parse_list->quote_start
 					|| parse_list->index > parse_list->quote_end))));
 }
@@ -41,8 +40,7 @@ bool	check_in_out_file(char *s, t_parsing *parse_list)
 	return ((s[parse_list->index] == '<'
 			|| s[parse_list->index] == '>'
 			|| s[parse_list->index] == '|')
-		&& ((parse_list->quotes == false)
-			|| (parse_list->quotes == true
+		&& ((parse_list->quotes == false) || (parse_list->quotes == true
 				&& (parse_list->index < parse_list->quote_start
 					|| parse_list->index > parse_list->quote_end))));
 }
