@@ -2,5 +2,5 @@
 a.out
 *.dSYM/
 *.o
-DunderShell
+minishell
 ./div
