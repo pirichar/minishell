@@ -53,10 +53,21 @@ t_parsing	*check_metachar(t_parsing *p_l)
 			return (tmp);
 		if ((p_l->tkns_list->tok_type == OUTPUT 
 			|| p_l->tkns_list->tok_type == INPUT 
-			|| p_l->tkns_list->tok_type == APPEND 
+			|| p_l->tkns_list->tok_type == APPEND)
 			|| p_l->tkns_list->tok_type == PIPE)
-			&& (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD))
-			p_l->tkns_list->next->tok_type = ARG;
+			{
+				while (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD)
+				{
+					p_l->tkns_list->next->tok_type = ARG;
+					if (p_l->tkns_list->next)
+						p_l->tkns_list = p_l->tkns_list->next;
+					else
+						{
+							p_l->tkns_list = p_l->start;
+							return (p_l);
+						}
+				}
+			}
 		if (p_l->tkns_list->tok_type == TRUNC)
 			p_l->tkns_list->next->tok_type = TRUNC_ARG;
 		if (p_l->tkns_list->tok_type == PIPE)

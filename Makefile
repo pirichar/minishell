@@ -1,4 +1,4 @@
-NAME	=	DunderShell
+NAME	=	minishell
 
 LIBFT		= ft
 LIBFTDIR	= include/libft
@@ -56,11 +56,11 @@ $(OBJ):
 all		:	$(NAME)
 
 clean	:
+			$(RM) $(OBJS)
 			$(MAKELIBFT) fclean
-			@$(RM) $(OBJS)
 
 fclean	:	clean
-			@$(RM) $(NAME) $(OBJ)
+			$(RM) $(NAME) $(OBJ)
 			
 re		:	fclean all
 
