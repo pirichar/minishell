@@ -77,7 +77,7 @@ char	*del_quotes(t_parsing *parse_list, char *line)
 	newline = arena_alloc(&g_ex.arena,ft_strlen(line) * sizeof(char *));
 	while (line[i] != '\0')
 	{
-		if ((parse_list->quote_type == '\'' && line[i] == parse_list->quote_type) 
+		if ((parse_list->quote_type == 39 && line[i] == parse_list->quote_type) 
 			&& (i != parse_list->quote_start && i != parse_list->quote_end))
 		{
 			newline[y] = line[i];

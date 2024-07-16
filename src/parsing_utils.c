@@ -62,13 +62,16 @@ bool	check_cmd_quotes(char *s, t_parsing *parse_list, int index)
 {
 	int i;
 
-	if (index != parse_list->index && parse_list->index != 0)
+	if (parse_list->quotes == true && index != parse_list->index && parse_list->index != 0)
 		i = parse_list->index;
 	else
 		i = index;
 	if ((parse_list->quotes == false) 
 		&& (ft_isspace(s[index]) == true))
 		return(false);
+	if ((parse_list->quotes == false || parse_list->quote_type == 34) 
+		&& (ft_isspace(s[i]) == false))
+		return(true);
 	if (ft_isspace(s[index]) == true && parse_list->quotes == true 
 		&& (i < parse_list->quote_start || i > parse_list->quote_end))
 		return (false);
@@ -77,9 +80,6 @@ bool	check_cmd_quotes(char *s, t_parsing *parse_list, int index)
 		return (true);
 	if (parse_list->quote_type == 39 && s[i] == 39)
 		return (false);
-	if ((parse_list->quotes == false || parse_list->quote_type == 34) 
-		&& (ft_isspace(s[i]) == false))
-		return(true);
 	if  (parse_list->quote_type == 39 
 		&& (i >= parse_list->quote_start 
 		|| i <= parse_list->quote_end))
