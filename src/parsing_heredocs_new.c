@@ -14,7 +14,7 @@ static t_parsing	*helper1(t_parsing *p_l)
 		if (do_trunc(p_l) == 1)
 			return (p_l);
 		else
-			return(NULL);
+			return (NULL);
 	}
 	if (p_l->tkns_list->tok_type == IN_OUT)
 		if (do_in_out(p_l) == 1)
@@ -36,10 +36,10 @@ static t_parsing	*helper1(t_parsing *p_l)
 }
 
 /**
- * @brief 
+ * @brief
 
- * @param parse_list 
- * @return t_parsing* 
+ * @param parse_list
+ * @return t_parsing*
  */
 t_parsing	*check_metachar(t_parsing *p_l)
 {
@@ -53,16 +53,17 @@ t_parsing	*check_metachar(t_parsing *p_l)
 			return (tmp);
 		if (p_l->tkns_list->tok_type == PIPE)
 			p_l->nb_of_pipes += 1;
-		if ((p_l->tkns_list->tok_type == OUTPUT 
-			|| p_l->tkns_list->tok_type == APPEND)
+		if ((p_l->tkns_list->tok_type == OUTPUT
+				|| p_l->tkns_list->tok_type == APPEND)
 			|| p_l->tkns_list->tok_type == PIPE)
+		{
+			while (p_l->tkns_list->next
+				&& p_l->tkns_list->next->tok_type == CMD)
 			{
-				while (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD)
-				{
-					p_l->tkns_list->next->tok_type = ARG;
-					p_l->tkns_list = p_l->tkns_list->next;
-				}
+				p_l->tkns_list->next->tok_type = ARG;
+				p_l->tkns_list = p_l->tkns_list->next;
 			}
+		}
 		if (p_l->tkns_list->tok_type == INPUT)
 			if (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD)
 				p_l->tkns_list->next->tok_type = ARG;

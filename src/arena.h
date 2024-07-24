@@ -4,11 +4,11 @@
 
 typedef struct s_arena
 {
-    char	*block;
-    size_t	size;
-    size_t	index;
-    size_t  high_watermark;
-}   t_arena;
+	char	*block;
+	size_t	size;
+	size_t	index;
+	size_t	high_watermark;
+}	t_arena;
 
 /**
  * @brief 
@@ -17,7 +17,7 @@ typedef struct s_arena
  * @param size 
  * @return t_arena* 
  */
-t_arena *arena_init(t_arena *arena, size_t size);
+t_arena	*arena_init(t_arena *arena, size_t size);
 
 /**
  * @brief 
@@ -33,13 +33,13 @@ void	*arena_alloc(t_arena *arena, size_t size);
  * 
  * @param arena 
  */
-void    arena_clear(t_arena *arena);
+void	arena_clear(t_arena *arena);
 
 /**
  * @brief 
  * *arena = (t_arena){0} is like a b zero for every variables
  * @param arena 
  */
-void    arena_free(t_arena *arena);
+void	arena_free(t_arena *arena);
 
-void    arena_log_watermark(t_arena *arena);
+void	arena_log_watermark(t_arena *arena);

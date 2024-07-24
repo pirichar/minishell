@@ -4,15 +4,19 @@ t_tkns	*set_toktype(t_tkns *matrix)
 {
 	while (matrix -> next)
 		matrix = matrix -> next;
-	if (matrix->data[0] == '<' && matrix->data[1] == '<' && matrix->data[2] == '\0')
+	if (matrix->data[0] == '<' && matrix->data[1] == '<'
+		&& matrix->data[2] == '\0')
 		matrix->tok_type = TRUNC;
-	else if (matrix->data[0] == '<' && matrix->data[1] == '>' && matrix->data[2] == '\0')
+	else if (matrix->data[0] == '<' && matrix->data[1] == '>'
+		&& matrix->data[2] == '\0')
 		matrix->tok_type = IN_OUT;
 	else if (matrix->data[0] == '<' && matrix->data[1] == '\0')
 		matrix->tok_type = INPUT;
-	else if (matrix->data[0] == '>' && matrix->data[1] == '>' && matrix->data[2] == '\0')
+	else if (matrix->data[0] == '>' && matrix->data[1] == '>'
+		&& matrix->data[2] == '\0')
 		matrix->tok_type = APPEND;
-	else if (matrix->data[0] == '>' && matrix->data[1] == '|' && matrix->data[2] == '\0')
+	else if (matrix->data[0] == '>' && matrix->data[1] == '|'
+		&& matrix->data[2] == '\0')
 		matrix->tok_type = SPECIAL_PIPE;
 	else if (matrix->data[0] == '>' && matrix->data[1] == '\0')
 		matrix->tok_type = OUTPUT;
@@ -49,7 +53,8 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 			parse_list->old = parse_list->tkns_list;
 			parse_list->start = parse_list->tkns_list->next;
 		}
-		while ((ft_isspace(s[parse_list->index]) == true) || (parse_list->quote_type == 39 && s[parse_list->index] == 39))
+		while ((ft_isspace(s[parse_list->index]) == true)
+			|| (parse_list->quote_type == 39 && s[parse_list->index] == 39))
 			parse_list->index += 1;
 	}
 	parse_list->tkns_list = parse_list->start;

@@ -5,7 +5,8 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 	parse_list->cmd_count
 		= count_cmd(parse_list->tkns_list);
 	parse_list->vector_cmd
-		= arena_alloc(&g_ex.arena,(parse_list->cmd_count + 1) * sizeof(char *));//TODO AERENA
+		= arena_alloc(&g_ex.arena,
+			(parse_list->cmd_count + 1) * sizeof(char *));
 	parse_list->start = parse_list->tkns_list;
 	while (parse_list->tkns_list != NULL
 		&& parse_list->tkns_list->data != NULL)
@@ -75,10 +76,10 @@ char	*del_quotes(t_parsing *parse_list, char *line)
 
 	i = 0;
 	y = 0;
-	newline = arena_alloc(&g_ex.arena,ft_strlen(line) * sizeof(char *));
+	newline = arena_alloc(&g_ex.arena, ft_strlen(line) * sizeof(char *));
 	while (line[i] != '\0')
 	{
-		if ((parse_list->quote_type == 39 && line[i] == parse_list->quote_type) 
+		if ((parse_list->quote_type == 39 && line[i] == parse_list->quote_type)
 			&& (i != parse_list->quote_start && i != parse_list->quote_end))
 		{
 			newline[y] = line[i];
@@ -111,6 +112,6 @@ char	**prep_tab(t_tkns *tkns_list)
 		else
 			break ;
 	}
-	tab = arena_alloc(&g_ex.arena,(count + 1) * sizeof(char *));
+	tab = arena_alloc(&g_ex.arena, (count + 1) * sizeof(char *));
 	return (tab);
 }

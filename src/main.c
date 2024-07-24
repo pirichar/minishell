@@ -85,7 +85,7 @@ static bool	process_command(void)
 		if (g_ex.fail_heredoc)
 		{
 			g_ex.fail_heredoc = false;
-			return(false);
+			return (false);
 		}
 		if (parse == NULL)
 		{
@@ -142,10 +142,10 @@ int	main(int argc, char **argv, char **env)
 			write(1, "exit\n", 5);
 			free(g_ex.line);
 			free_strrarr(g_ex.new_env);
-			break;
+			break ;
 		}
-		if (process_command()) // if process command returns true 
-			continue;
+		if (process_command())
+			continue ;
 		arena_clear(&g_ex.arena);
 	}
 	arena_log_watermark(&g_ex.arena);

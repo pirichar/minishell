@@ -22,7 +22,7 @@ t_parsing	*start_parse(char *line, int status)
 
 	if (is_empty(line))
 		return (NULL);
-	parse_list = arena_alloc(&g_ex.arena, sizeof(t_parsing)); //TODO AERENA
+	parse_list = arena_alloc(&g_ex.arena, sizeof(t_parsing));
 	init_master_list(parse_list, status);
 	parse_list = quotes_line(line, parse_list);
 	line = expand_var(line, *&parse_list);
@@ -31,7 +31,8 @@ t_parsing	*start_parse(char *line, int status)
 	parse_list->tkns_list = init_list(line);
 	parse_list = new_split(line, parse_list);
 	parse_list = check_metachar(parse_list);
-	parse_list->pids = arena_alloc(&g_ex.arena,(parse_list->nb_of_pipes + 1) * sizeof(int));//TODO AERENA
+	parse_list->pids = arena_alloc(&g_ex.arena,
+			(parse_list->nb_of_pipes + 1) * sizeof(int));
 	parse_list = get_cmd(parse_list);
 	if (parse_list->nb_of_pipes != 0)
 		parse_list->pipes_args = get_argarray(parse_list);
@@ -51,7 +52,7 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str)
 
 	i = 0;
 	parse_list->vector_cmd[parse_list->i_vect]
-		= arena_alloc(&g_ex.arena,ft_strlen(str) + 1);
+		= arena_alloc(&g_ex.arena, ft_strlen(str) + 1);
 	while (parse_list && parse_list->tkns_list
 		&& str[i] != '\0' && (parse_list->i_vect < parse_list->cmd_count))
 	{
@@ -64,8 +65,8 @@ t_parsing	*do_copy_cmd(t_parsing *parse_list, char *str)
 
 char	*str_del_one(char *str)
 {
-	char *new_str;
-	int	i;
+	char	*new_str;
+	int		i;
 
 	i = 0;
 	new_str = arena_alloc(&g_ex.arena, ft_strlen(str) - 1);
@@ -78,4 +79,3 @@ char	*str_del_one(char *str)
 	}
 	return (new_str);
 }
-

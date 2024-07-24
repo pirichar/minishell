@@ -4,10 +4,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static size_t align_up(size_t address, size_t alignment)
+static size_t	align_up(size_t address, size_t alignment)
 {
-    size_t mask = alignment - 1;
-    return (address + mask) & ~mask;
+	size_t	mask;
+
+	mask = alignment - 1;
+	return ((address + mask) & ~mask);
 }
 
 /**
@@ -17,12 +19,12 @@ static size_t align_up(size_t address, size_t alignment)
  * @param size 
  * @return t_arena* 
  */
-t_arena *arena_init(t_arena *arena, size_t size)
+t_arena	*arena_init(t_arena *arena, size_t size)
 {
-    *arena = (t_arena){0};
-    arena->block = (char*)ft_calloc(size, sizeof(char));
-    arena->size = size;
-    return arena;
+	*arena = (t_arena){0};
+	arena->block = (char *)ft_calloc(size, sizeof(char));
+	arena->size = size;
+	return (arena);
 }
 
 /**
@@ -34,18 +36,20 @@ t_arena *arena_init(t_arena *arena, size_t size)
  */
 void	*arena_alloc(t_arena *arena, size_t size)
 {
-    arena->index = align_up(arena->index, 16);
-    char *address = arena->block + arena->index;
-    arena->index += size;
-    if (arena->index > arena->high_watermark)
-        arena->high_watermark = arena->index;
-    if (arena->index >= arena->size)
-    {
-        dprintf(STDERR_FILENO, "Out of memory\n");
-        exit(EXIT_FAILURE);
-    }
-    ft_bzero(address, size);
-    return address;
+	char	*address;
+
+	arena->index = align_up(arena->index, 16);
+	address = arena->block + arena->index;
+	arena->index += size;
+	if (arena->index > arena->high_watermark)
+		arena->high_watermark = arena->index;
+	if (arena->index >= arena->size)
+	{
+		dprintf(STDERR_FILENO, "Out of memory\n");
+		exit(EXIT_FAILURE);
+	}
+	ft_bzero(address, size);
+	return (address);
 }
 
 /**
@@ -53,9 +57,9 @@ void	*arena_alloc(t_arena *arena, size_t size)
  * 
  * @param arena 
  */
-void    arena_clear(t_arena *arena)
+void	arena_clear(t_arena *arena)
 {
-    arena->index = 0;
+	arena->index = 0;
 }
 
 /**
@@ -63,10 +67,10 @@ void    arena_clear(t_arena *arena)
  * *arena = (t_arena){0} is like a b zero for every variables
  * @param arena 
  */
-void    arena_free(t_arena *arena)
+void	arena_free(t_arena *arena)
 {
-    free(arena->block);
-    *arena = (t_arena){0};
+	free(arena->block);
+	*arena = (t_arena){0};
 }
 
 /**
@@ -74,13 +78,13 @@ void    arena_free(t_arena *arena)
  * 
  * @param arena 
  */
-void    arena_log_watermark(t_arena *arena)
+void	arena_log_watermark(t_arena *arena)
 {
-    printf("arena max memory: ");
-    if (arena->high_watermark >= 1024 * 1024)
+	printf("arena max memory: ");
+	if (arena->high_watermark >= 1024 * 1024)
 		printf("%.2f MB\n", (float)arena->high_watermark / (1024.f * 1024.f));
-    else if (arena->high_watermark >= 1024)
+	else if (arena->high_watermark >= 1024)
 		printf("%.2f KB\n", (float)arena->high_watermark / (1024.f));
-    else
-        printf("%zu byte\n", arena->high_watermark);
+	else
+		printf("%zu byte\n", arena->high_watermark);
 }
