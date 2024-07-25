@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:42:51 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:42:51 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 /**
@@ -122,6 +134,7 @@ static void	actually_set_variables(char **s_line, char ***new_env)
 void	mini_export(char **s_line, char ***new_env, t_parsing *parse)
 {
 	parse->b_in = true;
+	parse->bin_do_not_wait = true;
 	if (s_line[1] == NULL)
 		print_export(new_env);
 	else

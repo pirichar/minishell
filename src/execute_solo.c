@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_solo.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:43:45 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:43:46 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 #include <stdio.h>
 
@@ -31,16 +43,18 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 		close(parse->outfile);
 	}
 	look_for_builtins(&cmd, env, parse);
-	if (parse->b_in == false && access (cmd[0], X_OK) == 0)
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	if (parse->b_in == false)
 	{
-		execve(cmd[0], cmd, *(env));
+		if (access (cmd[0], X_OK) == 0)
+			execve(cmd[0], cmd, *(env));
+		else
+			parse_and_exec_cmd_shell(cmd, *(env));
 		exit(1);
 	}
-	else if (parse->b_in == false)
-	{
-		parse_and_exec_cmd_shell(cmd, *(env));
-		exit (1);
-	}
+	arena_free(&g_ex.arena);
+	free_strrarr(g_ex.new_env);
 	exit (0);
 }
 
@@ -74,6 +88,7 @@ void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 			mini_echo(cmd, parse);
 		else
 		{
+			signal(SIGINT, SIG_IGN);
 			pid = fork();
 			if (pid == 0)
 				exec_solo_child(parse, cmd, env);

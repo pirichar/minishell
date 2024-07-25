@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:42:16 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:42:16 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
+#include "arena.h"
 
 /**
  * @brief Function used when there is no PWD
@@ -14,10 +27,8 @@ static char	*pwd_not_there(char *blue_user)
 	char	*pwd;
 	char	*prompt;
 
-	pwd = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
-	prompt = ft_strjoin(pwd, "/DunderShell $> \e[0m");
-	free(pwd);
-	free(blue_user);
+	pwd = ft_strjoin_arena(blue_user, "\e[1;31m@\e[1;32m");
+	prompt = ft_strjoin_arena(pwd, "/DunderShell $> \e[0m");
 	return (prompt);
 }
 
@@ -46,21 +57,17 @@ static char	*pwd_prompt(char *new_env[], char *blue_user)
 		if (new_env[i] == NULL)
 			return (pwd_not_there(blue_user));
 	}
-	user = calloc(ft_strlen(new_env[i]), sizeof(char));
+	user = arena_alloc(&g_ex.arena, ft_strlen(new_env[i]));
 	ft_strlcpy(user, new_env[i] + 4, ft_strlen(new_env[i]));
-	with_at = ft_strjoin(blue_user, "\e[1;31m@\e[1;32m");
-	pwd = ft_strjoin(user, " $> \e[0m");
-	prompt = ft_strjoin(with_at, pwd);
-	free(blue_user);
-	free(with_at);
-	free(pwd);
-	free(user);
+	with_at = ft_strjoin_arena(blue_user, "\e[1;31m@\e[1;32m");
+	pwd = ft_strjoin_arena(user, " $> \e[0m");
+	prompt = ft_strjoin_arena(with_at, pwd);
 	return (prompt);
 }
 
 /**
  * @brief Function called to return a prompt to give to minishell
-			Its called in main.c for ex->prompt
+			Its called in main.c for g_ex.prompt
 			or in ft_signals for the prompt in sigint
 			It will use its local functions to
 			Get the PWD if available
@@ -83,14 +90,13 @@ char	*set_prompt(char *new_env[])
 		i++;
 		if (new_env[i] == NULL)
 		{
-			prompt = ft_strjoin("\e[1;32m", "DunderShell $> \e[0m");
+			prompt = ft_strjoin_arena("\e[1;32m", "DunderShell $> \e[0m");
 			return (prompt);
 		}
 	}
-	user = calloc(ft_strlen(new_env[i]), sizeof(char));
+	user = arena_alloc(&g_ex.arena, ft_strlen(new_env[i]));
 	ft_strlcpy(user, new_env[i] + 5, ft_strlen(new_env[i]));
-	blue_user = ft_strjoin(BBLU, user);
-	free(user);
+	blue_user = ft_strjoin_arena(BBLU, user);
 	prompt = pwd_prompt(new_env, blue_user);
 	return (prompt);
 }

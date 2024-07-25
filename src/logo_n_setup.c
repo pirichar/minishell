@@ -1,4 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   logo_n_setup.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:42:40 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:42:41 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
+#include "arena.h"
 
 /**
  * @brief Fun function to print our logo
@@ -60,7 +73,6 @@ void	configure_terminal(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-
 /**
  * @brief First function called by main
  			Configure the terminal settings to suppress ^C
@@ -74,23 +86,20 @@ void	configure_terminal(void)
  */
 int	setup_minishell(int argc, char **env)
 {
-	configure_terminal();
-	ex = ft_calloc(1, sizeof(t_exec));
-	if (ex == NULL)
-		exit(1);
-	ex->status = 0;
-	ex->foreground_job_active = 0;
-	ex->interrupted = 0;
-	ex->line = NULL;
-	ex->prompt = NULL;
 	if (argc > 1)
 	{
 		fprintf(stderr, "Why U put params?!?!\n");
-		free(ex);
 		return (1);
 	}
+	configure_terminal();
+	g_ex = (t_exec){0};
+	g_ex.status = 0;
+	g_ex.line = NULL;
+	g_ex.prompt = NULL;
+	g_ex.only_delim = false;
 	print_logo(env);
-	ex->new_env = copy_env(env);
+	g_ex.new_env = copy_env(env);
 	setup_signal_handlers();
+	arena_init(&g_ex.arena, 1024 * 1024 * 10);
 	return (0);
 }

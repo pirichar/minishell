@@ -1,38 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:35:12 by adube             #+#    #+#             */
+/*   Updated: 2024/07/25 11:35:15 by adube            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
-int	init_first_token_nodes(t_parsing *parse_list)  //may 21, should be ok. but is it useful
+int	init_first_token_nodes(t_parsing *parse_list)
 {
 	parse_list->tkns_list = calloc(1, sizeof(t_tkns));
 	parse_list->tkns_list->dollar_sign = false;
 	parse_list->tkns_list->prev = NULL;
-//	parse_list->tkns_list->argv_pos = 0;
 	parse_list->start = NULL;
 	return (0);
 }
 
-// void	print_tkns_array_debug(t_parsing parse_list)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	parse_list.tkns_list = parse_list.tkns_list->start;
-// 	while (parse_list.tkns_list)
-// 	{
-// 		if (parse_list.tkns_list == NULL)
-// 			return ;
-// 		while (parse_list.tkns_list->vector_cmd
-// 			&& parse_list.tkns_list->vector_cmd[i])
-// 		{
-// 			printf("list %d array %d : %s\n", parse_list.tkns_list->argv_pos,
-// 				i, parse_list.tkns_list->vector_cmd[i]);
-// 			i++;
-// 		}
-// 		parse_list.tkns_list = parse_list.tkns_list->next;
-// 		i = 0;
-// 	}
-// }
-
-int	count_cmd(t_tkns *tkns_list)  //is it still used?
+int	count_cmd(t_tkns *tkns_list)
 {
 	int	count;
 
@@ -50,7 +39,7 @@ int	check_file_and_delim_name(t_tkns *tkns_list)
 {
 	if (tkns_list->next != NULL)
 	{
-		if (ft_strchr("<|>", tkns_list->next->data[0])) 
+		if (ft_strchr("<|>", tkns_list->next->data[0]))
 		{
 			printf("Dundershell: syntax error near unexpected token `%c'\n",
 				tkns_list->next->data[0]);
@@ -79,4 +68,28 @@ int	check_pipe_name(t_tkns *tkns_list) //may 21, should be ok
 		return (1);
 	}
 	return (0);
+}
+
+bool	check_cmd_quotes(char *s, t_parsing *parse_list, int index)
+{
+	int	i;
+
+	if (parse_list->quotes == true && index != parse_list->index
+		&& parse_list->index != 0)
+		i = parse_list->index;
+	else
+		i = index;
+	if (ft_isspace(s[index]) == true)
+		return (false);
+	if ((parse_list->quotes == false)
+		&& (ft_isspace(s[i]) == false))
+		return (true);
+	if (parse_list->quotes == true
+		&& (i >= parse_list->quote_start
+			|| i <= parse_list->quote_end) && s[i] != parse_list->quote_type)
+		return (true);
+	if ((parse_list->quote_type == 39 && s[i] == 39)
+		|| (parse_list->quote_type == 34 && s[i] == 34))
+		return (true);
+	return (false);
 }

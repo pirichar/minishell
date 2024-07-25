@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:43:32 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:43:33 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 /**
@@ -65,6 +77,7 @@ void	mini_echo(char **s_line, t_parsing *parse)
 	parse->with_nl = true;
 	parse->check_nl = true;
 	parse->b_in = true;
+	parse->bin_do_not_wait = true;
 	while (s_line[i])
 	{
 		parse_echo(s_line, &parse->check_nl, &parse->with_nl, &i);

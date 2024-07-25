@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:43:35 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:43:36 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 /**
@@ -43,6 +55,7 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse)
 	char	*buff;
 
 	parse->b_in = true;
+	parse->bin_do_not_wait = true;
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(new_env, "OLDPWD=", actual_pwd);

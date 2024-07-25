@@ -1,29 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_pipes.c                                    :+:      :+:    :+:   */
+/*   parsing_expand.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/25 11:35:45 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:35:47 by adube            ###   ########.fr       */
+/*   Created: 2024/07/25 11:36:15 by adube             #+#    #+#             */
+/*   Updated: 2024/07/25 11:36:17 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	check_pipes(t_parsing *parse_list)
+char	*ret_value(char *s1, char *s2, t_parsing *p_l)
 {
-	while (parse_list->tkns_list != NULL)
+	char	*str;
+	char	*num;
+	int		i;
+	int		y;
+
+	i = 0;
+	y = 0;
+	if (s2[p_l->index + 1] == '?')
 	{
-		if (parse_list->tkns_list->tok_type == PIPE)
+		str = arena_alloc(&g_ex.arena, MAX_INPUT);
+		num = ft_itoa(g_ex.status);
+		while (s1[i])
 		{
-			if (check_pipe_name(parse_list->tkns_list) != 0)
-				return (1);
-			printf("do the pipe\n");
-			break ;
+			str[i] = s1[i];
+			i++;
 		}
-		parse_list->tkns_list = parse_list->tkns_list->next;
+		while (num[y])
+			str[i++] = num[y++];
+		free(num);
+		p_l->new_i = i;
+		p_l->index += 2;
+		return (str);
 	}
-	return (0);
+	return (s1);
 }

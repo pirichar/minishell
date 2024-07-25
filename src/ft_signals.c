@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_signals.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:42:46 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:42:48 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 #include <readline/history.h>
 
@@ -43,15 +55,12 @@ be expected to to for itself, it must do itself.
  * @brief This function handles the Ctrl-C (SIGINT) event
             Move to a new line
             This function is binded by setup_signal_handlers
-            It will update ex->interrupted to 1 and print a new prompt
-            ex->interrupted is verified in in process_command(main)
-            and wont process the command if set to 1
 
 // TO-DO Double check why mik add g_mini.code =  INTERRUPT_SIG 
  * 
  * @param sig is required by the sig action struct
  */
-static void	handle_sigint(int sig)
+void	handle_sigint(int sig)
 {
 	(void) sig;
 	write(1, "\n", 1);
@@ -59,79 +68,13 @@ static void	handle_sigint(int sig)
 	rl_replace_line("", 0);
 	rl_redisplay();
 }
-/*
-static void	handle_sigint(int sig)
-{
-	char	*prompt;
-
-	(void) sig;
-	ex->interrupted = 1;
-	write(1, "\n", 1);
-	prompt = set_prompt(ex->new_env);
-	write(1, prompt, ft_strlen(prompt));
-	free(prompt);
-	//rl_on_new_line();
-}*/
 
 /**
- * @brief This function handles the Ctrl-\  (sigquit) event
-            it will only be called if a foreground_job is active
-            This function is binded by setup_signal_handlers
- * 
- * @param sig is required by the sig action struct
- */
-static	void	handle_sigquit(int sig)
-{
-	(void) sig;
-	if (ex->foreground_job_active)
-		write(1, "\nQuit signal (SIGQUIT) received by job.\n", 40);
-}
-
-/**
- * @brief Set the up signal handlers object 
-            Sigaction
-            (signaltype, struct sig action 
-			(handle, mask, flags), pointer to another sigaction structure)
-            The mask is the signals we want to block
-            the flag helps to control with more details
-            A signalset is a bunch of bits hidden behind macros
-            Sigemptyset will initialise a signalset and will clear everything
-
-			First we setup the sigint (mask, handler, flags)
-			We setup the SA_RESTART flag for the flags so
-			it auto-restart the functions if interrupted
-			we finally call sigation on that SIGINT with ex->sa_int struct
-
-			Then we setup the sigquit handler without a flag
-			This function is called in setup_minishell in main
+ * @brief 
  * 
  */
 void	setup_signal_handlers(void)
 {
-	sigemptyset(&ex->sa_int.sa_mask);
-	ex->sa_int.sa_handler = handle_sigint;
-	ex->sa_int.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &ex->sa_int, NULL);
-	sigemptyset(&ex->sa_quit.sa_mask);
-	ex->sa_quit.sa_handler = handle_sigquit;
-	ex->sa_quit.sa_flags = 0;
-	sigaction(SIGQUIT, &ex->sa_quit, NULL);
-}
-
-/**
- * @brief Will update the sigquit signal depending
-			on the bool ex->foreground_job_active
- 			Set to custom handler when a job is active
-			Ignore SIGQUIT when nob job is active
-
-			This function is called by prompt_and_read_input
-			CALLED ALOT
- * 
- */
-void	update_sigquit_handling(void)
-{
-	if (ex->foreground_job_active)
-		signal(SIGQUIT, handle_sigquit);
-	else
-		signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, &handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
 }

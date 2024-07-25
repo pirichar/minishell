@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   calling_the_execs_shell.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:44:02 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:44:03 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 /**
@@ -28,8 +40,8 @@
 
 void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 {
-	int	fd;
-	int	i;
+	int		fd;
+	int		i;
 
 	i = 1;
 	parse->i = 0;
@@ -39,6 +51,7 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 	{
 		parse->f_command = true;
 		fd = execute(parse->infile, &parse->pids[0], *(new_env), parse);
+		parse->f_command = false;
 		cmd = parse->pipes_args[parse->i];
 		while (i < parse->nb_of_pipes)
 		{
@@ -52,7 +65,8 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 }
 
 /**
- * @brief parse and exec CMD taks as input the command the be executed
+ * @brief ONLY CALLED BY CHILD PROCESSES
+	parse and exec CMD taks as input the command the be executed
 	It also takes as input the environment variable
 	First it ill get the path within the env variable and put it in a 2d array
 	Then it will add a slash to the cmd so 
@@ -69,12 +83,6 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 		command is not found and free everything
 	This function is called by executioin functions such as
 	execute_out excute_solo our execute exec_child
-
-// TO-DO verifier le leak ici il faudrait surement passer 
-//par adresse le s_line pour le modifier
-//les leaks sont sur les cmd[0] avec les strjoin 
-//il faudrait que je fasse un strjoin free s2
-// maybe change the fprintf for an error function
  * 
  * @param cmd to be executed
  * @param env variables passed 
@@ -90,19 +98,20 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 		fprintf(stderr, "PATH environment variable not set\n");
 		return ;
 	}
-	cmd[0] = ft_strjoin("/", cmd[0]);
+	cmd[0] = ft_strjoin_arena("/", cmd[0]);
 	i = 0;
-	while (p.path[i])
+	while (p.path[i++])
 	{
 		if (search_path_exec(p.path[i], cmd[0]) == true)
 		{
-			cmd[0] = ft_strjoin(p.path[i], cmd[0]);
+			cmd[0] = ft_strjoin_arena(p.path[i], cmd[0]);
 			execve(cmd[0], cmd, env);
 			exit(1);
 		}
-		i++;
 	}
 	fprintf(stderr, "%s: command not found\n", cmd[0] + 1);
 	free_strrarr(p.path);
+	arena_free(&g_ex.arena);
+	free_strrarr(g_ex.new_env);
 	exit(2);
 }

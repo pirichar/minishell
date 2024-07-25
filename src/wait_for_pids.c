@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   wait_for_pids.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:41:45 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:41:46 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 /**
@@ -12,13 +24,23 @@ void	wait_for_pids(t_parsing *parse)
 	int	i;
 
 	i = 0;
-	while (i <= parse->nb_of_pipes)
+	if (parse->nb_of_pipes == 0 && parse->bin_do_not_wait == true)
 	{
-		waitpid(parse->pids[i], &parse->ex->cmd_rtn, 0);
-		i++;
+		if (parse->infile != 0)
+			close(parse->infile);
+		setup_signal_handlers();
 	}
-	if (parse->infile != 0)
-		close(parse->infile);
-	if (parse->pids != 0)
-		free(parse->pids);
+	else
+	{
+		while (i <= parse->nb_of_pipes)
+		{
+			waitpid(parse->pids[i], &g_ex.cmd_rtn, 0);
+			if (WIFEXITED(g_ex.cmd_rtn))
+				g_ex.status = WEXITSTATUS(g_ex.cmd_rtn);
+			i++;
+		}
+		if (parse->infile != 0)
+			close(parse->infile);
+		setup_signal_handlers();
+	}
 }

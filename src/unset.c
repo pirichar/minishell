@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:41:54 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:41:54 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 /**
@@ -73,6 +85,7 @@ static void	delete_variable(char ***env, char *var)
 void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 {
 	p->b_in = true;
+	p->bin_do_not_wait = true;
 	if (s_line[1] == NULL)
 		printf("unset : not enough arguments\n");
 	else
@@ -88,13 +101,9 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 				continue ;
 			}
 			p->to_unset = return_variable((*new_env), s_line[p->i]);
-			if (p->to_unset == NULL)
-				p->i++;
-			else
-			{
+			if (p->to_unset != NULL)
 				delete_variable(new_env, s_line[p->i]);
-				p->i++;
-			}
+			p->i++;
 		}
 	}
 }

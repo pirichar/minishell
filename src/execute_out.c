@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_out.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:43:41 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:43:43 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../include/minishell.h"
 
 /**
@@ -14,17 +26,19 @@
  * @param cmd to be executed
  * @param env 
  */
-static void	exec_out_child(int *fds[2], t_parsing *parse,
+static void	exec_out_child(int fds[2], t_parsing *parse,
 	char **cmd, char **env)
 {
-	dup2(*(fds[0]), 0);
-	close(*(fds[0]));
+	dup2(fds[0], 0);
+	close(fds[0]);
 	if (parse->outfile != 1)
 	{
-		dup2(*(fds[1]), 1);
-		close(*(fds[1]));
+		dup2(fds[1], 1);
+		close(fds[1]);
 	}
 	look_for_builtins(&cmd, &env, parse);
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (parse->b_in == false && access(cmd[0], X_OK) == 0)
 	{
 		execve(cmd[0], cmd, env);
@@ -59,10 +73,11 @@ void	execute_out(char **cmd, int fds[2], char **env, t_parsing *parse)
 {
 	int	pid;
 
+	signal(SIGINT, SIG_IGN);
 	pid = fork();
-	parse->ex->cmd_rtn = 0;
+	g_ex.cmd_rtn = 0;
 	if (pid == 0)
-		exec_out_child(&fds, parse, cmd, env);
+		exec_out_child(fds, parse, cmd, env);
 	close(fds[0]);
 	if (parse->outfile != 1)
 		close(fds[1]);
