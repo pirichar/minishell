@@ -12,20 +12,20 @@ static size_t	align_up(size_t address, size_t alignment)
 	return ((address + mask) & ~mask);
 }
 
-/**
- * @brief 
- * 
- * @param arena 
- * @param size 
- * @return t_arena* 
- */
-t_arena	*arena_init(t_arena *arena, size_t size)
-{
-	*arena = (t_arena){0};
-	arena->block = (char *)ft_calloc(size, sizeof(char));
-	arena->size = size;
-	return (arena);
-}
+// /**
+//  * @brief 
+//  * 
+//  * @param arena 
+//  * @param size 
+//  * @return t_arena* 
+//  */
+// t_arena	*arena_init(t_arena *arena, size_t size)
+// {
+// 	*arena = (t_arena){0};
+// 	arena->block = (char *)ft_calloc(size, sizeof(char));
+// 	arena->size = size;
+// 	return (arena);
+// }
 
 /**
  * @brief 

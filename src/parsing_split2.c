@@ -28,16 +28,23 @@ t_tkns	*make_node(t_tkns *matrix, char *s, t_parsing *parse_list)
 {
 	t_tkns	*new;
 	int		i;
+	int		y;
 
 	i = 0;
+	y = 0;
 	new = (t_tkns *)arena_alloc(&g_ex.arena, sizeof(*new));
 	if (new == NULL)
 		return (NULL);
 	new->data = arena_alloc(&g_ex.arena, MAX_INPUT);
 	while (s[i] && check_cmd_quotes(s, parse_list, i) == true)
 	{
-		new->data[i] = s[i];
-		i++;
+		if ((parse_list->quote_type == 39 && s[i] == 39)
+			|| (parse_list->quote_type == 34 && s[i] == 34))
+		{
+			i++;
+			continue ;
+		}
+		new->data[y++] = s[i++];
 	}
 	new->next = NULL;
 	nodeaddback(&matrix, new);

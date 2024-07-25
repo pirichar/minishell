@@ -53,7 +53,6 @@ static char	*pwd_prompt(char *new_env[], char *blue_user)
 	return (prompt);
 }
 
-
 /**
  * @brief Function called to return a prompt to give to minishell
 			Its called in main.c for g_ex.prompt

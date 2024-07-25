@@ -76,7 +76,6 @@ void	init_redir_node_one_char(char *s, t_parsing *parse_list)
 	parse_list->index += 1;
 }
 
-
 /**
  * @brief When the node is a command
  * 

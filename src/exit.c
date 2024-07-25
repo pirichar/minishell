@@ -15,19 +15,23 @@
 
  * @param s_line command line splitted
  */
+
+static void	null_exit(t_parsing **parse)
+{
+	printf("exit\n");
+	rl_clear_history();
+	ft_exit(*parse);
+	arena_log_watermark(&g_ex.arena);
+	arena_free(&g_ex.arena);
+	exit (0);
+}
+
 static void	exit_was_too_long(char **s_line, t_parsing **parse)
 {
 	int	i;
 
 	if (s_line[1] == NULL)
-	{
-		printf("exit\n");
-		rl_clear_history();
-		ft_exit(*parse);
-		arena_log_watermark(&g_ex.arena);
-		arena_free(&g_ex.arena);
-		exit (0);
-	}
+		null_exit(parse);
 	i = 0;
 	while (s_line[1][i])
 	{

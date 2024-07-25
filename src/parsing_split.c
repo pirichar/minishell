@@ -54,7 +54,8 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 			parse_list->start = parse_list->tkns_list->next;
 		}
 		while ((ft_isspace(s[parse_list->index]) == true)
-			|| (parse_list->quote_type == 39 && s[parse_list->index] == 39))
+			|| (parse_list->quotes == true
+				&& s[parse_list->index] == parse_list->quote_type))
 			parse_list->index += 1;
 	}
 	parse_list->tkns_list = parse_list->start;

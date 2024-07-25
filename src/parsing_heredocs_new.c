@@ -35,6 +35,29 @@ static t_parsing	*helper1(t_parsing *p_l)
 	return (NULL);
 }
 
+t_parsing	*metachar_utils(t_parsing *p_l)
+{
+	if (p_l->tkns_list->tok_type == PIPE)
+		p_l->nb_of_pipes += 1;
+	if ((p_l->tkns_list->tok_type == OUTPUT
+			|| p_l->tkns_list->tok_type == APPEND)
+		|| p_l->tkns_list->tok_type == PIPE)
+	{
+		while (p_l->tkns_list->next
+			&& p_l->tkns_list->next->tok_type == CMD)
+		{
+			p_l->tkns_list->next->tok_type = ARG;
+			p_l->tkns_list = p_l->tkns_list->next;
+		}
+	}
+	if (p_l->tkns_list->tok_type == INPUT)
+		if (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD)
+			p_l->tkns_list->next->tok_type = ARG;
+	if (p_l->tkns_list->tok_type == TRUNC)
+		p_l->tkns_list->next->tok_type = TRUNC_ARG;
+	return (p_l);
+}
+
 /**
  * @brief
 
@@ -51,24 +74,7 @@ t_parsing	*check_metachar(t_parsing *p_l)
 		tmp = helper1(p_l);
 		if (tmp)
 			return (tmp);
-		if (p_l->tkns_list->tok_type == PIPE)
-			p_l->nb_of_pipes += 1;
-		if ((p_l->tkns_list->tok_type == OUTPUT
-				|| p_l->tkns_list->tok_type == APPEND)
-			|| p_l->tkns_list->tok_type == PIPE)
-		{
-			while (p_l->tkns_list->next
-				&& p_l->tkns_list->next->tok_type == CMD)
-			{
-				p_l->tkns_list->next->tok_type = ARG;
-				p_l->tkns_list = p_l->tkns_list->next;
-			}
-		}
-		if (p_l->tkns_list->tok_type == INPUT)
-			if (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD)
-				p_l->tkns_list->next->tok_type = ARG;
-		if (p_l->tkns_list->tok_type == TRUNC)
-			p_l->tkns_list->next->tok_type = TRUNC_ARG;
+		p_l = metachar_utils(p_l);
 		if (p_l->tkns_list->next)
 			p_l->tkns_list = p_l->tkns_list->next;
 		else

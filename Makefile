@@ -27,7 +27,8 @@ CFILES	=	environement.c main.c builtin.c execute.c parsing_1.c \
 			calling_the_execs_shell.c look_for.c execute_out.c\
 			execute_solo.c ft_signals.c logo_n_setup.c parsing_split.c\
 			parsing_split2.c parsing_split_helpers.c parsing_3.c\
-			parsing_heredocs_new2.c arena.c arena_str.c parsing_expand.c
+			parsing_heredocs_new2.c arena.c arena_str.c parsing_expand.c\
+			parsing_heredocs_utils.c
 
 SRC			= src
 INC			= include

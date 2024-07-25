@@ -255,6 +255,11 @@ int			do_input(t_parsing *parse_list);
 int			do_append(t_parsing *parse_list);
 int			do_output(t_parsing *parse_list);
 
+//parsing_here_doc_utils.c
+int			do_trunc(t_parsing *p_l);
+void		stop_heredoc(int signal);
+void		trunc_child(t_parsing *p_l);
+
 //parsing_utils.c
 int			check_file_and_delim_name(t_tkns *tkns_list);
 int			count_cmd(t_tkns *tkns_list);

@@ -33,15 +33,13 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 	look_for_builtins(&cmd, env, parse);
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
-	if (parse->b_in == false && access (cmd[0], X_OK) == 0)
+	if (parse->b_in == false)
 	{
-		execve(cmd[0], cmd, *(env));
+		if (access (cmd[0], X_OK) == 0)
+			execve(cmd[0], cmd, *(env));
+		else
+			parse_and_exec_cmd_shell(cmd, *(env));
 		exit(1);
-	}
-	else if (parse->b_in == false)
-	{
-		parse_and_exec_cmd_shell(cmd, *(env));
-		exit (1);
 	}
 	arena_free(&g_ex.arena);
 	free_strrarr(g_ex.new_env);

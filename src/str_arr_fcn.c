@@ -74,6 +74,7 @@ char	*ft_itoa_arena(long long n)
  * 
  * @param env passed by address by copy_env
  */
+
 static void	set_3_variables(char ***env)
 {
 	char	*actual_pwd;

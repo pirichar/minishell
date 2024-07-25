@@ -89,13 +89,9 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 				continue ;
 			}
 			p->to_unset = return_variable((*new_env), s_line[p->i]);
-			if (p->to_unset == NULL)
-				p->i++;
-			else
-			{
+			if (p->to_unset != NULL)
 				delete_variable(new_env, s_line[p->i]);
-				p->i++;
-			}
+			p->i++;
 		}
 	}
 }

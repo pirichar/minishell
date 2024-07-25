@@ -47,6 +47,14 @@ static void	execute_command_shell(t_parsing *parse)
 	wait_for_pids(parse);
 }
 
+void	mini_process(void)
+{
+	g_ex.only_delim = true;
+	free(g_ex.line);
+	if (*g_ex.s_line != NULL)
+		free_strrarr(g_ex.s_line);
+}
+
 /**
  * @brief Last function called by main in the while(1)
 			Create a parsing struct
@@ -88,17 +96,12 @@ static bool	process_command(void)
 			return (false);
 		}
 		if (parse == NULL)
-		{
 			return (true);
-		}
 		parse->tkns_list = parse->start;
 		g_ex.s_line = parse->tkns_list->vector_cmd;
 		if (g_ex.s_line && g_ex.s_line[0] == NULL)
 		{
-			g_ex.only_delim = true;
-			free(g_ex.line);
-			if (*g_ex.s_line != NULL)
-				free_strrarr(g_ex.s_line);
+			mini_process();
 			return (true);
 		}
 		execute_command_shell(parse);

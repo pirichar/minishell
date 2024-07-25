@@ -1,6 +1,21 @@
 #include "../include/minishell.h"
 #include "arena.h"
 
+/**
+ * @brief 
+ * 
+ * @param arena 
+ * @param size 
+ * @return t_arena* 
+ */
+t_arena	*arena_init(t_arena *arena, size_t size)
+{
+	*arena = (t_arena){0};
+	arena->block = (char *)ft_calloc(size, sizeof(char));
+	arena->size = size;
+	return (arena);
+}
+
 static char	*ft_fill_word_arena(const char *s, int *pos, char c)
 {
 	char	*rtn;
@@ -64,7 +79,8 @@ char	*ft_strjoin_arena(const char *s1, const char *s2)
 	j = 0;
 	if (!s1 || !s2)
 		return (NULL);
-	str = arena_alloc(&g_ex.arena, sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	str = arena_alloc(&g_ex.arena,
+			sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (str == NULL)
 		return (NULL);
 	while (s1[i])
