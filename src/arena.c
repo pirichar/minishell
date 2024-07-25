@@ -1,8 +1,16 @@
-#include "arena.h"
-#include "../include/libft/libft.h"
-#include <stddef.h>
-#include <stdlib.h>
-#include <unistd.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arena.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/25 11:46:28 by pirichar          #+#    #+#             */
+/*   Updated: 2024/07/25 11:46:29 by pirichar         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
 
 static size_t	align_up(size_t address, size_t alignment)
 {
