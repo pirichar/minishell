@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 09:42:13 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 16:07:33 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 char	*expand_var(char *line, t_parsing *p_l)
 {
 	p_l->p_new = arena_alloc(&g_ex.arena, MAX_INPUT);
-	while (line[p_l->index])
+	while (line[p_l->index] != '\0')
 	{
 		if (line[p_l->index] == '$')
 		{
@@ -140,7 +140,8 @@ char	*expand_var(char *line, t_parsing *p_l)
 		if ((p_l->index == p_l->quote_end)
 			&& (line[p_l->index] == p_l->quote_type))
 			p_l->quote_end = p_l->new_i;
-		p_l->p_new [p_l->new_i++] = line[p_l->index++];
+		if (line[p_l->index] != '\0')
+			p_l->p_new [p_l->new_i++] = line[p_l->index++];
 	}
 	return (p_l->p_new);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calling_the_execs_shell.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:44:02 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:44:03 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:36:33 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,5 +113,5 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 	free_strrarr(p.path);
 	arena_free(&g_ex.arena);
 	free_strrarr(g_ex.new_env);
-	exit(2);
+	exit(127);
 }
