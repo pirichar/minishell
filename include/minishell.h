@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:45:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/29 10:04:01 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 14:33:03 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ typedef struct s_parsing
 	int		quote_end;
 	char	quote_type;
 	int		quote_count;
+	int		quoteadd;
 	bool	quotes;
 	int		cmd_count;
 	char	***pipes_args;

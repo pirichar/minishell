@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split_helpers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:38 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 10:04:44 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 14:35:04 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,12 @@ void	init_command_node(char *s, t_parsing *parse_list)
 	parse_list->tkns_list->next
 		= make_node(parse_list->tkns_list->next,
 			&s[parse_list->index], parse_list);
-	while (s[parse_list->index]
-		&& check_cmd_quotes(s, parse_list, parse_list->index) == true)
-		parse_list->index += 1;
+	parse_list->index += ft_strlen((const char *)parse_list->tkns_list->next->data);
+	if (parse_list->quotes == true && parse_list->quoteadd <= parse_list->quote_count)
+	{	
+		parse_list->quoteadd += 1;
+		parse_list->index += parse_list->quoteadd;
+	}
 	if (parse_list->tkns_list->tok_type == CMD)
 		parse_list->cmd_count++;
 }

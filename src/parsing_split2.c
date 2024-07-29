@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:22 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 11:42:17 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 14:39:25 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ t_tkns	*make_node(t_tkns *matrix, char *s, t_parsing *parse_list)
 		if ((parse_list->quote_type == 39 && s[i] == 39)
 			|| (parse_list->quote_type == 34 && s[i] == 34))
 		{
+			parse_list->quote_count++;
 			i++;
 			continue ;
 		}

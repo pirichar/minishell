@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:32 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 11:19:43 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 14:39:54 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 {
 	parse_list->index = 0;
 	parse_list->start = NULL;
+	parse_list->quote_count = 0;
 	while (ft_isspace(s[parse_list->index]) == true)
 		parse_list->index += 1;
 	while (s[parse_list->index])

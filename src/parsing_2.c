@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:31 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:36:33 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 14:31:51 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->quote_count = 0;
 	parse_list->quote_start = 0;
 	parse_list->quote_end = 0;
+	parse_list->quoteadd = 0;
 	parse_list->bin_do_not_wait = false;
 	parse_list->quote_type = EMPTY;
 	parse_list->cmd_count = 0;

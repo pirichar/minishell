@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:12 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 12:00:51 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 14:52:27 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,10 @@ bool	check_cmd_quotes(char *s, t_parsing *p_l, int index)
 		i = p_l->index;
 	else
 		i = index;
-	if ((ft_isspace(s[i]) == true) && (p_l->quotes == false
-			|| (i < p_l->quote_start || i > p_l->quote_end)))
-		return (false);
 	if (p_l->quotes == true
 		&& (i >= p_l->quote_start
-			&& i <= p_l->quote_end) && s[i] == p_l->quote_type)
+			&& i <= p_l->quote_end) && s[i] == p_l->quote_type
+				 && ft_isspace(s[i+1]))
 		return (false);
 	if (p_l->quotes == true
 		&& (i < p_l->quote_start
