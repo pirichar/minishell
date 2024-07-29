@@ -84,18 +84,18 @@ void	set_variable(char ***env, char *var, char *new_var)
  */
 void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 {
-	if (ft_strncmp(*s_line[0], "echo", 5) == 0)
+	if (ft_strcmp(*s_line[0], "echo") == 0)
 		mini_echo(*s_line, parse);
-	else if (ft_strncmp(*s_line[0], "cd", 3) == 0)
+	else if (ft_strcmp(*s_line[0], "cd") == 0)
 		mini_cd(*s_line, (new_env), parse);
-	else if (ft_strncmp(*s_line[0], "export", 8) == 0)
+	else if (ft_strcmp(*s_line[0], "export") == 0)
 		mini_export(*s_line, (new_env), parse);
-	else if (ft_strncmp(*s_line[0], "unset", 6) == 0)
+	else if (ft_strcmp(*s_line[0], "unset") == 0)
 		mini_unset(*s_line, new_env, parse);
-	else if (ft_strncmp(*s_line[0], "pwd", 4) == 0)
+	else if (ft_strcmp(*s_line[0], "pwd") == 0)
 		mini_pwd(parse);
-	else if (ft_strncmp(*s_line[0], "env", 5) == 0)
+	else if (ft_strcmp(*s_line[0], "env") == 0)
 		mini_env((*new_env), parse);
-	else if (ft_strncmp(*s_line[0], "exit", 5) == 0)
+	else if (ft_strcmp(*s_line[0], "exit") == 0)
 		mini_exit(*s_line, parse);
 }
