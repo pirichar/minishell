@@ -85,11 +85,6 @@ void	mini_process(void)
 			Finally we execute command shell with parse struct
 			at the end of the process we free the line and return false 
 			To continue the main loop normally
-
-// TO-DO Clarify the parsing stuff with Alexandrine cuz jpa sure
-// TO-DO Calrify what situation could end
-	 up givinng s_line[0] == NULL ? For now I cant recreate it
-// TO-DO Calrify if we correctly free all the parse at the end
  *
  * @return true if line is not NULL 
  * @return false if line is NULL

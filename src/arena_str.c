@@ -13,11 +13,13 @@
 #include "../include/minishell.h"
 
 /**
- * @brief 
+ * @brief Used to allocate an arena allocator
+ 			arena = (t_arena){0} is like a b zero for every variables
+			within the struct
  * 
- * @param arena 
- * @param size 
- * @return t_arena* 
+ * @param Address to be allocated to
+ * @param The size we need
+ * @return The result
  */
 t_arena	*arena_init(t_arena *arena, size_t size)
 {

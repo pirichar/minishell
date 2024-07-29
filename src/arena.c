@@ -12,6 +12,18 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief 	Make sure next block of memory's address
+ 			is aligned to the specified boundary.(multiple of 2)
+			It calculates the mask as alignment - 1.
+			It then adds this mask to the address 
+			and clears the lower bits using bitwise AND with the negated mask.
+			This make sure we get the closest block of memory possible
+ * 
+ * @param The memory address to align.
+ * @param The alignment boundary.
+ * @return The aligned address.
+ */
 static size_t	align_up(size_t address, size_t alignment)
 {
 	size_t	mask;
@@ -20,27 +32,12 @@ static size_t	align_up(size_t address, size_t alignment)
 	return ((address + mask) & ~mask);
 }
 
-// /**
-//  * @brief 
-//  * 
-//  * @param arena 
-//  * @param size 
-//  * @return t_arena* 
-//  */
-// t_arena	*arena_init(t_arena *arena, size_t size)
-// {
-// 	*arena = (t_arena){0};
-// 	arena->block = (char *)ft_calloc(size, sizeof(char));
-// 	arena->size = size;
-// 	return (arena);
-// }
-
 /**
- * @brief 
+ * @brief Allocate a bloc of memory into the arena alocator
  * 
  * @param arena the arena map to allocate in
  * @param size how much to allocate
- * @return void* 
+ * @return the adress to the block to be used
  */
 void	*arena_alloc(t_arena *arena, size_t size)
 {
@@ -61,9 +58,9 @@ void	*arena_alloc(t_arena *arena, size_t size)
 }
 
 /**
- * @brief 
+ * @brief Reset the index of the block of memory to 0
  * 
- * @param arena 
+ * @param arena to be reset
  */
 void	arena_clear(t_arena *arena)
 {
@@ -71,9 +68,9 @@ void	arena_clear(t_arena *arena)
 }
 
 /**
- * @brief 
- * *arena = (t_arena){0} is like a b zero for every variables
- * @param arena 
+ * @brief Free the desired arena
+ * 			arena = (t_arena){0} is like a b zero for every variables
+ * @param to be freed
  */
 void	arena_free(t_arena *arena)
 {
@@ -82,9 +79,9 @@ void	arena_free(t_arena *arena)
 }
 
 /**
- * @brief print in MB, KB or B
+ * @brief print in MB, KB or B, only used at the end
  * 
- * @param arena 
+ * @param arena to print
  */
 void	arena_log_watermark(t_arena *arena)
 {
