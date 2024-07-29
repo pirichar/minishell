@@ -15,10 +15,19 @@
 /**
  * @brief 	Make sure next block of memory's address
  			is aligned to the specified boundary.(multiple of 2)
-			It calculates the mask as alignment - 1.
+			It calculates the mask as alignment - 1 
 			It then adds this mask to the address 
-			and clears the lower bits using bitwise AND with the negated mask.
-			This make sure we get the closest block of memory possible
+			The bitwise AND with the negated (NOT operator ~)mask clears out
+			the lower bits to ensure alignment
+			This make sure we get the closest block of memory possible within
+
+			Example:
+			Suppose address = 18 and alignment = 16:
+			Mask: 15 (00001111)
+			Address + Mask: 18 + 15 = 33 (00100001)
+			Address & ~mask : 33 & ~15 (the opposite of (00001111)) =
+			33(00100001) & 240 (11110000) = 32 (00100000)
+
  * 
  * @param The memory address to align.
  * @param The alignment boundary.
