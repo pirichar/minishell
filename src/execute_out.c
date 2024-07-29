@@ -49,8 +49,9 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 		parse_and_exec_cmd_shell(cmd, env);
 		exit(1);
 	}
-	else
-		exit(0);
+	arena_free(&g_ex.arena);
+	free_strrarr(g_ex.new_env);
+	exit(0);
 }
 
 /**
