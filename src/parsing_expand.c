@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_expand.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:15 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:36:17 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 16:34:46 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ret_value(char *s1, char *s2, t_parsing *p_l)
 
 	i = 0;
 	y = 0;
-	if (s2[p_l->index + 1] == '?')
+	if (s2[p_l->index] != '\0' && s2[p_l->index + 1] == '?')
 	{
 		str = arena_alloc(&g_ex.arena, MAX_INPUT);
 		num = ft_itoa(g_ex.status);
