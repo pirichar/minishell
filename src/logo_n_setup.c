@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "arena.h"
 
 /**
  * @brief Fun function to print our logo

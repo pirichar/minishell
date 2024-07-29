@@ -56,7 +56,6 @@ be expected to to for itself, it must do itself.
             Move to a new line
             This function is binded by setup_signal_handlers
 
-// TO-DO Double check why mik add g_mini.code =  INTERRUPT_SIG 
  * 
  * @param sig is required by the sig action struct
  */
