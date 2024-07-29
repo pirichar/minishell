@@ -99,9 +99,11 @@ void	init_command_node(char *s, t_parsing *parse_list)
 	parse_list->tkns_list->next
 		= make_node(parse_list->tkns_list->next,
 			&s[parse_list->index], parse_list);
-	parse_list->index += ft_strlen((const char *)parse_list->tkns_list->next->data);
-	if (parse_list->quotes == true && parse_list->quoteadd <= parse_list->quote_count)
-	{	
+	parse_list->index
+		+= ft_strlen((const char *)parse_list->tkns_list->next->data);
+	if (parse_list->quotes == true
+		&& parse_list->quoteadd <= parse_list->quote_count)
+	{
 		parse_list->quoteadd += 1;
 		parse_list->index += parse_list->quoteadd;
 	}

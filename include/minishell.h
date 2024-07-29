@@ -248,7 +248,7 @@ t_parsing	*new_split(char *s, t_parsing *parse_list);
 t_tkns		*my_lstlast(t_tkns *lst);
 void		nodeaddback(t_tkns **lst, t_tkns *new);
 t_tkns		*make_node(t_tkns *matrix, char *s, t_parsing *parse_list);
-t_tkns		*node_redir(t_tkns *matrix, char *s, int size, t_parsing * p_l);
+t_tkns		*node_redir(t_tkns *matrix, char *s, int size, t_parsing *p_l);
 t_tkns		*init_list(char *s);
 
 //parking_split_helper.c

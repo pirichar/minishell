@@ -82,7 +82,7 @@ bool	check_cmd_quotes(char *s, t_parsing *p_l, int index)
 	if (p_l->quotes == true
 		&& (i >= p_l->quote_start
 			&& i <= p_l->quote_end) && s[i] == p_l->quote_type
-				 && ft_isspace(s[i+1]))
+		&& ft_isspace(s[i + 1]))
 		return (false);
 	if (p_l->quotes == true
 		&& (i < p_l->quote_start
