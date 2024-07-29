@@ -129,7 +129,7 @@ bool	search_path_exec(const char *p_arr, const char *cmd)
 	char	*line;
 
 	line = ft_strjoin_arena(p_arr, cmd);
-	if (access(line, X_OK) == 0)
+	if (line && access(line, X_OK) == 0)
 		return (true);
 	return (false);
 }
