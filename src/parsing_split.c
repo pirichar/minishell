@@ -6,16 +6,14 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:32 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:35:34 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 11:19:43 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_tkns	*set_toktype(t_tkns *matrix)
+int	check_toktype_utils(t_tkns *matrix)
 {
-	while (matrix -> next)
-		matrix = matrix -> next;
 	if (matrix->data[0] == '<' && matrix->data[1] == '<'
 		&& matrix->data[2] == '\0')
 		matrix->tok_type = TRUNC;
@@ -24,17 +22,32 @@ t_tkns	*set_toktype(t_tkns *matrix)
 		matrix->tok_type = IN_OUT;
 	else if (matrix->data[0] == '<' && matrix->data[1] == '\0')
 		matrix->tok_type = INPUT;
-	else if (matrix->data[0] == '>' && matrix->data[1] == '>'
-		&& matrix->data[2] == '\0')
-		matrix->tok_type = APPEND;
-	else if (matrix->data[0] == '>' && matrix->data[1] == '|'
-		&& matrix->data[2] == '\0')
-		matrix->tok_type = SPECIAL_PIPE;
-	else if (matrix->data[0] == '>' && matrix->data[1] == '\0')
-		matrix->tok_type = OUTPUT;
-	else if (matrix->data[0] == '|' && matrix->data[1] == '\0')
-		matrix->tok_type = PIPE;
 	else
+		matrix->tok_type = EMPTY;
+	return (matrix->tok_type);
+}
+
+t_tkns	*set_toktype(t_tkns *matrix, t_parsing *p_l)
+{
+	while (matrix -> next)
+		matrix = matrix -> next;
+	if (p_l->quotes == false || (p_l->quotes == true
+			&& (p_l->index < p_l->quote_start || p_l->index > p_l->quote_end)))
+	{
+		if (matrix->data[0] == '<')
+			matrix->tok_type = check_toktype_utils(matrix);
+		else if (matrix->data[0] == '>' && matrix->data[1] == '>'
+			&& matrix->data[2] == '\0')
+			matrix->tok_type = APPEND;
+		else if (matrix->data[0] == '>' && matrix->data[1] == '|'
+			&& matrix->data[2] == '\0')
+			matrix->tok_type = SPECIAL_PIPE;
+		else if (matrix->data[0] == '>' && matrix->data[1] == '\0')
+			matrix->tok_type = OUTPUT;
+		else if (matrix->data[0] == '|' && matrix->data[1] == '\0')
+			matrix->tok_type = PIPE;
+	}
+	if (matrix->tok_type == EMPTY)
 		matrix->tok_type = CMD;
 	return (matrix);
 }

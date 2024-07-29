@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:22 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:35:25 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 11:42:17 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ t_tkns	*make_node(t_tkns *matrix, char *s, t_parsing *parse_list)
 	}
 	new->next = NULL;
 	nodeaddback(&matrix, new);
-	return (set_toktype(matrix));
+	return (set_toktype(matrix, parse_list));
 }
 
-t_tkns	*node_redir(t_tkns *matrix, char *s, int size)
+t_tkns	*node_redir(t_tkns *matrix, char *s, int size, t_parsing *parse_list)
 {
 	t_tkns	*new;
 	int		i;
@@ -81,7 +81,7 @@ t_tkns	*node_redir(t_tkns *matrix, char *s, int size)
 	new->data[i] = '\0';
 	new->next = NULL;
 	nodeaddback(&matrix, new);
-	return (set_toktype(matrix));
+	return (set_toktype(matrix, parse_list));
 }
 
 t_tkns	*init_list(char *s)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:45:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:45:42 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/07/29 10:04:01 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,14 +240,14 @@ char		*expand_var(char *line, t_parsing *p_l);
 char		*ret_value(char *s1, char *s2, t_parsing *p_l);
 
 //parsing_split.c
-t_tkns		*set_toktype(t_tkns *matrix);
+t_tkns		*set_toktype(t_tkns *matrix, t_parsing *p_l);
 t_parsing	*new_split(char *s, t_parsing *parse_list);
 
 //parsing_split2.c
 t_tkns		*my_lstlast(t_tkns *lst);
 void		nodeaddback(t_tkns **lst, t_tkns *new);
 t_tkns		*make_node(t_tkns *matrix, char *s, t_parsing *parse_list);
-t_tkns		*node_redir(t_tkns *matrix, char *s, int size);
+t_tkns		*node_redir(t_tkns *matrix, char *s, int size, t_parsing * p_l);
 t_tkns		*init_list(char *s);
 
 //parking_split_helper.c

@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:38 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:35:39 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 10:04:44 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	init_redir_node_two_char(char *s, t_parsing *parse_list)
 {
 	parse_list->tkns_list->next
 		= node_redir(parse_list->tkns_list->next,
-			&s[parse_list->index], 2);
+			&s[parse_list->index], 2, parse_list);
 	parse_list->index += 2;
 }
 
@@ -84,7 +84,7 @@ void	init_redir_node_one_char(char *s, t_parsing *parse_list)
 {
 	parse_list->tkns_list->next
 		= node_redir(parse_list->tkns_list->next,
-			&s[parse_list->index], 1);
+			&s[parse_list->index], 1, parse_list);
 	parse_list->index += 1;
 }
 

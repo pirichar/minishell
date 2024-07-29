@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:36:25 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 09:42:13 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,19 +126,16 @@ char	*expand_var(char *line, t_parsing *p_l)
 	{
 		if (line[p_l->index] == '$')
 		{
-			if (p_l->quotes == true && (p_l->index
-					< p_l->quote_start || p_l->index > p_l->quote_end))
+			if ((p_l->quotes == false) || (p_l->quotes == true && ((p_l->index
+							< p_l->quote_start || p_l->index > p_l->quote_end)
+						|| (p_l->quote_type == 34
+							&& (p_l->index > p_l->quote_start
+								|| p_l->index < p_l->quote_end)))))
+			{
 				p_l->p_new = joining(p_l->p_new, search_env(line,
 							p_l->index + 1, p_l), *&p_l);
-			else if (p_l->quotes == true
-				&& p_l->quote_type == 34 && (p_l->index > p_l->quote_start
-					|| p_l->index < p_l->quote_end))
-				p_l->p_new = joining(p_l->p_new, search_env(line,
-							p_l->index + 1, p_l), *&p_l);
-			else if (p_l->quotes == false)
-				p_l->p_new = joining(p_l->p_new, search_env(line,
-							p_l->index + 1, p_l), *&p_l);
-			p_l->p_new = ret_value(p_l->p_new, line, *&p_l);
+				p_l->p_new = ret_value(p_l->p_new, line, *&p_l);
+			}
 		}
 		if ((p_l->index == p_l->quote_end)
 			&& (line[p_l->index] == p_l->quote_type))

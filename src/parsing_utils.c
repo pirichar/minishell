@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:12 by adube             #+#    #+#             */
-/*   Updated: 2024/07/25 11:35:15 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/29 12:00:51 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,26 +70,32 @@ int	check_pipe_name(t_tkns *tkns_list) //may 21, should be ok
 	return (0);
 }
 
-bool	check_cmd_quotes(char *s, t_parsing *parse_list, int index)
+bool	check_cmd_quotes(char *s, t_parsing *p_l, int index)
 {
 	int	i;
 
-	if (parse_list->quotes == true && index != parse_list->index
-		&& parse_list->index != 0)
-		i = parse_list->index;
+	if (p_l->quotes == true && index != p_l->index
+		&& p_l->index != 0 && p_l->index > index)
+		i = p_l->index;
 	else
 		i = index;
-	if (ft_isspace(s[index]) == true)
+	if ((ft_isspace(s[i]) == true) && (p_l->quotes == false
+			|| (i < p_l->quote_start || i > p_l->quote_end)))
 		return (false);
-	if ((parse_list->quotes == false)
+	if (p_l->quotes == true
+		&& (i >= p_l->quote_start
+			&& i <= p_l->quote_end) && s[i] == p_l->quote_type)
+		return (false);
+	if (p_l->quotes == true
+		&& (i < p_l->quote_start
+			|| i > p_l->quote_end) && ft_isspace(s[i]) == false)
+		return (true);
+	if ((p_l->quotes == false)
 		&& (ft_isspace(s[i]) == false))
 		return (true);
-	if (parse_list->quotes == true
-		&& (i >= parse_list->quote_start
-			|| i <= parse_list->quote_end) && s[i] != parse_list->quote_type)
-		return (true);
-	if ((parse_list->quote_type == 39 && s[i] == 39)
-		|| (parse_list->quote_type == 34 && s[i] == 34))
+	if (p_l->quotes == true
+		&& (i >= p_l->quote_start
+			&& i <= p_l->quote_end))
 		return (true);
 	return (false);
 }
