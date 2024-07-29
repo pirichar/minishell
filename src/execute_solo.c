@@ -13,6 +13,23 @@
 #include "../include/minishell.h"
 #include <stdio.h>
 
+static void	process_cmd(t_parsing *parse, char ***env, char **cmd)
+{
+	if (parse->b_in == false)
+	{
+		if (access (cmd[0], X_OK) == 0)
+			execve(cmd[0], cmd, *(env));
+		else
+			parse_and_exec_cmd_shell(cmd, *(env));
+		arena_free(&g_ex.arena);
+		free_strrarr(g_ex.new_env);
+		exit(1);
+	}
+	arena_free(&g_ex.arena);
+	free_strrarr(g_ex.new_env);
+	exit (0);
+}
+
 /**
  * @brief Function made to execute a solo child
  			if parse->infile is not the default
@@ -32,6 +49,8 @@
  */
 static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (parse->infile != 0)
 	{
 		dup2(parse->infile, 0);
@@ -43,19 +62,7 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 		close(parse->outfile);
 	}
 	look_for_builtins(&cmd, env, parse);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-	if (parse->b_in == false)
-	{
-		if (access (cmd[0], X_OK) == 0)
-			execve(cmd[0], cmd, *(env));
-		else
-			parse_and_exec_cmd_shell(cmd, *(env));
-		exit(1);
-	}
-	arena_free(&g_ex.arena);
-	free_strrarr(g_ex.new_env);
-	exit (0);
+	process_cmd(parse, env, cmd);
 }
 
 /**

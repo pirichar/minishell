@@ -29,6 +29,8 @@
 static void	exec_out_child(int fds[2], t_parsing *parse,
 	char **cmd, char **env)
 {
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	dup2(fds[0], 0);
 	close(fds[0]);
 	if (parse->outfile != 1)
@@ -37,8 +39,6 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 		close(fds[1]);
 	}
 	look_for_builtins(&cmd, &env, parse);
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
 	if (parse->b_in == false && access(cmd[0], X_OK) == 0)
 	{
 		execve(cmd[0], cmd, env);
