@@ -27,7 +27,7 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 		exit (1);
 	}
 	arena_free(&g_ex.arena);
-	free_strrarr(g_ex.new_env);
+	//free_strrarr(g_ex.new_env);
 	exit (0);
 }
 
