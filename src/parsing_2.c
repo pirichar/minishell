@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:31 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 12:29:28 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/07/31 15:02:53 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 t_parsing	*get_cmd(t_parsing *parse_list)
 {
+	parse_list->cmd_count = 0;
 	parse_list->cmd_count
 		= count_cmd(parse_list->tkns_list);
 	parse_list->vector_cmd
@@ -114,7 +115,7 @@ char	*del_quotes(t_parsing *parse_list, char *line)
 	return (newline);
 }
 
-char	**prep_tab(t_tkns *tkns_list)
+char	**	prep_tab(t_tkns *tkns_list)
 {
 	char	**tab;
 	int		count;
