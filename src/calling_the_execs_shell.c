@@ -45,7 +45,7 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 
 	i = 1;
 	parse->i = 0;
-	if (parse->nb_of_pipes == 0)
+	if (parse->nb_of_pipes == 0 || parse->nb_pipearg <= 0)
 		execute_solo(cmd, new_env, parse);
 	else
 	{
@@ -53,7 +53,7 @@ void	calling_the_execs_shell(char **cmd, char ***new_env, t_parsing *parse)
 		fd = execute(parse->infile, &parse->pids[0], *(new_env), parse);
 		parse->f_command = false;
 		cmd = parse->pipes_args[parse->i];
-		while (i < parse->nb_of_pipes)
+		while (i < parse->nb_pipearg)
 		{
 			fd = execute(fd, &parse->pids[i], *(new_env), parse);
 			i++;

@@ -57,7 +57,7 @@ int	do_trunc(t_parsing *p_l)
 
 	if (check_file_and_delim_name(p_l->tkns_list) == 1)
 		return (1);
-	p_l->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_APPEND, 0777);
+	p_l->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (p_l->file == -1)
 		return (1);
 	signal(SIGINT, SIG_IGN);
