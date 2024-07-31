@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:45:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/29 14:33:03 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/07/31 12:49:08 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,6 +279,10 @@ int			count_cmd(t_tkns *tkns_list);
 int			init_first_token_nodes(t_parsing *parse_list);
 int			check_pipe_name(t_tkns *tkns_array);
 bool		check_cmd_quotes(char *s, t_parsing *parse_list, int i);
+
+//parsing_utils2.c
+bool 		ft_isredir(char c);
+t_parsing	*empty_quotes(char *line, t_parsing *p_l);
 
 // ft_signals
 void		handle_sigint(int sig);

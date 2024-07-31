@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:54 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 10:35:25 by adube            ###   ########.fr       */
+/*   Updated: 2024/07/30 17:05:33 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ t_parsing	*start_parse(char *line, int status)
 	parse_list->pids = arena_alloc(&g_ex.arena,
 			(parse_list->nb_of_pipes + 1) * sizeof(int));
 	parse_list = get_cmd(parse_list);
-	if (parse_list->nb_of_pipes != 0)
+	if (parse_list != NULL && parse_list->nb_of_pipes != 0)
 		parse_list->pipes_args = get_argarray(parse_list);
 	return (parse_list);
 }

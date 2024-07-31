@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:31 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 14:31:51 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/07/31 12:29:28 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ t_parsing	*get_cmd(t_parsing *parse_list)
 			break ;
 	}
 	parse_list->tkns_list = parse_list->start;
+	if (parse_list->tkns_list == NULL)
+		return (NULL);
 	parse_list->tkns_list->vector_cmd = parse_list->vector_cmd;
 	return (parse_list);
 }
@@ -75,8 +77,13 @@ t_parsing	*quotes_line(char *line, t_parsing *parse_list)
 		i--;
 	if (parse_list->quote_start != i)
 	{
-		parse_list->quote_end = i;
-		parse_list->quotes = true;
+		if ((parse_list->quote_start + 1) == i && (line[parse_list->quote_start + 2] == '\0'))
+			parse_list->quotes = false;
+		else
+		{
+			parse_list->quote_end = i;
+			parse_list->quotes = true;
+		}
 	}
 	return (parse_list);
 }

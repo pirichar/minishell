@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 16:35:07 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/07/31 12:47:40 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	helper_get_arg(t_parsing	*parse_list, int i, char ***tab_tab)
 			tab_tab[i][y][z] = parse_list->tkns_list->data[z];
 			z++;
 		}
+		tab_tab[i][y][z] = '\0';
 		y++;
 		if (parse_list->tkns_list->next != NULL)
 			parse_list->tkns_list = parse_list->tkns_list->next;
@@ -99,8 +100,6 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 
 	i = 0;
 	j = parse_list->to_skip;
-	if (!s2)
-		return (s1);
 	if (!s1)
 		return (s2);
 	str = arena_alloc(&g_ex.arena, MAX_INPUT);
@@ -108,6 +107,11 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 	{
 		str[i] = s1[i];
 		i++;
+	}
+	if (!s2)
+	{
+		parse_list->new_i = i + 1;
+		return (str);
 	}
 	while (s2[j])
 	{
@@ -122,6 +126,7 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 char	*expand_var(char *line, t_parsing *p_l)
 {
 	p_l->p_new = arena_alloc(&g_ex.arena, MAX_INPUT);
+	p_l = empty_quotes(*&p_l->p_new, p_l);
 	while (line[p_l->index] != '\0')
 	{
 		if (line[p_l->index] == '$')

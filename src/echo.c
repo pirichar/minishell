@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:43:32 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:43:33 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:43:57 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
