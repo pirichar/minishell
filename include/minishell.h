@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:45:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/31 15:03:11 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/07/31 17:03:14 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ typedef struct s_parsing
 	bool	quotes;
 	int		cmd_count;
 	char	***pipes_args;
+	int		nb_pipearg;
 	int		index;
 	int		new_i;
 	int		to_skip;

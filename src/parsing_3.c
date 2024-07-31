@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 15:03:23 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/07/31 17:10:36 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,14 @@ char	***get_argarray(t_parsing *parse_list)
 			tab_tab[i] = prep_tab(parse_list->tkns_list);
 			helper_get_arg(parse_list, i, tab_tab);
 			i++;
+			parse_list->nb_pipearg++;
 		}
 		else if (parse_list->tkns_list->next != NULL)
 			parse_list->tkns_list = parse_list->tkns_list->next;
 		else
 			break ;
 	}
+	parse_list->nb_pipearg -= 1;
 	return (tab_tab);
 }
 

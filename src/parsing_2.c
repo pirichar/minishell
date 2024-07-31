@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:31 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 15:02:53 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/07/31 17:02:43 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->quote_type = EMPTY;
 	parse_list->cmd_count = 0;
 	parse_list->nb_of_pipes = 0;
+	parse_list->nb_pipearg = 0;
 	parse_list->to_skip = 0;
 	parse_list->index = 0;
 	parse_list->new_i = 0;
