@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdio.h>
 
 static void	process_cmd(t_parsing *parse, char ***env, char **cmd)
 {
@@ -71,8 +70,6 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 			If it cant it will then call execute solo child
 			This function is called by calling_the_execs_shell
  * 
-	// for(int i = 0;cmd[i];i++)
-	// 	printf("CMD[%d] = %s\n",i, cmd[i]);
  * @param cmd 
  * @param env 
  * @param parse 
