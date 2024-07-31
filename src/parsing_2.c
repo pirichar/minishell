@@ -57,9 +57,6 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->index = 0;
 	parse_list->new_i = 0;
 	parse_list->pids = 0;
-	parse_list->file
-		= open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	close(parse_list->file);
 }
 
 t_parsing	*quotes_line(char *line, t_parsing *parse_list)
