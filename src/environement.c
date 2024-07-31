@@ -67,13 +67,13 @@ char	**path_to_starrr(char **env, char *var)
 
 	p_arr = NULL;
 	len = strlen_path(env);
-	path = ft_calloc(sizeof(char), len);
+	path = ft_calloc(sizeof(char), len + 1);
 	i = 0;
 	while (env[i])
 	{
 		if (ft_strncmp(env[i], var, ft_strlen(var)) == 0)
 		{
-			ft_strlcpy(path, env[i], len);
+			ft_strlcpy(path, env[i], len + 1);
 			p_arr = ft_split(path + 5, ':');
 		}
 		i++;

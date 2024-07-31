@@ -100,14 +100,16 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 	}
 	cmd[0] = ft_strjoin_arena("/", cmd[0]);
 	i = 0;
-	while (p.path[i++])
+	while (p.path[i])
 	{
 		if (search_path_exec(p.path[i], cmd[0]) == true)
 		{
+			fprintf(stderr, "Found in path[i] [%d]\n", i);
 			cmd[0] = ft_strjoin_arena(p.path[i], cmd[0]);
 			execve(cmd[0], cmd, env);
 			exit(1);
 		}
+		i++;
 	}
 	fprintf(stderr, "%s: command not found\n", cmd[0] + 1);
 	free_strrarr(p.path);

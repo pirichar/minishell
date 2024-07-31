@@ -12,6 +12,15 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Will try to run the command passed locally
+			If it cant, it will then try to run the command on all the paths
+			with parse_and_exec_cmd shell
+ * 
+ * @param parse 
+ * @param env 
+ * @param cmd 
+ */
 static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 {
 	if (parse->b_in == false
@@ -27,7 +36,6 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 		exit (1);
 	}
 	arena_free(&g_ex.arena);
-	//free_strrarr(g_ex.new_env);
 	exit (0);
 }
 
