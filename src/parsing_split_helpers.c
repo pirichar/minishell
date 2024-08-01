@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:38 by adube             #+#    #+#             */
-/*   Updated: 2024/08/01 13:04:06 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/01 13:32:57 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ bool	check_in_out_file(char *s, t_parsing *parse_list)
 		&& ((parse_list->quotes == false) || (parse_list->quotes == true
 				&& (parse_list->index < parse_list->quote_start
 					|| parse_list->index > parse_list->quote_end))))
-			return (true);
+		return (true);
 	return (false);
 }
 
