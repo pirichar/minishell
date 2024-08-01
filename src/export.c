@@ -139,11 +139,15 @@ void	mini_export(char **s_line, char ***new_env, t_parsing *parse, bool local)
 {
 	parse->b_in = true;
 	parse->bin_do_not_wait = true;
-	if (s_line[1] == NULL)
+	if (s_line[1] == NULL && local)
 		print_export(new_env);
-	else
+	else if (local)
 		actually_set_variables(s_line, new_env);
 	if (!local)
+	{
+		arena_free(&g_ex.arena);
+		free_strrarr(g_ex.new_env);
 		exit (g_ex.status);
+	}
 
 }

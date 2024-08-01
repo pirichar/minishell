@@ -49,6 +49,7 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 		parse_and_exec_cmd_shell(cmd, env);
 		exit(1);
 	}
+	fprintf(stderr, "before the end of process_cmd in execute_child in OUT\n");
 	arena_free(&g_ex.arena);
 	free_strrarr(g_ex.new_env);
 	exit(0);

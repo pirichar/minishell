@@ -97,5 +97,9 @@ void	mini_echo(char **s_line, t_parsing *parse, bool local)
 		dprintf(parse->outfile, "\n");
 	g_ex.status = 0;
 	if (!local)
+	{
+		arena_free(&g_ex.arena);
+		free_strrarr(g_ex.new_env);
 		exit (g_ex.status);
+	}
 }

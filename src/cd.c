@@ -56,6 +56,7 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 	char	*buff;
 	int		rtn;
 
+	rtn = 0;
 	parse->b_in = true;
 	parse->bin_do_not_wait = true;
 	buff = NULL;
@@ -75,7 +76,7 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 		g_ex.status = 1;
 		fprintf(stderr, "cd: no such file or directory: %s\n", s_line[1]);
 	}
-	else 
+	else
 		g_ex.status = 0;
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
@@ -83,5 +84,9 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 	free(actual_pwd);
 	free(buff);
 	if (!local)
+	{
+		arena_free(&g_ex.arena);
+		free_strrarr(g_ex.new_env);
 		exit (g_ex.status);
+	}
 }

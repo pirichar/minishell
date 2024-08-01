@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdio.h>
 
 /**
  * @brief Will try to run the command passed locally
@@ -35,6 +36,8 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 		parse_and_exec_cmd_shell(cmd, env);
 		exit (1);
 	}
+	fprintf(stderr, "before the end of process_cmd in execute_child in EXEC\n");
+	free_strrarr(g_ex.new_env);
 	arena_free(&g_ex.arena);
 	exit (0);
 }

@@ -94,7 +94,11 @@ void	mini_exit(char **s_line, t_parsing *parse, bool local)
 			return ;
 		}
 		else
+		{
+			arena_free(&g_ex.arena);
+			free_strrarr(g_ex.new_env);
 			exit (1);
+		}
 	}
 	exit_was_too_long(s_line, &parse);
 	tmp = ft_atoi(s_line[1]);

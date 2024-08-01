@@ -90,8 +90,6 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p, bool local)
 	{
 		fprintf(stderr, "unset : not enough arguments\n");
 		g_ex.status = 1;
-		if (!local)
-			exit (g_ex.status);
 	}
 	else
 	{
@@ -112,7 +110,11 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p, bool local)
 			p->i++;
 			g_ex.status = 0;
 		}
-		if (!local)
-			exit (g_ex.status);
+	}
+	if (!local)
+	{
+		arena_free(&g_ex.arena);
+		free_strrarr(g_ex.new_env);
+		exit (g_ex.status);
 	}
 }
