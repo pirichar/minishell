@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:32 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 12:13:30 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 13:04:18 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,13 +64,13 @@ t_parsing	*new_split(char *s, t_parsing *parse_list)
 	parse_list->index = 0;
 	parse_list->start = NULL;
 	parse_list->quote_count = 0;
-	// while (ft_isspace(s[parse_list->index]) == true)
-	// 	parse_list->index += 1;
+	while (ft_isspace(s[parse_list->index]) == true)
+		parse_list->index += 1;
 	while (s[parse_list->index])
 	{
-		if (check_double_redir(s, parse_list))
+		if (check_double_redir(s, parse_list) == true)
 			init_redir_node_two_char(s, parse_list);
-		else if (check_in_out_file(s, parse_list))
+		else if (check_in_out_file(s, parse_list) == true)
 			init_redir_node_one_char(s, parse_list);
 		else
 			init_command_node(s, parse_list);

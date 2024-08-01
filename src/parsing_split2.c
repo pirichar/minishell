@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:22 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 11:48:00 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 12:39:37 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ t_tkns	*make_node(t_tkns *matrix, char *s, t_parsing *parse_list)
 	new->data = arena_alloc(&g_ex.arena, MAX_INPUT);
 	while (s[i] && check_cmd_quotes(s, parse_list, i) == true)
 	{
-		if ((parse_list->quotes == true) && ((parse_list->quote_type == 39 && s[i] == 39)
-			|| (parse_list->quote_type == 34 && s[i] == 34)))
+		if ((parse_list->quotes == true)
+			&& ((parse_list->quote_type == 39 && s[i] == 39)
+				|| (parse_list->quote_type == 34 && s[i] == 34)))
 		{
 			parse_list->quote_count++;
 			i++;

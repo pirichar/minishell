@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split_helpers.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:38 by adube             #+#    #+#             */
-/*   Updated: 2024/07/29 14:35:04 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 13:04:06 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,16 @@
  */
 bool	check_double_redir(char *s, t_parsing *parse_list)
 {
-	return (((s[parse_list->index] == '<'
+	if (((s[parse_list->index] == '<'
 				|| s[parse_list->index] == '>')
 			&& (s[parse_list->index + 1] == '<'
 				|| s[parse_list->index + 1] == '>'
 				|| s[parse_list->index + 1] == '|'))
 		&& ((parse_list->quotes == false) || (parse_list->quotes == true
 				&& (parse_list->index < parse_list->quote_start
-					|| parse_list->index > parse_list->quote_end))));
+					|| parse_list->index > parse_list->quote_end))))
+		return (true);
+	return (false);
 }
 
 /**
@@ -49,12 +51,14 @@ bool	check_double_redir(char *s, t_parsing *parse_list)
 
 bool	check_in_out_file(char *s, t_parsing *parse_list)
 {
-	return ((s[parse_list->index] == '<'
+	if ((s[parse_list->index] == '<'
 			|| s[parse_list->index] == '>'
 			|| s[parse_list->index] == '|')
 		&& ((parse_list->quotes == false) || (parse_list->quotes == true
 				&& (parse_list->index < parse_list->quote_start
-					|| parse_list->index > parse_list->quote_end))));
+					|| parse_list->index > parse_list->quote_end))))
+			return (true);
+	return (false);
 }
 
 /**

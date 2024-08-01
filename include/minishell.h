@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:45:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/31 17:03:14 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 12:51:10 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ typedef struct s_parsing
 	char	*p_new;
 	char	**trunc_args;
 	bool	bin_do_not_wait;
+	bool	quote_flag;
 }				t_parsing;
 
 //main.c
@@ -282,7 +283,7 @@ int			check_pipe_name(t_tkns *tkns_array);
 bool		check_cmd_quotes(char *s, t_parsing *parse_list, int i);
 
 //parsing_utils2.c
-bool 		ft_isredir(char c);
+bool		ft_isredir(char c);
 t_parsing	*empty_quotes(char *line, t_parsing *p_l);
 
 // ft_signals

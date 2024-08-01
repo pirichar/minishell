@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 12:45:17 by alexandrine       #+#    #+#             */
-/*   Updated: 2024/07/31 12:49:31 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 12:44:37 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-bool ft_isredir(char c)
+bool	ft_isredir(char c)
 {
 	if (c == '|' || c == '<' || c == '>')
-		return true;
+		return (true);
 	else
-		return false;
+		return (false);
 }
 
 t_parsing	*empty_quotes(char *line, t_parsing *p_l)
@@ -31,12 +31,12 @@ t_parsing	*empty_quotes(char *line, t_parsing *p_l)
 	new_line = arena_alloc(&g_ex.arena, MAX_INPUT);
 	while (line[i])
 	{
-		if(p_l->quote_start == i && p_l->quote_start + 1 == p_l->quote_end)
-		{ 
+		if (p_l->quote_start == i && ((p_l->quote_start + 1) == p_l->quote_end))
+		{
 			new_line[y++] = line[i++];
 			new_line[y] = ' ';
 			y++;
-			p_l->quote_end += 1; 
+			p_l->quote_end += 1;
 		}
 		new_line[y] = line[i];
 		i ++;

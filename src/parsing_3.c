@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 17:10:36 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 12:37:45 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,8 @@ char	***get_argarray(t_parsing *parse_list)
 		else
 			break ;
 	}
-	parse_list->nb_pipearg -= 1;
+	if (parse_list->nb_pipearg > 1)
+		parse_list->nb_pipearg -= 1;
 	return (tab_tab);
 }
 
@@ -116,11 +117,7 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 		return (str);
 	}
 	while (s2[j])
-	{
-		str[i] = s2[j];
-		i++;
-		j++;
-	}
+		str[i++] = s2[j++];
 	parse_list->new_i = i;
 	return (str);
 }

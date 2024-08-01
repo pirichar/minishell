@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:43:32 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/31 12:43:57 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 12:49:58 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ void	mini_echo(char **s_line, t_parsing *parse)
 		if (s_line[i] == NULL)
 			return ;
 		parse->check_nl = false;
+		if (ft_strcmp(s_line[i], "\'\'") == 0
+			|| ft_strcmp(s_line[i], "\"\"") == 0)
+			s_line[i] = " ";
 		if (s_line[i + 1])
 			dprintf(parse->outfile, "%s ", s_line[i]);
 		else

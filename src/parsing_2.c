@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:31 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 17:02:43 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/01 12:38:38 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->index = 0;
 	parse_list->new_i = 0;
 	parse_list->pids = 0;
+	parse_list->quote_flag = false;
 }
 
 t_parsing	*quotes_line(char *line, t_parsing *parse_list)
@@ -76,7 +77,8 @@ t_parsing	*quotes_line(char *line, t_parsing *parse_list)
 		i--;
 	if (parse_list->quote_start != i)
 	{
-		if ((parse_list->quote_start + 1) == i && (line[parse_list->quote_start + 2] == '\0'))
+		if ((parse_list->quote_start + 1) == i
+			&& (line[parse_list->quote_start + 2] == '\0'))
 			parse_list->quotes = false;
 		else
 		{
@@ -113,7 +115,7 @@ char	*del_quotes(t_parsing *parse_list, char *line)
 	return (newline);
 }
 
-char	**	prep_tab(t_tkns *tkns_list)
+char	**prep_tab(t_tkns *tkns_list)
 {
 	char	**tab;
 	int		count;
