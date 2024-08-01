@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:12 by adube             #+#    #+#             */
-/*   Updated: 2024/08/01 13:10:41 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/01 16:23:07 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ bool	check_cmd_quotes(char *s, t_parsing *p_l, int index)
 	int	i;
 
 	if (p_l->quotes == true && index != p_l->index && p_l->quote_flag == false
-		&& p_l->index != 0 && p_l->index > index
-		&& p_l->index >= p_l->quote_start)
+		&& p_l->index != 0 && index != 0 && (p_l->index >= p_l->quote_start
+			&& p_l->index <= p_l->quote_end))
 	{
 		i = p_l->index;
 		p_l->quote_flag = true;
@@ -84,13 +84,13 @@ bool	check_cmd_quotes(char *s, t_parsing *p_l, int index)
 	else
 		i = index;
 	if (p_l->quotes == true
-		&& (p_l->index >= p_l->quote_start
-			&& p_l->index <= p_l->quote_end) && s[i] == p_l->quote_type
-		&& ft_isspace(s[i + 1]))
+		&& ((p_l->index + index) >= p_l->quote_start
+			&& (p_l->index + index) <= p_l->quote_end)
+		&& s[i] == p_l->quote_type && ft_isspace(s[i + 1]))
 		return (false);
 	if (p_l->quotes == true
-		&& (p_l->index >= p_l->quote_start
-			&& p_l->index <= p_l->quote_end))
+		&& ((p_l->index + index) >= p_l->quote_start
+			&& (p_l->index + index) <= p_l->quote_end))
 		return (true);
 	if (ft_isspace(s[i]) == false && ft_isredir(s[i]) == false)
 		return (true);

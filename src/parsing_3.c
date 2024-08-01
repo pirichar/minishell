@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/08/01 12:37:45 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/01 16:13:49 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,6 @@ char	***get_argarray(t_parsing *parse_list)
 		else
 			break ;
 	}
-	if (parse_list->nb_pipearg > 1)
-		parse_list->nb_pipearg -= 1;
 	return (tab_tab);
 }
 
