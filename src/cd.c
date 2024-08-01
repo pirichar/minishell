@@ -50,7 +50,7 @@ static void	go_to_home(char ***new_env)
  * @param new_env the env passed by address
  * @param parse for the b_in bool
  */
-void	mini_cd(char **s_line, char ***new_env, t_parsing *parse)
+void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 {
 	char	*actual_pwd;
 	char	*buff;
@@ -82,4 +82,6 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse)
 	set_variable(new_env, "PWD=", actual_pwd);
 	free(actual_pwd);
 	free(buff);
+	if (!local)
+		exit (g_ex.status);
 }

@@ -69,7 +69,7 @@ static void	parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i)
  * @param s_line line to print
  * @param parse used to check the NEW LINE and to set the b_in is true
  */
-void	mini_echo(char **s_line, t_parsing *parse)
+void	mini_echo(char **s_line, t_parsing *parse, bool local)
 {
 	int		i;
 
@@ -96,4 +96,6 @@ void	mini_echo(char **s_line, t_parsing *parse)
 	if (parse->with_nl)
 		dprintf(parse->outfile, "\n");
 	g_ex.status = 0;
+	if (!local)
+		exit (g_ex.status);
 }

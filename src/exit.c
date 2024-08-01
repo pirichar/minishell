@@ -75,7 +75,7 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
  * @param s_line splitted line 
  * @param parse for the builtin
  */
-void	mini_exit(char **s_line, t_parsing *parse)
+void	mini_exit(char **s_line, t_parsing *parse, bool local)
 {
 	int	tmp;
 	int	i;
@@ -88,8 +88,13 @@ void	mini_exit(char **s_line, t_parsing *parse)
 	if (i > 3)
 	{
 		fprintf(stderr, "Dundershell: exit: too many arguments\n");
-		g_ex.status = 1;
-		return ;
+		if (local)
+		{
+			g_ex.status = 1;
+			return ;
+		}
+		else
+			exit (1);
 	}
 	exit_was_too_long(s_line, &parse);
 	tmp = ft_atoi(s_line[1]);

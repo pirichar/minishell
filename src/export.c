@@ -105,7 +105,10 @@ static void	actually_set_variables(char **s_line, char ***new_env)
 	{
 		to_add = ft_split(s_line[i], '=');
 		if (to_add[0] == NULL)
-			printf("DunderSHell: export: `=': not a valid identifier\n");
+		{
+			fprintf(stderr, "DunderSHell: export: `=': not a valid identifier\n");
+			g_ex.status = 1;
+		}
 		else if (to_add[1] != NULL)
 		{
 			to_add[0] = ft_strjoin_free(to_add[0], "=");
@@ -116,6 +119,7 @@ static void	actually_set_variables(char **s_line, char ***new_env)
 			to_add[0] = ft_strjoin_free(to_add[0], "=");
 			set_variable(new_env, to_add[0], "");
 		}
+		g_ex.status = 0;
 		free_strrarr(to_add);
 		i++;
 	}
@@ -131,7 +135,7 @@ static void	actually_set_variables(char **s_line, char ***new_env)
  * @param new_env the env since we want to export in it
  * @param parse for the builtin bool
  */
-void	mini_export(char **s_line, char ***new_env, t_parsing *parse)
+void	mini_export(char **s_line, char ***new_env, t_parsing *parse, bool local)
 {
 	parse->b_in = true;
 	parse->bin_do_not_wait = true;
@@ -139,5 +143,7 @@ void	mini_export(char **s_line, char ***new_env, t_parsing *parse)
 		print_export(new_env);
 	else
 		actually_set_variables(s_line, new_env);
-	g_ex.status = 0;
+	if (!local)
+		exit (g_ex.status);
+
 }

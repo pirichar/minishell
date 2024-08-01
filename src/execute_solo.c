@@ -81,15 +81,15 @@ void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 	if (parse->infile != -1)
 	{
 		if (look_for_exit(cmd))
-			mini_exit(cmd, parse);
+			mini_exit(cmd, parse, true);
 		else if (look_for_export(cmd))
-			mini_export(cmd, env, parse);
+			mini_export(cmd, env, parse, true);
 		else if (look_for_unset(cmd))
-			mini_unset(cmd, env, parse);
+			mini_unset(cmd, env, parse, true);
 		else if (look_for_cd(cmd))
-			mini_cd(cmd, env, parse);
+			mini_cd(cmd, env, parse, true);
 		else if (look_for_echo(cmd))
-			mini_echo(cmd, parse);
+			mini_echo(cmd, parse, true);
 		else
 		{
 			signal(SIGINT, SIG_IGN);

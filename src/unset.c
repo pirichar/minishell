@@ -82,7 +82,7 @@ static void	delete_variable(char ***env, char *var)
  * @param new_env 
  * @param p parsing struct used for the i, 
  */
-void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
+void	mini_unset(char **s_line, char ***new_env, t_parsing *p, bool local)
 {
 	p->b_in = true;
 	p->bin_do_not_wait = true;
@@ -90,6 +90,8 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 	{
 		fprintf(stderr, "unset : not enough arguments\n");
 		g_ex.status = 1;
+		if (!local)
+			exit (g_ex.status);
 	}
 	else
 	{
@@ -110,5 +112,7 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 			p->i++;
 			g_ex.status = 0;
 		}
+		if (!local)
+			exit (g_ex.status);
 	}
 }
