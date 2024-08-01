@@ -87,7 +87,10 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 	p->b_in = true;
 	p->bin_do_not_wait = true;
 	if (s_line[1] == NULL)
-		printf("unset : not enough arguments\n");
+	{
+		fprintf(stderr, "unset : not enough arguments\n");
+		g_ex.status = 1;
+	}
 	else
 	{
 		p->i = 1;
@@ -96,14 +99,16 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p)
 			if (s_line[p->i] && s_line[p->i][0] == '=' &&
 					s_line[p->i][1] == '\0')
 			{
-				printf("Minishell: unset: \"=\": not a valid identifier\n");
+				fprintf(stderr, "Minishell: unset: \"=\": not a valid identifier\n");
 				p->i++;
+				g_ex.status = 1;
 				continue ;
 			}
 			p->to_unset = return_variable((*new_env), s_line[p->i]);
 			if (p->to_unset != NULL)
 				delete_variable(new_env, s_line[p->i]);
 			p->i++;
+			g_ex.status = 0;
 		}
 	}
 }

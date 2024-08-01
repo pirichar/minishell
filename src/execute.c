@@ -114,11 +114,6 @@ static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
 		Finally it will give to the passed 
 
 */
-//à mettre au début de la fonction entre pid et le 
-//pipe pour voir ce qui est passé à la fonction
-// printf("WITHIN EXECUTE\n");
-// for(int i = 0;cmd[i];i++)
-// 	printf("CMD[%d] = %s\n",i, cmd[i]);
 int	execute(int fd_in, int *p, char **env, t_parsing *parse)
 {
 	int	pipes[2];

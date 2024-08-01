@@ -49,8 +49,9 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 	{
 		if (s_line[1][i] < '0' || s_line[1][i] > '9')
 		{
-			printf("exit\n");
-			printf("Dundershell: exit: %s: numeric argument required\n",
+			fprintf(stderr, "exit\n");
+			fprintf(stderr,
+				"Dundershell: exit: %s: numeric argument required\n",
 				s_line[1]);
 			rl_clear_history();
 			ft_exit(*parse);
@@ -86,12 +87,9 @@ void	mini_exit(char **s_line, t_parsing *parse)
 		;
 	if (i > 3)
 	{
-		printf("Dundershell: exit: too many arguments\n");
-		rl_clear_history();
-		ft_exit(parse);
-		arena_log_watermark(&g_ex.arena);
-		arena_free(&g_ex.arena);
-		exit (255);
+		fprintf(stderr, "Dundershell: exit: too many arguments\n");
+		g_ex.status = 1;
+		return ;
 	}
 	exit_was_too_long(s_line, &parse);
 	tmp = ft_atoi(s_line[1]);

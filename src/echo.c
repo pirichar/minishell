@@ -95,4 +95,5 @@ void	mini_echo(char **s_line, t_parsing *parse)
 	}
 	if (parse->with_nl)
 		dprintf(parse->outfile, "\n");
+	g_ex.status = 0;
 }

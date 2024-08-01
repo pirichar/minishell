@@ -139,4 +139,5 @@ void	mini_export(char **s_line, char ***new_env, t_parsing *parse)
 		print_export(new_env);
 	else
 		actually_set_variables(s_line, new_env);
+	g_ex.status = 0;
 }

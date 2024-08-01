@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <stdio.h>
 
 /**
  * @brief function called by CD when no option with it
@@ -53,6 +54,7 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse)
 {
 	char	*actual_pwd;
 	char	*buff;
+	int		rtn;
 
 	parse->b_in = true;
 	parse->bin_do_not_wait = true;
@@ -67,7 +69,14 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse)
 		return ;
 	}
 	if (s_line[1])
-		chdir(s_line[1]);
+		rtn = chdir(s_line[1]);
+	if (rtn != 0)
+	{
+		g_ex.status = 1;
+		fprintf(stderr, "cd: no such file or directory: %s\n", s_line[1]);
+	}
+	else 
+		g_ex.status = 0;
 	buff = NULL;
 	actual_pwd = getcwd(buff, 1024);
 	set_variable(new_env, "PWD=", actual_pwd);
