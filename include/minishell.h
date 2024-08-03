@@ -151,7 +151,8 @@ void		calling_the_execs_shell(char **cmd,
 void		parse_and_exec_cmd_shell(char **cmd, char **env);
 
 //cd.c
-void		mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local);
+void		mini_cd(char **s_line, char ***new_env, t_parsing *parse,
+				bool local);
 
 //cleaning
 void		clean_and_exit(int to_exit);
@@ -174,7 +175,6 @@ bool		search_path_exec(const char *p_arr, const char *cmd);
 //exit.c
 void		mini_exit(char **s_line, t_parsing *parse, bool local);
 
-
 //execute.c
 int			execute(int fd_in, int *p, char **env, t_parsing *parse);
 
@@ -186,7 +186,8 @@ void		execute_solo(char **cmd, char ***env, t_parsing *parse);
 
 //export.c
 char		**bubble_sort_strarr(char **rtn);
-void		mini_export(char **s_line, char ***new_env, t_parsing *parse, bool local);
+void		mini_export(char **s_line, char ***new_env, t_parsing *parse,
+				bool local);
 
 //ft_strjoin_free.c
 char		*ft_strjoin_free(char *s1, const char *s2);
@@ -216,7 +217,8 @@ char		**copy_env(char **env);
 
 //unset.c
 char		*return_variable(char **env, char *var);
-void		mini_unset(char **s_line, char ***new_env, t_parsing *parse, bool local);
+void		mini_unset(char **s_line, char ***new_env, t_parsing *parse,
+				bool local);
 
 //wait_for_pids.c
 void		wait_for_pids(t_parsing *parse);
