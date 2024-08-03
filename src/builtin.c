@@ -82,8 +82,11 @@ void	set_variable(char ***env, char *var, char *new_var)
  * @param new_env the env whihc is needed in some builtins
  * @param parse  the parse structure so I can set builtin to true
  */
-void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
+bool	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 {
+	bool	rtn;
+
+	rtn = true;
 	if (ft_strcmp(*s_line[0], "echo") == 0)
 		mini_echo(*s_line, parse, false);
 	else if (ft_strcmp(*s_line[0], "cd") == 0)
@@ -98,4 +101,7 @@ void	look_for_builtins(char ***s_line, char ***new_env, t_parsing *parse)
 		mini_env((*new_env), parse);
 	else if (ft_strcmp(*s_line[0], "exit") == 0)
 		mini_exit(*s_line, parse, false);
+	else
+		rtn = false;
+	return (rtn);
 }

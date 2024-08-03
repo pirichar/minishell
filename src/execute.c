@@ -22,7 +22,7 @@
  * @param env 
  * @param cmd 
  */
-static void	process_cmd(t_parsing *parse, char **env, char **cmd)
+static void	process_cmd(t_parsing *parse, char **env, char **cmd, int *pipes)
 {
 	if (parse->b_in == false
 		&& access(cmd[0], X_OK) == 0)
@@ -36,9 +36,9 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 		parse_and_exec_cmd_shell(cmd, env);
 		exit (1);
 	}
-	fprintf(stderr, "before the end of process_cmd in execute_child in EXEC\n");
 	free_strrarr(g_ex.new_env);
 	arena_free(&g_ex.arena);
+	close(pipes[0]);
 	exit (0);
 }
 
@@ -62,7 +62,7 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
  * @param parse used to know if parse->b_in is true
  * @param env required for execve
  */
-static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
+static void	exec_child(int fd_in, int *pipes, t_parsing *parse, char **env)
 {
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
@@ -71,17 +71,17 @@ static void	exec_child(int fd_in, int pipe_1, t_parsing *parse, char **env)
 		dup2(fd_in, 0);
 		close(fd_in);
 	}
-	dup2(pipe_1, 1);
-	close(pipe_1);
+	dup2(pipes[1], 1);
+	close(pipes[1]);
 	if (parse->f_command == true)
 	{
 		look_for_builtins(&parse->tkns_list->vector_cmd, &env, parse);
-		process_cmd(parse, env, parse->tkns_list->vector_cmd);
+		process_cmd(parse, env, parse->tkns_list->vector_cmd, pipes);
 	}
 	else
 	{
 		look_for_builtins(&parse->pipes_args[parse->i], &env, parse);
-		process_cmd(parse, env, parse->pipes_args[parse->i]);
+		process_cmd(parse, env, parse->pipes_args[parse->i], pipes);
 	}
 }
 
@@ -128,7 +128,7 @@ int	execute(int fd_in, int *p, char **env, t_parsing *parse)
 		signal(SIGINT, SIG_IGN);
 		pid = fork();
 		if (pid == 0)
-			exec_child(fd_in, pipes[1], parse, env);
+			exec_child(fd_in, pipes, parse, env);
 		*p = pid;
 	}
 	if (fd_in != 0)

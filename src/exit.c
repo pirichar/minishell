@@ -33,8 +33,6 @@ static void	null_exit(t_parsing **parse)
 	printf("exit\n");
 	rl_clear_history();
 	ft_exit(*parse);
-	arena_log_watermark(&g_ex.arena);
-	arena_free(&g_ex.arena);
 	exit (0);
 }
 
@@ -55,8 +53,6 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 				s_line[1]);
 			rl_clear_history();
 			ft_exit(*parse);
-			arena_log_watermark(&g_ex.arena);
-			arena_free(&g_ex.arena);
 			exit (255);
 		}
 		i++;
@@ -78,14 +74,13 @@ static void	exit_was_too_long(char **s_line, t_parsing **parse)
 void	mini_exit(char **s_line, t_parsing *parse, bool local)
 {
 	int	tmp;
-	int	i;
 
-	i = 1;
+	parse->i = 1;
 	parse->b_in = true;
 	parse->bin_do_not_wait = true;
-	while (s_line[i++])
+	while (s_line[parse->i++])
 		;
-	if (i > 3)
+	if (parse->i > 3)
 	{
 		fprintf(stderr, "Dundershell: exit: too many arguments\n");
 		if (local)
@@ -94,85 +89,12 @@ void	mini_exit(char **s_line, t_parsing *parse, bool local)
 			return ;
 		}
 		else
-		{
-			arena_free(&g_ex.arena);
-			free_strrarr(g_ex.new_env);
-			exit (1);
-		}
+			clean_and_exit(1);
 	}
 	exit_was_too_long(s_line, &parse);
 	tmp = ft_atoi(s_line[1]);
 	printf("exit\n");
 	rl_clear_history();
-	arena_log_watermark(&g_ex.arena);
-	arena_free(&g_ex.arena);
 	ft_exit(parse);
 	exit (tmp);
-}
-
-/**
- * @brief Function called at the end of each cycle of minishell
-	
-* 	PARSING STRUCT
-	// free parse_list->tkn->list 
-	// free parse->vector->cmd and s_line 
-	// free parse->pipe_args
-	//free parse->p_new (expand variables)
-	// free parse_list
-
-	EXEC
-	// free g_ex.line
-
-	Pids are freed in wait for pids
- * 
- * @param parse struct to free
- */
-void	ft_clean(t_parsing	**parse)
-{
-	t_tkns	*tmp;
-
-	if ((*parse) && (*parse)->tkns_list)
-	{
-		while ((*parse)->tkns_list)
-		{
-			tmp = (*parse)->tkns_list->next;
-			free((*parse)->tkns_list->data);
-			free((*parse)->tkns_list);
-			(*parse)->tkns_list = tmp;
-		}
-	}
-	if ((*parse) && *(*parse)->vector_cmd)
-		free_strrarr((*parse)->vector_cmd);
-	if ((*parse) && (*parse)->pipes_args)
-	{
-		(*parse)->i = 0;
-		while ((*parse)->pipes_args[(*parse)->i])
-			free_strrarr((*parse)->pipes_args[(*parse)->i++]);
-	}
-	free ((*parse)->pipes_args);
-	free ((*parse)->p_new);
-	free ((*parse));
-	*parse = NULL;
-	free (g_ex.line);
-}
-
-/**
- * @brief Function called when the program is closing
-	
-* 	PARSING STRUCT
-	// free parse_list->tkn->list 
-
-	EXEC
-	// free g_ex.line
-	// free env
-	// free ex
- * 
- * @param parse struct to free
- */
-void	ft_exit(t_parsing	*parse)
-{
-	(void)parse;
-	free (g_ex.line);
-	if (g_ex.fail_heredoc == false)
-		free_strrarr(g_ex.new_env);
 }

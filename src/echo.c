@@ -57,6 +57,14 @@ static void	parse_echo(char **s_line, bool *check_nl, bool *with_nl, int *i)
 	}
 }
 
+void	set_parse_bools(t_parsing *parse)
+{
+	parse->with_nl = true;
+	parse->check_nl = true;
+	parse->b_in = true;
+	parse->bin_do_not_wait = true;
+}
+
 /**
  * @brief This function basically printf stuff
 			It first look for -n -nnn and multiples -n
@@ -74,10 +82,7 @@ void	mini_echo(char **s_line, t_parsing *parse, bool local)
 	int		i;
 
 	i = 1;
-	parse->with_nl = true;
-	parse->check_nl = true;
-	parse->b_in = true;
-	parse->bin_do_not_wait = true;
+	set_parse_bools(parse);
 	while (s_line[i])
 	{
 		parse_echo(s_line, &parse->check_nl, &parse->with_nl, &i);
@@ -97,9 +102,5 @@ void	mini_echo(char **s_line, t_parsing *parse, bool local)
 		dprintf(parse->outfile, "\n");
 	g_ex.status = 0;
 	if (!local)
-	{
-		arena_free(&g_ex.arena);
-		free_strrarr(g_ex.new_env);
-		exit (g_ex.status);
-	}
+		clean_and_exit(g_ex.status);
 }

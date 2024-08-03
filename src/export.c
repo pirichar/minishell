@@ -95,33 +95,31 @@ static void	print_export(char ***new_env)
  * @param s_line splitted cmd line
  * @param new_env the env to add the variable
  */
-static void	actually_set_variables(char **s_line, char ***new_env)
+static void	actually_set_variables(char **s_line, char ***new_env, t_parsing *p)
 {
-	int		i;
-	char	**to_add;
-
-	i = 1;
-	while (s_line[i])
+	p->i = 1;
+	while (s_line[p->i])
 	{
-		to_add = ft_split(s_line[i], '=');
-		if (to_add[0] == NULL)
+		p->to_add = ft_split(s_line[p->i], '=');
+		if (p->to_add[0] == NULL)
 		{
-			fprintf(stderr, "DunderSHell: export: `=': not a valid identifier\n");
+			fprintf(stderr,
+				"DunderSHell: export: `=': not a valid identifier\n");
 			g_ex.status = 1;
 		}
-		else if (to_add[1] != NULL)
+		else if (p->to_add[1] != NULL)
 		{
-			to_add[0] = ft_strjoin_free(to_add[0], "=");
-			set_variable(new_env, to_add[0], to_add[1]);
+			p->to_add[0] = ft_strjoin_free(p->to_add[0], "=");
+			set_variable(new_env, p->to_add[0], p->to_add[1]);
 		}
-		else if (to_add[1] == NULL)
+		else if (p->to_add[1] == NULL)
 		{
-			to_add[0] = ft_strjoin_free(to_add[0], "=");
-			set_variable(new_env, to_add[0], "");
+			p->to_add[0] = ft_strjoin_free(p->to_add[0], "=");
+			set_variable(new_env, p->to_add[0], "");
 		}
 		g_ex.status = 0;
-		free_strrarr(to_add);
-		i++;
+		free_strrarr(p->to_add);
+		p->i++;
 	}
 }
 
@@ -135,19 +133,18 @@ static void	actually_set_variables(char **s_line, char ***new_env)
  * @param new_env the env since we want to export in it
  * @param parse for the builtin bool
  */
-void	mini_export(char **s_line, char ***new_env, t_parsing *parse, bool local)
+void	mini_export(char **s_line, char ***n_env, t_parsing *p, bool loc)
 {
-	parse->b_in = true;
-	parse->bin_do_not_wait = true;
-	if (s_line[1] == NULL && local)
-		print_export(new_env);
-	else if (local)
-		actually_set_variables(s_line, new_env);
-	if (!local)
+	p->b_in = true;
+	p->bin_do_not_wait = true;
+	if (s_line[1] == NULL && loc)
+		print_export(n_env);
+	else if (loc)
+		actually_set_variables(s_line, n_env, p);
+	if (!loc)
 	{
 		arena_free(&g_ex.arena);
 		free_strrarr(g_ex.new_env);
 		exit (g_ex.status);
 	}
-
 }

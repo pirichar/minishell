@@ -68,6 +68,15 @@ static void	delete_variable(char ***env, char *var)
 		free_strrarr(tmp);
 }
 
+static void	helper_1(char **s_line, char ***new_env, t_parsing *p)
+{
+	p->to_unset = return_variable((*new_env), s_line[p->i]);
+	if (p->to_unset != NULL)
+		delete_variable(new_env, s_line[p->i]);
+	p->i++;
+	g_ex.status = 0;
+}
+
 /**
  * @brief Builtin function
 			Our version of unset
@@ -82,11 +91,11 @@ static void	delete_variable(char ***env, char *var)
  * @param new_env 
  * @param p parsing struct used for the i, 
  */
-void	mini_unset(char **s_line, char ***new_env, t_parsing *p, bool local)
+void	mini_unset(char **s_l, char ***new_env, t_parsing *p, bool local)
 {
 	p->b_in = true;
 	p->bin_do_not_wait = true;
-	if (s_line[1] == NULL)
+	if (s_l[1] == NULL)
 	{
 		fprintf(stderr, "unset : not enough arguments\n");
 		g_ex.status = 1;
@@ -94,27 +103,18 @@ void	mini_unset(char **s_line, char ***new_env, t_parsing *p, bool local)
 	else
 	{
 		p->i = 1;
-		while (s_line[p->i])
+		while (s_l[p->i])
 		{
-			if (s_line[p->i] && s_line[p->i][0] == '=' &&
-					s_line[p->i][1] == '\0')
+			if (s_l[p->i] && s_l[p->i][0] == '=' && s_l[p->i][1] == '\0')
 			{
-				fprintf(stderr, "Minishell: unset: \"=\": not a valid identifier\n");
+				fprintf(stderr, "unset: \"=\": not a valid identifier\n");
 				p->i++;
 				g_ex.status = 1;
 				continue ;
 			}
-			p->to_unset = return_variable((*new_env), s_line[p->i]);
-			if (p->to_unset != NULL)
-				delete_variable(new_env, s_line[p->i]);
-			p->i++;
-			g_ex.status = 0;
+			helper_1(s_l, new_env, p);
 		}
 	}
 	if (!local)
-	{
-		arena_free(&g_ex.arena);
-		free_strrarr(g_ex.new_env);
-		exit (g_ex.status);
-	}
+		clean_and_exit(g_ex.status);
 }

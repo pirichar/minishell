@@ -24,7 +24,6 @@ static void	process_cmd(t_parsing *parse, char ***env, char **cmd)
 		free_strrarr(g_ex.new_env);
 		exit(1);
 	}
-	fprintf(stderr, "before the end of process_cmd in execute_child in SOLO\n");
 	arena_free(&g_ex.arena);
 	free_strrarr(g_ex.new_env);
 	exit (0);

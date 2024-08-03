@@ -39,6 +39,30 @@ static void	go_to_home(char ***new_env)
 	free(buff);
 }
 
+void	set_old_pwd(char ***new_env)
+{
+	char	*actual_pwd;
+	char	*buff;
+
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	set_variable(new_env, "OLDPWD=", actual_pwd);
+	free(actual_pwd);
+	free(buff);
+}
+
+void	set_pwd(char ***new_env)
+{
+	char	*actual_pwd;
+	char	*buff;
+
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	set_variable(new_env, "PWD=", actual_pwd);
+	free(actual_pwd);
+	free(buff);
+}
+
 /**
  * @brief Builtin function
 			our version of CD;
@@ -52,18 +76,12 @@ static void	go_to_home(char ***new_env)
  */
 void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 {
-	char	*actual_pwd;
-	char	*buff;
 	int		rtn;
 
 	rtn = 0;
 	parse->b_in = true;
 	parse->bin_do_not_wait = true;
-	buff = NULL;
-	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "OLDPWD=", actual_pwd);
-	free(actual_pwd);
-	free(buff);
+	set_old_pwd(new_env);
 	if (s_line[1] == NULL)
 	{
 		go_to_home(new_env);
@@ -78,15 +96,7 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 	}
 	else
 		g_ex.status = 0;
-	buff = NULL;
-	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "PWD=", actual_pwd);
-	free(actual_pwd);
-	free(buff);
+	set_pwd(new_env);
 	if (!local)
-	{
-		arena_free(&g_ex.arena);
-		free_strrarr(g_ex.new_env);
-		exit (g_ex.status);
-	}
+		clean_and_exit(g_ex.status);
 }
