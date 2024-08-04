@@ -3,4 +3,4 @@ a.out
 *.dSYM/
 *.o
 minishell
-./div/*
+div/here_doc
