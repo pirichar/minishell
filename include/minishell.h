@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include <sys/types.h>
+# include <sys/stat.h>
 # include <dirent.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -56,6 +57,7 @@ typedef struct s_exec
 	bool	fail_heredoc;
 	bool	only_delim;
 	t_arena	arena;
+	//ajouter le pwd ici
 }				t_exec;
 
 extern t_exec		g_ex;
@@ -135,6 +137,7 @@ typedef struct s_parsing
 	bool	bin_do_not_wait;
 	bool	quote_flag;
 	char	**to_add;
+	char	*up_dir;
 }				t_parsing;
 
 //main.c
@@ -203,9 +206,6 @@ bool		look_for_export(char **s_line);
 bool		look_for_unset(char **s_line);
 bool		look_for_cd(char **s_line);
 bool		look_for_echo(char **s_line);
-
-//pwd.c
-void		mini_pwd(t_parsing *parse);
 
 //signals
 void		setup_signal_handlers(void);
@@ -292,6 +292,12 @@ bool		check_cmd_quotes(char *s, t_parsing *parse_list, int i);
 //parsing_utils2.c
 bool		ft_isredir(char c);
 t_parsing	*empty_quotes(char *line, t_parsing *p_l);
+
+//pwd.c
+void		mini_pwd(t_parsing *parse);
+void		set_old_pwd(char ***new_env);
+void		set_pwd(char ***new_env);
+char		*get_cwd(void);
 
 // ft_signals
 void		handle_sigint(int sig);

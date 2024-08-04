@@ -31,3 +31,38 @@ void	mini_pwd(t_parsing *parse)
 	free(to_print);
 	free(buff);
 }
+
+void	set_old_pwd(char ***new_env)
+{
+	char	*actual_pwd;
+	char	*buff;
+
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	set_variable(new_env, "OLDPWD=", actual_pwd);
+	free(actual_pwd);
+	free(buff);
+}
+
+void	set_pwd(char ***new_env)
+{
+	char	*actual_pwd;
+	char	*buff;
+
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	set_variable(new_env, "PWD=", actual_pwd);
+	free(actual_pwd);
+	free(buff);
+}
+
+char	*get_cwd(void)
+{
+	char	*actual_pwd;
+	char	*buff;
+
+	buff = NULL;
+	actual_pwd = getcwd(buff, 1024);
+	free(buff);
+	return (actual_pwd);
+}

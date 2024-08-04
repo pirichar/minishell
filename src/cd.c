@@ -22,7 +22,6 @@ static void	go_to_home(char ***new_env)
 {
 	char	**home;
 	char	*actual_pwd;
-	char	*buff;
 
 	home = ft_split(return_variable(*new_env, "HOME"), '=');
 	if (home == NULL)
@@ -32,35 +31,67 @@ static void	go_to_home(char ***new_env)
 		chdir(home[1]);
 		free_strrarr(home);
 	}
-	buff = NULL;
-	actual_pwd = getcwd(buff, 1024);
+	actual_pwd = get_cwd();
 	set_variable(new_env, "PWD=", actual_pwd);
 	free(actual_pwd);
-	free(buff);
 }
 
-void	set_old_pwd(char ***new_env)
+/**
+ * @brief Check permissions to local folder and verify users demand
+			will call stat to check the folder permission and verify we asked ..
+ * 
+ * @param file wich is the command or where the user is trying to go
+ * @return 0 of its fine 1 if we encounter a locked folder with the cd .. 
+ */
+static int	check_persmissions(char *file)
 {
-	char	*actual_pwd;
-	char	*buff;
+	char		*actual_pwd;
+	struct stat	statbuff;
 
-	buff = NULL;
-	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "OLDPWD=", actual_pwd);
+	actual_pwd = get_cwd();
+	if (stat(".", &statbuff) == -1 && ft_strcmp(file, "..") == 0)
+	{
+		free(actual_pwd);
+		return (1);
+	}
 	free(actual_pwd);
-	free(buff);
+	return (0);
 }
 
-void	set_pwd(char ***new_env)
+/**
+ * @brief 	//remove the end of the pwd to go backwards
+			//get the strlen;
+			//do a copy
+			//then start from the revert index to find the first /
+ * 
+ * @param parse 
+ * @return int 
+ */
+static int	chmod_situation(t_parsing *parse)
 {
-	char	*actual_pwd;
-	char	*buff;
+	int		rtn;
+	char	*pwd;
+	int		pwd_len;
+	int		to_trim;
+	int		tmp;
 
-	buff = NULL;
-	actual_pwd = getcwd(buff, 1024);
-	set_variable(new_env, "PWD=", actual_pwd);
-	free(actual_pwd);
-	free(buff);
+	to_trim = 0;
+	pwd = get_cwd();
+	pwd_len = ft_strlen(pwd);
+	tmp = pwd_len;
+	parse->up_dir = ft_calloc(1, pwd_len +1);
+	while (tmp)
+	{
+		tmp--;
+		to_trim++;
+		if (pwd[tmp] == '/')
+			break ;
+	}
+	ft_strlcpy(parse->up_dir, pwd, pwd_len - to_trim + 1);
+	rtn = chdir(parse->up_dir);
+	free(parse->up_dir);
+	free(pwd);
+	return (rtn);
 }
 
 /**
@@ -87,7 +118,9 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 		go_to_home(new_env);
 		return ;
 	}
-	if (s_line[1])
+	else if (check_persmissions(s_line[1]) == 1)
+		rtn = chmod_situation(parse);
+	else if (s_line[1])
 		rtn = chdir(s_line[1]);
 	if (rtn != 0)
 	{
