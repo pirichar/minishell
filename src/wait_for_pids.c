@@ -39,7 +39,7 @@ void	wait_for_pids(t_parsing *parse)
 				g_ex.status = WEXITSTATUS(g_ex.cmd_rtn);
 			i++;
 		}
-		if (parse->infile != 0)
+		if (parse->infile != 0 && parse->infile != -1)
 			close(parse->infile);
 		setup_signal_handlers();
 	}
