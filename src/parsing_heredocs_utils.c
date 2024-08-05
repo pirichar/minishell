@@ -71,6 +71,9 @@ int	do_trunc(t_parsing *p_l)
 		g_ex.fail_heredoc = true;
 		return (1);
 	}
+	close(p_l->file);
+	if (p_l->infile != 0)
+		close(p_l->infile);
 	p_l->infile = open("./div/here_doc", O_RDONLY);
 	return (0);
 }

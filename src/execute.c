@@ -127,8 +127,8 @@ int	execute(int fd_in, int *p, char **env, t_parsing *parse)
 			exec_child(fd_in, pipes, parse, env);
 		*p = pid;
 	}
-	if (fd_in != 0)
-		close(fd_in);
+	// if (fd_in != 0)
+	// 	close(fd_in);
 	close(pipes[1]);
 	return (pipes[0]);
 }
