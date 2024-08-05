@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:08 by adube             #+#    #+#             */
-/*   Updated: 2024/08/05 18:49:31 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/05 19:17:01 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,16 @@ static t_parsing	*helper1(t_parsing *p_l)
 	return (NULL);
 }
 
+bool check_meta(t_parsing *p_l)
+{
+	if (p_l->nb_of_pipes != 0 && ((p_l->cmd_count + 1) > p_l->nb_of_pipes)
+		&& (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD) 
+		&& (p_l->tkns_list->tok_type == PIPE || ((p_l->tkns_list->next->next) 
+		&& p_l->tkns_list->next->next->tok_type == PIPE)))
+		return (true);
+	return (false);
+}
+
 t_parsing	*metachar_utils(t_parsing *p_l)
 {
 	if (p_l->tkns_list->tok_type == PIPE)
@@ -67,8 +77,7 @@ t_parsing	*metachar_utils(t_parsing *p_l)
 				p_l->tkns_list = p_l->tkns_list->next;
 		}
 	}
-	if (p_l->nb_of_pipes != 0 && (p_l->cmd_count + 1) > p_l->nb_of_pipes
-		&& (p_l->tkns_list->next != NULL && p_l->tkns_list->next->tok_type == CMD) && (p_l->tkns_list->tok_type == PIPE || (p_l->tkns_list->next->next != NULL && p_l->tkns_list->next->next->tok_type == PIPE)))
+	if (check_meta(p_l) == true)
 		p_l->tkns_list->next->tok_type = ARG;
 	if (p_l->tkns_list->tok_type == TRUNC)
 		p_l->tkns_list->next->tok_type = TRUNC_ARG;
