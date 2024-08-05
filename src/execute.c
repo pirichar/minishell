@@ -49,7 +49,7 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 			par la suite on verifie pour une builtin; 
 			s'il n,y en a pas on execute la commande
 			soit localement soit avec parse_and_exec_cmd_shell 
-
+			CLOSE PIPES[0] U DONT NEED IT
 			
  * 
  * @param fd_in input file descriptor
@@ -68,6 +68,7 @@ static void	exec_child(int fd_in, int *pipes, t_parsing *parse, char **env)
 	}
 	dup2(pipes[1], 1);
 	close(pipes[1]);
+	close(pipes[0]);
 	if (parse->f_command == true)
 	{
 		look_for_builtins(&parse->tkns_list->vector_cmd, &env, parse);
