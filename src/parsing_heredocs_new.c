@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:08 by adube             #+#    #+#             */
-/*   Updated: 2024/08/05 13:07:02 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/05 13:55:15 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,16 +63,16 @@ t_parsing	*metachar_utils(t_parsing *p_l)
 			&& p_l->tkns_list->next->tok_type == CMD)
 		{
 			if (p_l->cmd_count == 0)
-			{
-				p_l->cmd_count++;
 				break ;
-			}
 			else
 				p_l->tkns_list->next->tok_type = ARG;
 			if (p_l->tkns_list->next)
 				p_l->tkns_list = p_l->tkns_list->next;
 		}
 	}
+	if (p_l->nb_of_pipes != 0 && p_l->cmd_count > p_l->nb_of_pipes
+		&& p_l->tkns_list->tok_type == CMD)
+		p_l->tkns_list->tok_type = ARG;
 	if (p_l->tkns_list->tok_type == TRUNC)
 		p_l->tkns_list->next->tok_type = TRUNC_ARG;
 	return (p_l);
