@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/08/05 10:52:16 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/05 13:13:01 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ char	***get_argarray(t_parsing *parse_list)
 			(parse_list->nb_of_pipes + 1) * sizeof(char **));
 	while (parse_list->tkns_list != NULL)
 	{
-		if (parse_list->tkns_list->tok_type
-			== ARG && i < (parse_list->nb_of_pipes))
+		if (parse_list->tkns_list->tok_type == ARG
+			&& i < (parse_list->nb_of_pipes))
 		{
 			tab_tab[i] = prep_tab(parse_list->tkns_list);
 			helper_get_arg(parse_list, i, tab_tab);
