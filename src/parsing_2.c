@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:31 by adube             #+#    #+#             */
-/*   Updated: 2024/08/05 14:25:17 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/05 15:32:02 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	init_master_list(t_parsing *parse_list, int status)
 	parse_list->index = 0;
 	parse_list->new_i = 0;
 	parse_list->pids = 0;
+	parse_list->tab_i = 0;
 	parse_list->quote_flag = false;
 }
 
@@ -121,7 +122,7 @@ char	**prep_tab(t_tkns *tkns_list)
 	int		count;
 
 	count = 0;
-	while (tkns_list->tok_type != PIPE)
+	while (tkns_list->tok_type == ARG)
 	{
 		count++;
 		if (tkns_list->next != NULL)

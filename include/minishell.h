@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:45:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/08/01 12:51:10 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/05 15:31:43 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ typedef struct s_parsing
 	bool	quote_flag;
 	char	**to_add;
 	char	*up_dir;
+	int		tab_i;
 }				t_parsing;
 
 //main.c

@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/08/05 14:24:50 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/05 15:33:21 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	helper_get_arg(t_parsing	*parse_list, int i, char ***tab_tab)
 
 	y = 0;
 	z = 0;
-	while (parse_list->tkns_list->tok_type != PIPE)
+	while (parse_list->tkns_list->tok_type == ARG)
 	{
 		z = 0;
 		tab_tab[i][y] = arena_alloc(&g_ex.arena,
@@ -30,34 +30,40 @@ void	helper_get_arg(t_parsing	*parse_list, int i, char ***tab_tab)
 			z++;
 		}
 		tab_tab[i][y][z] = '\0';
-		y++;
-		if (parse_list->tkns_list->next != NULL)
+		if (parse_list->tkns_list->next != NULL
+			&& parse_list->tkns_list->next->tok_type == ARG)
+		{
+			y++;
 			parse_list->tkns_list = parse_list->tkns_list->next;
+		}
 		else
 			break ;
 	}
 }
 
-char	***get_argarray(t_parsing *parse_list)
+char	***get_argarray(t_parsing *p_l)
 {
 	char	***tab_tab;
-	int		i;
 
-	i = 0;
 	tab_tab = arena_alloc(&g_ex.arena,
-			(parse_list->nb_of_pipes + 1) * sizeof(char **));
-	while (parse_list->tkns_list != NULL)
+			(p_l->nb_of_pipes + 1) * sizeof(char **));
+	while (p_l->tkns_list != NULL)
 	{
-		if (parse_list->tkns_list->tok_type == ARG
-			&& i < (parse_list->nb_of_pipes))
+		if ((p_l->tkns_list->tok_type == ARG
+				&& p_l->tkns_list->tok_type == TRUNC)
+			|| (p_l->tkns_list->tok_type == TRUNC_ARG
+				&& p_l->tkns_list->tok_type == ARG))
+			p_l->nb_pipearg--;
+		if (p_l->tkns_list->tok_type == ARG
+			&& p_l->tab_i < (p_l->nb_of_pipes))
 		{
-			tab_tab[i] = prep_tab(parse_list->tkns_list);
-			helper_get_arg(parse_list, i, tab_tab);
-			i++;
-			parse_list->nb_pipearg++;
+			tab_tab[p_l->tab_i] = prep_tab(p_l->tkns_list);
+			helper_get_arg(p_l, p_l->tab_i, tab_tab);
+			p_l->tab_i++;
+			p_l->nb_pipearg++;
 		}
-		else if (parse_list->tkns_list->next != NULL)
-			parse_list->tkns_list = parse_list->tkns_list->next;
+		if (p_l->tkns_list->next != NULL)
+			p_l->tkns_list = p_l->tkns_list->next;
 		else
 			break ;
 	}
