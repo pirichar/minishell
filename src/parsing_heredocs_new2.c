@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "arena.h"
-#include <signal.h>
 
 int	do_in_out(t_parsing *parse_list)
 {
@@ -31,6 +29,8 @@ int	do_input(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
 		return (1);
+	if (parse_list->infile != 0)
+		close(parse_list->infile);
 	parse_list->infile = open(parse_list->tkns_list->next->data, O_RDONLY);
 	if (parse_list->infile == -1)
 		fprintf(stderr, "Could not open input file\n");

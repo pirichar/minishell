@@ -11,8 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include "arena.h"
-#include <signal.h>
 
 void	stop_heredoc(int signal)
 {

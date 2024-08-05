@@ -63,7 +63,8 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 	if (parse->outfile != 1)
 	{
 		dup2(parse->outfile, 1);
-		close(parse->outfile);
+		if (parse->outfile != -1)
+			close(parse->outfile);
 	}
 	look_for_builtins(&cmd, env, parse);
 	process_cmd(parse, env, cmd);
