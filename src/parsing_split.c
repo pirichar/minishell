@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:32 by adube             #+#    #+#             */
-/*   Updated: 2024/08/01 13:04:18 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/05 10:23:17 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,31 +59,31 @@ t_tkns	*set_toktype(t_tkns *matrix, t_parsing *p_l)
  * @param parse_list 
  * @return t_parsing* 
  */
-t_parsing	*new_split(char *s, t_parsing *parse_list)
+t_parsing	*new_split(char *s, t_parsing *p_l)
 {
-	parse_list->index = 0;
-	parse_list->start = NULL;
-	parse_list->quote_count = 0;
-	while (ft_isspace(s[parse_list->index]) == true)
-		parse_list->index += 1;
-	while (s[parse_list->index])
+	p_l->index = 0;
+	p_l->start = NULL;
+	p_l->quote_count = 0;
+	while (ft_isspace(s[p_l->index]) == true)
+		p_l->index += 1;
+	while (s[p_l->index])
 	{
-		if (check_double_redir(s, parse_list) == true)
-			init_redir_node_two_char(s, parse_list);
-		else if (check_in_out_file(s, parse_list) == true)
-			init_redir_node_one_char(s, parse_list);
+		if (check_double_redir(s, p_l) == true)
+			init_redir_node_two_char(s, p_l);
+		else if (check_in_out_file(s, p_l) == true)
+			init_redir_node_one_char(s, p_l);
 		else
-			init_command_node(s, parse_list);
-		if (parse_list->start == NULL)
+			init_command_node(s, p_l);
+		if (p_l->start == NULL)
 		{
-			parse_list->old = parse_list->tkns_list;
-			parse_list->start = parse_list->tkns_list->next;
+			p_l->old = p_l->tkns_list;
+			p_l->start = p_l->tkns_list->next;
 		}
-		while ((ft_isspace(s[parse_list->index]) == true)
-			|| (parse_list->quotes == true
-				&& s[parse_list->index] == parse_list->quote_type))
-			parse_list->index += 1;
+		while ((ft_isspace(s[p_l->index]) == true && (p_l->index \
+			< p_l->quote_start || p_l->index > p_l->quote_end))
+			|| (p_l->quotes == true && s[p_l->index] == p_l->quote_type))
+			p_l->index += 1;
 	}
-	parse_list->tkns_list = parse_list->start;
-	return (parse_list);
+	p_l->tkns_list = p_l->start;
+	return (p_l);
 }
