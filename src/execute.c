@@ -21,7 +21,7 @@
  * @param env 
  * @param cmd 
  */
-static void	process_cmd(t_parsing *parse, char **env, char **cmd, int *pipes)
+static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 {
 	if (parse->b_in == false
 		&& access(cmd[0], X_OK) == 0)
@@ -34,10 +34,7 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd, int *pipes)
 		parse_and_exec_cmd_shell(cmd, env);
 	}
 	else if (parse->b_in == true)
-	{
-		close(pipes[0]);
 		clean_and_exit(0);
-	}
 }
 
 /**
@@ -74,12 +71,12 @@ static void	exec_child(int fd_in, int *pipes, t_parsing *parse, char **env)
 	if (parse->f_command == true)
 	{
 		look_for_builtins(&parse->tkns_list->vector_cmd, &env, parse);
-		process_cmd(parse, env, parse->tkns_list->vector_cmd, pipes);
+		process_cmd(parse, env, parse->tkns_list->vector_cmd);
 	}
 	else
 	{
 		look_for_builtins(&parse->pipes_args[parse->i], &env, parse);
-		process_cmd(parse, env, parse->pipes_args[parse->i], pipes);
+		process_cmd(parse, env, parse->pipes_args[parse->i]);
 	}
 }
 
