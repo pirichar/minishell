@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <stdio.h>
 
 /**
  * @brief Will try to run the command passed locally
@@ -27,19 +26,18 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd, int *pipes)
 	if (parse->b_in == false
 		&& access(cmd[0], X_OK) == 0)
 	{
-		execve(cmd[0],
-			cmd, env);
+		execve(cmd[0], cmd, env);
 		exit (1);
 	}
 	else if (parse->b_in == false)
 	{
 		parse_and_exec_cmd_shell(cmd, env);
-		exit (1);
 	}
-	free_strrarr(g_ex.new_env);
-	arena_free(&g_ex.arena);
-	close(pipes[0]);
-	exit (0);
+	else if (parse->b_in == true)
+	{
+		close(pipes[0]);
+		clean_and_exit(0);
+	}
 }
 
 /**

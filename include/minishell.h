@@ -146,7 +146,6 @@ void		prompt_and_read_input(void);
 //builtin
 bool		look_for_builtins(char ***s_line,
 				char ***new_env, t_parsing *parse);
-void		set_variable(char ***env, char *var, char *new_var);
 
 //caling_the_exec_shell.c
 void		calling_the_execs_shell(char **cmd,
@@ -168,6 +167,7 @@ void		mini_echo(char **s_line, t_parsing *parse, bool local);
 //env.c
 void		mini_env(char **new_env, t_parsing *parse);
 int			ft_strcmp(const char *s1, const char *s2);
+void		set_variable(char ***env, char *var, char *new_var);
 
 void		print_out_dir(char **to_print);
 //environement.c

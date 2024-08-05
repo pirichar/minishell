@@ -12,6 +12,15 @@
 
 #include "../include/minishell.h"
 
+/**
+ * @brief Will first try cmd with absolue path, then within the path
+			Will finally clean and exit with 1 or 2 depending 
+			if a problem was encountered
+ * 
+ * @param parse 
+ * @param env 
+ * @param cmd 
+ */
 static void	process_cmd(t_parsing *parse, char ***env, char **cmd)
 {
 	if (parse->b_in == false)
@@ -20,13 +29,9 @@ static void	process_cmd(t_parsing *parse, char ***env, char **cmd)
 			execve(cmd[0], cmd, *(env));
 		else
 			parse_and_exec_cmd_shell(cmd, *(env));
-		arena_free(&g_ex.arena);
-		free_strrarr(g_ex.new_env);
-		exit(1);
+		clean_and_exit(1);
 	}
-	arena_free(&g_ex.arena);
-	free_strrarr(g_ex.new_env);
-	exit (0);
+	clean_and_exit(0);
 }
 
 /**

@@ -11,6 +11,37 @@
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+/**
+ * @brief Will first try cmd with absolue path, then within the path
+			Will finally clean and exit with 1 or 2 depending 
+			if a problem was encountered
+ * 
+ * @param parse 
+ * @param cmd 
+ * @param env 
+ * @param fds 
+ */
+static void	process_cmd(t_parsing *parse, char **cmd, char **env, int *fds)
+{
+	if (parse->b_in == true)
+		close(fds[1]);
+	if (parse->b_in == false && access(cmd[0], X_OK) == 0)
+	{
+		execve(cmd[0], cmd, env);
+		exit(1);
+	}
+	else if (parse->b_in == false)
+	{
+		parse_and_exec_cmd_shell(cmd, env);
+		exit(1);
+	}
+	else if (parse->b_in == true)
+	{
+		arena_free(&g_ex.arena);
+		free_strrarr(g_ex.new_env);
+		exit(0);
+	}
+}
 
 /**
  * @brief Function made to exectute the last child
@@ -39,21 +70,7 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 		close(fds[1]);
 	}
 	look_for_builtins(&cmd, &env, parse);
-	if (parse->b_in == true)
-		close(fds[1]);
-	if (parse->b_in == false && access(cmd[0], X_OK) == 0)
-	{
-		execve(cmd[0], cmd, env);
-		exit(1);
-	}
-	else if (parse->b_in == false)
-	{
-		parse_and_exec_cmd_shell(cmd, env);
-		exit(1);
-	}
-	arena_free(&g_ex.arena);
-	free_strrarr(g_ex.new_env);
-	exit(0);
+	process_cmd(parse, cmd, env, fds);
 }
 
 /**
