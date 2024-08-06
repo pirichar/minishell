@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/08/06 11:59:26 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/06 13:06:31 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*search_env(char *s, int search, t_parsing *p_list)
 			if (s[search] != g_ex.new_env[p_list->p_x][p_list->p_y])
 				break ;
 			if ((ft_isspace(s[search + 1]) == true || s[search + 1] == '\0'
-					|| s[search + 1] == p_list->quote_type)
+					|| s[search + 1] == 34 || s[search + 1] == 39)
 				&& g_ex.new_env[p_list->p_x][p_list->p_y + 1] == '=')
 			{
 				p_list->index += p_list->p_y + 2;
@@ -146,7 +146,7 @@ char	*expand_var(char *line, t_parsing *p_l)
 				p_l = expand_return(p_l, line);
 			}
 		}
-		if ((p_l->index == p_l->quote_end)
+		if ((p_l->quotes == true && p_l->index == p_l->quote_end)
 			&& (line[p_l->index] == p_l->quote_type))
 			p_l->quote_end = p_l->new_i;
 		if (line[p_l->index] != '\0')
