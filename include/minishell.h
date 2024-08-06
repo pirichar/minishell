@@ -57,6 +57,7 @@ typedef struct s_exec
 	bool	fail_heredoc;
 	bool	only_delim;
 	t_arena	arena;
+	int		file;
 	//ajouter le pwd ici
 }				t_exec;
 
