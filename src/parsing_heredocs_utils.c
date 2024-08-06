@@ -16,7 +16,7 @@ void	stop_heredoc(int signal)
 {
 	(void)signal;
 	write(STDERR_FILENO, "\n", 1);
-	exit(INTERRUPT_SIG);
+	clean_and_exit(INTERRUPT_SIG);
 }
 
 void	trunc_child(t_parsing *p_l)
@@ -39,9 +39,7 @@ void	trunc_child(t_parsing *p_l)
 	if (p_l->infile != 0)
 		close(p_l->infile);
 	free(tmp);
-	free_strrarr(g_ex.new_env);
-	arena_free(&g_ex.arena);
-	exit(0);
+	clean_and_exit(0);
 }
 
 /**
