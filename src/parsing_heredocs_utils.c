@@ -36,6 +36,8 @@ void	trunc_child(t_parsing *p_l)
 		free(tmp);
 	}
 	close(p_l->file);
+	if (p_l->infile != 0)
+		close(p_l->infile);
 	free(tmp);
 	free_strrarr(g_ex.new_env);
 	arena_free(&g_ex.arena);
