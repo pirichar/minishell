@@ -16,7 +16,8 @@ void	stop_heredoc(int signal)
 {
 	(void)signal;
 	write(STDERR_FILENO, "\n", 1);
-	exit(INTERRUPT_SIG);
+	close(g_ex.file);
+	clean_and_exit(INTERRUPT_SIG);
 }
 
 void	trunc_child(t_parsing *p_l)
@@ -32,16 +33,14 @@ void	trunc_child(t_parsing *p_l)
 		if (!ft_strcmp(p_l->tkns_list->next->data, tmp))
 			break ;
 		p_l->buf = ft_strjoin_arena(tmp, "\n");
-		write(p_l->file, p_l->buf, ft_strlen(p_l->buf));
+		write(g_ex.file, p_l->buf, ft_strlen(p_l->buf));
 		free(tmp);
 	}
-	close(p_l->file);
+	close(g_ex.file);
 	if (p_l->infile != 0)
 		close(p_l->infile);
 	free(tmp);
-	free_strrarr(g_ex.new_env);
-	arena_free(&g_ex.arena);
-	exit(0);
+	clean_and_exit(0);
 }
 
 /**
@@ -57,8 +56,8 @@ int	do_trunc(t_parsing *p_l)
 
 	if (check_file_and_delim_name(p_l->tkns_list) == 1)
 		return (1);
-	p_l->file = open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
-	if (p_l->file == -1)
+	g_ex.file = open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
+	if (g_ex.file == -1)
 		return (1);
 	signal(SIGINT, SIG_IGN);
 	pid = fork();
@@ -71,7 +70,7 @@ int	do_trunc(t_parsing *p_l)
 		g_ex.fail_heredoc = true;
 		return (1);
 	}
-	close(p_l->file);
+	close(g_ex.file);
 	if (p_l->infile != 0)
 		close(p_l->infile);
 	p_l->infile = open("./div/here_doc", O_RDONLY);

@@ -1,7 +1,17 @@
-Faire :
-
-env 
-cd ..
-env
-
-on dirait que mon cd fuck le chien
+Makefile
+README.md
+div
+include
+lib
+linlib
+m1lib
+minishell
+notes
+notes.txt
+obj
+outfile
+rdm.txt
+src
+supp.txt
+test
+test.sh
