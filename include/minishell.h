@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:45:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/08/05 15:31:43 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/06 11:58:08 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,6 +293,7 @@ bool		check_cmd_quotes(char *s, t_parsing *parse_list, int i);
 //parsing_utils2.c
 bool		ft_isredir(char c);
 t_parsing	*empty_quotes(char *line, t_parsing *p_l);
+t_parsing 	*expand_return(t_parsing *p_l, char *line);
 
 //pwd.c
 void		mini_pwd(t_parsing *parse);

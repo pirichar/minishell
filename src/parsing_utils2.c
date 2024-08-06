@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/31 12:45:17 by alexandrine       #+#    #+#             */
-/*   Updated: 2024/08/01 12:44:37 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/06 11:58:33 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,13 @@ t_parsing	*empty_quotes(char *line, t_parsing *p_l)
 		y++;
 	}
 	new_line[y] = '\0';
+	return (p_l);
+}
+
+t_parsing	*expand_return(t_parsing *p_l, char *line)
+{
+	p_l->p_new = ret_value(p_l->p_new, line, *&p_l);
+	while (ft_isspace(line[p_l->index]) == false)
+		p_l->index++;
 	return (p_l);
 }
