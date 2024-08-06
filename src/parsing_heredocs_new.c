@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_heredocs_new.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:08 by adube             #+#    #+#             */
-/*   Updated: 2024/08/05 19:17:01 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/06 10:12:23 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ static t_parsing	*helper1(t_parsing *p_l)
 	return (NULL);
 }
 
-bool check_meta(t_parsing *p_l)
+bool	check_meta(t_parsing *p_l)
 {
 	if (p_l->nb_of_pipes != 0 && ((p_l->cmd_count + 1) > p_l->nb_of_pipes)
-		&& (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD) 
-		&& (p_l->tkns_list->tok_type == PIPE || ((p_l->tkns_list->next->next) 
-		&& p_l->tkns_list->next->next->tok_type == PIPE)))
+		&& (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD)
+		&& (p_l->tkns_list->tok_type == PIPE || ((p_l->tkns_list->next->next)
+				&& p_l->tkns_list->next->next->tok_type == PIPE)))
 		return (true);
 	return (false);
 }
@@ -63,8 +63,8 @@ t_parsing	*metachar_utils(t_parsing *p_l)
 		p_l->nb_of_pipes += 1;
 	if (p_l->tkns_list->tok_type == CMD)
 		p_l->cmd_count += 1;
-	if (p_l->tkns_list->tok_type == INPUT || p_l->tkns_list->tok_type == OUTPUT 
-			|| p_l->tkns_list->tok_type == APPEND)
+	if (p_l->tkns_list->tok_type == INPUT || p_l->tkns_list->tok_type == OUTPUT
+		|| p_l->tkns_list->tok_type == APPEND)
 		if (p_l->tkns_list->next && p_l->tkns_list->next->tok_type == CMD)
 			p_l->tkns_list->next->tok_type = EMPTY;
 	if (p_l->tkns_list->tok_type == PIPE)

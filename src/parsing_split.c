@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:32 by adube             #+#    #+#             */
-/*   Updated: 2024/08/05 19:15:48 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/06 10:11:05 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,26 @@ t_tkns	*set_toktype(t_tkns *matrix, t_parsing *p_l)
 	return (matrix);
 }
 
+int	how_split(t_parsing *p_l, char *s)
+{
+	int	i;
+
+	i = p_l->index;
+	if (p_l->quotes == true && s[p_l->index - 1] == p_l->quote_type)
+	{
+		while (ft_isspace(s[i]) == true)
+			i++;
+		if ((p_l->quotes == true && s[i] == p_l->quote_type))
+			p_l->index = i;
+		return (p_l->index);
+	}
+	while ((ft_isspace(s[p_l->index]) == true && (p_l->index \
+			< p_l->quote_start || p_l->index > p_l->quote_end))
+		|| (p_l->quotes == true && s[p_l->index] == p_l->quote_type))
+		p_l->index++;
+	return (p_l->index);
+}
+
 /**
  * @brief 
  * 
@@ -79,10 +99,7 @@ t_parsing	*new_split(char *s, t_parsing *p_l)
 			p_l->old = p_l->tkns_list;
 			p_l->start = p_l->tkns_list->next;
 		}
-		while ((ft_isspace(s[p_l->index]) == true && (p_l->index \
-			< p_l->quote_start || p_l->index > p_l->quote_end))
-			|| (p_l->quotes == true && s[p_l->index] == p_l->quote_type))
-			p_l->index += 1;
+		p_l->index = how_split(p_l, s);
 	}
 	p_l->tkns_list = p_l->start;
 	return (p_l);
