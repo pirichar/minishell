@@ -58,7 +58,8 @@ static void	exec_solo_child(t_parsing *parse, char **cmd, char ***env)
 	if (parse->infile != 0)
 	{
 		dup2(parse->infile, 0);
-		close(parse->infile);
+		if (parse->infile != -1)
+			close(parse->infile);
 	}
 	if (parse->outfile != 1)
 	{
