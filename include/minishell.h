@@ -193,6 +193,9 @@ char		**bubble_sort_strarr(char **rtn);
 void		mini_export(char **s_line, char ***new_env, t_parsing *parse,
 				bool local);
 
+//export_split.c
+char		**ft_export_split(const char *s, char c);
+
 //ft_strjoin_free.c
 char		*ft_strjoin_free(char *s1, const char *s2);
 
@@ -293,7 +296,7 @@ bool		check_cmd_quotes(char *s, t_parsing *parse_list, int i);
 //parsing_utils2.c
 bool		ft_isredir(char c);
 t_parsing	*empty_quotes(char *line, t_parsing *p_l);
-t_parsing 	*expand_return(t_parsing *p_l, char *line);
+t_parsing	*expand_return(t_parsing *p_l, char *line);
 
 //pwd.c
 void		mini_pwd(t_parsing *parse);

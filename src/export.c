@@ -100,7 +100,7 @@ static void	actually_set_variables(char **s_line, char ***new_env, t_parsing *p)
 	p->i = 1;
 	while (s_line[p->i])
 	{
-		p->to_add = ft_split(s_line[p->i], '=');
+		p->to_add = ft_export_split(s_line[p->i], '=');
 		if (p->to_add[0] == NULL)
 		{
 			fprintf(stderr,
