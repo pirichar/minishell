@@ -64,7 +64,8 @@ static void	exec_child(int fd_in, int *pipes, t_parsing *parse, char **env)
 	if (fd_in != 0)
 	{
 		dup2(fd_in, 0);
-		close(fd_in);
+		if (fd_in != -1)
+			close(fd_in);
 	}
 	dup2(pipes[1], 1);
 	close(pipes[1]);
@@ -127,7 +128,7 @@ int	execute(int fd_in, int *p, char **env, t_parsing *parse)
 			exec_child(fd_in, pipes, parse, env);
 		*p = pid;
 	}
-	if (fd_in != 0)
+	if (fd_in != 0 && fd_in != -1)
 		close(fd_in);
 	close(pipes[1]);
 	return (pipes[0]);

@@ -29,7 +29,7 @@ int	do_input(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
 		return (1);
-	if (parse_list->infile != 0)
+	if (parse_list->infile != 0 && parse_list->infile != -1)
 		close(parse_list->infile);
 	parse_list->infile = open(parse_list->tkns_list->next->data, O_RDONLY);
 	if (parse_list->infile == -1)
