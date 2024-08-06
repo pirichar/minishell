@@ -84,7 +84,7 @@ void	execute_solo(char **cmd, char ***env, t_parsing *parse)
 {
 	int	pid;
 
-	if (parse->infile != -1)
+	if (parse->infile != -1 || parse->nb_of_pipes > 0)
 	{
 		if (look_for_exit(cmd))
 			mini_exit(cmd, parse, true);
