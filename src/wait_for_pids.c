@@ -26,7 +26,7 @@ void	wait_for_pids(t_parsing *parse)
 	i = 0;
 	if (parse->nb_of_pipes == 0 && parse->bin_do_not_wait == true)
 	{
-		if (parse->infile != 0)
+		if (parse->infile != 0 && parse->infile != -1 )
 			close(parse->infile);
 		setup_signal_handlers();
 	}

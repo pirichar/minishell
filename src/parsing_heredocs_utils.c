@@ -37,7 +37,7 @@ void	trunc_child(t_parsing *p_l)
 		free(tmp);
 	}
 	close(g_ex.file);
-	if (p_l->infile != 0)
+	if (p_l->infile != 0 && p_l->infile != -1)
 		close(p_l->infile);
 	free(tmp);
 	clean_and_exit(0);
@@ -71,7 +71,7 @@ int	do_trunc(t_parsing *p_l)
 		return (1);
 	}
 	close(g_ex.file);
-	if (p_l->infile != 0)
+	if (p_l->infile != 0 && p_l->infile != -1)
 		close(p_l->infile);
 	p_l->infile = open("./div/here_doc", O_RDONLY);
 	return (0);

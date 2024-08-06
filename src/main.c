@@ -58,8 +58,12 @@ static void	execute_command_shell(t_parsing *parse)
 	wait_for_pids(parse);
 }
 
-void	mini_process(void)
+static void	mini_process(t_parsing *parse)
 {
+	if (parse->infile != 0 && parse->infile != -1)
+		close(parse->infile);
+	if (parse->outfile != 1 && parse->outfile != -1)
+		close(parse->outfile);
 	g_ex.only_delim = true;
 	free(g_ex.line);
 	if (*g_ex.s_line != NULL)
@@ -107,7 +111,7 @@ static bool	process_command(void)
 		g_ex.s_line = parse->tkns_list->vector_cmd;
 		if (g_ex.s_line && g_ex.s_line[0] == NULL)
 		{
-			mini_process();
+			mini_process(parse);
 			return (true);
 		}
 		execute_command_shell(parse);
