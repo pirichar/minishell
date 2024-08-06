@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+// Allocates memory and creates a string from the given range in `s`
+// from `start` to `end`.
 static char	*allocate_word(int start, int end, const char *s)
 {
 	char	*rtn;
@@ -27,38 +29,39 @@ static char	*allocate_word(int start, int end, const char *s)
 	return (rtn);
 }
 
-static int	find_split_position(const char *s, int *pos, char c)
+// Extracts the key portion of the string,
+// which is everything before the first '='.
+// Updates `pos` to the character after the '='.
+static char	*ft_extract_key(const char *s, int *pos, char c)
 {
-	int	i;
-	int	first_equal;
-
-	i = *pos;
-	first_equal = 1;
-	while (s[i] && s[i] == c)
-		i++;
-	while (s[i])
-	{
-		if (s[i] == c && first_equal)
-		{
-			first_equal = 0;
-			break ;
-		}
-		i++;
-	}
-	*pos = i + 1;
-	return (i);
-}
-
-static char	*ft_fill_word_exp(const char *s, int *pos, char c)
-{
-	int	start;
-	int	end;
+	int		start;
+	int		end;
 
 	start = *pos;
-	end = find_split_position(s, pos, c) - 1;
-	return (allocate_word(start, end, s));
+	while (s[*pos] && s[*pos] != c)
+		(*pos)++;
+	end = *pos;
+	if (s[*pos] == c)
+		(*pos)++;
+	return (allocate_word(start, end - 1, s));
 }
 
+// Extracts the value portion of the string,
+///which is everything after the first '='.
+// Uses the current position in `pos` to start extracting.
+static char	*ft_extract_value(const char *s, int *pos)
+{
+	int		start;
+
+	start = *pos;
+	while (s[*pos])
+		(*pos)++;
+	return (allocate_word(start, *pos - 1, s));
+}
+
+// Splits the input string `s` into a key-value pair based on the first '='.
+// Returns a 2-element array where the first element is the key and the
+// second element is the value, even if the value contains '='.
 char	**ft_export_split(const char *s, char c)
 {
 	char	**rtn;
@@ -72,8 +75,8 @@ char	**ft_export_split(const char *s, char c)
 		return (NULL);
 	pos = 0;
 	i = 0;
-	while (i < 2)
-		rtn[i++] = ft_fill_word_exp(s, &pos, c);
+	rtn[i++] = ft_extract_key(s, &pos, c);
+	rtn[i++] = ft_extract_value(s, &pos);
 	rtn[i] = NULL;
 	return (rtn);
 }
