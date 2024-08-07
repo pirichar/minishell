@@ -74,6 +74,7 @@ void	set_parse_bools(t_parsing *parse)
 static void	exit_echo_child(t_parsing *p)
 {
 	(void)p;
+	close(p->outfile);
 	clean_and_exit(g_ex.status);
 }
 
@@ -115,6 +116,6 @@ void	mini_echo(char **s_line, t_parsing *p, bool local)
 			dprintf(p->outfile, "\n");
 		g_ex.status = 0;
 	}
-	if (!local)
+	if (local == false)
 		exit_echo_child(p);
 }

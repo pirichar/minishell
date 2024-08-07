@@ -36,11 +36,7 @@ static void	process_cmd(t_parsing *parse, char **cmd, char **env, int *fds)
 		exit(1);
 	}
 	else if (parse->b_in == true)
-	{
-		arena_free(&g_ex.arena);
-		free_strrarr(g_ex.new_env);
-		exit(0);
-	}
+		clean_and_exit(0);
 }
 
 /**
@@ -65,12 +61,10 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 	dup2(fds[0], 0);
 	close(fds[0]);
 	if (parse->outfile != 1)
-	{
 		dup2(fds[1], 1);
-		if (parse->outfile != -1)
-			close(fds[1]);
-	}
 	look_for_builtins(&cmd, &env, parse);
+	if (parse->outfile != 1 && parse->outfile != -1)
+		close(fds[1]);
 	process_cmd(parse, cmd, env, fds);
 }
 

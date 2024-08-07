@@ -74,7 +74,7 @@ static char	**sort_strarr(char **to_sort)
  * 
  * @param new_env to print
  */
-static void	print_export(char ***new_env)
+static void	print_export(char ***new_env, t_parsing *p)
 {
 	char	**to_print;
 	int		i;
@@ -83,7 +83,7 @@ static void	print_export(char ***new_env)
 	to_print = sort_strarr(*new_env);
 	while (to_print[i])
 	{
-		printf("declare -x %s\n", to_print[i]);
+		dprintf(p->outfile, "declare -x %s\n", to_print[i]);
 		i++;
 	}
 	free_strrarr(to_print);
@@ -138,7 +138,7 @@ void	mini_export(char **s_line, char ***n_env, t_parsing *p, bool loc)
 	p->b_in = true;
 	p->bin_do_not_wait = true;
 	if (s_line[1] == NULL && loc)
-		print_export(n_env);
+		print_export(n_env, p);
 	else if (loc)
 		actually_set_variables(s_line, n_env, p);
 	if (!loc)

@@ -171,7 +171,6 @@ void		mini_env(char **new_env, t_parsing *parse);
 int			ft_strcmp(const char *s1, const char *s2);
 void		set_variable(char ***env, char *var, char *new_var);
 
-void		print_out_dir(char **to_print);
 //environement.c
 char		**path_to_starrr(char **env, char *var);
 char		*var_to_str(char **env, char *var);
