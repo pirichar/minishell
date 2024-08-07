@@ -17,6 +17,11 @@
 			Design to wait for all the pids
 			will also close infile
 			and free the pids
+		This was removed at the end to stop double close of fd
+		// if (parse->infile != 0 && parse->infile != -1)
+		// 	close(parse->infile);
+		// if (parse->outfile != 1 && parse->outfile != -1)
+		// 	close(parse->outfile);
  * @param parse struct containing all the info
  */
 void	wait_for_pids(t_parsing *parse)
@@ -28,6 +33,8 @@ void	wait_for_pids(t_parsing *parse)
 	{
 		if (parse->infile != 0 && parse->infile != -1)
 			close(parse->infile);
+		if (parse->outfile != 1 && parse->outfile != -1)
+			close(parse->outfile);
 		setup_signal_handlers();
 	}
 	else
@@ -39,10 +46,6 @@ void	wait_for_pids(t_parsing *parse)
 				g_ex.status = WEXITSTATUS(g_ex.cmd_rtn);
 			i++;
 		}
-		if (parse->infile != 0 && parse->infile != -1)
-			close(parse->infile);
-		if (parse->outfile != 1 && parse->outfile != -1)
-			close(parse->outfile);
 		setup_signal_handlers();
 	}
 }

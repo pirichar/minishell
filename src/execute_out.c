@@ -67,7 +67,8 @@ static void	exec_out_child(int fds[2], t_parsing *parse,
 	if (parse->outfile != 1)
 	{
 		dup2(fds[1], 1);
-		close(fds[1]);
+		if (parse->outfile != -1)
+			close(fds[1]);
 	}
 	look_for_builtins(&cmd, &env, parse);
 	process_cmd(parse, cmd, env, fds);
@@ -99,7 +100,7 @@ void	execute_out(char **cmd, int fds[2], char **env, t_parsing *parse)
 	if (pid == 0)
 		exec_out_child(fds, parse, cmd, env);
 	close(fds[0]);
-	if (parse->outfile != 1)
+	if (parse->outfile != 1 && parse->outfile != -1)
 		close(fds[1]);
 	parse->pids[parse->nb_of_pipes] = pid;
 }

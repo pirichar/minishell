@@ -65,6 +65,13 @@ void	set_parse_bools(t_parsing *parse)
 	parse->bin_do_not_wait = true;
 }
 
+static void	exit_echo_child(t_parsing *p)
+{
+	(void)p;
+	//close(p->outfile);
+	clean_and_exit(g_ex.status);
+}
+
 /**
  * @brief This function basically printf stuff
 			It first look for -n -nnn and multiples -n
@@ -74,33 +81,35 @@ void	set_parse_bools(t_parsing *parse)
 			to parse but print them out instead
 			So our echo act more like zsh then bash its a decision we made
 			Because of -n -n -n working 
+			we now also check that the outfile is not -1
  * @param s_line line to print
  * @param parse used to check the NEW LINE and to set the b_in is true
  */
-void	mini_echo(char **s_line, t_parsing *parse, bool local)
+void	mini_echo(char **s_line, t_parsing *p, bool local)
 {
-	int		i;
-
-	i = 1;
-	set_parse_bools(parse);
-	while (s_line[i])
+	p->i = 1;
+	set_parse_bools(p);
+	if (p->outfile != -1)
 	{
-		parse_echo(s_line, &parse->check_nl, &parse->with_nl, &i);
-		if (s_line[i] == NULL)
-			return ;
-		parse->check_nl = false;
-		if (ft_strcmp(s_line[i], "\'\'") == 0
-			|| ft_strcmp(s_line[i], "\"\"") == 0)
-			s_line[i] = " ";
-		if (s_line[i + 1])
-			dprintf(parse->outfile, "%s ", s_line[i]);
-		else
-			dprintf(parse->outfile, "%s", s_line[i]);
-		i++;
+		while (s_line[p->i])
+		{
+			parse_echo(s_line, &p->check_nl, &p->with_nl, &p->i);
+			if (s_line[p->i] == NULL)
+				return ;
+			p->check_nl = false;
+			if (ft_strcmp(s_line[p->i], "\'\'") == 0
+				|| ft_strcmp(s_line[p->i], "\"\"") == 0)
+				s_line[p->i] = " ";
+			if (s_line[p->i + 1])
+				dprintf(p->outfile, "%s ", s_line[p->i]);
+			else
+				dprintf(p->outfile, "%s", s_line[p->i]);
+			p->i++;
+		}
+		if (p->with_nl)
+			dprintf(p->outfile, "\n");
+		g_ex.status = 0;
 	}
-	if (parse->with_nl)
-		dprintf(parse->outfile, "\n");
-	g_ex.status = 0;
 	if (!local)
-		clean_and_exit(g_ex.status);
+		exit_echo_child(p);
 }
