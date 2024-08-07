@@ -98,10 +98,10 @@ t_parsing	*check_metachar(t_parsing *p_l)
 	while (p_l->tkns_list != NULL)
 	{
 		if ((p_l->tkns_list->tok_type == APPEND || p_l->tkns_list->tok_type \
-				== INPUT || p_l->tkns_list->tok_type == OUTPUT) 
+				== INPUT || p_l->tkns_list->tok_type == OUTPUT)
 			&& p_l->tkns_list->next != NULL)
 			p_l->tkns_list->next->tok_type = EMPTY;
-			p_l->tkns_list = p_l->tkns_list->next;
+		p_l->tkns_list = p_l->tkns_list->next;
 	}
 	p_l->tkns_list = p_l->start;
 	while (p_l->tkns_list)
