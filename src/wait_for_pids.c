@@ -12,6 +12,13 @@
 
 #include "../include/minishell.h"
 
+static	void close_in_out(t_parsing* parse)
+{
+	if (parse->infile != 0 && parse->infile != -1)
+		close(parse->infile);
+	if (parse->outfile != 1 && parse->outfile != -1)
+		close(parse->outfile);
+}
 /**
  * @brief Function from Pipex
 			Design to wait for all the pids
@@ -32,10 +39,7 @@ void	wait_for_pids(t_parsing *parse)
 	if ((parse->nb_of_pipes == 0 && parse->bin_do_not_wait == true)
 		|| (parse->nb_pipearg == 0 && parse->bin_do_not_wait == true))
 	{
-		if (parse->infile != 0 && parse->infile != -1)
-			close(parse->infile);
-		if (parse->outfile != 1 && parse->outfile != -1)
-			close(parse->outfile);
+		close_in_out(parse);
 		setup_signal_handlers();
 	}
 	else
@@ -47,6 +51,8 @@ void	wait_for_pids(t_parsing *parse)
 				g_ex.status = WEXITSTATUS(g_ex.cmd_rtn);
 			i++;
 		}
+		if (parse->nb_pipearg == 0)
+			close_in_out(parse);
 		setup_signal_handlers();
 	}
 }
