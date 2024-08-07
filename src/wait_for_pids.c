@@ -29,7 +29,8 @@ void	wait_for_pids(t_parsing *parse)
 	int	i;
 
 	i = 0;
-	if (parse->nb_of_pipes == 0 && parse->bin_do_not_wait == true)
+	if ((parse->nb_of_pipes == 0 && parse->bin_do_not_wait == true)
+		|| (parse->nb_pipearg == 0 && parse->bin_do_not_wait == true))
 	{
 		if (parse->infile != 0 && parse->infile != -1)
 			close(parse->infile);

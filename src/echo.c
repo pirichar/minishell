@@ -65,10 +65,15 @@ void	set_parse_bools(t_parsing *parse)
 	parse->bin_do_not_wait = true;
 }
 
+/**
+ * @brief maybe add back //close(p->outfile)
+
+ * 
+ * @param p 
+ */
 static void	exit_echo_child(t_parsing *p)
 {
 	(void)p;
-	//close(p->outfile);
 	clean_and_exit(g_ex.status);
 }
 
