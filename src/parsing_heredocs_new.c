@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:08 by adube             #+#    #+#             */
-/*   Updated: 2024/08/07 10:05:47 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/07 16:22:23 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,9 @@ t_parsing	*check_metachar(t_parsing *p_l)
 	p_l->start = p_l->tkns_list;
 	while (p_l->tkns_list != NULL)
 	{
-		if ((p_l->tkns_list->tok_type == APPEND || p_l->tkns_list->tok_type \
-				== INPUT || p_l->tkns_list->tok_type == OUTPUT)
-			&& p_l->tkns_list->next != NULL)
+		if ((p_l->tkns_list->tok_type == APPEND || p_l->tkns_list->tok_type == OUTPUT
+				|| p_l->tkns_list->tok_type == INPUT) && p_l->tkns_list->next != NULL
+			&& p_l->tkns_list->next->tok_type == CMD)
 			p_l->tkns_list->next->tok_type = EMPTY;
 		p_l->tkns_list = p_l->tkns_list->next;
 	}
@@ -107,8 +107,8 @@ t_parsing	*check_metachar(t_parsing *p_l)
 	while (p_l->tkns_list)
 	{
 		tmp = helper1(p_l);
-		if (tmp)
-			return (tmp);
+		if (tmp != NULL)
+			p_l = tmp;
 		p_l = metachar_utils(p_l);
 		if (p_l->tkns_list->next)
 			p_l->tkns_list = p_l->tkns_list->next;
