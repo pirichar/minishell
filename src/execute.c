@@ -27,7 +27,7 @@ static void	process_cmd(t_parsing *parse, char **env, char **cmd)
 		&& access(cmd[0], X_OK) == 0)
 	{
 		execve(cmd[0], cmd, env);
-		exit (1);
+		clean_and_exit(1);
 	}
 	else if (parse->b_in == false)
 	{

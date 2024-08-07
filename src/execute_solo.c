@@ -26,9 +26,14 @@ static void	process_cmd(t_parsing *parse, char ***env, char **cmd)
 	if (parse->b_in == false)
 	{
 		if (access (cmd[0], X_OK) == 0)
+		{
 			execve(cmd[0], cmd, *(env));
+			clean_and_exit(1);
+		}
 		else
+		{
 			parse_and_exec_cmd_shell(cmd, *(env));
+		}
 		clean_and_exit(1);
 	}
 	clean_and_exit(0);

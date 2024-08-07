@@ -1,8 +1,0 @@
-faut absolument gere le split
-
-le <<, le <, le > ,le | et le >> sont donnes for real
-
-
-tester cat << opi >> out | < out >> delim cat << delim > out
-
-done and goods
