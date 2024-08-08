@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:08 by adube             #+#    #+#             */
-/*   Updated: 2024/08/07 23:57:05 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/08 08:25:24 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static t_parsing	*helper1(t_parsing *p_l)
 {
 	int	ret;
 
+	ret = 0;
 	if (p_l->tkns_list->tok_type == TRUNC)
 		ret = do_trunc(p_l);
 	if (p_l->tkns_list->tok_type == IN_OUT)
