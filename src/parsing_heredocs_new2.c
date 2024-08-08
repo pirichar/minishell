@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:02 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 12:47:51 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/07 23:50:23 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	do_in_out(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
-		return (1);
+		return (2);
 	return (0);
 }
 
@@ -28,19 +28,19 @@ int	do_in_out(t_parsing *parse_list)
 int	do_input(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
-		return (1);
+		return (2);
 	if (parse_list->infile != 0 && parse_list->infile != -1)
 		close(parse_list->infile);
 	parse_list->infile = open(parse_list->tkns_list->next->data, O_RDONLY);
 	if (parse_list->infile == -1)
-		fprintf(stderr, "Could not open input file\n");
+		fprintf(stderr, "MINISHELL: Could not open input file\n");
 	return (0);
 }
 
 int	do_append(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
-		return (1);
+		return (2);
 	parse_list->outfile = open(parse_list->tkns_list->next->data,
 			O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (parse_list->outfile == -1)
@@ -54,7 +54,7 @@ int	do_append(t_parsing *parse_list)
 int	do_output(t_parsing *parse_list)
 {
 	if (check_file_and_delim_name(parse_list->tkns_list) == 1)
-		return (1);
+		return (2);
 	parse_list->outfile = open(parse_list->tkns_list->next->data,
 			O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (parse_list->outfile == -1)

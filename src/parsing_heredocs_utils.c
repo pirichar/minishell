@@ -6,7 +6,7 @@
 /*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:35:55 by adube             #+#    #+#             */
-/*   Updated: 2024/07/31 12:47:55 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/07 23:49:55 by alexandrine      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	do_trunc(t_parsing *p_l)
 	int		w_status;
 
 	if (check_file_and_delim_name(p_l->tkns_list) == 1)
-		return (1);
+		return (2);
 	g_ex.file = open("./div/here_doc", O_CREAT | O_WRONLY | O_TRUNC, 0777);
 	if (g_ex.file == -1)
 		return (1);
