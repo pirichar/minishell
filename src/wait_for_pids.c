@@ -3,22 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   wait_for_pids.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:41:45 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:41:46 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/08/19 11:04:45 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-static	void close_in_out(t_parsing* parse)
+static void	close_in_out(t_parsing *parse)
 {
 	if (parse->infile != 0 && parse->infile != -1)
 		close(parse->infile);
 	if (parse->outfile != 1 && parse->outfile != -1)
 		close(parse->outfile);
 }
+
 /**
  * @brief Function from Pipex
 			Design to wait for all the pids
@@ -31,6 +32,7 @@ static	void close_in_out(t_parsing* parse)
 		// 	close(parse->outfile);
  * @param parse struct containing all the info
  */
+
 void	wait_for_pids(t_parsing *parse)
 {
 	int	i;
