@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_heredocs_new.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:08 by adube             #+#    #+#             */
-/*   Updated: 2024/08/08 08:25:24 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/19 14:49:05 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

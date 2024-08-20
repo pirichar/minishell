@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arena.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:46:28 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:46:29 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:16:50 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	*arena_alloc(t_arena *arena, size_t size)
 		arena->high_watermark = arena->index;
 	if (arena->index >= arena->size)
 	{
-		dprintf(STDERR_FILENO, "Out of memory\n");
+		ft_putstr_fd("Out of memory\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 	ft_bzero(address, size);

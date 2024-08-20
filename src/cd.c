@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:43:35 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:43:36 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/08/20 10:25:11 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,14 @@ static int	chmod_situation(t_parsing *parse)
 	return (rtn);
 }
 
+static void	cd_err(char *s_line)
+{
+	g_ex.status = 1;
+	ft_putstr_fd(ft_strjoin_arena("cd: no such file or directory: ", s_line),
+		STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+}
+
 /**
  * @brief Builtin function
 			our version of CD;
@@ -123,10 +131,7 @@ void	mini_cd(char **s_line, char ***new_env, t_parsing *parse, bool local)
 	else if (s_line[1])
 		rtn = chdir(s_line[1]);
 	if (rtn != 0)
-	{
-		g_ex.status = 1;
-		fprintf(stderr, "cd: no such file or directory: %s\n", s_line[1]);
-	}
+		cd_err(s_line[1]);
 	else
 		g_ex.status = 0;
 	set_pwd(new_env);

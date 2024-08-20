@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   logo_n_setup.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:42:40 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:42:41 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:32:27 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	setup_minishell(int argc, char **env)
 {
 	if (argc > 1)
 	{
-		fprintf(stderr, "Why U put params?!?!\n");
+		ft_putstr_fd("Why U put params?!?!\n", STDERR_FILENO);
 		return (1);
 	}
 	configure_terminal();

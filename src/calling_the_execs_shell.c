@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:44:02 by pirichar          #+#    #+#             */
-/*   Updated: 2024/08/01 12:36:30 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/19 14:31:26 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 	p.path = path_to_starrr(env, "PATH=");
 	if (p.path == NULL)
 	{
-		fprintf(stderr, "PATH environment variable not set\n");
+		ft_putstr_fd("PATH environment variable not set\n", STDERR_FILENO);
 		return ;
 	}
 	cmd[0] = ft_strjoin_arena("/", cmd[0]);
@@ -110,7 +110,8 @@ void	parse_and_exec_cmd_shell(char **cmd, char **env)
 		}
 		i++;
 	}
-	fprintf(stderr, "%s: command not found\n", cmd[0] + 1);
+	ft_putstr_fd(cmd[0] + 1, STDERR_FILENO);
+	ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	free_strrarr(p.path);
 	clean_and_exit(127);
 }

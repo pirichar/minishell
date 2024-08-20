@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:23 by adube             #+#    #+#             */
-/*   Updated: 2024/08/06 13:06:31 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/19 13:54:38 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,8 @@ char	*joining(char *s1, char *s2, t_parsing *parse_list)
 	parse_list->new_i = i;
 	return (str);
 }
+
+//when type single quote ignore (while) until next single quote is found
 
 char	*expand_var(char *line, t_parsing *p_l)
 {

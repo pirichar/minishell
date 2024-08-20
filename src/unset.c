@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:41:54 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:41:54 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:36:27 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ void	mini_unset(char **s_l, char ***new_env, t_parsing *p, bool local)
 	p->bin_do_not_wait = true;
 	if (s_l[1] == NULL)
 	{
-		fprintf(stderr, "unset : not enough arguments\n");
+		ft_putstr_fd("unset : not enough arguments\n", STDERR_FILENO);
 		g_ex.status = 1;
 	}
 	else
@@ -107,7 +107,8 @@ void	mini_unset(char **s_l, char ***new_env, t_parsing *p, bool local)
 		{
 			if (s_l[p->i] && s_l[p->i][0] == '=' && s_l[p->i][1] == '\0')
 			{
-				fprintf(stderr, "unset: \"=\": not a valid identifier\n");
+				ft_putstr_fd("unset: \"=\": not a valid identifier\n",
+					STDERR_FILENO);
 				p->i++;
 				g_ex.status = 1;
 				continue ;

@@ -6,7 +6,7 @@
 /*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:43:32 by pirichar          #+#    #+#             */
-/*   Updated: 2024/08/01 12:49:58 by adube            ###   ########.fr       */
+/*   Updated: 2024/08/20 10:44:41 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,13 +107,13 @@ void	mini_echo(char **s_line, t_parsing *p, bool local)
 				|| ft_strcmp(s_line[p->i], "\"\"") == 0)
 				s_line[p->i] = " ";
 			if (s_line[p->i + 1])
-				dprintf(p->outfile, "%s ", s_line[p->i]);
+				ft_putstr_fd(ft_strjoin_arena(s_line[p->i], " "), p->outfile);
 			else
-				dprintf(p->outfile, "%s", s_line[p->i]);
+				ft_putstr_fd(s_line[p->i], p->outfile);
 			p->i++;
 		}
 		if (p->with_nl)
-			dprintf(p->outfile, "\n");
+			ft_putstr_fd("\n", p->outfile);
 		g_ex.status = 0;
 	}
 	if (local == false)

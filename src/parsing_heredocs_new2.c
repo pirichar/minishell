@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_heredocs_new2.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alexandrinedube <alexandrinedube@studen    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:36:02 by adube             #+#    #+#             */
-/*   Updated: 2024/08/07 23:50:23 by alexandrine      ###   ########.fr       */
+/*   Updated: 2024/08/19 14:34:48 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	do_input(t_parsing *parse_list)
 		close(parse_list->infile);
 	parse_list->infile = open(parse_list->tkns_list->next->data, O_RDONLY);
 	if (parse_list->infile == -1)
-		fprintf(stderr, "MINISHELL: Could not open input file\n");
+		ft_putstr_fd("MINISHELL: Could not open input file\n", STDERR_FILENO);
 	return (0);
 }
 
@@ -45,7 +45,7 @@ int	do_append(t_parsing *parse_list)
 			O_CREAT | O_WRONLY | O_APPEND, 0644);
 	if (parse_list->outfile == -1)
 	{
-		fprintf(stderr, "MINISHELL: Could not open output file\n");
+		ft_putstr_fd("MINISHELL: Could not open output file\n", STDERR_FILENO);
 		return (1);
 	}
 	return (0);
@@ -59,7 +59,7 @@ int	do_output(t_parsing *parse_list)
 			O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (parse_list->outfile == -1)
 	{
-		fprintf(stderr, "MINISHELL: Could not open output file\n");
+		ft_putstr_fd("MINISHELL: Could not open output file\n", STDERR_FILENO);
 		return (1);
 	}
 	return (0);

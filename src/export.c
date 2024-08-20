@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:42:51 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:42:51 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:36:57 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ static void	print_export(char ***new_env, t_parsing *p)
 	to_print = sort_strarr(*new_env);
 	while (to_print[i])
 	{
-		dprintf(p->outfile, "declare -x %s\n", to_print[i]);
+		ft_putstr_fd("declare -x", p->outfile);
+		ft_putstr_fd(to_print[i], p->outfile);
+		ft_putstr_fd("\n", p->outfile);
 		i++;
 	}
 	free_strrarr(to_print);
@@ -103,8 +105,8 @@ static void	actually_set_variables(char **s_line, char ***new_env, t_parsing *p)
 		p->to_add = ft_export_split(s_line[p->i], '=');
 		if (p->to_add[0] == NULL)
 		{
-			fprintf(stderr,
-				"DunderSHell: export: `=': not a valid identifier\n");
+			ft_putstr_fd("DunderSHell: export: `=': not a valid identifier\n",
+				STDERR_FILENO);
 			g_ex.status = 1;
 		}
 		else if (p->to_add[1] != NULL)

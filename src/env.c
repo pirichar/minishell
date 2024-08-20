@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pirichar <pirichar@student.42quebec.com    +#+  +:+       +#+        */
+/*   By: adube <adube@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/25 11:43:29 by pirichar          #+#    #+#             */
-/*   Updated: 2024/07/25 11:43:30 by pirichar         ###   ########.fr       */
+/*   Updated: 2024/08/19 14:22:13 by adube            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ void	mini_env(char **new_env, t_parsing *parse)
 	{
 		tmp = ft_split(new_env[i], '=');
 		if (tmp[1] != NULL)
-			dprintf(parse->outfile, "%s\n", new_env[i]);
+		{
+			ft_putstr_fd(new_env[i], parse->outfile);
+			ft_putstr_fd("\n", parse->outfile);
+		}
 		free_strrarr(tmp);
 		i++;
 	}
